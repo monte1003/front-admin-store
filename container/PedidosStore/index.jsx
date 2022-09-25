@@ -13,7 +13,7 @@ const PedidosStore = () => {
     handleChange,
     handleSubmit,
     setDataValue,
-    { dataForm, errorForm, setForcedError }
+    { dataForm, errorForm }
   ] = useFormTools()
   const [more, setMore] = useState(100)
   const ACEPTA_STATUS_ORDER = 1
@@ -25,6 +25,8 @@ const PedidosStore = () => {
   const [data, { loading: a, fetchMore }] = useOrders({
     statusOrder: ACEPTA_STATUS_ORDER
   })
+
+  console.log(data)
   const [dataProgressOrder] = useOrders({
     statusOrder: PROCESSING_STATUS_ORDER
   })
@@ -106,89 +108,7 @@ const PedidosStore = () => {
           </Column>
         </Row>
       </Column> */}
-        <Tabs width={['20%', '20%', '20%', '20%', '20%']}>
-          <Tabs.Panel label={`Pedidos entrantes (${data?.length || 0})`}>
-            {data?.length > 0 ? (
-              <ListPedidos
-                data={data}
-                dataForm={dataForm}
-                errorForm={errorForm}
-                fetchMore={fetchMore}
-                handleChange={handleChange}
-                more={more}
-                setMore={setMore}
-              />
-            ) : (
-              <span>No hay datos</span>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel
-            label={`pedidos en progreso (${dataProgressOrder?.length || 0})`}
-          >
-            {dataProgressOrder?.length > 0 ? (
-              <ListPedidos
-                data={dataProgressOrder}
-                dataForm={dataForm}
-                errorForm={errorForm}
-                fetchMore={fetchMore}
-                handleChange={handleChange}
-                more={more}
-                setMore={setMore}
-              />
-            ) : (
-              <span>No hay datos</span>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel
-            label={`Pedidos listos para entrega (${
-              dataReadyOrder?.length || 0
-            })`}
-          >
-            {dataReadyOrder?.length > 0 ? (
-              <ListPedidos
-                data={dataReadyOrder}
-                dataForm={dataForm}
-                errorForm={errorForm}
-                fetchMore={fetchMore}
-                handleChange={handleChange}
-                more={more}
-                setMore={setMore}
-              />
-            ) : (
-              <span>No hay Datos</span>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel label={`Pedidos concluidos (${dataConcludes?.length})`}>
-            {dataConcludes?.length > 0 ? (
-              <ListPedidos
-                data={dataConcludes}
-                dataForm={dataForm}
-                errorForm={errorForm}
-                fetchMore={fetchMore}
-                handleChange={handleChange}
-                more={more}
-                setMore={setMore}
-              />
-            ) : (
-              <span>No hay datos</span>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel label={`Rechazados (${dataRechazados?.length || 0})`}>
-            {dataRechazados?.length > 0 ? (
-              <ListPedidos
-                data={dataRechazados}
-                dataForm={dataForm}
-                errorForm={errorForm}
-                fetchMore={fetchMore}
-                handleChange={handleChange}
-                more={more}
-                setMore={setMore}
-              />
-            ) : (
-              <span>No hay datos</span>
-            )}
-          </Tabs.Panel>
-        </Tabs>
+  
       </Container>
     </div>
   )

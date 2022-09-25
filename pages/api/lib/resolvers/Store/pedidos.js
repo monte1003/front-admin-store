@@ -1,16 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import productModelFood from '../../models/product/productFood'
 import pedidosModel from '../../models/Store/pedidos'
 import ShoppingCard from '../../models/Store/ShoppingCard'
-import StatusPedidosModel from '../../models/Store/statusPedidoFinal'
+import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 import Users from '../../models/Users'
 import { deCode, getAttributes } from '../../utils/util'
 import { deleteOneItem, getOneStore } from './store'
 import { Op } from 'sequelize'
 
 export const createOnePedidoStore = async (_, { input }) => {
-  const { id, idStore, ShoppingCard, pCodeRef, payMethodPState, pPRecoger } =
-    input || {}
+  const {
+    id,
+    idStore,
+    ShoppingCard,
+    pCodeRef,
+    payMethodPState,
+    pPRecoger
+  } = input || {}
   try {
     await pedidosModel.create({
       ...input,
@@ -35,12 +40,12 @@ const changePPStatePPedido = async (_, { pPStateP, pCodeRef, pDatMod }, ctx) => 
   const state = {
     1: 'El pedido fue marcado como aprobado',
     2: 'El pedido fue marcado como en proceso',
-    3: 'El pedido Esta listo para salir',
+    3: 'El pedido esta listo para salir',
     4: 'Pedido fue pagado con éxito por el cliente (Concluido)',
     5: 'Pedido rechazado'
   }
   try {
-    await StatusPedidosModel.update(
+    await StatusOrderModel.update(
       { pSState: pPStateP, pDatMod },
       { where: { pCodeRef: pCodeRef } }
     )
@@ -67,7 +72,7 @@ const createMultipleOrderStore = async (_, { input }, ctx) => {
     locationUser
   } = input || {}
   try {
-    await StatusPedidosModel.create({
+    await StatusOrderModel.create({
       id: deCode(ctx.User.id),
       locationUser,
       idStore: deCode(setInput[0].idStore),
@@ -78,8 +83,8 @@ const createMultipleOrderStore = async (_, { input }, ctx) => {
       pickUp,
       totalProductsPrice
     })
-    for (let i = 0; i < setInput.length; i++) {
-      const { ShoppingCard, idStore } = setInput[i]
+    for (const element of setInput) {
+      const { ShoppingCard, idStore } = element
       await deleteOneItem(null, { ShoppingCard, cState: 1 })
       await createOnePedidoStore(null, {
         input: {
@@ -93,7 +98,6 @@ const createMultipleOrderStore = async (_, { input }, ctx) => {
           pPRecoger
         }
       })
-      // console.log(ShoppingCard, idStore)
     }
     return { success: true, message: 'Update' }
   } catch (error) {
@@ -127,8 +131,8 @@ export const getAllPedidoStore = async (_, args, ctx, info) => {
 export const getAllPedidoStoreFinal = async (_, args, ctx, info) => {
   const { idStore, statusOrder } = args || {}
   try {
-    const attributes = getAttributes(StatusPedidosModel, info)
-    const data = await StatusPedidosModel.findAll({
+    const attributes = getAttributes(StatusOrderModel, info)
+    const data = await StatusOrderModel.findAll({
       attributes,
       where: {
         [Op.or]: [
@@ -150,15 +154,12 @@ export const getAllPedidoStoreFinal = async (_, args, ctx, info) => {
 export const getAllPedidoUserFinal = async (_, args, ctx, info) => {
   const { id } = args || {}
   try {
-    const attributes = getAttributes(StatusPedidosModel, info)
-    const data = await StatusPedidosModel.findAll({
+    const attributes = getAttributes(StatusOrderModel, info)
+    const data = await StatusOrderModel.findAll({
       attributes,
       where: {
         [Op.or]: [
-          {
-            // ID STORE
-            id: id ? deCode(id) : deCode(ctx.User.id)
-          }
+          { id: id ? deCode(id) : deCode(ctx.User.id) }
         ]
       },
       order: [['pDatCre', 'DESC']]

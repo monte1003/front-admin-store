@@ -71,6 +71,46 @@ export const Login = () => {
       setAlertBox({ message: 'Lo sentimos ha ocurrido un error', color: 'error' })
     })
   }
+
+  const responseGoogleFalse = async (e) => {
+    console.log('first')
+    e.preventDefault()
+    // await fetchData()
+    const device = await getDeviceId()
+    // window.localStorage.setItem('sessionGoogle', JSON.stringify(response.profileObj))
+    // const { name, googleId, email, imageUrl } = response?.profileObj || {}
+    const body = {
+      name: 'Jesus Juvinao',
+      username: 'Jesus Juvinao',
+      lastName: null,
+      email: 'juvi69elpapu@gmail.com',
+      password: '109872394149172618249',
+      locationFormat: null,
+      useragent: null,
+      deviceid: '',
+      imageUrl: ''
+    }
+    await fetchJson(`${process.env.URL_BASE}api/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(res => {
+      setAlertBox({ message: `${res.message}`, color: 'success' })
+      const { storeUserId, token } = res
+      const { idStore, id } = storeUserId || {}
+      if (storeUserId) {
+        localStorage.setItem('restaurant', idStore)
+        localStorage.setItem('usuario', id)
+        localStorage.setItem('usuario', token)
+        localStorage.setItem('session', token)
+        router.push('/restaurante/getDataVerify')
+      } else {
+        router.push('/restaurante/getDataVerify')
+      }
+    }).catch(() => {
+      setAlertBox({ message: 'Lo sentimos ha ocurrido un error', color: 'error' })
+    })
+  }
   return (
     <Portal selector={'portal'}>
       <Content>
@@ -93,7 +133,7 @@ export const Login = () => {
             colorFont='#717171'
             // disabled={renderProps.disabled}
             height='40px'
-            onClick={responseGoogle}
+            onClick={responseGoogleFalse}
             size='14px'
           ><IconGoogleFullColor size='30px' /> Continue with Google false<div style={{ width: 'min-content' }} /> </ButtonSubmit>
           <GoogleLogin

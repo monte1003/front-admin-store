@@ -1331,38 +1331,3 @@ export const getUserFromToken = async token => {
   }
   return { user, userProfile, error }
 }
-
-const data = [
-  { x: '2021-10-17T14:38:45.540Z', y: 2 },
-  { x: '2021-09-16T14:36:46.540Z', y: 1 },
-  { x: '2021-01-04T14:35:46.540Z', y: 2 },
-  { x: '2021-01-01T14:30:46.540Z', y: 1 },
-  { x: '2020-02-01T06:28:47.520Z', y: 12 },
-  { x: '2020-02-01T07:28:47.520Z', y: 12 },
-  { x: '2019-04-13T10:19:20.034Z', y: 20 },
-  { x: '2018-01-01T09:09:19.134Z', y: 4 },
-  { x: '2017-01-01T12:09:19.034Z', y: 11 },
-  { x: '2016-01-02T12:10:20.034Z', y: 24 }
-]
-
-function get_date_parts(iso_string) {
-  const [year, month, day, hr, min, sec] = iso_string.split(/\D/g)
-
-  return { year, month, day, hr, min, sec }
-}
-
-function group_by_year(arr) {
-  return Object.values(
-    arr.reduce((a, { x: date_string, y: value }) => {
-      const { hr } = get_date_parts(date_string);
-      (a[hr] ??= { value: 0, label: hr }).value += value
-
-      return a
-    }, {})
-  )
-}
-
-const grouped_by_year = group_by_year(data).sort((a, b) => {return +a.label - +a.label})
-
-console.log(grouped_by_year)
-

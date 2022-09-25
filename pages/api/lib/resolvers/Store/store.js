@@ -176,7 +176,7 @@ export const getAllShoppingCard = async (_root, { input }, context, info) => {
         ]
       }
     })
-    return data
+    return context.User ? data : []
   } catch (e) {
     throw new ApolloError(`Lo sentimos, ha ocurrido un error interno en el carrito, ${e}`)
   }
@@ -238,64 +238,7 @@ export const getAllStoreInStore = async (root, args, context, _info) => {
     return error
   }
 }
-// export const getAllStoreAdmins = async (root, args, context, _info) => {
-//     try {
-//         const { search, min, max } = args
-//         let whereSearch = {}
-//         if (search) {
-//             whereSearch = {
-//                 [Op.or]: [
-//                     { cpName: { [Op.substring]: search.replace(/\s+/g, ' ') } },
-//                 ]
-//             }
-//         }
-//         const attributes = getAttributes(Store, _info)
-//         const data = await Store.findAll({
-//             attributes: [
-//                 'idStore', 'cId',
-//                 'id',
-//                 'dId',
-//                 'ctId',
-//                 // 'catStore',
-//                 'neighborhoodStore', 'Viaprincipal',
-//                 'storeOwner', 'storeName',
-//                 'emailStore', 'storePhone',
-//                 'socialRaz', 'Image',
-//                 'banner', 'documentIdentifier',
-//                 'uPhoNum', 'ULocation',
-//                 'upLat', 'upLon',
-//                 'uState', 'siteWeb',
-//                 'description', 'NitStore',
-//                 'typeRegiments', 'typeContribute',
-//                 'secVia', 'addressStore',
-//                 'createAt'
-//             ],
-//             where: {
-//                 [Op.or]: [
-//                     {
-//                         ...whereSearch,
-//                         // ID Productos
-//                         uState: 2
-//                         // // ID departamento
-//                         // dId: dId ? deCode(dId) : { [Op.gt]: 0 },
-//                         // ctId: ctId ? deCode(ctId) : { [Op.gt]: 0 },
-//                     }
-//                 ]
-//             }, limit: [min || 0, max || 100],
-//             order: [
-//                 // [ratingStoreStart, 'rScore', 'ASC']
-//                 ['createdAt', 'DESC'],
-//                 ['storeName', 'DESC'],
-//                 ['id', 'DESC']
-//             ]
-//         })
-//         return data
-//     } catch (e) {
-//         console.log(e)
-//         const error = new Error('Lo sentimos, ha ocurrido un error interno')
-//         return error
-//     }
-// }
+
 export const getOneStore = async (parent, args, context, info) => {
   const { idStore } = args || {}
   try {
@@ -303,9 +246,8 @@ export const getOneStore = async (parent, args, context, info) => {
       const attributes = getAttributes(Store, info)
       const data = Store.findOne({ attributes, where: { idStore: idStore ? deCode(idStore) : deCode(parent.idStore) } })
       return data
-    } 
+    }
     return {}
-    
   } catch (e) {
     const error = new Error('Lo sentimos, ha ocurrido un error interno')
     return error
