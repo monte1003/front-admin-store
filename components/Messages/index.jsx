@@ -1,7 +1,17 @@
 import PropTypes from 'prop-types'
 import { useContext } from 'react'
 import Image from 'next/image'
-import { BoxChat, Chat, CircleStore, ContentAction, ContentMessage, ItemMessage, Message, TextMessage, WrapperChat } from './styled'
+import { 
+  BoxChat,
+  Chat,
+  CircleStore,
+  ContentAction,
+  ContentMessage,
+  ItemMessage,
+  Message,
+  TextMessage,
+  WrapperChat
+} from './styled'
 import { RippleButton } from 'components/Ripple'
 import { IconCancel } from 'public/icons'
 import { Context } from 'context/Context'
