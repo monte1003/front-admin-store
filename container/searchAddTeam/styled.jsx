@@ -1,6 +1,5 @@
-import Link from 'next/link'
 import styled, { css } from 'styled-components'
-import { APColor, BGColor, EColor, PColor, PVColor } from '../../public/colors'
+import { APColor, BGColor, DarkSilver } from '../../public/colors'
 
 export const ContentTeam = styled.div`
     width: 100%;
@@ -17,7 +16,6 @@ export const ContentTeam = styled.div`
     padding: 5px;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-   
 `
 export const CtnAdd = styled.div`
     display: flex;
@@ -31,7 +29,7 @@ export const User = styled.div`
     border-radius: 50%;
     display: grid;
     place-content: center;
-    color: #fff;
+    color: ${BGColor};
 `
 export const Content = styled.div`
     width: 100%;
@@ -65,7 +63,7 @@ export const Text = styled.h2`
 }
     font-weight: initial;
     font-family: PFont-Regular;
-    color: ${({ color }) => {return color ? color : '#717171'}};
+    color: ${({ color }) => {return color ? color : DarkSilver}};
     margin: 0 0 22px;
     ${props => {return props.cursor && css`cursor: pointer;`}}
 `

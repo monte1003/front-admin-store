@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client'
 import { GET_ALL_DEVICES } from 'container/profile/queries'
 import styled from 'styled-components'
 import moment from 'moment'
+import { DarkSilver } from '@/public/colors'
 
 export const Devices = () => {
   const { data: dataDevice } = useQuery(GET_ALL_DEVICES)
@@ -133,7 +134,7 @@ export const CardDevice = styled.div`
     font-weight: 500;
     }
     .device__localization {
-      color: #717171;
+      color: ${DarkSilver};
       font-size: .875rem;
     line-height: 1.25rem;
     }

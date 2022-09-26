@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import styled, { css } from 'styled-components'
-import { BGColor, EColor, PColor } from '../../public/colors'
+import { BGColor, DarkSilver, EColor, PColor } from '../../public/colors'
 
 export const Content = styled.div`
     width: 100%;
@@ -151,7 +151,7 @@ export const Text = styled.h2`
 }
     font-weight: initial;
     font-family: PFont-Regular;
-    color: ${({ color }) => {return color ? color : '#717171'}};
+    color: ${({ color }) => {return color ? color : DarkSilver}};
     margin: 0 0 22px;
     ${props => {return props.cursor && css`cursor: pointer;`}}
 `

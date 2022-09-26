@@ -1,4 +1,4 @@
-import { BGColor, PColor, APColor, SECBGColor } from 'public/colors'
+import { BGColor, PColor, APColor, SECBGColor, DarkSilver } from 'public/colors'
 import styled, { css } from 'styled-components'
 
 export const Input = styled.input`
@@ -96,7 +96,7 @@ export const CateItem = styled.div`
     cursor: pointer;
     box-sizing: border-box;
     font-weight: lighter;
-    color: #717171;
+    color: ${DarkSilver};
     word-break: break-word;
     margin-bottom: 10px;
     overflow: hidden;
@@ -109,7 +109,7 @@ export const CateItem = styled.div`
     background-color: ${SECBGColor};
     text-rendering: optimizeLegibility;
     cursor: pointer;
-    color: #717171;
+    color: ${DarkSilver};
     word-break: break-word;
     font-size: .875rem;
     line-height: 1.25rem;

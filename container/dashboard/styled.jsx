@@ -1,6 +1,6 @@
 import styled, { css, keyframes } from 'styled-components'
 // import { StyleSheet } from '@react-pdf/renderer'
-import { BColor, BGColor, PColor, SECColor, PVColor, TBGSColor, PLVColor, TBGAColor, TBGVColor, TBGBColor, TBGEColor, TBGRColor, TBGDColor } from '../../public/colors'
+import { BColor, BGColor, PColor, SECColor, PVColor, TBGSColor, PLVColor, TBGAColor, TBGVColor, TBGBColor, TBGEColor, TBGRColor, TBGDColor, DarkSilver } from '../../public/colors'
 import { fadeIn, fadeOut } from '../../components/AlertBox/styled'
 import { BG_ANIMATION_, SideIn, SlideInLeft } from '../../components/animations'
 
@@ -133,7 +133,7 @@ export const CardProductsContent = styled.div`
     list-style: none;
     cursor: pointer;
     font-weight: lighter;
-    color: #717171;
+    color: ${DarkSilver};
     word-break: break-word;
     margin-bottom: 10px;
     font-size: .875rem;
@@ -190,7 +190,7 @@ export const DisRestaurant = styled.div`
       line-height: 1.15;
       font-weight: 500;
       font-size: 1rem;
-      color: #717171;
+      color: ${DarkSilver};
     }
     .dish-restaurant__header {
       line-height: 1.15;
@@ -1216,7 +1216,7 @@ export const CardDevice = styled.button`
     font-weight: 500;
     }
     .device__localization {
-      color: #717171;
+      color: ${DarkSilver};
       font-size: .875rem;
     line-height: 1.25rem;
     }

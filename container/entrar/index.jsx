@@ -3,7 +3,7 @@ import { GoogleLogin } from 'react-google-login'
 // import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { Content, Form, Card, Text, ButtonSubmit } from './styled'
 import { RippleButton } from '../../components/Ripple'
-import { BGColor, EColor } from '../../public/colors'
+import { BGColor, DarkSilver, EColor } from '../../public/colors'
 import ActiveLink from '../../components/common/Link'
 import fetchJson from '../../components/hooks/fetchJson'
 import { useRouter } from 'next/router'
@@ -130,8 +130,7 @@ export const Login = () => {
           ><Facebook color={BGColor} size='30px' /> Login <div style={{ width: 'min-content' }} />    </ButtonSubmit>
           <ButtonSubmit
             color='2'
-            colorFont='#717171'
-            // disabled={renderProps.disabled}
+            colorFont={DarkSilver}
             height='40px'
             onClick={responseGoogleFalse}
             size='14px'
@@ -148,7 +147,7 @@ export const Login = () => {
 
                   <ButtonSubmit
                     color='2'
-                    colorFont='#717171'
+                    colorFont={DarkSilver}
                     disabled={renderProps.disabled}
                     height='40px'
                     onClick={renderProps.onClick}

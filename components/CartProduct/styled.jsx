@@ -1,5 +1,6 @@
 import { APColor, BColor, BGColor, PColor, PVColor } from 'public/colors'
 import styled, { css } from 'styled-components'
+import { DarkSilver } from '../../../front-client/public/colors'
 
 export const ContentImage = styled.div`
     display: flex;
@@ -315,7 +316,7 @@ export const Card = styled.div`
     cursor: pointer;
     box-sizing: border-box;
     font-weight: lighter;
-    color: #717171;
+    color: ${DarkSilver};
     word-break: break-word;
     font-size: .875rem;
     line-height: 1.25rem;

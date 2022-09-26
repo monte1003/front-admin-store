@@ -1,7 +1,7 @@
 import { RippleButton } from 'components/Ripple'
 import { Table } from 'components/Table'
 import { Section } from 'components/Table/styled'
-import { APColor, BColor, BGColor, BGVColor, PColor, PLColor, SCColor, SECColor, SEGColor, TBGEColor, WColor } from 'public/colors'
+import { APColor, BColor, BGColor, BGVColor, DarkSilver, PColor, PLColor, SCColor, SECColor, TBGEColor, WColor } from 'public/colors'
 import React, { useContext, useState } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import moment from 'moment'
@@ -132,7 +132,7 @@ export const CheckStatus = ({ setModal, modal, dataModal }) => {
 
     })
   }
-  const [dataStore, { loading: LoadingRes }] = useStore()
+  const [dataStore] = useStore()
 
   return (
     <div>
@@ -160,8 +160,6 @@ export const CheckStatus = ({ setModal, modal, dataModal }) => {
             <Text size='25px'>{uLocationKnow}</Text>
           </CardTicket>
           {getAllPedidoStore && getAllPedidoStore?.map(p => {
-            const { getAllShoppingCard } = p || {}
-            const { productFood, comments } = getAllShoppingCard || {}
             return (
               <div key={p.ShoppingCard}>
                 <Card>
@@ -365,7 +363,7 @@ export const GarnishChoicesHeader = styled.div`
         font-size: .875rem;
         line-height: 17px;
         display: block;
-        color: #717171;
+        color: ${DarkSilver};
     }
      .marmita-minitag{
         -webkit-text-size-adjust: 100%;
@@ -386,7 +384,7 @@ export const GarnishChoicesHeader = styled.div`
     font-variant-numeric: tabular-nums;
     font-size: .5625rem;
     line-height: 1;
-    background-color: #717171;
+    background-color: ${DarkSilver};
     color: #f5f0eb;
     border: none;
     padding: 6px 6px 4px;
@@ -417,7 +415,7 @@ export const DisRestaurant = styled.div`
     line-height: 1.15;
     font-weight: 500;
     font-size: 1rem;
-    color: #717171;
+    color: ${DarkSilver};
   }
   .dish-restaurant__header {
     line-height: 1.15;

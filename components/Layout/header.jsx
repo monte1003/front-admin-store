@@ -6,7 +6,7 @@ import React, {
   useEffect, 
   useState } from 'react'
 import styled from 'styled-components'
-import { PColor, SECBGColor } from '../../public/colors'
+import { DarkSilver, PColor, SECBGColor } from '../../public/colors'
 import { useApolloClient } from '@apollo/client'
 import { IconLogo, IconSales } from '../../public/icons'
 import useScrollHook, { useScrollColor } from '../hooks/useScroll'
@@ -176,7 +176,7 @@ export const HeaderWrapperButton = styled.div`
     }
     .info-sales {
     margin: 0 0 0 6px;
-    color: #717171;
+    color: ${DarkSilver};
     transition: background-color .3s ease-in-out;
     white-space: nowrap;
     text-align: left;

@@ -9,7 +9,7 @@ import { GET_ALL_CATEGORIES_WITH_PRODUCT, GET_ALL_EXTRA_PRODUCT } from 'containe
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { numberFormat, updateCache, validationImg } from 'utils'
 import { RippleButton } from 'components/Ripple'
-import { APColor, BColor, BGColor, PColor } from 'public/colors'
+import { APColor, BColor, BGColor, DarkSilver, PColor } from 'public/colors'
 import { IconDelete, IconPay } from 'public/icons'
 import Link from 'next/link'
 import { CLIENT_URL_BASE } from 'apollo/urls'
@@ -124,9 +124,9 @@ export const ProductEdit = ({ id }) => {
           })
         }
       })
-    } else {
-      setAlertBox({ message: `Es necesario una imagen para el product ${dataForm?.pName || null}` })
-    }
+    } 
+    setAlertBox({ message: `Es necesario una imagen para el product ${dataForm?.pName || null}` })
+    
   }
   const fileInputRef = useRef(null)
   const onTargetClick = e => {
@@ -344,7 +344,7 @@ export const ButtonCard = styled.button`
     return props.grid && css`
         top: ${({ top }) => { return top ? top : '80px' }};
         `}
-  }
+}
 `
 const Card = styled.div`
     position: relative;
@@ -452,7 +452,7 @@ const Card = styled.div`
     cursor: pointer;
     box-sizing: border-box;
     font-weight: lighter;
-    color: #717171;
+    color: ${DarkSilver};
     word-break: break-word;
     font-size: .875rem;
     line-height: 1.25rem;
