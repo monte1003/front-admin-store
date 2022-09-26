@@ -1,7 +1,7 @@
 const { createServer } = require('http')
 const { parse } = require('url')
 const next = require('next')
-const { join, resolve } = require('path')
+const { join } = require('path')
 const port = parseInt(process.env.PORT) || 3001
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -16,7 +16,7 @@ app.prepare()
       const { pathname, query } = parsedUrl
       const rootStaticFiles = [
         '/favicon.ico',
-        '/horario.svg',
+        '/horario.svg'
       ]
       if (rootStaticFiles.indexOf(parsedUrl.pathname) > -1) {
         const path = join(__dirname, 'public', parsedUrl.pathname)
