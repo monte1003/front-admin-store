@@ -117,7 +117,7 @@ export const Login = () => {
         <Card>
         </Card>
         <Form>
-          <span id="kind"></span>
+          <span id='kind'></span>
           <Text size='30px'>¡Falta poco para saciar tu hambre!</Text>
           <Text size='15px'>¿Cómo deseas continuar?</Text>
           <ButtonSubmit

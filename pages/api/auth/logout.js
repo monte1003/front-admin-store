@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { cookie } from '~/utils'
 

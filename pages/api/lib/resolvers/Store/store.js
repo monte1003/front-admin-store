@@ -13,11 +13,9 @@ import { deCode, getAttributes } from '../../utils/util'
 import ratingStoreStart from '../../models/Store/ratingStoreStart'
 import ScheduleStore from '../../models/Store/scheduleStore'
 import { Op } from 'sequelize'
-import StatusPedidosModel from '../../models/Store/statusPedidoFinal'
 
 // eslint-disable-next-line
 export const newRegisterStore = async (_, { input }, ctx) => {
-  // const id = ctx.User.id || ''
   const { cId, dId, ctId, id, catStore } = input
   try {
     let res = {}
@@ -74,11 +72,11 @@ const updateExtraProduct = async ({ input }) => {
 
 }
 /**
- * 
+ *
  * @param {*} root
  * @param {*} args
- * @param {*} context contexto de la app 
- * @param {*} _info ADMINISTRA SHOPPING_CART 
+ * @param {*} context contexto de la app
+ * @param {*} _info ADMINISTRA SHOPPING_CART
  */
 // eslint-disable-next-line
 export const deleteOneItem = async (root, args, context, _info) => {
@@ -129,8 +127,6 @@ const registerSalesStore = async (root, { input, totalProductsPrice, pickUp, id,
     //   }
     // }
   } catch (e) {
-    console.log('🚀 ~ file: store.js ~ line 132 ~ registerSalesStore ~ e', e)
-    // console.log('🚀 ~ file: store.js ~ line 128 ~ registerSalesStore ~ e', e)
     const error = new Error('Lo sentimos, ha ocurrido un error interno papu')
     return error
   }
