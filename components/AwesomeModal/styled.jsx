@@ -165,6 +165,8 @@ export const ModalBody = styled.div`
     position: relative;
     flex: 1 1 auto;
     overflow-y: auto;
+    border-radius: ${({ borderRadius }) => { return borderRadius || 'none' }};
+
     display: ${({ display }) => { return display || 'block' }};
     height: ${({ height }) => { return height || 'auto' }};
     min-height: ${({ height }) => { return height || 'auto' }};

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React, {
   createContext,
   useCallback,
@@ -10,6 +11,7 @@ import React, {
 export const Context = createContext()
 const Provider = ({ children }) => {
   // STATE
+  const router = useRouter()
   const [error, setError] = useState({})
   // State to Session
   const [isCompany, setCompany] = useState({})
@@ -124,13 +126,22 @@ const Provider = ({ children }) => {
   [selectedStore, hidden]
   )
 
+  const [status, setStatus] = useState('close')
+
+  useEffect(() => {
+    handleMenu(false)
+    setCollapsed(false)
+    setStatus('close')
+  }, [router])
 
   const value = useMemo(
     () => {
       return {
         error,
+        setStatus,
         hidden,
         setSelectedStore,
+        status,
         setOpenSchedule,
         setSalesOpen,
         salesOpen,
@@ -165,42 +176,7 @@ const Provider = ({ children }) => {
         setAlertBox: err => { return setError(err) }
       }
     },
-    [
-      error,
-      hidden,
-      setSelectedStore,
-      setOpenSchedule,
-      openSchedule,
-      setHidden,
-      selectedStore,
-      setStoreChatActive,
-      DataCompany,
-      setSalesOpen,
-      // Link
-      setCompanyLink,
-      setCollapsed,
-      setCountPedido,
-      countPedido,
-      isCompany,
-      handleMenu,
-      salesOpen,
-      // Menu Ctx
-      menu,
-      collapsed,
-      isSession,
-      setIsSession,
-      // State login
-      authData,
-      setSessionActive,
-      // UseCompany
-      useCompany,
-      company,
-      // setAlertBox
-      alert,
-      // add products
-      state_product_card,
-      dispatch
-    ]
+    [error, hidden, status, salesOpen, openSchedule, selectedStore, setStoreChatActive, DataCompany, setCompanyLink, countPedido, isCompany, handleMenu, menu, collapsed, isSession, authData, setSessionActive, useCompany, company, alert, state_product_card]
   )
 
   return <Context.Provider value={value}>

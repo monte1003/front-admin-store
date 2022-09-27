@@ -3,9 +3,29 @@ import React, { useCallback, useContext, useState } from 'react'
 import { useApolloClient } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { BGColor, PColor } from '../../../public/colors'
-import { IconHome, IconHorario, IconLogo, IconLogout, IconShopping, IconUser, IconWallet } from '../../../public/icons'
+import {
+  IconHome,
+  IconHorario,
+  IconLogo,
+  IconLogout,
+  IconShopping,
+  IconUser,
+  IconWallet
+} from '../../../public/icons'
 import ActiveLink from '../../common/Link'
-import { Anchor, AnchorRouter, ButtonGlobalCreate, Card, ContainerAside, ContentAction, DynamicNav, Info, LeftNav, OptionButton, Router } from './styled'
+import { 
+  Anchor,
+  AnchorRouter,
+  ButtonGlobalCreate, 
+  Card,
+  ContainerAside, 
+  ContentAction,
+  DynamicNav,
+  Info,
+  LeftNav,
+  OptionButton,
+  Router
+} from './styled'
 import { useRouter } from 'next/router'
 import { ButtonOption } from '../styled'
 import { useStore } from 'components/hooks/useStore'
@@ -14,11 +34,20 @@ import { gql } from '@apollo/client'
 import Link from 'next/link'
 import { Skeleton } from 'components/Skeleton'
 import { useSubscription } from '@apollo/client'
+import { useMobile } from 'npm-pkg-hook'
+import { Overline } from '~/components/common/Reusable'
 
 const Aside = () => {
+  const { isMobile } = useMobile()
   const { client } = useApolloClient()
   const location = useRouter()
-  const { openSchedule, setOpenSchedule, countPedido } = useContext(Context)
+  const {
+    openSchedule,
+    setOpenSchedule,
+    countPedido,
+    setCollapsed,
+    collapsed
+  } = useContext(Context)
 
   const [show, setShow] = useState(false)
   const onClickLogout = useCallback(async () => {
@@ -54,9 +83,16 @@ const Aside = () => {
       // console.log(subscriptionData.data.numberIncremented)
     }
   })
+
   return (
     <>
-      <ContainerAside>
+      {isMobile && <Overline
+        bgColor='rgba(0,0,0,.4)'
+        onClick={() => {return setCollapsed(!collapsed)}}
+        show={collapsed}
+        zIndex='999'
+      />}
+      <ContainerAside collapsed={isMobile ? collapsed : false}>
         <Card>
           <Info>
             <ButtonGlobalCreate onClick={() => { return setShow(!show) }}>

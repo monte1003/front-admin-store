@@ -880,7 +880,7 @@ export const List = styled.div`
 export const Container = styled.div`
   background-color: ${BGColor};
   @media (max-width: 769px) {
-    /* flex-direction: ${({ direction }) => { return direction || 'column' }}; */
+    overflow: hidden auto;
   }
 `
 export const Avatar = styled.img`

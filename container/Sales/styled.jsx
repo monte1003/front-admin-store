@@ -62,12 +62,24 @@ export const Box = styled.div`
 export const Wrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
+    .parent {
+        width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        resize: horizontal ;
+        border-radius: 8px;
+    }
+    .child {
+    height: 100%;
+    border-radius: 3px;
+    width: clamp(100px, 100%, 100vw);
+}
 `
 export const ContainerGrid = styled.div`
     display: grid;    
     margin: 0;
     padding-bottom: 20px;
-    /* max-width: 1366px!important; */
     margin: auto;
     padding: 0 30px;
     height: 100vh;

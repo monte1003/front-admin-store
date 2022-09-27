@@ -29,6 +29,7 @@ export const AwesomeModal = ({
   question,
   submit = false,
   header = true,
+  sizeIconClose = '20px',
   borderRadius = '.3rem',
   onHide = () => { return undefined },
   onCancel = () => { return undefined },
@@ -110,13 +111,14 @@ export const AwesomeModal = ({
           state={state}
         >
           <ModalBody
+            borderRadius={borderRadius}
             display={display}
             height={height}
             padding={padding}
           >
             {header && <ModalHeader>
               <ModalTitle>{title}</ModalTitle>
-              <BtnClose onClick={() => { return question ? onShowQuestion() : hide() }}><IconCancel size='20px' /></BtnClose>
+              <BtnClose onClick={() => { return question ? onShowQuestion() : hide() }}><IconCancel size={sizeIconClose} /></BtnClose>
             </ModalHeader>}
             {modal &&
               <div className='modal-wrapper'>

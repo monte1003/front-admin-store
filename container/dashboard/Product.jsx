@@ -7,11 +7,34 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { APColor } from 'public/colors'
 import React from 'react'
-import { CardProductsModal, ContentImage, ContentInfo, DisRestaurant, Flex, HeadSticky, Text } from './styled'
+import {
+  CardProductsModal,
+  ContentImage,
+  ContentInfo,
+  DisRestaurant,
+  Flex,
+  HeadSticky,
+  Text
+} from './styled'
 import { useRouter } from 'next/router'
 
-export const Product = ({ store,setModal, modal, ProDescription, ProImage, pName, ProPrice, dataExtra, storeName, ProDescuento, nameStore, dataOptional, handleDelete, pId, ...props }) => {
-const router = useRouter()
+export const Product = ({
+  store,
+  setModal,
+  modal,
+  ProDescription,
+  ProImage,
+  pName,
+  ProPrice,
+  dataExtra,
+  storeName,
+  ProDescuento,
+  nameStore,
+  dataOptional,
+  handleDelete,
+  pId,
+  ...props }) => {
+  const router = useRouter()
   return (
     <div {...props}>
       <ContainerFilter>

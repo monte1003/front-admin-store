@@ -3,24 +3,63 @@ import { RippleButton } from 'components/Ripple'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { BGColor, PColor } from 'public/colors'
-import { IconDelete, IconEdit } from 'public/icons'
-import { ActionName, Button, ButtonCard, Card, ContainerActions, InputCounter, ItemProQuantity, OverlineFree, WrapperButton, WrapperCard } from './styled'
+import { IconDelete, IconEdit, IconPlus } from 'public/icons'
+import {
+  ActionName,
+  Button,
+  ButtonCard,
+  Card,
+  ContainerActions,
+  InputCounter,
+  ItemProQuantity,
+  OverlineFree,
+  WrapperButton,
+  WrapperCard
+} from './styled'
 import { useState } from 'react'
 import { numberFormat } from '../../utils'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const CardProducts = ({ pName, del, edit, pId, src, onTargetClick = () => { }, sum, free, height, index, fileInputRef, onFileInputChange, handleFree, ProDescription, handleFreeProducts = () => { }, dispatch = () => { }, handleIncrement, ProQuantity, handleDecrement, ValueDelivery, ProPrice, render = null, onClick = () => { }, handleDelete = () => { }, ProDescuento = 0, ProImage, widthButton }) => {
+export const CardProducts = ({
+  del,
+  edit,
+  fileInputRef,
+  free,
+  handleDecrement,
+  handleFree,
+  handleIncrement,
+  height,
+  index,
+  onFileInputChange,
+  pId,
+  pName,
+  ProDescription,
+  ProDescuento = 0,
+  ProImage,
+  ProPrice,
+  ProQuantity,
+  render = null,
+  src,
+  sum,
+  ValueDelivery,
+  widthButton,
+  dispatch = () => { return },
+  handleDelete = () => { return },
+  handleFreeProducts = () => { return },
+  onClick = () => { return },
+  onTargetClick = () => { return }
+}) => {
   const router = useRouter()
   const [startAnimateUp, setStartAnimateUp] = useState('')
-  const [show, setShow] = useState(false)
   const [animateType, setAnimateType] = useState('')
+  const [show, setShow] = useState(false)
+
   const handle = () => {
     setTimeout(() => {
       setAnimateType('move-up')
       setStartAnimateUp('')
     }, 250)
   }
-  const decreamentHandler = () => {
+  const handleDown = () => {
     handleDecrement()
     setStartAnimateUp('')
     setAnimateType('')
@@ -33,7 +72,7 @@ export const CardProducts = ({ pName, del, edit, pId, src, onTargetClick = () =>
     }, 0)
   }
 
-  const increamentHandler = () => {
+  const handleUp = () => {
     handleIncrement()
     setStartAnimateUp('')
     setAnimateType('')
@@ -54,44 +93,53 @@ export const CardProducts = ({ pName, del, edit, pId, src, onTargetClick = () =>
       />
       <WrapperCard>
 
-        {handleFree && <OverlineFree free={free} onClick={() => { return handleFreeProducts() }}>
-          <span>Gratis</span>
-        </OverlineFree>}
-        <Card
-          d
-          free={free}
-          height={height}
-        >
-          {del && <ButtonCard grid={false} onClick={handleDelete}>
+        {handleFree &&
+        <OverlineFree free={free} onClick={() => { return handleFreeProducts() }}>
+          <span>
+            Gratis
+          </span>
+        </OverlineFree>
+        }
+        <Card free={free} height={height} >
+          {del &&
+          <ButtonCard grid={false} onClick={handleDelete}>
             <IconDelete color={PColor} size={20} />
-            <ActionName>Eliminar</ActionName>
-          </ButtonCard>}
-          {edit && <ButtonCard
+            <ActionName>
+              Eliminar
+            </ActionName>
+          </ButtonCard>
+          }
+          {edit &&
+          <ButtonCard
             delay='.1s'
             grid={false}
             onClick={() => { return router.push(`/update/products/editar/${pId}`) }}
             top={'80px'}
           >
             <IconEdit color={PColor} size={20} />
-            <ActionName>Editar</ActionName>
-          </ButtonCard>}
-          {sum && <WrapperButton>
+            <ActionName>
+              Editar
+            </ActionName>
+          </ButtonCard>
+          }
+          {sum &&
+          <WrapperButton>
             <Button
               delay='.1s'
               grid={false}
-              onClick={() => { return increamentHandler() }}
+              onClick={() => { return handleUp() }}
               top={'80px'}
             >
-              +
+              <IconPlus color={BGColor} size={10} />
             </Button>
-
             <ItemProQuantity className='ProQuantity' >
-              <div className={`counts--container`} onClick={() => { return setShow(index) }}>
+              <div className='counts--container' onClick={() => { return setShow(index) }}>
                 <div className={`count ${startAnimateUp}${animateType}`}>
                   {ProQuantity}
                 </div>
               </div>
-              {show === index && <InputCounter
+              {show === index &&
+              <InputCounter
                 max={999}
                 min={1}
                 onBlur={() => { return setShow(false) }}
@@ -121,13 +169,14 @@ export const CardProducts = ({ pName, del, edit, pId, src, onTargetClick = () =>
                 show={show}
                 type='number'
                 value={ProQuantity}
-              />}
+              />
+              }
             </ItemProQuantity>
 
             <Button
               delay='.1s'
               grid={false}
-              onClick={() => { return decreamentHandler() }}
+              onClick={() => { return handleDown() }}
               top={'80px'}
             >
               -
@@ -147,23 +196,26 @@ export const CardProducts = ({ pName, del, edit, pId, src, onTargetClick = () =>
               <span className='description'>{ProDescription}</span>
             </span>
             <ContainerActions>
-              {render && <RippleButton
+              {render &&
+              <RippleButton
                 bgColor={BGColor}
                 margin='5px auto'
                 onClick={() => { return onClick() }}
                 padding='0'
                 widthButton={widthButton}
-              >{render}</RippleButton>}
+              >
+                {render}
+              </RippleButton>
+              }
             </ContainerActions>
           </div>
           <div className='dish-card__container-image' onClick={() => { return onTargetClick() }}>
             <Image
-              alt={pName}
+              alt={pName || ''}
               blurDataURL='/images/DEFAULTBANNER.png'
               className='store_image'
               layout='fill'
               objectFit='cover'
-
               src={ProImage || src || '/app/images/DEFAULTBANNER.png'}
             />
           </div>

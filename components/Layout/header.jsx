@@ -2,11 +2,15 @@ import { Context } from 'context/Context'
 import Link from 'next/link'
 import React, {
   useCallback,
-  useContext, 
-  useEffect, 
+  useContext,
+  useEffect,
   useState } from 'react'
 import styled from 'styled-components'
-import { DarkSilver, PColor, SECBGColor } from '../../public/colors'
+import {
+  DarkSilver,
+  PColor,
+  SECBGColor
+} from '../../public/colors'
 import { useApolloClient } from '@apollo/client'
 import { IconLogo, IconSales } from '../../public/icons'
 import useScrollHook, { useScrollColor } from '../hooks/useScroll'
@@ -15,10 +19,18 @@ import { useRouter } from 'next/router'
 import { AwesomeModal } from 'components/AwesomeModal'
 import Text from 'components/common/Atoms/Text'
 import Column from 'components/common/Atoms/Column'
+import { useMobile } from 'npm-pkg-hook'
+import { Hamburguer } from './Burguer'
+import Row from '../common/Atoms/Row'
+
 
 export const Header = () => {
   const style = useScrollHook()
-  const { setSalesOpen, salesOpen, setAlertBox } = useContext(Context)
+  const {
+    setSalesOpen,
+    salesOpen,
+    setAlertBox
+  } = useContext(Context)
   const { client } = useApolloClient()
   const { scrollNav } = useScrollColor()
   const customTime = new Date()
@@ -26,9 +38,7 @@ export const Header = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const location = useRouter()
-  // let displayMessage;
 
-  // Cerrar sesión
   const onClickLogout = useCallback(async () => {
     setLoading(true)
     await window
@@ -47,12 +57,14 @@ export const Header = () => {
         setError(true)
         setAlertBox({ message: 'Ocurrió un error al cerrar session' })
       })
+    setLoading(false)
   }, [client, location, setAlertBox])
 
 
   const customColor = {
     color: ''
   }
+  let displayMessage = ''
   if (customHours < 12) {
     // displayMessage = `Good Morning`;
     customColor.color = 'red'
@@ -63,8 +75,7 @@ export const Header = () => {
     // displayMessage = `Good Night`;
     customColor.color = '#090c10'
   }
-  // const { mobile, width, height } = useWindowSize();
-
+  const { isMobile } = useMobile()
   const [timer, setTimer] = useState(0)
   const [isOn, setIsOn] = useState(false)
   useEffect(() => {
@@ -86,17 +97,16 @@ export const Header = () => {
       window.removeEventListener('blur', () => { return })
     }
   }, [isOn])
-  const [openAlerCloseSessions, setOpenAlerCloseSessions] = useState(false)
+  const [openAlerCloseSessions, setOpenAlertCloseSessions] = useState(false)
   useEffect(() => {
     if (timer >= 300) {
-      setOpenAlerCloseSessions(true)
+      setOpenAlertCloseSessions(true)
     }
     if (timer >= 700) {
       // eslint-disable-next-line
       onClickLogout().catch(() => {return console.log('logout cancelled')})
     }
   }, [onClickLogout, timer])
-
   return (
     <HeaderC scrollNav={scrollNav} style={style} >
       <AwesomeModal
@@ -108,7 +118,7 @@ export const Header = () => {
         header={false}
         height={'200px'}
         onCancel={() => { return false }}
-        onHide={() => { return setOpenAlerCloseSessions(!openAlerCloseSessions) }}
+        onHide={() => { return setOpenAlertCloseSessions(!openAlerCloseSessions) }}
         padding={'30px'}
         show={openAlerCloseSessions}
         size='20%'
@@ -117,24 +127,30 @@ export const Header = () => {
         <Column>
           <Text size='20px'>Tu session terminara pronto</Text>
         </Column>
-        <button onClick={() => {return setOpenAlerCloseSessions(!openAlerCloseSessions)}}>
+        <button onClick={() => {return setOpenAlertCloseSessions(!openAlerCloseSessions)}}>
           cancelar
         </button>
         <button onClick={() => {return onClickLogout()}}>
           cerrar session
         </button>
       </AwesomeModal>
-      <Link href={'/dashboard'}>
-        <a>
-          <IconLogo color={PColor} size='80px' />
-        </a>
-      </Link>
+      <Row alignItems='center'>
+        {isMobile && <Hamburguer />}
+        &nbsp;
+        &nbsp;
+        <Link href={'/dashboard'}>
+          <a>
+            <IconLogo color={PColor} size={isMobile ? '40px' : '80px'} />
+          </a>
+        </Link>
+      </Row>
       <CtnItemOps>
-        <Options
+        {!isMobile
+        && <Options
           error={error}
           loading={loading}
           onClickLogout={onClickLogout}
-        />
+        />}
         <HeaderWrapperButton onClick={() => { return setSalesOpen(!salesOpen) }} style={style}>
           <IconSales size={30} />
           <div className='info-sales'>
@@ -201,6 +217,7 @@ export const HeaderC = styled.header`
     z-index: 990;
     justify-content: space-between;
     box-shadow: inset 0 -1px 0 #dcdcdc;
-    @media (min-width: 992px) {
+    @media (max-width: 992px) {
+      padding: 0 0.2em;
     }
     `

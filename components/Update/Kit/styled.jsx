@@ -266,7 +266,7 @@ export const ItemFilter = styled.button`
     color: ${DarkSilver};
     font-size: 0.875rem;
     cursor: pointer;
-    min-width: 5.375rem;
+    min-width: max-content;
     font-family: PFont-Light;
 `
 export const ContainerBurger = styled.div`

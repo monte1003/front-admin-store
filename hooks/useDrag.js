@@ -56,7 +56,15 @@ export const useDrag = (x, y) => {
   return { move, moveTo, handelDown, handelUp, handleMove }
 }
 
-export const Draggable = ({ children, moveY = false, moveX = false, minX, minY, maxX, maxY }) => {
+export const Draggable = ({
+  children,
+  moveY = false,
+  moveX = false,
+  minX,
+  minY,
+  maxX,
+  maxY
+}) => {
   const elemRef = useRef(null)
   const dragProps = useRef()
   useEffect(() => {

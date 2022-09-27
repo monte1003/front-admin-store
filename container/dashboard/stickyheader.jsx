@@ -11,9 +11,7 @@ function Sticky({ children, as = 'div', className = '', ...rest }) {
   const addStickyRef = stickyRef => {
     dispatch.addStickyRef(topSentinelRef, bottomSentinelRef, stickyRef)
   }
-  
   const Component = as
-  
   return (
     <Component
       className={styles.sticky + className || ` ${className}`}

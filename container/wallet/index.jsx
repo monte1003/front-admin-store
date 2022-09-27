@@ -564,7 +564,7 @@ export const WalletC = () => {
             <Item></Item>
           </ColumnList>
           {data?.WalletDebt?.map(x => {return (
-            <ColumnList key={x.RefDebtCode}>{console.log(x)}
+            <ColumnList key={x.RefDebtCode}>
               <Item>
                 <span> {x.RefDebtCode}</span>
               </Item>

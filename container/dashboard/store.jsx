@@ -28,6 +28,7 @@ import { Skeleton } from 'components/Skeleton'
 import { useOnScreen } from 'hooks/useIntersection'
 import { Product } from './Product'
 import { ItemFilter } from 'components/Update/Kit/styled'
+import { useMobile } from 'npm-pkg-hook'
 
 const DashboardStore = () => {
   // STATE
@@ -150,21 +151,19 @@ const DashboardStore = () => {
           onUnstuck={handleUnstuck}
         >
           <Sticky
-            as='h1'
+            as='h3'
             id={key}
             name={x.pName}
             onClick={() => { return setOpenOptionCatProducts(x.carProId) }}
           >
-
             <ContentSearch>
-              {OptionCatProduct === x.carProId ?
-                <input
+              {OptionCatProduct === x.carProId
+                ? <input
                   autoFocus={true}
                   placeholder={x.pName}
                   type='text'
-                // value={'' || x.pName}
-                /> :
-                <Title size='.9em'>{x.pName} ({x.productFoodsAll?.length || 0})</Title>
+                />
+                : <Title size='.9em'>{x.pName} ({x.productFoodsAll?.length || 0})</Title>
               }
             </ContentSearch>
 
@@ -245,7 +244,7 @@ const DashboardStore = () => {
       }
     }).catch(err => { return setAlertBox({ message: `${err}`, duration: 7000 }) })
   }
-  const buttons = () => {
+  const Buttons = () => {
     return (
       <WrapperOptions>
         <ItemFilter
@@ -262,21 +261,22 @@ const DashboardStore = () => {
           padding={'10px'}
           radius={'19px'}
         > Administrar Categorías</ItemFilter>
-        {/* <ItemFilter
+        <ItemFilter
           onClick={() => { return openTable(!table) }}
           padding={'10px'}
           radius={'19px'}
-        > Ver sobre mesa</ItemFilter> */}
+        > Ver sobre mesa</ItemFilter>
       </WrapperOptions>
     )
   }
+  const { isMobile } = useMobile()
+
   return (<>
     <Wrapper>
       {(loadCatPro || loading) && <Loading />}
       <Container>
-        <Managebanner />
-        {buttons()}
-
+        <Managebanner isMobile={isMobile} />
+        {Buttons()}
         <InputHooks
           errors={errorForm?.search}
           name='search'
@@ -289,7 +289,8 @@ const DashboardStore = () => {
           {stickySectionElements}
         </StickyViewport>
       </Container>
-      {(modalStore || name[3]) && <AwesomeModal
+      {(modalStore || name[3])
+      && <AwesomeModal
         backdrop='static'
         btnCancel={true}
         btnConfirm={false}

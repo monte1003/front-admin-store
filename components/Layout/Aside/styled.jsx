@@ -5,6 +5,9 @@ import { BColor, BGColor, PColor, PLVColor, SFVColor } from '../../../public/col
 export const Router = styled.div`
     background-color: ${`${SFVColor}69`};
     height: 100vw;
+    @media (max-width: 768px){
+        height: auto;
+    }
 `
 export const CtnAnchor = styled(link)`
     box-sizing: border-box;

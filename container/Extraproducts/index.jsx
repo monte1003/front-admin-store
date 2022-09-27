@@ -1,6 +1,10 @@
 import { Button } from 'components/Layout/styled'
 import { Item } from 'components/Update/Products/styled'
-import { DELETE_EXTRA_PRODUCTS, EDIT_EXTRA_PRODUCTS, GET_ALL_EXTRA_PRODUCT } from 'container/dashboard/queries'
+import {
+  DELETE_EXTRA_PRODUCTS,
+  EDIT_EXTRA_PRODUCTS,
+  GET_ALL_EXTRA_PRODUCT
+} from 'container/dashboard/queries'
 import { PColor } from 'public/colors'
 import { IconDelete, IconEdit } from 'public/icons'
 import React, { useContext } from 'react'
@@ -156,7 +160,7 @@ export const ExtraProducts = () => {
             dataExtra={dataExtra?.ExtProductFoodsAll || []}
             dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}
             modal={false}
-            setModal={() => { }}
+            setModal={() => { return }}
           />
         </div>
 

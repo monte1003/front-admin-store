@@ -69,7 +69,10 @@ export const Section = styled.div`
     &:hover  ${ButtonCard} {
         right: 15px;
     }
-    `
+    @media only screen and (max-width: 960px) {
+      padding: 0;
+    }
+`
 export const MerchantInfoTitle = styled.h1`
     color: ${SECColor};
     font-weight: 400;
@@ -87,6 +90,10 @@ export const MerchantInfoTitle = styled.h1`
     svg {
       cursor: pointer;
     }
+    @media only screen and (max-width: 960px) {
+    font-size: 1.125rem;
+    }
+
 `
 export const ButtonAction = styled.button`
     margin: 10px;
@@ -109,6 +116,9 @@ export const WrapperOptions = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    @media only screen and (max-width: 960px) {
+      overflow: scroll;
+    }
 `
 export const ButtonOption = styled.div`
     position: absolute;
@@ -197,6 +207,9 @@ export const MerchantBannerWrapperInfo = styled.div`
     padding-left: 30px;
     background-color: rgb(0 0 0 / 6%);
     background-blend-mode: overlay;
+    @media only screen and (max-width: 960px) {
+      height: 118px;
+    }
     background-image: ${({ bannerImage }) => { return bannerImage ? (bannerImage) : '' }};
     .merchant-banner__status-description {
       line-height: 1.15;
@@ -231,6 +244,7 @@ export const MerchantBannerWrapperInfo = styled.div`
         }
       }
     }
+    
 `
 
 // IMAGE
@@ -280,6 +294,11 @@ export const Title = styled.h1`
   line-height: 44px;
   margin-bottom: 0;
   width: fit-content;
+  @media only screen and (max-width: 960px) {
+    font-size: 1.125rem;
+    color: #393a3d;
+    font-family: PFont-Regular;
+  }
 `
 export const ContainerCarrusel = styled.div`
   display: grid;

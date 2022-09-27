@@ -1,3 +1,4 @@
+import React, { useContext, useEffect } from 'react'
 import { gql, useSubscription } from '@apollo/client'
 import { AwesomeModal } from 'components/AwesomeModal'
 import { BtnClose } from 'components/AwesomeModal/styled'
@@ -8,7 +9,6 @@ import GenerateSales from 'container/Sales'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import { IconCancel } from 'public/icons'
-import React, { useContext, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { Context } from '../../context/Context'
 import { AlertBox } from '../AlertBox'
@@ -18,7 +18,14 @@ import { Header } from './header'
 
 export const Layout = ({ children, watch, settings }) => {
   const location = useRouter()
-  const { error, isSession, setAlertBox, openSchedule, setOpenSchedule, salesOpen, setSalesOpen } = useContext(Context)
+  const {
+    error,
+    setAlertBox,
+    openSchedule,
+    setOpenSchedule,
+    salesOpen,
+    setSalesOpen
+  } = useContext(Context)
   const { latitude, longitude } = usePosition(watch, settings)
   const dataLocation = usePosition(watch, settings)
   useEffect(() => {
@@ -50,7 +57,7 @@ export const Layout = ({ children, watch, settings }) => {
     <>
       <AlertBox err={error} />
       <Main aside={!['/'].find(x => { return x === location.pathname })} >
-        {!isSession && <Header />}
+        <Header />
         <Aside />
         <div style={{ gridArea: 'main', overflowY: 'auto' }}>
           {children}

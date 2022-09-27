@@ -307,7 +307,6 @@ export const Card = styled.div`
     -webkit-box-orient: vertical;
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    width: 85%;
     }
     .description {
     text-rendering: optimizeLegibility;
