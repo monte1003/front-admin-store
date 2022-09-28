@@ -43,7 +43,7 @@ const Provider = ({ children }) => {
   }
   // Context LastCompany
   const [company, setCompanyId] = useState(initialCompanyState)
-  const useCompany = idStore => {
+  const useCompany = useCallback(idStore => {
     setCompanyId({
       ...company,
       idStore
@@ -51,7 +51,7 @@ const Provider = ({ children }) => {
     if (typeof idStore !== 'undefined') {
       localStorage.setItem('idStore', idStore)
     }
-  }
+  }, [company])
   useEffect(() => {
     if (localStorage.getItem('idStore') !== company.idStore) {
       setCompanyId({
@@ -63,11 +63,34 @@ const Provider = ({ children }) => {
 
   // Context to session
   const [isSession, setIsSession] = useState()
-  const [salesOpen, setSalesOpen] = useState(false)
+  const [salesOpen, setSalesOpenModal] = useState(false)
   const setSessionActive = useCallback(
     sessionValue => { return setIsSession(sessionValue) },
-    [isSession]
+    []
   )
+  const setSalesOpen = () => {
+    setSalesOpenModal(!salesOpen)
+    router.push(
+      {
+        query: {
+          ...router.query,
+          sale: salesOpen ? '' : 'true'
+        }
+      },
+      undefined,
+      { shallow: true }
+    )
+  }
+  useEffect(() => {
+    if (router.query.sale === 'true') {
+      setSalesOpenModal(true)
+    }
+    handleMenu(false)
+    setCollapsed(false)
+    setStatus('close')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router])
+
   useEffect(() => {
     if (!isSession) {
       setIsSession(null)
@@ -128,11 +151,6 @@ const Provider = ({ children }) => {
 
   const [status, setStatus] = useState('close')
 
-  useEffect(() => {
-    handleMenu(false)
-    setCollapsed(false)
-    setStatus('close')
-  }, [router])
 
   const value = useMemo(
     () => {

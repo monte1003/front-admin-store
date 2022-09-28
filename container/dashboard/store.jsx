@@ -1,17 +1,32 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import PropTypes from 'prop-types'
 import Image from 'next/image'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { PColor, APColor } from '../../public/colors'
 import { Loading } from '../../components/Loading'
 import { useRouter } from 'next/router'
-import { Container, Wrapper, CardProductsContent, TooltipCardProduct, WrapperCard, CtnBox } from './styled'
-import { useFormTools } from '../../components/BaseForm'
+import {
+  Container,
+  Wrapper,
+  CardProductsContent,
+  TooltipCardProduct,
+  WrapperCard,
+  CtnBox } from './styled'
+import { useFormTools } from 'npm-pkg-hook'
 import { Food } from '../update/Products/food'
 import { useSetState } from '../../components/hooks/useState'
 import { AwesomeModal } from '../../components/AwesomeModal'
 import { GET_ALL_CATEGORIES_WITH_PRODUCT, GET_ALL_EXTRA_PRODUCT } from './queries'
-import { WrapperOptions, ContentSearch, Title, ContainerCarrusel } from './styledStore'
+import {
+  WrapperOptions,
+  ContentSearch,
+  Title,
+  ContainerCarrusel
+} from './styledStore'
 import InputHooks from '../../components/InputHooks/InputHooks'
 import { GET_ONE_PRODUCTS_FOOD } from '../producto/queries'
 import { GET_EXTRAS_PRODUCT_FOOD_OPTIONAL, UPDATE_PRODUCT_FOOD } from '../update/Products/queries'
@@ -21,7 +36,11 @@ import { GET_ALL_PRODUCT_STORE } from './queriesStore'
 import { useStore } from 'components/hooks/useStore'
 import { ManageCategories } from './ManageCategories'
 import { Managebanner } from './profile/Managebanner'
-import { Sticky, StickyBoundary, StickyViewport } from './stickyheader'
+import {
+  Sticky,
+  StickyBoundary,
+  StickyViewport
+} from './stickyheader'
 import { IconDelete, IconEdit } from 'public/icons'
 import { numberFormat } from '../../utils'
 import { Skeleton } from 'components/Skeleton'
@@ -32,37 +51,36 @@ import { useMobile } from 'npm-pkg-hook'
 
 const DashboardStore = () => {
   // STATE
-  const { openSchedule, setOpenSchedule, setAlertBox } = useContext(Context)
-  // const StoreId = location.query?.name[1]
-  // eslint-disable-next-line
-  const [handleChange, _handleSubmit, _setDataValue, { dataForm, errorForm }] = useFormTools()
+  const {
+    openSchedule,
+    setOpenSchedule,
+    setAlertBox
+  } = useContext(Context)
+  const [
+    handleChange,
+    _handleSubmit,
+    _setDataValue,
+    {
+      dataForm,
+      errorForm
+    }
+  ] = useFormTools()
+  const [showDessert, setShowDessert] = useState(false)
   const SHOW_MODAL = useSetState(false)
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line
   const [searchFilter, setSearchFilter] = useState({ gender: [], desc: [], speciality: [] })
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line
   const [search, setSearch] = useState('')
-  // eslint-disable-next-line
-  const [catProduct, setValueCatPorducts] = useState({})
   const [OptionCatProduct, setOpenOptionCatProducts] = useState(false)
   const [table, openTable] = useState(false)
   const [dataProCat, setData] = useState([])
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line
   const [showMore, setShowMore] = useState(5)
   const [modal, setModal] = useState(false)
   const [modalStore, setModalStore] = useState(false)
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line
   const [hour, setHour] = useState(null)
-  // eslint-disable-next-line
   const [day, setDay] = useState()
   const SET_OPEN_PRODUCT = useSetState(false)
 
   const containerStyle = {
     height: '100vh'
-    // overflowY: 'auto',
   }
   const router = useRouter()
   const { name, plato } = router.query
@@ -100,8 +118,15 @@ const DashboardStore = () => {
       setAlertBox({ message: 'Lo sentimos, ocurrió un error' })
     }
   }
-  // eslint-disable-next-line no-unused-vars
-  const { getStore, pId, pName, ProPrice, ProDescuento, ProDescription, ProImage } = dataProduct?.productFoodsOne || {}
+  const {
+    getStore,
+    pId,
+    pName,
+    ProPrice,
+    ProDescuento,
+    ProDescription,
+    ProImage
+  } = dataProduct?.productFoodsOne || {}
   const { storeName } = getStore || {}
   const { storeName: nameStore } = store || {}
 
@@ -128,8 +153,7 @@ const DashboardStore = () => {
   }
   // EFFECTS
   useEffect(() => {
-    // eslint-disable-next-line no-unsafe-optional-chaining
-    dataProductAndCategory?.getCatProductsWithProduct && setData([...dataProductAndCategory?.getCatProductsWithProduct])
+    dataProductAndCategory?.getCatProductsWithProduct && setData([...dataProductAndCategory.getCatProductsWithProduct])
   }, [dataProductAndCategory, searchFilter])
   useEffect(() => {
     getCatProductsWithProduct({ variables: { max: showMore } })
@@ -141,7 +165,7 @@ const DashboardStore = () => {
     setHour(moment(date).format('hh:mm'))
   }, [])
 
-  const stickySectionElements = dataProCat?.map((x, key) => {
+  const StickySectionElements = dataProCat?.map((x, key) => {
     return (
       <div key={x.carProId}>
         <StickyBoundary
@@ -218,7 +242,7 @@ const DashboardStore = () => {
     plato: plato && <h1>Hola</h1>
   }
   const handleDelete = product => {
-    const { pId, pState, pName } = product || dataProduct?.productFoodsOne
+    const { pId, pState, pName } = product || dataProduct.productFoodsOne
     updateProductFoods({
       variables: {
         input: {
@@ -286,7 +310,7 @@ const DashboardStore = () => {
           value={dataForm?.search}
         />
         <StickyViewport as='main' style={containerStyle}>
-          {stickySectionElements}
+          {StickySectionElements}
         </StickyViewport>
       </Container>
       {(modalStore || name[3])
@@ -303,23 +327,27 @@ const DashboardStore = () => {
         size='large'
         zIndex='999'
       >
-        {(plato && modalStore) ? <Product
-          ProDescription={ProDescription}
-          ProDescuento={ProDescuento}
-          ProImage={ProImage}
-          ProPrice={ProPrice}
-          dataExtra={dataExtra}
-          dataOptional={dataOptional}
-          handleDelete={handleDelete}
-          modal={modal}
-          nameStore={nameStore}
-          pId={pId}
-          pName={pName}
-          setModal={setModal}
-          store={store}
-          storeName={storeName}
+        {(plato && modalStore)
+          ? <Product
+            ProDescription={ProDescription}
+            ProDescuento={ProDescuento}
+            ProImage={ProImage}
+            ProPrice={ProPrice}
+            dataExtra={dataExtra}
+            dataOptional={dataOptional}
+            handleDelete={handleDelete}
+            modal={modal}
+            nameStore={nameStore}
+            pId={pId}
+            pName={pName}
+            setModal={setModal}
+            setShowDessert={setShowDessert}
+            showDessert={showDessert}
+            store={store}
+            storeName={storeName}
 
-        /> : component[name[3]]}
+          /> : component[name[3]]
+        }
       </AwesomeModal>}
     </Wrapper>
   </>
@@ -381,15 +409,15 @@ export const CardProducts = ({ food, onClick, setAlertBox }) => {
             </div>}
           </CtnBox>
           <CtnBox>
-            {isVisible === true && <Image
-              alt={food.ProDescription || 'img'}
-              // width={150}
-              // height={150}
-              blurDataURL='/images/DEFAULTBANNER.png'
-              layout='fill'
-              objectFit='cover'
-              src={food.ProImage}
-            />}
+            {isVisible === true &&
+             <Image
+               alt={food.ProDescription || 'img'}
+               blurDataURL='/images/DEFAULTBANNER.png'
+               layout='fill'
+               objectFit='cover'
+               src={food.ProImage}
+             />
+            }
           </CtnBox>
         </CardProductsContent>
       </WrapperCard>}

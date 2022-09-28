@@ -17,6 +17,7 @@ import {
   Text
 } from './styled'
 import { useRouter } from 'next/router'
+import { AwesomeModal } from '~/components/AwesomeModal'
 
 export const Product = ({
   store,
@@ -31,16 +32,20 @@ export const Product = ({
   ProDescuento,
   nameStore,
   dataOptional,
+  showDessert,
+  setShowDessert,
   handleDelete,
   pId,
   ...props }) => {
   const router = useRouter()
+  console.log(showDessert)
   return (
     <div {...props}>
       <ContainerFilter>
         <ItemFilter onClick={() => { return setModal(!modal) }}>Añadir Adicionales</ItemFilter>
+        <ItemFilter onClick={() => { return setShowDessert(!showDessert) }}>Añadir Extra Sobremesa </ItemFilter>
         <ItemFilter onClick={() => { return router.push(`/update/products/editar/${pId}`) }} >Editar</ItemFilter>
-        <ItemFilter onClick={() => { return handleDelete() }} >Eliminar</ItemFilter>
+        <ItemFilter onClick={() => { return handleDelete() }}>Eliminar</ItemFilter>
       </ContainerFilter>
       <CardProductsModal>
         <ContentImage>
@@ -98,11 +103,19 @@ export const Product = ({
           />
         </ContentInfo>
       </CardProductsModal>
-
-      <OptionalExtraProducts
-        dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}
-        pId={pId}
-      />
+      <AwesomeModal
+        footer={false}
+        header={false}
+        height={'100vh'}
+        onHide={() => {return setShowDessert(!showDessert)}}
+        show={showDessert}
+        size={'90vw'}
+      >
+        <OptionalExtraProducts
+          dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}
+          pId={pId}
+        />
+      </AwesomeModal>
     </div>
   )
 }

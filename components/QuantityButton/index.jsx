@@ -1,19 +1,31 @@
 import React from 'react'
+import { ButtonDecrement, ButtonIncrement, ContainerQuantity, MarmitaCounter } from './styled'
 import styles from './styles.module.css'
 
 export const QuantityButton = ({
   quantity,
-  label,
+  // label,
+  border,
+  padding,
   handleDecrement,
-  handleIncrement
+  showNegativeButton = false,
+  validationZero = false,
+  width,
+  showPositiveButton = false,
+  handleIncrement,
+  ...props
 }) => {
+  const validateZero = validationZero && quantity >= 0
   return (
-    <div>
-      <div className={styles['dish-action__counter']}>
-        <div className={styles['marmita-counter']} data-test-id='marmita-counter'>
-          <button
+    <div {...props}>
+      <ContainerQuantity border={border} width={width}>
+        <MarmitaCounter
+          data-test-id='marmita-counter'
+          padding={padding}
+        >
+          <ButtonDecrement
             className={styles['btn-icon btn-icon--primary btn-icon--size-m btn-icon--transparent marmita-counter__btn-decrement']}
-            disabled=''
+            disabled={showNegativeButton || validateZero}
             onClick={() => {return handleDecrement()}}
             type='button'
           >
@@ -26,18 +38,18 @@ export const QuantityButton = ({
               >
                 <path
                   d='M17.993 11c.556 0 1.007.444 1.007 1 0 .552-.45 1-1.007 1H6.007A1.001 1.001 0 0 1 5 12c0-.552.45-1 1.007-1h11.986z'
-                  fill='#EA1D2C'
+                  fill={validateZero ? 'transparent' : '#EA1D2C'}
                   fillRule='evenodd'
                 > </path>
               </svg>
             </span>
-          </button>
-          <span className={styles['marmita-counter__value_label']}>{label}</span>
+          </ButtonDecrement>
+          {/* <span className={styles['marmita-counter__value_label']}>{label}</span> */}
           <div className={styles['marmita-counter__value']}>
-            {quantity}
+            {validateZero ? null : quantity }
           </div>
-          <button
-            className={styles['btn-icon btn-icon--primary btn-icon--size-m btn-icon--transparent']}
+          {<ButtonIncrement
+            disabled={showPositiveButton}
             onClick={() => {return handleIncrement()}}
             type='button'
           >
@@ -54,9 +66,9 @@ export const QuantityButton = ({
               ></path>
             </svg>
             </span>
-          </button>
-        </div>
-      </div>
+          </ButtonIncrement>}
+        </MarmitaCounter>
+      </ContainerQuantity>
     </div>
   )
 }

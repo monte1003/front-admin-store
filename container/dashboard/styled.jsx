@@ -1,8 +1,26 @@
 import styled, { css, keyframes } from 'styled-components'
-// import { StyleSheet } from '@react-pdf/renderer'
-import { BColor, BGColor, PColor, SECColor, PVColor, TBGSColor, PLVColor, TBGAColor, TBGVColor, TBGBColor, TBGEColor, TBGRColor, TBGDColor, DarkSilver } from '../../public/colors'
+import {
+  BColor,
+  BGColor,
+  PColor,
+  SECColor,
+  PVColor,
+  TBGSColor,
+  PLVColor,
+  TBGAColor,
+  TBGVColor,
+  TBGBColor,
+  TBGEColor,
+  TBGRColor,
+  TBGDColor,
+  DarkSilver
+} from '../../public/colors'
 import { fadeIn, fadeOut } from '../../components/AlertBox/styled'
-import { BG_ANIMATION_, SideIn, SlideInLeft } from '../../components/animations'
+import {
+  BG_ANIMATION_,
+  SideIn,
+  SlideInLeft
+} from '../../components/animations'
 
 const pulse = keyframes`
   0% {
@@ -150,10 +168,10 @@ export const CardProductsModal = styled(CardProductsContent)`
   padding: 0px;
   height: min-content;
   display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(400px, .5fr));
-    grid-gap: 20px;
-    place-content: center;
-    place-items: stretch;
+  grid-template-columns: repeat(auto-fill,minmax(350px, .5fr));
+  grid-gap: 20px;
+  place-content: center;
+  place-items: stretch;
   @media (max-width: 768px) {
     grid-template-columns: 100%;
   }
@@ -174,15 +192,14 @@ export const ContentImage = styled.div`
 export const Flex = styled.div`
   display: flex;
   width: 100%;
-  
-  `
+`
 export const DisRestaurant = styled.div`
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(63,62,62,.1);
     border-radius: 4px;
-    width: 90%;
-    margin: auto;
+    width: 100%;
+    margin: 0 0 10px 0;
     padding: 10px;
     height: auto;
     padding: 11px 20px;

@@ -52,6 +52,7 @@ export const SubItems = ({
           <ExtrasProductsItems
             dataExtra={dataExtra || []}
             dataOptional={dataOptional || []}
+            editing={false}
             modal={false}
             pId={pId}
             setModal={() => { return }}

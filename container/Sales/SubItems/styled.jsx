@@ -22,7 +22,7 @@ export const Container = styled.div`
     font-size: 16px;
     overflow-y: auto;
     height: 100%;
-    padding: 16px 40px;
+    padding: 16px 20px;
 
 `
 export const DishAction = styled.div`
@@ -34,8 +34,7 @@ export const DishAction = styled.div`
     padding: 20px;
     height: 80px;
     width: 100%;
-    grid-area: action;
     && button {
-       background-color: transparent;
+    background-color: transparent;
     }
 `

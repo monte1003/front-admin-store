@@ -1,15 +1,25 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { RippleButton } from '../../../components/Ripple'
-import { EColor, PColor } from '../../../public/colors'
-import { IconDelete, IconMiniCheck, IconPlus } from '../../../public/icons'
+import { EColor } from '../../../public/colors'
+import { IconDelete, IconMiniCheck } from '../../../public/icons'
 import { RandomCode, updateCache } from '../../../utils'
 import { MockData } from '../../../components/common/mockData'
-import { GET_EXTRAS_PRODUCT_FOOD_OPTIONAL, GET_EXTRAS_PRODUCT_FOOD_SUB_OPTIONAL, UPDATE_EXTRAS_PRODUCT_FOOD_OPTIONAL } from '../../update/Products/queries'
-import { CardsComponent, ContainerListOptions, ContentCheckbox, Div, GarnishChoicesHeader, Input, WrapperList } from './styled'
+import {
+  GET_EXTRAS_PRODUCT_FOOD_OPTIONAL,
+  GET_EXTRAS_PRODUCT_FOOD_SUB_OPTIONAL,
+  UPDATE_EXTRAS_PRODUCT_FOOD_OPTIONAL
+} from '../../update/Products/queries'
+import {
+  CardsComponent,
+  ContentCheckbox,
+  GarnishChoicesHeader,
+  Input
+} from './styled'
 import { Checkbox } from 'components/Checkbox'
 import Column from 'components/common/Atoms/Column'
 import Row from 'components/common/Atoms/Row'
+import { QuantityButton } from '~/components/QuantityButton'
 
 
 export const OptionalExtraProducts = ({ pId }) => {
@@ -32,7 +42,7 @@ export const OptionalExtraProducts = ({ pId }) => {
       id: id,
       title: title,
       numberLimit: 5,
-      required: setCheck.exState ? 1 : 0,
+      required: setCheck.exState ? 1 : 0
     }
     const list = data.lists[listId]
     list.cards = [...list.cards, newCard]
@@ -117,12 +127,20 @@ export const OptionalExtraProducts = ({ pId }) => {
     }
   }
 
-  const filterData = data?.listIds?.filter(x => x !== '01list')
-  return <Row width='100%' margin='102px 0' flexWrap='wrap'>
+  const filterData = data?.listIds?.filter(x => {return x !== '01list'})
+  return <Row
+    flexWrap='wrap'
+    margin='102px 0'
+    width='100%'
+  >
     {filterData && filterData?.map((listID, index) => {
       const list = data.lists[listID]
       return (
-        <Column width='30%' key={index} role='list'>
+        <Column
+          key={index}
+          role='list'
+          width='30%'
+        >
           <GarnishChoicesHeader>
             <div>
               <p className='garnish-choices__title'>{list?.title}</p>
@@ -168,8 +186,9 @@ export const OptionalExtraProducts = ({ pId }) => {
               }
             }}
             widthButton='100%'
-          >Adicionar sobremesa</RippleButton>
-          z
+          >
+            Adicionar sobremesa
+          </RippleButton>
         </Column>
       )
     })}
@@ -208,14 +227,20 @@ export const OptionalExtraProducts = ({ pId }) => {
         <ContentCheckbox>
           <Checkbox
             checkbox
-            margin='10px 0'
-            name={'exState'}
             checked={setCheck.exState}
             id={setCheck.exState}
+            margin='10px 0'
+            name={'exState'}
             onChange={e => { return handleCheck(e) }}
             type='checkbox'
           />
         </ContentCheckbox>
+        <QuantityButton
+          handleDecrement={() => { return setNumberLimit(numberLimit  === 0 ? 0 : numberLimit - 1) }}
+          handleIncrement={() => {return setNumberLimit(numberLimit + 1)}}
+          quantity={numberLimit}
+          showNegativeButton={numberLimit  === 0}
+        />
         <RippleButton
           margin='0'
           onClick={() => { return handleAddList({ title: title, numberLimit: numberLimit }) }}
@@ -223,27 +248,6 @@ export const OptionalExtraProducts = ({ pId }) => {
           type='button'
           widthButton='100%'
         >Adicionar Categoría de sobremesa</RippleButton>
-        <div style={{ display: 'block' }}>
-          <RippleButton
-            bgColor={'transparent'}
-            border='1px solid'
-            margin='0'
-            onClick={() => { return setNumberLimit(numberLimit + 1) }}
-            padding='0'
-            type='button'
-            widthButton='100%'
-          ><IconPlus color={PColor} size='16px' /></RippleButton>
-          <RippleButton
-            bgColor={'transparent'}
-            border='1px solid'
-            color='#000'
-            margin='0'
-            onClick={() => { return setNumberLimit(numberLimit = 0 && numberLimit - 1) }}
-            padding='0'
-            type='button'
-            widthButton='100%'
-          >--</RippleButton>
-        </div>
       </GarnishChoicesHeader>
     </div>
   </Row>
@@ -253,22 +257,22 @@ export const OptionalExtraProducts = ({ pId }) => {
 export const List = ({ list, setData, data }) => {
   return (
     <Column>
-        {list?.cards?.map((card, index) => {
-          return (
-            <Column key={card?.id}>
-              <Card
-                card={card}
-                data={data}
-                id={list?.id}
-                index={index}
-                key={card?.id}
-                list={list}
-                setData={setData}
-              />
+      {list?.cards?.map((card, index) => {
+        return (
+          <Column key={card?.id}>
+            <Card
+              card={card}
+              data={data}
+              id={list?.id}
+              index={index}
+              key={card?.id}
+              list={list}
+              setData={setData}
+            />
               s
-            </Column>
-          )
-        })}
+          </Column>
+        )
+      })}
     </Column>
   )
 }
@@ -298,11 +302,21 @@ export const Card = ({ card, index }) => {
   )
 }
 
-export const InputHookProducts = ({ placeholder, value, onChange, inputText, type, color, ...props }) => {
+export const InputHookProducts = ({
+  placeholder,
+  borderRadius,
+  value,
+  onChange,
+  inputText,
+  type,
+  color,
+  ...props
+}) => {
   return (
     <>
       <Input
         {...props}
+        borderRadius={borderRadius}
         color={color}
         inputText={inputText}
         onChange={onChange ? e => { return onChange(e.target.value) } : undefined}

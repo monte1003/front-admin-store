@@ -189,7 +189,7 @@ export default function App({ Component, pageProps }) {
       />
       <ApolloProvider client={apolloClient}>
         <GlobalStyle />
-        {<ProgressBar progress={animating} />}
+        <ProgressBar progress={animating} />
         <Noscript>
         </Noscript>
 

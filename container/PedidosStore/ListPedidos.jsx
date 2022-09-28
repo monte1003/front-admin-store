@@ -223,16 +223,22 @@ export const CheckStatus = ({ setModal, modal, dataModal }) => {
                         </div>
                         {/* <IconMiniCheck size={'15px'} color={'#009b3a'} /> */}
                       </GarnishChoicesHeader>
-                      {/* {ExtProductFoodsAll?.map(extra => (
-                                            <CardsComponent key={extra.exPid}>
-                                                <div>
-                                                    <h3 className="title_card">{extra.extraName}</h3>
-                                                    <h3 className="price"> $ {extra.extraPrice}</h3>
-                                                </div>
-                                                <RippleButton bgColor={'transparent'} margin='0px' widthButton='min-content' type="button" onClick={() => console.log(extra)} >
-                                                </RippleButton>
-                                            </CardsComponent>
-                                        ))} */}
+                      {ExtProductFoodsAll?.map(extra => {return (
+                        <CardsComponent key={extra.exPid}>
+                          <div>
+                            <h3 className='title_card'>{extra.extraName}</h3>
+                            <h3 className='price'> $ {extra.extraPrice}</h3>
+                          </div>
+                          <RippleButton
+                            bgColor={'transparent'}
+                            margin='0px'
+                            onClick={() => {return console.log(extra)}}
+                            type='button'
+                            widthButton='min-content'
+                          >
+                          </RippleButton>
+                        </CardsComponent>
+                      )})}
                       {![1, 2, 4]?.map((itemOptional, i) => {return (
                         <div key={i + 1}>
                           <GarnishChoicesHeader >

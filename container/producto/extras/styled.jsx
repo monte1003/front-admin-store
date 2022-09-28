@@ -1,5 +1,9 @@
 import styled, { css } from 'styled-components'
-import { BGColor, PColor, PVColor, BColor } from '../../../public/colors'
+import {
+  BGColor,
+  PColor,
+  BColor
+} from '../../../public/colors'
 
 export const Div = styled.div`
     width: 30%;
@@ -78,13 +82,10 @@ export const GarnishChoicesHeader = styled.div`
 `
 export const CardsComponent = styled.div`
     background-color: ${BGColor};
-    padding: 10px;
-    margin: 15px 0;
-    border-bottom: 1px solid #ccc;
-    grid-template-columns: 5fr 10%;
-    gap: 20px;
-    cursor: move;
-    display: grid;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
     .title_card{
         word-break: break-word;
         font-family: PFont-Light;
@@ -105,7 +106,28 @@ export const CardsComponent = styled.div`
     }
 `
 export const ContentModal = styled.form`
-    height: ${({ height }) => { return height ? height : '600px' }};
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        .header {
+            position: static;
+            width: auto;
+            justify-content: flex-end;
+            padding: 20px 6px 0;
+            min-height: auto;
+            height: auto;
+            display: flex;
+        }
+        .content {
+            line-height: 1.15;
+    font-size: 16px;
+    overflow-y: auto;
+    height: 100%;
+    padding: 16px 20px;
+
+        }
 `
 export const ContentLinesItems = styled.div`
     display: flex;
@@ -125,19 +147,19 @@ export const ContentCheckbox = styled.div`
 `
 export const Input = styled.input`
     width: 100%;
-    border-radius: 0.375em;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 25%);
     outline: none;
-    border:none;
+    border: none;
     ${props => { return props.margin && css`margin: ${props.margin};` }}
     ${props => { return props.padding && css`padding: ${props.padding};` }}
+    ${props => { return props.borderRadius && css`border-radius: ${props.borderRadius};` }}
     ${props => {
-        return props.card && css`
+    return props.card && css`
     padding: 25px;
     border: 2px solid ${PColor};
     `}}
     ${props => {
-        return props.inputText && css`
+    return props.inputText && css`
         font-weight: 500;
         margin: 0.625rem 0 0;
         overflow: visible;
@@ -149,7 +171,7 @@ export const Input = styled.input`
         border: 2px solid transparent;
     `}}
     ${props => {
-        return props.inputText && css`
+    return props.inputText && css`
         overflow: visible;
         border: none;
         margin: 0 0 0 5px;
@@ -159,16 +181,12 @@ export const Input = styled.input`
         border: 2px solid transparent;
     `}}
     ${props => {
-        return props.checkbox && css`
+    return props.checkbox && css`
         cursor: inherit;
         zoom: inherit;
         margin: 0;
         z-index: 2;
     `}}
-    &:focus {
-        border: 2px solid ${PVColor};
-        outline: none;
-    }
     &&::after {
         border-width: 6px;
         visibility: visible;
@@ -202,18 +220,13 @@ export const Container = styled.div`
     }
 `
 export const Action = styled.div`
-    font-size: 16px;
-    background: ${BGColor};
+    align-items: center;
+    background: #fff;
     border-top: 2px solid #f5f0eb;
+    display: flex;
     justify-content: flex-end;
     padding: 20px;
     height: 80px;
-    align-items: center;
-    z-index: 9999;
-    display: flex;
     width: 100%;
-    position: absolute;
-    bottom: 0;
-    right: 0;
 `
 
