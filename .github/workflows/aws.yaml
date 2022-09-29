@@ -12,6 +12,5 @@ jobs:
   runs-on: ubuntu-18.04
   steps:
     - name: Deployment Pipeline
-      run: |
-      echo "Deployment Pipeline is running successfully!"
+      run: Deployment Pipeline is running successfully
 
