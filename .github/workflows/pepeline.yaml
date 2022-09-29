@@ -30,7 +30,7 @@ jobs:
       with:
         node-version: 16
     - name: run test
-    - run: npm run check:eslint -f
+      run: npm run check:eslint -f
 
   build:
     runs-on: ubuntu-latest
@@ -42,4 +42,4 @@ jobs:
       with:
         node-version: 16
     - name: Build
-    - run: npm run build -f
+      run: npm run build -f
