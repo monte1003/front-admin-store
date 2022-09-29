@@ -1,6 +1,15 @@
 import PropTypes from 'prop-types'
-import React, { useContext, useEffect, useReducer, useState } from 'react'
-import { useMutation, useQuery, useLazyQuery } from '@apollo/client'
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useState
+} from 'react'
+import {
+  useMutation,
+  useQuery,
+  useLazyQuery
+} from '@apollo/client'
 import { GET_ALL_PRODUCT_STORE, REGISTER_CAT_OF_PRODUCTS } from './queriesStore'
 import { CtnItems, FlexContent } from './styled'
 import { useFormTools } from '../../components/BaseForm'
@@ -8,7 +17,13 @@ import InputHooks from '../../components/InputHooks/InputHooks'
 import { AwesomeModal } from '../../components/AwesomeModal'
 import { useSetState } from '../../components/hooks/useState'
 import { ButtonAction } from './styledStore'
-import { DELETE_ONE_CAT_PRODUCTS, DELETE_ONE_CAT_PRODUCTS_FINAL, GET_ALL_CATEGORIES_WITH_PRODUCT, GET_ULTIMATE_CATEGORY_PRODUCTS, UPDATE_CAT_IN_PRODUCT } from './queries'
+import {
+  DELETE_ONE_CAT_PRODUCTS,
+  DELETE_ONE_CAT_PRODUCTS_FINAL,
+  GET_ALL_CATEGORIES_WITH_PRODUCT,
+  GET_ULTIMATE_CATEGORY_PRODUCTS,
+  UPDATE_CAT_IN_PRODUCT
+} from './queries'
 import { IconBuy, IconDelete, IconEdit, IconPause } from '../../public/icons'
 import { RippleButton } from '../../components/Ripple'
 import { PColor, WColor } from '../../public/colors'
@@ -31,10 +46,10 @@ export const ManageCategories = ({ SHOW_MODAL_UPDATE_PRODUCTS }) => {
   const SHOW_CATEGORIES = useSetState(false)
   const [idCat, setIdCat] = useState('')
   const [dataProducto, setData] = useState([])
-  const [showMore, setShowMore] = useState(100)
+  const [showMore] = useState(100)
   const [openModalProducts, setOpenModalProducts] = useState(false)
   // QUERIES
-  const [updatedProducts, { loading, error }] = useMutation(REGISTER_CAT_OF_PRODUCTS, {
+  const [updatedProducts] = useMutation(REGISTER_CAT_OF_PRODUCTS, {
     onError: (e) => {
       setAlertBox({
         type: 'error',
@@ -191,6 +206,7 @@ export const ManageCategories = ({ SHOW_MODAL_UPDATE_PRODUCTS }) => {
   useEffect(() => {
     productFoodsAll({ variables: { max: showMore } })
   }, [productFoodsAll, showMore])
+  const loading = false
   return (
     <>
       {loading && <Loading />}

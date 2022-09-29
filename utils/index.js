@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { resolve } from 'path'
 import moment from 'moment'
 import { useEffect } from 'react'
@@ -1199,8 +1200,7 @@ export function months(config) {
   return values
 }
 
-export const numbers = (config) => {
-  let cfg = config || {}
+export const numbers = () => {
   let min = 1
   let max = 2
   let from = 4

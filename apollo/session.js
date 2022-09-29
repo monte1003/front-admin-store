@@ -1,7 +1,7 @@
 
 import { withIronSessionApiRoute } from 'iron-session/next'
 export default withIronSessionApiRoute(() => {
-  console.log('first') 
+  return {}
 }, sessionOptions)
 
 export const sessionOptions = {

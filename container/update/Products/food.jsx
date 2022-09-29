@@ -1,11 +1,27 @@
+/* eslint-disable consistent-return */
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
-import React, { useContext, useEffect, useReducer, useRef, useState } from 'react'
-import { GET_ALL_FOOD_PRODUCTS, UPDATE_IMAGE_PRODUCT_FOOD, UPDATE_PRODUCT_FOOD } from './queries'
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState
+} from 'react'
+import { 
+  GET_ALL_FOOD_PRODUCTS,
+  UPDATE_IMAGE_PRODUCT_FOOD, 
+  UPDATE_PRODUCT_FOOD
+} from './queries'
 import useLocalStorage from '../../../components/hooks/useLocalSorage'
 import { useSetState } from '../../../components/hooks/useState'
 import { FoodComponent } from '../../../components/Update/Products/food'
 import { GET_ONE_STORE } from '../../Restaurant/queries'
-import { convertBase64, getFileSizeByUnit, RandomCode, validationImg } from '../../../utils'
+import {
+  convertBase64,
+  getFileSizeByUnit,
+  RandomCode,
+  validationImg
+} from '../../../utils'
 import { GET_ALL_PRODUCT_STORE } from '../../dashboard/queriesStore'
 import { Context } from 'context/Context'
 import { useCategoriesProduct } from 'components/hooks/useCategoriesProducts'

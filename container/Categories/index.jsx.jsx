@@ -1,6 +1,15 @@
 import PropTypes from 'prop-types'
-import React, { useContext, useEffect, useReducer, useState } from 'react'
-import { useMutation, useQuery, useLazyQuery } from '@apollo/client'
+import React, { 
+  useContext, 
+  useEffect,
+  useReducer,
+  useState 
+} from 'react'
+import { 
+  useMutation,
+  useQuery,
+  useLazyQuery 
+} from '@apollo/client'
 import { useFormTools } from 'components/BaseForm'
 import InputHooks from 'components/InputHooks/InputHooks'
 import { AwesomeModal } from 'components/AwesomeModal'
@@ -12,8 +21,19 @@ import styled from 'styled-components'
 import { Section } from 'components/Table/styled'
 import { CardProducts } from 'components/CartProduct'
 import { Context } from 'context/Context'
-import { IconBuy, IconDelete, IconEdit, IconPause } from '../../public/icons'
-import { DELETE_ONE_CAT_PRODUCTS, DELETE_ONE_CAT_PRODUCTS_FINAL, GET_ALL_CATEGORIES_WITH_PRODUCT, GET_ULTIMATE_CATEGORY_PRODUCTS, UPDATE_CAT_IN_PRODUCT } from '../dashboard/queries'
+import { 
+  IconBuy, 
+  IconDelete, 
+  IconEdit,
+  IconPause
+} from '../../public/icons'
+import { 
+  DELETE_ONE_CAT_PRODUCTS, 
+  DELETE_ONE_CAT_PRODUCTS_FINAL, 
+  GET_ALL_CATEGORIES_WITH_PRODUCT, 
+  GET_ULTIMATE_CATEGORY_PRODUCTS, 
+  UPDATE_CAT_IN_PRODUCT
+} from '../dashboard/queries'
 import { Loading } from '~/components/Loading'
 import { SkeletonP } from '~/components/Update/Categories'
 import { useSetState } from '~/hooks/useState'
@@ -31,10 +51,10 @@ export const Categories = ({ SHOW_MODAL_UPDATE_PRODUCTS }) => {
   const SHOW_CATEGORIES = useSetState(false)
   const [idCat, setIdCat] = useState('')
   const [dataProducto, setData] = useState([])
-  const [showMore, setShowMore] = useState(100)
+  const [showMore] = useState(100)
   const [openModalProducts, setOpenModalProducts] = useState(false)
   // QUERIES
-  const [updatedProducts, { loading, error }] = useMutation(REGISTER_CAT_OF_PRODUCTS, {
+  const [updatedProducts, { loading }] = useMutation(REGISTER_CAT_OF_PRODUCTS, {
     onError: (e) => {
       setAlertBox({
         type: 'error',

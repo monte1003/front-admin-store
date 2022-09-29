@@ -1,16 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types'
+import React, { useEffect, useState } from 'react'
 import { MainCard } from 'components/common/Reusable/ShadowCard'
 import { Rate } from 'components/Rate'
-import React, { useEffect, useState } from 'react'
 import { ContentGrid, MediaValue } from './styled'
 import { useLazyQuery, useQuery } from '@apollo/client'
-import { GET_ALL_RATING_START_STORE, GET_ALL_VISITOR_STORE, GET_MIN_PEDIDO } from './queriesStore'
-import { GET_ALL_SALES, GET_ALL_SALES_STATISTICS } from 'container/ventas/queries'
+import {
+  GET_ALL_RATING_START_STORE,
+  GET_ALL_VISITOR_STORE,
+  GET_MIN_PEDIDO
+} from './queriesStore'
+import { GET_ALL_SALES_STATISTICS } from 'container/ventas/queries'
 import moment from 'moment'
 import styled, { css } from 'styled-components'
 import { numberFormat } from '../../utils'
 
-export const LastedStatistic = ({ idStore }) => {
+export const LastedStatistic = () => {
   let dt = new Date()
   const [valueSales, setValueSales] = useState(0)
   const [getAllRatingStar, { data: dataStartStore }] = useLazyQuery(GET_ALL_RATING_START_STORE)
@@ -33,9 +38,6 @@ export const LastedStatistic = ({ idStore }) => {
   }, [dataStartStore, dataMinPedido, VISITOR])
 
   const [getAllSalesStoreStatistic, { data }] = useLazyQuery(GET_ALL_SALES_STATISTICS)
-  const { data: dataSales } = useQuery(GET_ALL_SALES, {
-    variables: { fromDate: moment(dt.setDate(dt.getDate() - 90)).format('YYYY-MM-DD'), toDate: moment().format('YYYY-MM-DD') }
-  })
   useEffect(() => {
     let suma = 0
     const avg = data?.getAllSalesStoreStatistic?.map((x, index) => { return (suma += x.pSState === 4) / (index + 1) })
@@ -47,7 +49,7 @@ export const LastedStatistic = ({ idStore }) => {
   useEffect(() => {
     getAllSalesStoreStatistic({ variables: { min: 0, fromDate: moment(dt.setDate(dt.getDate() - 90)).format('YYYY-MM-DD'), toDate: moment().format('YYYY-MM-DD') } })
     data?.getAllSalesStoreStatistic?.forEach((a) => {
-      const { totalProductsPrice, pDatCre } = a || {}
+      const { totalProductsPrice } = a || {}
       suma += totalProductsPrice
       setTotalProductPrice(suma)
     })

@@ -14,7 +14,9 @@ import { ChatStatistic } from 'container/ventas/ListVentas'
 import { useMultiKeyPress } from '~/hooks/useKeypress'
 
 const Dashboard = ({ ...props }) => {
+  // eslint-disable-next-line
   const happySadPress = useMultiKeyPress('Control', 'f')
+
   return (<>
     <Wrapper>
       <Main {...props} />

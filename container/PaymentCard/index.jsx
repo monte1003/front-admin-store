@@ -1,7 +1,12 @@
 import { FlipCard } from 'components/PaymentCard/cards'
 import React from 'react'
 import { GET_ALL_CARDS_TYPES } from './queries'
-import { CreditCard, Line, Number, WarperCards } from './styled'
+import {
+  CreditCard,
+  Line,
+  Number,
+  WarperCards
+} from './styled'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 
@@ -30,7 +35,7 @@ export const PaymentCard = () => {
             }
             key={elem.cardtypeId}
             onClick={() => { return router.push(`formas-de-pago/${elem.typeCardName}`)}}
-            setFlipped={() => { }}
+            setFlipped={() => { return }}
           />
 
         )

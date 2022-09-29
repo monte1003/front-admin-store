@@ -33,8 +33,6 @@ export const Header = () => {
   } = useContext(Context)
   const { client } = useApolloClient()
   const { scrollNav } = useScrollColor()
-  const customTime = new Date()
-  const customHours = customTime.getHours()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const location = useRouter()
@@ -61,20 +59,6 @@ export const Header = () => {
   }, [client, location, setAlertBox])
 
 
-  const customColor = {
-    color: ''
-  }
-  let displayMessage = ''
-  if (customHours < 12) {
-    // displayMessage = `Good Morning`;
-    customColor.color = 'red'
-  } else if (customHours >= 12 && customHours < 18) {
-    // displayMessage = `Good Afternoon`;
-    customColor.color = 'green'
-  } else {
-    // displayMessage = `Good Night`;
-    customColor.color = '#090c10'
-  }
   const { isMobile } = useMobile()
   const [timer, setTimer] = useState(0)
   const [isOn, setIsOn] = useState(false)

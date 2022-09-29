@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { RippleButton } from 'components/Ripple'
 
 export const TeamStore = () => {
-  const { data: dataEmployees, error: errEmployees } = useQuery(GET_ALL_EMPLOYEE_STORE)
+  const { data: dataEmployees } = useQuery(GET_ALL_EMPLOYEE_STORE)
   return (
     <div>
       {dataEmployees?.employees?.map(x => {return (
@@ -35,7 +35,7 @@ export const TeamStore = () => {
 export const ItemTeam = styled.div`
     tab-size: 4;
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     border-bottom: 1px solid #ccc;
     border-collapse: collapse;
     font-size: .875rem;

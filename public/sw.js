@@ -4,10 +4,10 @@ try {
   const PRECACHE = 'precache-v2'
   const RUNTIME = 'runtime'
   const CACHE_VERSION = 1
+  // eslint-disable-next-line
   const CURRENT_CACHES = {
     font: 'font-cache-v' + CACHE_VERSION
   }
-  
   // A list of local resources we always want to be cached.
   const PRECACHE_URLS = [
     `offline.html`, // Alias for index.html

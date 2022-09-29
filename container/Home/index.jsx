@@ -1,21 +1,21 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import Image from 'next/image'
-import { Container, ContainerLeft, ContentImage, Form } from './styled'
+import {
+  Container,
+  ContainerLeft,
+  ContentImage,
+  Form
+} from './styled'
 import InputHooks from 'components/InputHooks/InputHooks'
 import { RippleButton } from 'components/Ripple'
-import { useFormTools } from 'components/BaseForm'
-import { useRouter } from 'next/router'
-import { formatDate } from 'utils'
-import moment from 'moment'
+import { useFormTools } from 'npm-pkg-hook'
 
 
-const index = () => {
-  const [handleChange, handleSubmitMain, setDataValue, { dataForm, errorForm, setForcedError }] = useFormTools()
-  const router = useRouter()
-  const data = formatDate({ date: moment(new Date) })
+const Index = () => {
+  const [handleChange, handleSubmitMain, setDataValue, { dataForm, errorForm }] = useFormTools()
   const handleRedirect = e => {
     e.stopPropagation()
-    router.push('/entrar')
   }
   return (
     <div>
@@ -32,7 +32,7 @@ const index = () => {
             />
           </ContentImage>
         </ContainerLeft>
-        <Form onSubmit={(e) => { return console.log(e) }}>
+        <Form onSubmit={(e) => { return }}>
           <InputHooks
             error={errorForm?.correo}
             name='correo'
@@ -63,13 +63,11 @@ const index = () => {
   )
 }
 
-index.propTypes = {}
+Index.propTypes = {}
 
-export default index
+export default Index
 export const Home = () => {
-  const [handleChange, handleSubmitMain, setDataValue, { dataForm, errorForm, setForcedError }] = useFormTools()
-  const router = useRouter()
-  const data = formatDate({ date: moment(new Date) })
+  const [handleChange, handleSubmitMain, setDataValue, { dataForm, errorForm }] = useFormTools()
 
   return (
     <Container>
@@ -85,7 +83,7 @@ export const Home = () => {
           />
         </ContentImage>
       </ContainerLeft>
-      <Form onSubmit={(e) => { return console.log(e) }}>
+      <Form onSubmit={() => { return }}>
         <InputHooks
           error={errorForm?.correo}
           name='correo'
@@ -106,9 +104,11 @@ export const Home = () => {
         />
         <RippleButton
           margin='20px auto'
-          onClick={(e) => {return handleRedirect(e)}}
+          onClick={() => { return }}
           widthButton='100%'
-        >Login</RippleButton>
+        >
+          Login
+        </RippleButton>
         {/* <RippleButton widthButton='100%' margin='20px auto' onClick={() => console.log()}>Login</RippleButton> */}
       </Form>
     </Container>

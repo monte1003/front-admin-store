@@ -1,16 +1,27 @@
 import { AwesomeModal } from 'components/AwesomeModal'
 import React from 'react'
 import { CLIENT_URL_BASE } from 'apollo/urls'
-import { Card, CardProductsModal, ContentInfo, DisRestaurant, Flex, HeadSticky, Text, GarnishChoicesHeader } from './styled'
+import {
+  Card,
+  CardProductsModal,
+  ContentInfo,
+  DisRestaurant,
+  Flex,
+  HeadSticky,
+  Text,
+  GarnishChoicesHeader
+} from './styled'
 import Image from 'next/image'
 import { APColor, PLColor } from 'public/colors'
 import { numberFormat } from '../../utils'
-import { useStore } from 'components/hooks/useStore'
+import { useStore } from 'npm-pkg-hook'
 import Link from 'next/link'
+import { CardsComponent } from '../pruebas/styled'
+import { RippleButton } from '~/components/Ripple'
 
 export const GetOneSales = ({ setOpen, open, data }) => {
   const { getAllPedidoStore } = data
-  const [dataStore, { loading: LoadingRes }] = useStore()
+  const [dataStore] = useStore()
   return (
     <AwesomeModal
       backdrop='static'
@@ -27,8 +38,6 @@ export const GetOneSales = ({ setOpen, open, data }) => {
       zIndex='99390'
     >
       {getAllPedidoStore && getAllPedidoStore?.map(p => {
-        const { getAllShoppingCard } = p || {}
-        const { productFood, comments } = getAllShoppingCard || {}
         return (
           <div key={p.ShoppingCard}>
             <Card>
@@ -65,7 +74,7 @@ export const GetOneSales = ({ setOpen, open, data }) => {
                       size='14px'
                       style={{ textDecoration: 'line-through' }}
                     >$ {numberFormat(p?.getAllShoppingCard?.productFood.ProDescuento)}</Text>
-                  </Flex>{console.log(p)}
+                  </Flex>
                   <DisRestaurant>
                     {dataStore && <Link
                       href={{
@@ -92,18 +101,8 @@ export const GetOneSales = ({ setOpen, open, data }) => {
                     </div>
                     {/* <IconMiniCheck size={'15px'} color={'#009b3a'} /> */}
                   </GarnishChoicesHeader>}
-                  {/* {ExtProductFoodsAll?.map(extra => (
-                                            <CardsComponent key={extra.exPid}>
-                                                <div>
-                                                    <h3 className="title_card">{extra.extraName}</h3>
-                                                    <h3 className="price"> $ {extra.extraPrice}</h3>
-                                                </div>
-                                                <RippleButton bgColor={'transparent'} margin='0px' widthButton='min-content' type="button" onClick={() => console.log(extra)} >
-                                                </RippleButton>
-                                            </CardsComponent>
-                                        ))} */}
                   {![1, 2, 4]?.map(itemOptional => {return (
-                    <div>
+                    <div key={itemOptional}>
                       <GarnishChoicesHeader key={itemOptional?.opExPid}>
                         <div>
                           <p className='garnish-choices__title'>{itemOptional?.OptionalProName}</p>
@@ -119,14 +118,14 @@ export const GetOneSales = ({ setOpen, open, data }) => {
                           <input
                             id='cat'
                             name='subOptional'
-                            onChange={handleChangeClickOnTable}
+                            onChange={() => { return }}
                             type='checkbox'
                             value={x?.opSubExPid}
                           />
                           <RippleButton
                             bgColor={'transparent'}
                             margin='0px'
-                            onClick={() => {return console.log(x)}}
+                            onClick={() => { return }}
                             type='button'
                             widthButton='min-content'
                           >

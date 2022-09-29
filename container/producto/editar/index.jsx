@@ -1,15 +1,36 @@
+/* eslint-disable consistent-return */
 import PropTypes from 'prop-types'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React,
+{
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import styled, { css } from 'styled-components'
 import InputHooks from '../../../components/InputHooks/InputHooks'
 import { useFormTools } from '../../../components/BaseForm'
 import { EDIT_PRODUCT, GET_ONE_PRODUCTS_FOOD } from '../queries'
-import { GET_EXTRAS_PRODUCT_FOOD_OPTIONAL, UPDATE_IMAGE_PRODUCT_FOOD, UPDATE_PRODUCT_FOOD } from 'container/update/Products/queries'
+import {
+  GET_EXTRAS_PRODUCT_FOOD_OPTIONAL,
+  UPDATE_IMAGE_PRODUCT_FOOD,
+  UPDATE_PRODUCT_FOOD
+} from 'container/update/Products/queries'
 import { GET_ALL_CATEGORIES_WITH_PRODUCT, GET_ALL_EXTRA_PRODUCT } from 'container/dashboard/queries'
 import { useLazyQuery, useMutation } from '@apollo/client'
-import { numberFormat, updateCache, validationImg } from 'utils'
+import {
+  numberFormat,
+  updateCache,
+  validationImg
+} from 'utils'
 import { RippleButton } from 'components/Ripple'
-import { APColor, BColor, BGColor, DarkSilver, PColor } from 'public/colors'
+import {
+  APColor,
+  BColor,
+  BGColor,
+  DarkSilver,
+  PColor
+} from 'public/colors'
 import { IconDelete, IconPay } from 'public/icons'
 import Link from 'next/link'
 import { CLIENT_URL_BASE } from 'apollo/urls'
@@ -85,7 +106,7 @@ export const ProductEdit = ({ id }) => {
             const { data } = x
             const { setImageProducts } = data
             setAlertBox({ message: `${setImageProducts?.message || ''}`, color: 'success', duration: 7000 })
-          }).catch((x) => {
+          }).catch(() => {
             setAlertBox({ message: 'Lo sentimos ha ocurrido un error al cargar la imagen', color: 'error', duration: 7000 })
           })
           const { pName, ProPrice, ProDescuento, ValueDelivery, ProUniDisponibles, ProDescription, ProProtegido, ProAssurance, ProWidth, ProHeight, ProLength, ProWeight, ProQuantity, ProOutstanding, ProDelivery, ProVoltaje, pState, sTateLogistic } = dataForm || {}

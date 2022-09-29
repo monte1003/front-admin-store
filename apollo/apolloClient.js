@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-console */
 import { useMemo } from 'react'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { onError } from '@apollo/client/link/error'
@@ -34,23 +36,6 @@ const errorHandler = onError(({ graphQLErrors }) => {
       }
     })
   }
-})
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) => {
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
-    })
-  //   
-  graphQLErrors?.length && graphQLErrors.forEach(err => {
-    const { code } = err.extensions
-    if (code === 'UNAUTHENTICATED' || code === 'FORBIDDEN') console.log('Papuuuuuuuu')
-    else if (code === 403) {
-      console.log('Papuuuuuuuu')
-    }
-  })
-  if (networkError) console.log(`[Network error]: ${networkError}`)
 })
 
 const authLink = async () => {
@@ -160,25 +145,6 @@ function createApolloClient() {
     : ApolloLink.split(() => { return true }, operation => { return getLink(operation) },
       errorLink
     )
-  let link2 = ApolloLink.from([
-    onError(({ graphQLErrors, networkError }) => {
-      if (graphQLErrors) {
-        graphQLErrors.map(({ message, locations, path }) => {
-          return console.log(
-            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-          )
-        }
-        )
-      }
-      if (networkError) console.error(`[Network error]: ${networkError}`, networkError.stack)
-    }),
-    ApolloLink.split(
-      operation => { return operation.getContext().important === true },
-      httpLink // don't batch important
-      // batchHttpLink
-    )
-  ])
-
   return new ApolloClient({
     connectToDevTools: true,
     ssrMode,

@@ -1,13 +1,13 @@
 import { PColor } from 'public/colors'
 import Image from 'next/image'
-import React, { 
+import React, {
   useContext,
   useEffect,
   useMemo,
   useRef,
-  useState 
+  useState
 } from 'react'
-import { 
+import {
   CREATE_BANNER_STORE,
   CREATE_LOGO,
   DELETE_ONE_BANNER_STORE,
@@ -43,7 +43,7 @@ const Banner = ({ isMobile }) => {
   const fileInputRef = useRef(null)
   const fileInputRefLogo = useRef(null)
   const [day, setDay] = useState()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line
   const [hour, setHour] = useState(null)
   const [openStore, SetStoreOpen] = useState(false)
   const [{ altLogo, srcLogo }, setPreviewImgLogo] = useState({})
@@ -77,7 +77,7 @@ const Banner = ({ isMobile }) => {
     setNameStore(dataStore?.storeName)
   }, [dataStore])
   const [openSName, setOpenSName] = useState(false)
-  const [setEditNameStore, { loading: loadingEditName }] = useMutation(SET_EDIT_STORE_NAME)
+  const [setEditNameStore] = useMutation(SET_EDIT_STORE_NAME)
   const handleEditNameStore = () => {
     setEditNameStore({
       variables: {
@@ -108,6 +108,7 @@ const Banner = ({ isMobile }) => {
     onCompleted: (data) => { return setAlertBox({ message: data?.DeleteOneBanner?.message }) },
     context: { clientName: 'admin-server' }
   })
+  // eslint-disable-next-line
   const [deleteALogoStore] = useMutation(DELETE_ONE_LOGO_STORE, {
     onCompleted: (data) => {
       setAlertBox({

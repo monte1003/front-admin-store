@@ -1,15 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useLazyQuery, useMutation } from '@apollo/client'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Categories } from '../../../components/Update/Categories'
 import { GET_ALL_CATEGORIES, UPDATE_CATEGORIES } from './queries'
-import { Context } from '../../../context/Context'
 import { useCategories } from '../../../components/hooks/useCategories'
 
 export const CategoriesC = () => {
   const [errors, setErrors] = useState({})
   const [values, setValues] = useState({})
   const [finalData] = useCategories()
-  //  const { setAlertBox } = useContext(Context)
   const handleChange = (e, error) => {
     setValues({ ...values, [e.target.name]: e.target.value })
     setErrors({ ...errors, [e.target.name]: error })
@@ -35,12 +34,11 @@ export const CategoriesC = () => {
               }
             }
           })
-          setAlertBox({ message: `La Categoría ${ cpName } subido con éxito`, color: 'success', duration: 7000 })
         }
-      }).catch(err => {return setAlertBox({ message: `${ err }`, duration: 7000 })})
+      }).catch(() => { return })
     }
     catch (error) {
-      setAlertBox({ message: `${ error.message }`, duration: 7000 })
+      return
     }
   }
   const handleDelete = caId => {
@@ -61,9 +59,8 @@ export const CategoriesC = () => {
             }
           }
         })
-        setAlertBox({ message: `La categoría ${ value[0].cpName } ha sido eliminada`, color: 'error', duration: 7000 })
       }
-    }).catch(err => {return setAlertBox({ message: `${ err }`, duration: 7000 })})
+    }).catch(() => { return })
   }
   // Filtrar product
   const [search, setSearch] = useState('')
@@ -74,7 +71,7 @@ export const CategoriesC = () => {
   const [dataCategories, setData] = useState([])
   const [showMore, setShowMore] = useState(100)
   useEffect(() => {
-    dataProduct && setData([...dataProduct?.CategoryProductsAll])
+    dataProduct && setData([...dataProduct.CategoryProductsAll])
   }
   , [dataProduct])
   useEffect(() => {
@@ -84,7 +81,6 @@ export const CategoriesC = () => {
     <Categories
       data={dataCategories}
       errors={errors}
-      handleChange={handleChange}
       handleChange={handleChange}
       handleChangeFilter={handleChangeFilter}
       handleDelete={handleDelete}

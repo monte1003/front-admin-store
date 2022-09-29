@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { AwesomeModal } from 'components/AwesomeModal'
 import { useFormTools } from 'components/BaseForm'
 import { useSetState } from 'components/hooks/useState'

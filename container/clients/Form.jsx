@@ -1,5 +1,6 @@
+/* eslint-disable consistent-return */
 import React, { useState } from 'react'
-import { useFormTools } from '~/components/BaseForm'
+import { useFormTools } from 'npm-pkg-hook'
 import { CREATE_CLIENTS, GET_ALL_CLIENTS } from './queries'
 import { useMutation } from '@apollo/client'
 import { updateCache } from '~/utils'

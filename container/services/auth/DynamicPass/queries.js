@@ -20,6 +20,5 @@ query getAOneDynamicPassword {
     DatCre
     DatMod
   }
-    
 }
 `

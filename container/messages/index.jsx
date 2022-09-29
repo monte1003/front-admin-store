@@ -1,18 +1,33 @@
-import { useLazyQuery, useSubscription, useMutation, useQuery } from '@apollo/client'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React,
+{
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
+import {
+  useLazyQuery,
+  useSubscription,
+  useMutation,
+  useQuery
+} from '@apollo/client'
 import { useUser } from 'components/hooks/useUser'
 import { MessageComp } from 'components/Messages'
 import { ContainerContextMessage } from 'components/Messages/styled'
-import { GET_MESSAGES, NEW_MESSAGE, SEND_MESSAGES } from 'gql/Messages'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import {
+  GET_MESSAGES,
+  NEW_MESSAGE,
+  SEND_MESSAGES
+} from 'gql/Messages'
 import { GET_ALL_STORY_ACTIVE_MESSAGE_ORDER } from './queries'
-import { useApolloClient } from '@apollo/client'
 import { Context } from 'context/Context'
 
 export const Messages = () => {
   //ESTADOS
   const { setAlertBox, selectedStore, setStoreChatActive, hidden } = useContext(Context)
   const [show, setShow] = useState(false)
-  const [dataUser, { loading: loUser }] = useUser()
+  const [dataUser] = useUser()
   const { id } = dataUser || {}
   const [values, setValues] = useState({})
 
@@ -27,7 +42,7 @@ export const Messages = () => {
   }
   // QUERIES
 
-  const [getMessages, { data: messageData, refetch, fetchMore }] = useLazyQuery(GET_MESSAGES, {
+  const [getMessages, { data: messageData }] = useLazyQuery(GET_MESSAGES, {
     context: { clientName: 'admin-server' },
     // fetchPolicy: 'network-only',
     onError: err => {return setAlertBox({
@@ -39,14 +54,9 @@ export const Messages = () => {
   const { data: dataStoreActiveOrder } = useQuery(GET_ALL_STORY_ACTIVE_MESSAGE_ORDER, {
     // fetchPolicy: 'network-only'
   })
-  const client = useApolloClient()
   const { data: messageDataNew, error: messageError } = useSubscription(NEW_MESSAGE, {
     pollInterval: 10,
-    onSubscriptionComplete: () => {
-      // const dataMessage = client.readQuery({ query: GET_MESSAGES })
-    },
-    onSubscriptionData: ({ subscriptionData }) => {
-      console.log(subscriptionData)
+    onSubscriptionData: () => {
       // client.writeQuery({
       //     query: GET_MESSAGES,
       //     // data: {
@@ -61,14 +71,13 @@ export const Messages = () => {
   })
   const [dataMessage, setDataMessage] = useState([])
   useEffect(() => {
-    if (messageError) console.log(messageError)
     messageData?.getMessages && setDataMessage([...messageData.getMessages])
     if (messageDataNew) {
-      setDataMessage([...dataMessage, messageDataNew?.newMessage ]) 
+      setDataMessage([...dataMessage, messageDataNew?.newMessage ])
     }
   }, [messageError, messageDataNew, messageData])
 
-  const [sendMessage, { data, loading }] = useMutation(SEND_MESSAGES, {
+  const [sendMessage, { loading }] = useMutation(SEND_MESSAGES, {
     context: { clientName: 'admin-server' }
     // fetchPolicy: 'cache-and-network',
   })
@@ -98,7 +107,7 @@ export const Messages = () => {
       if (selectedStore && id && !!content) {
         sendMessage({
           variables: { to: id, content: content }
-        }).catch(res => {
+        }).catch(() => {
           input.current.value = ''
           setValues({})
         }).catch(err => {return setAlertBox({ message: `${err}`, duration: 7000 })})

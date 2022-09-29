@@ -1,9 +1,10 @@
-import { useFormTools } from '../../components/BaseForm'
+import { useFormTools } from 'npm-pkg-hook'
 import InputHooks from '../../components/InputHooks/InputHooks'
 import { ContentCards } from './styled'
 
-const Bankdata = props => {
-  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm, setForcedError }] = useFormTools()
+const Bankdata = () => {
+  // eslint-disable-next-line
+  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm }] = useFormTools()
 
   return (
     <ContentCards>

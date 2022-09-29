@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
-import { Content, Form, Card, Text } from './styled'
+import {
+  Content,
+  Form,
+  Card,
+  Text
+} from './styled'
 import PropTypes from 'prop-types'
 import { RippleButton } from '../../components/Ripple'
 import { EColor } from '../../public/colors'
@@ -10,6 +15,7 @@ import { EmptyLayout } from 'pages/_app'
 
 export const EmailVerifyCode = ({ code }) => {
   const router = useRouter()
+  // eslint-disable-next-line
   const [step, setStep] = useState(0)
   const tokenState = getTokenState(code)
   const decode = decodeToken(code)

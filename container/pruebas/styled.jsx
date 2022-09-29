@@ -1,5 +1,11 @@
 import styled, { css } from 'styled-components'
-import { BGColor, EColor, PLAColor, PLVColor, PSColor, PVColor, SECColor } from '../../public/colors'
+import { 
+  BGColor, 
+  PLVColor, 
+  PSColor,
+  PVColor, 
+  SECColor
+} from '../../public/colors'
 
 export const ContentTitles = styled.div`
     display: flex;
@@ -33,7 +39,6 @@ export const Text = styled.span`
     display: flex;
     font-family: ${({ font }) => {return font || 'PFont-Regular'}};
     ${({ paddingLeft }) => {return paddingLeft && css`padding-left: ${paddingLeft};`}}
-    
     @media (max-width: 768px) {
         font-size: 12px;
         margin: 0;

@@ -4,7 +4,7 @@ import Row from '~/components/common/Atoms/Row'
 import Text from '~/components/common/Atoms/Text'
 import { RippleButton } from '~/components/Ripple'
 
-export const EmployeeProfile = ({ eId,
+export const EmployeeProfile = ({
   idStore,
   id,
   idEmployee,
@@ -14,7 +14,8 @@ export const EmployeeProfile = ({ eId,
   termContract,
   eDatAdm,
   eState,
-  tpEmail }) => {
+  tpEmail
+}) => {
   return (
     <div>
       <Column>

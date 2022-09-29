@@ -38,7 +38,7 @@ export const Product = ({
   pId,
   ...props }) => {
   const router = useRouter()
-  console.log(showDessert)
+
   return (
     <div {...props}>
       <ContainerFilter>

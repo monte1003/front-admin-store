@@ -1,31 +1,37 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
 import { RippleButton } from '../../components/Ripple'
-import { APColor, BColor, BGColor, EColor, PLColor, PVColor } from '../../public/colors'
+import {
+  BColor,
+  BGColor,
+  EColor,
+  PVColor
+} from '../../public/colors'
 import InputHooks from '../../components/InputHooks/InputHooks'
-import { useFormTools } from '../../components/BaseForm'
+import { useFormTools } from 'npm-pkg-hook'
 import { useMutation } from '@apollo/client'
 import { Content, ContentTeam, CtnAdd, Form, Text, User } from './styled'
-import { useLazyQuery, useQuery } from '@apollo/client'
-import { useRouter } from 'next/router'
-import { CREATE_ONE_TEAM_USER, CREATE_ONE_TEAM_USER_INVITE, GET_ONE_TEAM_USER } from './queries'
+import { useLazyQuery } from '@apollo/client'
+import {
+  CREATE_ONE_TEAM_USER,
+  CREATE_ONE_TEAM_USER_INVITE,
+  GET_ONE_TEAM_USER
+} from './queries'
 import { AwesomeModal } from '../../components/AwesomeModal'
-import { StepsComponent } from '../../components/Steps'
 import { IconPlus } from '../../public/icons'
 import { numberFormat } from '../../utils'
-import { isMoment } from 'moment'
 import { useSetState } from '../../components/hooks/useState'
-// import { EMAIL_SESSION } from './queries'
 
 export const AddEmployee = () => {
-  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm, setForcedError }] = useFormTools()
+  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm }] = useFormTools()
   const [step, setStep] = useState(0)
   const [modal, setModal] = useState(0)
   const SHOW_ADD_EMPLOYEE = useSetState(false)
-  const router = useRouter()
   const [createOneEmployeeStore] = useMutation(CREATE_ONE_TEAM_USER)
   const [createOneEmployeeStoreAndUser] = useMutation(CREATE_ONE_TEAM_USER_INVITE)
   const [getOneUser, { data, loading, error, called }] = useLazyQuery(GET_ONE_TEAM_USER, {
-    onError: (err) => {return console.log({ message: `${err}`, duration: 8000 })}
+    onError: (err) => { return }
   })
   const { id, email } = data?.getOneUser || {}
   const handleForm = (e, show) => {return handleSubmit({

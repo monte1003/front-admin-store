@@ -1,9 +1,23 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { 
+  useContext, 
+  useEffect, 
+  useState
+} from 'react'
 import { GoogleLogin } from 'react-google-login'
 // import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-import { Content, Form, Card, Text, ButtonSubmit } from './styled'
+import {
+  Content,
+  Form,
+  Card,
+  Text,
+  ButtonSubmit
+} from './styled'
 import { RippleButton } from '../../components/Ripple'
-import { BGColor, DarkSilver, EColor } from '../../public/colors'
+import {
+  BGColor,
+  DarkSilver,
+  EColor
+} from '../../public/colors'
 import ActiveLink from '../../components/common/Link'
 import fetchJson from '../../components/hooks/fetchJson'
 import { useRouter } from 'next/router'
@@ -73,9 +87,9 @@ export const Login = () => {
   }
 
   const responseGoogleFalse = async (e) => {
-    console.log('first')
     e.preventDefault()
     // await fetchData()
+    // eslint-disable-next-line
     const device = await getDeviceId()
     // window.localStorage.setItem('sessionGoogle', JSON.stringify(response.profileObj))
     // const { name, googleId, email, imageUrl } = response?.profileObj || {}

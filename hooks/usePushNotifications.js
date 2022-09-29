@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useState, useEffect } from 'react'
 import http from '../utils/http'
 //the function to call the push server: https://github.com/Spyna/push-notification-demo/blob/master/front-end-react/src/utils/http.js

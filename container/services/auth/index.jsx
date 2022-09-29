@@ -5,7 +5,11 @@ import { RippleButton } from '~/components/Ripple'
 import { Context } from '~/context/Context'
 import { useDynamicAuth } from '~/hooks/useDynamicAuth'
 import Option from './Option'
-import { ContainerAuth, Content, TableKeyboard } from './styles'
+import {
+  ContainerAuth,
+  Content,
+  TableKeyboard
+} from './styles'
 import PropTypes from 'prop-types'
 import { Loading } from '~/components/Loading'
 import { PColor } from '@/public/colors'
@@ -28,8 +32,8 @@ const AuthPassthrough = ({ idStore, user }) => {
   ])
   const { setAlertBox } = useContext(Context)
   // QUERY
+  // eslint-disable-next-line
   const [pass, { loading, error }] = useDynamicAuth()
-  console.log('🚀 ~ file: index.jsx ~ line 29 ~ AuthPassthrough ~ pass', pass)
   // HANDLESS
 
   const [password, setPassword] = useState([])

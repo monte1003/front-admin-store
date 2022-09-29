@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { BColor, PColor } from 'public/colors'
 import React from 'react'
 
@@ -167,7 +168,7 @@ export const IconPay = ({ style = {}, size, color }) => {
       width='200'
       x='5'
       y='93.32'
-    /><rect
+  /><rect
       fill='none'
       height='44'
       rx='12'
@@ -185,7 +186,7 @@ export const IconPay = ({ style = {}, size, color }) => {
       x2='180'
       y1='124.32'
       y2='125.32'
-    /><line
+  /><line
       fill='none'
       stroke={color || '#000'}
       strokeLinecap='round'
@@ -203,7 +204,7 @@ export const IconPay = ({ style = {}, size, color }) => {
       x2='54'
       y1='185.32'
       y2='186.32'
-    /><line
+  /><line
       fill='none'
       stroke={color || '#000'}
       strokeLinecap='round'
@@ -221,7 +222,7 @@ export const IconPay = ({ style = {}, size, color }) => {
       x2='147'
       y1='185.32'
       y2='186.32'
-    /><line
+  /><line
       fill='none'
       stroke={color || '#000'}
       strokeLinecap='round'
@@ -239,7 +240,7 @@ export const IconPay = ({ style = {}, size, color }) => {
       x2='208'
       y1='92.32'
       y2='42.32'
-    /><line
+  /><line
       fill='none'
       stroke={color || '#000'}
       strokeLinecap='round'
@@ -378,7 +379,7 @@ export const IconInstagramGradient = ({ style = {}, size }) => {
       x2='-32.9334'
       y1='634.1208'
       y2='647.1917'
-    > <stop offset='0' stopColor='#FFC107' /> <stop offset='0.507' stopColor='#F44336' /><stop offset='0.99' stopColor='#9C27B0' /></linearGradient><path d='M352,0H160C71.648,0,0,71.648,0,160v192c0,88.352,71.648,160,160,160h192c88.352,0,160-71.648,160-160V160C512,71.648,440.352,0,352,0z M464,352c0,61.76-50.24,112-112,112H160c-61.76,0-112-50.24-112-112V160C48,98.24,98.24,48,160,48h192c61.76,0,112,50.24,112,112V352z' fill='url(#SVGID_1_)' /><linearGradient
+  > <stop offset='0' stopColor='#FFC107' /> <stop offset='0.507' stopColor='#F44336' /><stop offset='0.99' stopColor='#9C27B0' /></linearGradient><path d='M352,0H160C71.648,0,0,71.648,0,160v192c0,88.352,71.648,160,160,160h192c88.352,0,160-71.648,160-160V160C512,71.648,440.352,0,352,0z M464,352c0,61.76-50.24,112-112,112H160c-61.76,0-112-50.24-112-112V160C48,98.24,98.24,48,160,48h192c61.76,0,112,50.24,112,112V352z' fill='url(#SVGID_1_)' /><linearGradient
       gradientTransform='matrix(32 0 0 -32 1519 20757)'
       gradientUnits='userSpaceOnUse'
       id='SVGID_2_'
@@ -394,7 +395,7 @@ export const IconInstagramGradient = ({ style = {}, size }) => {
       x2='-34.7919'
       y1='644.5793'
       y2='645.3331'
-    ><stop offset='0' stopColor='#FFC107' /><stop offset='0.507' stopColor='#F44336' /><stop offset='0.99' stopColor='#9C27B0' /></linearGradient><circle
+  ><stop offset='0' stopColor='#FFC107' /><stop offset='0.507' stopColor='#F44336' /><stop offset='0.99' stopColor='#9C27B0' /></linearGradient><circle
       cx='393.6'
       cy='118.4'
       fill='url(#SVGID_3_)'
@@ -428,7 +429,7 @@ export const IconSales = ({ style = {}, size, color }) => {
       strokeLinecap='round'
       strokeLinejoin='round'
       strokeWidth='1.5'
-    ></path><path
+  ></path><path
       d='M15 6V6C15 4.34315 13.6569 3 12 3V3C10.3431 3 9 4.34315 9 6V6'
       strokeLinecap='round'
       strokeLinejoin='round'
@@ -532,7 +533,7 @@ export const IconSearch = ({ style = {}, size, color }) => {
       width='5.71'
       x='-39.59'
       y='7.49'
-    /></svg>
+  /></svg>
 }
 // Icon de Arrow
 export const IconArrowBottom = ({ style = {}, color, size }) => {
@@ -625,7 +626,7 @@ export const IconSendMessage = ({ size, color }) => {
       strokeLinecap='round'
       strokeLinejoin='round'
       strokeWidth='1px'
-    /><path
+  /><path
       d='M9.62,23.15l-7.83-2a1,1,0,0,1-.15-2L45.62,1a.06.06,0,0,1,.05.11l-36.05,22,4.86,14.57a1,1,0,0,0,2-.31l.79-11'
       fill='none'
       stroke={color}
@@ -642,7 +643,7 @@ export const IconSendMessage = ({ size, color }) => {
       x2='23.65'
       y1='38.35'
       y2='28.11'
-    /></g></g></svg>
+  /></g></g></svg>
 }
 // Icon de Google full color
 export const IconSendMessageTwo = ({ size }) => {
@@ -655,7 +656,7 @@ export const IconSendMessageTwo = ({ size }) => {
       fill='#0080ff'
       fillRule='evenodd'
       stroke='none'
-    ></path></svg>
+  ></path></svg>
 }
 // Icono  de Ubicación
 export const IconEnterLocation = ({ style = {}, size, color }) => {
@@ -672,7 +673,7 @@ export const IconEnterLocation = ({ style = {}, size, color }) => {
       stroke={color}
       strokeLinecap='round'
       strokeMiterlimit='10'
-    /><circle
+  /><circle
       cx='3.479'
       cy='3.479'
       fill='none'
@@ -802,7 +803,7 @@ export const IconLocationMap = ({ style = {}, size, color }) => {
       fill={color}
       fillRule='nonzero'
       transform='translate(-287 -1776)'
-    ><g id='Prato' transform='translate(48 1708)'><g id='Alerta-endereço' transform='translate(239 68)'><path d='M25 45C13 36.96 7 28.96 7 21c0-9.941 8.059-18 18-18s18 8.059 18 18c0 7.96-6 15.96-18 24zm0-16a8 8 0 1 0 0-16 8 8 0 0 0 0 16z' id='Combined-Shape'></path></g></g></g></svg>
+  ><g id='Prato' transform='translate(48 1708)'><g id='Alerta-endereço' transform='translate(239 68)'><path d='M25 45C13 36.96 7 28.96 7 21c0-9.941 8.059-18 18-18s18 8.059 18 18c0 7.96-6 15.96-18 24zm0-16a8 8 0 1 0 0-16 8 8 0 0 0 0 16z' id='Combined-Shape'></path></g></g></g></svg>
 }
 
 // Iconos
@@ -852,7 +853,7 @@ export const IconConfig = ({ style = {}, size, color }) => {
       x2='272.29'
       y1='136'
       y2='136'
-    /><line
+  /><line
       x1='272.29'
       x2='272.29'
       y1='153.15'
@@ -880,7 +881,7 @@ export const IconFullscreen = ({ style = {}, size, color }) => {
       stroke={color}
       strokeMiterlimit='10'
       strokeWidth='13px'
-    /><polyline
+  /><polyline
       fill='none'
       points='56.88 107.75 6.5 107.75 6.5 62.77'
       stroke={color}
@@ -892,7 +893,7 @@ export const IconFullscreen = ({ style = {}, size, color }) => {
       stroke={color}
       strokeMiterlimit='10'
       strokeWidth='13px'
-    /></svg>
+  /></svg>
 }
 // Icon Fullscreen
 export const IconScreenNormal = ({ style = {}, size, color }) => {
@@ -915,7 +916,7 @@ export const IconScreenNormal = ({ style = {}, size, color }) => {
       stroke={color}
       strokeMiterlimit='10'
       strokeWidth='13px'
-    /><polyline
+  /><polyline
       fill='none'
       points='132.29 44.98 81.91 44.98 81.91 0'
       stroke={color}
@@ -927,7 +928,7 @@ export const IconScreenNormal = ({ style = {}, size, color }) => {
       stroke={color}
       strokeMiterlimit='10'
       strokeWidth='13px'
-    /></svg>
+  /></svg>
 }
 export const IconBill = ({ style = {}, size, color }) => {
   return <svg
@@ -1018,7 +1019,7 @@ export const IconGridLayout = ({ style = {}, size, color }) => {
       width='92'
       x='4'
       y='89.09'
-    /><rect
+  /><rect
       fill='none'
       height='110.74'
       stroke={color}
@@ -1038,7 +1039,7 @@ export const IconGridLayout = ({ style = {}, size, color }) => {
       width='92'
       x='120.26'
       y='137.26'
-    /></svg>
+  /></svg>
 }
 export const IconNoShow = ({ style = {}, size }) => {
   return <svg
@@ -1097,7 +1098,7 @@ export const IconFolder = ({ style = {}, size }) => {
       d='M423.64,328.6h22.11s3.13,2,3.13,5.09a15.74,15.74,0,0,1,0,6.46l-44.8,122.47s.19,4.11-11.35,3.33l-189.19.1s-5.59-.41-8.06-4.55a8.78,8.78,0,0,1-1.14-4.75c.22-11.24,21.81-58.84,29.36-81.62,2.79-8.43,6.38-16.59,9.13-25a82.53,82.53,0,0,1,7-15.92,29.4,29.4,0,0,1,2.48-4c5.71-6.66,17.73-5.16,26.17-4.35,11.52,1.11,23.18.21,34.68,1.49,6.88.76,23.65,1,57.19,1.36C379.28,328.92,400.47,328.94,423.64,328.6Z'
       fill='#ecce3d'
       transform='translate(-194.34 -258.36)'
-    /></svg>
+  /></svg>
 }
 export const IconDollar = ({ style = {}, size, color }) => {
   return <svg
@@ -1110,7 +1111,6 @@ export const IconDollar = ({ style = {}, size, color }) => {
       cx='92.33'
       cy='92.59'
       fill={color}
-      fill='none'
       rx='85.33'
       ry='85.59'
       stroke={color}
@@ -1141,7 +1141,7 @@ export const IconInvoice = ({ style = {}, size }) => {
       strokeMiterlimit='10'
       strokeWidth='5px'
       transform='translate(27.2 51.1)'
-    >INVOICE</text><line
+  >INVOICE</text><line
       fill='none'
       stroke='#000'
       strokeLinecap='round'
@@ -1163,7 +1163,7 @@ export const IconInvoice = ({ style = {}, size }) => {
       x2='171.71'
       y1='89.41'
       y2='89.41'
-    /><line
+  /><line
       fill='none'
       stroke='#000'
       strokeLinecap='round'
@@ -1185,7 +1185,7 @@ export const IconInvoice = ({ style = {}, size }) => {
       x2='170.74'
       y1='166.15'
       y2='166.15'
-    /><line
+  /><line
       fill='none'
       stroke='#000'
       strokeLinecap='round'
@@ -1205,7 +1205,7 @@ export const IconInvoice = ({ style = {}, size }) => {
       strokeMiterlimit='10'
       strokeWidth='5px'
       transform='translate(-150.54 -18.44)'
-    /><path d='M237.44,212.07h86.77v-84H180.87v84h22.77' transform='translate(-150.54 -18.44)' /></svg>
+  /><path d='M237.44,212.07h86.77v-84H180.87v84h22.77' transform='translate(-150.54 -18.44)' /></svg>
 }
 export const IconDate = ({ style = {}, size }) => {
   return <svg
@@ -1227,7 +1227,7 @@ export const IconDate = ({ style = {}, size }) => {
       strokeLinecap='round'
       strokeWidth='9px'
       transform='translate(278.93 -227.65)'
-    /><line
+  /><line
       fill='none'
       stroke='#000'
       strokeLinecap='round'
@@ -1245,7 +1245,7 @@ export const IconDate = ({ style = {}, size }) => {
       x2='23.26'
       y1='91.42'
       y2='91.42'
-    /><line
+  /><line
       fill='none'
       stroke='#000'
       strokeLinecap='round'
@@ -1263,7 +1263,7 @@ export const IconDate = ({ style = {}, size }) => {
       x2='150.83'
       y1='91.42'
       y2='91.42'
-    /><line
+  /><line
       fill='none'
       stroke='#000'
       strokeLinecap='round'
@@ -1281,7 +1281,7 @@ export const IconDate = ({ style = {}, size }) => {
       x2='85.05'
       y1='141.71'
       y2='141.71'
-    /><line
+  /><line
       fill='none'
       stroke='#000'
       strokeLinecap='round'
@@ -1299,7 +1299,7 @@ export const IconDate = ({ style = {}, size }) => {
       x2='114.07'
       y1='45.32'
       y2='4.5'
-    /><line
+  /><line
       fill='none'
       stroke='#000'
       strokeLinecap='round'
@@ -1325,7 +1325,7 @@ export const IconPDF = ({ style = {}, size }) => {
       d='M-219.25-207.63a9.42,9.42,0,0,1-1,4.33,8.66,8.66,0,0,1-2.65,3.11,11.59,11.59,0,0,1-3.68,1.81,15.47,15.47,0,0,1-4.25.57h-3.5v9.47A3.35,3.35,0,0,0-234-187a1.73,1.73,0,0,0,1,.89,7,7,0,0,0,1.4.29c.67.08,1.28.14,1.84.15v1.56h-13.41v-1.56l1.53-.15a5.46,5.46,0,0,0,1.4-.29,1.84,1.84,0,0,0,.95-.84,2.88,2.88,0,0,0,.3-1.4v-22.55a4,4,0,0,0-.22-1.38,1.63,1.63,0,0,0-1-.93,10.31,10.31,0,0,0-1.66-.41c-.56-.08-1-.13-1.42-.16v-1.56H-229a11.27,11.27,0,0,1,7.08,2.1A6.73,6.73,0,0,1-219.25-207.63Zm-6.7,5.33a6,6,0,0,0,1-2.19,9.42,9.42,0,0,0,.25-2,11.3,11.3,0,0,0-.3-2.55,6,6,0,0,0-1-2.27,5.24,5.24,0,0,0-2-1.61,7.58,7.58,0,0,0-3.13-.57h-3.1v13.8H-232a8.74,8.74,0,0,0,3.86-.73A5.68,5.68,0,0,0-225.95-202.3Z'
       fill='#fff'
       transform='translate(261 293.11)'
-    /><path
+  /><path
       d='M-185.75-199.53a15,15,0,0,1-1.5,6.91,13.89,13.89,0,0,1-3.89,4.8,17,17,0,0,1-5.44,2.8,21,21,0,0,1-6.23.92h-12.94v-1.56a14.92,14.92,0,0,0,1.66-.12,4.88,4.88,0,0,0,1.35-.28,1.9,1.9,0,0,0,1-.84,2.87,2.87,0,0,0,.3-1.36V-210.8a3.34,3.34,0,0,0-.26-1.34,1.9,1.9,0,0,0-1-1,5.76,5.76,0,0,0-1.47-.48,13.33,13.33,0,0,0-1.37-.2v-1.56h13.65a18.17,18.17,0,0,1,5.55.87,16.58,16.58,0,0,1,4.75,2.34,13.51,13.51,0,0,1,4.32,5.13A16.7,16.7,0,0,1-185.75-199.53Zm-5.39,0a18,18,0,0,0-.84-5.68,13.1,13.1,0,0,0-2.44-4.44,10.78,10.78,0,0,0-3.73-2.83,11.5,11.5,0,0,0-4.92-1l-2,0-1.68.06v24a3.06,3.06,0,0,0,1.16,2.77,6.67,6.67,0,0,0,3.59.77,11.35,11.35,0,0,0,4.89-1,8.91,8.91,0,0,0,3.39-2.75,12.31,12.31,0,0,0,2-4.28A22.49,22.49,0,0,0-191.14-199.54Z'
       fill='#fff'
       transform='translate(261 293.11)'
@@ -1333,7 +1333,7 @@ export const IconPDF = ({ style = {}, size }) => {
       d='M-157.66-207.52h-1.65a11.26,11.26,0,0,0-1.93-3.72,4.76,4.76,0,0,0-2.8-2.18c-.46-.06-1-.1-1.62-.13s-1.33,0-2.13,0H-173V-201h3.6a7.4,7.4,0,0,0,2.54-.34,3.9,3.9,0,0,0,1.54-1,4.46,4.46,0,0,0,.81-1.51,9,9,0,0,0,.47-2.19h1.65v12.28h-1.65a9.35,9.35,0,0,0-.45-2.2,5.49,5.49,0,0,0-.83-1.78,3.19,3.19,0,0,0-1.66-1.11,8.55,8.55,0,0,0-2.42-.3H-173v10.75a2.85,2.85,0,0,0,.29,1.29,2.15,2.15,0,0,0,1,.93,8.58,8.58,0,0,0,1.43.37,10.66,10.66,0,0,0,1.68.24v1.56h-13.54v-1.56l1.76-.14a5.07,5.07,0,0,0,1.43-.26,1.9,1.9,0,0,0,1-.84,2.87,2.87,0,0,0,.3-1.36V-210.8a3.13,3.13,0,0,0-.25-1.29,1.87,1.87,0,0,0-1-.91,7.84,7.84,0,0,0-1.59-.51,13.2,13.2,0,0,0-1.6-.26v-1.56h24.5Z'
       fill='#fff'
       transform='translate(261 293.11)'
-    /><rect
+  /><rect
       fill='#d7d7d7'
       height='9.59'
       rx='4.79'
@@ -1347,7 +1347,7 @@ export const IconPDF = ({ style = {}, size }) => {
       width='133.43'
       x='39'
       y='185.09'
-    /><rect
+  /><rect
       fill='#d7d7d7'
       height='9.59'
       rx='4.79'
@@ -1361,7 +1361,7 @@ export const IconPDF = ({ style = {}, size }) => {
       width='133.43'
       x='39'
       y='220.3'
-    /><circle
+  /><circle
       cx='182.04'
       cy='219.02'
       fill='#d7d7d7'
@@ -1371,7 +1371,7 @@ export const IconPDF = ({ style = {}, size }) => {
       cy='222.54'
       fill='#fff'
       r='59.96'
-    /><rect
+  /><rect
       fill='#389fcb'
       height='46.83'
       rx='6.78'
@@ -1402,7 +1402,7 @@ export const IconImg = ({ style = {}, size, color }) => {
       stroke={color}
       strokeWidth='12px'
       transform='translate(-682.81 -285.43)'
-    /><path
+  /><path
       d='M790,413.15l-49.44-52.64S735,353,727.13,362.84L685,406.93'
       fill='none'
       stroke={color}
@@ -1415,7 +1415,7 @@ export const IconImg = ({ style = {}, size, color }) => {
       r='22.65'
       stroke={color}
       strokeWidth='12px'
-    /></svg>
+  /></svg>
 }
 export const IconHTML = ({ style = {}, size }) => {
   return <svg
@@ -1467,7 +1467,7 @@ export const IconExcel = ({ style = {}, size }) => {
       fill='#107c41'
       height={size}
       width={size}
-    /><path
+  /><path
       d='m380.834 103.75h-73.334v48.125h82.5v-38.959c0-5.027-4.139-9.166-9.166-9.166z'
       fill='#33c481'
       fillRule='nonzero'
@@ -1479,7 +1479,7 @@ export const IconExcel = ({ style = {}, size }) => {
       fillRule='nonzero'
       height={size}
       width={size}
-    /><path
+  /><path
       d='m307.5 200h82.5v48.125h-82.5z'
       fill='#107c41'
       height={size}
@@ -1488,7 +1488,7 @@ export const IconExcel = ({ style = {}, size }) => {
       fillRule='nonzero'
       height={size}
       width={size}
-    ><path
+  ><path
         d='m284.584 138.125h-59.584v130.625h59.584c5.022-.014 9.152-4.144 9.166-9.166v-112.293c-.014-5.022-4.144-9.152-9.166-9.166z'
         fillOpacity='.094118'
         height={size}
@@ -1497,7 +1497,7 @@ export const IconExcel = ({ style = {}, size }) => {
         fillOpacity='.2'
         height={size}
         width={size}
-    ><path d='m277.709 145h-52.709v130.625h52.709c5.022-.014 9.152-4.144 9.166-9.166v-112.293c-.014-5.022-4.144-9.152-9.166-9.166z' /><path
+  ><path d='m277.709 145h-52.709v130.625h52.709c5.022-.014 9.152-4.144 9.166-9.166v-112.293c-.014-5.022-4.144-9.152-9.166-9.166z' /><path
           d='m277.709 145h-52.709v116.875h52.709c5.022-.014 9.152-4.144 9.166-9.166v-98.543c-.014-5.022-4.144-9.152-9.166-9.166z'
           height={size}
           width={size}
@@ -1505,7 +1505,7 @@ export const IconExcel = ({ style = {}, size }) => {
           d='m270.834 145h-45.834v116.875h45.834c5.022-.014 9.152-4.144 9.166-9.166v-98.543c-.014-5.022-4.144-9.152-9.166-9.166z'
           height={size}
           width={size}
-    /></g><path
+  /></g><path
         d='m179.166 145h91.668c5.027 0 9.166 4.139 9.166 9.166v91.668c0 5.027-4.138 9.166-9.166 9.166h-91.668c-5.027 0-9.166-4.139-9.166-9.166v-91.668c0-5.027 4.139-9.166 9.166-9.166z'
         fill='#107c41'
         height={size}
@@ -1515,7 +1515,7 @@ export const IconExcel = ({ style = {}, size }) => {
         fill='#fff'
         height={size}
         width={size}
-    /></g><path
+  /></g><path
       d='m170 90h220v220h-220z'
       fill='none'
       height={size}
@@ -1621,7 +1621,7 @@ export const IconZIP = ({ style = {}, size }) => {
       height='110.16'
       width='34.74'
       x='47.52'
-    /><rect
+  /><rect
       fill='#ed8231'
       height='17.64'
       width='37.68'
@@ -1633,7 +1633,7 @@ export const IconZIP = ({ style = {}, size }) => {
       width='37.68'
       x='46.62'
       y='15.52'
-    /><polygon fill='#c33032' points='82.26 6.36 125.64 36.72 83.17 36.72 82.26 6.36' /><path
+  /><polygon fill='#c33032' points='82.26 6.36 125.64 36.72 83.17 36.72 82.26 6.36' /><path
       d='M423.45-190.09s16.14-19.64,34.38,0Z'
       fill='#f9a855'
       transform='translate(-375.93 205.61)'
@@ -1641,7 +1641,7 @@ export const IconZIP = ({ style = {}, size }) => {
       d='M457.78-169.9v29.16H444.1V-153s-3.51-5.58-7.2.54v11.7H423.31V-169.9s-4.23-.54-4.32,3l-.9,29.43s2.07,5.13,6.48,6.75h34.29s3.51-.54,4.68-7.65l-.72-30.06S462.15-171.36,457.78-169.9Z'
       fill='#fff'
       transform='translate(-375.93 205.61)'
-    /><rect
+  /><rect
       fill='#f6c92e'
       height='27.6'
       width='6.84'
@@ -1653,7 +1653,7 @@ export const IconZIP = ({ style = {}, size }) => {
       width='6.84'
       x='9.36'
       y='44.16'
-    /><rect
+  /><rect
       fill='#f6c92e'
       height='27.6'
       width='6.84'
@@ -1845,7 +1845,7 @@ export const IconMiniCheck = ({ style = {}, size, color }) => {
       clipRule='evenodd'
       d='M2.59 6.57A1 1 0 0 0 1.19 8l5.16 5.09L16.72 2.36A1 1 0 1 0 15.28.97l-8.96 9.28-3.73-3.68z'
       fillRule='evenodd'
-    ></path></svg>
+  ></path></svg>
 }
 // Icono  de Cuba
 export const IconCuba = ({ style = {}, size }) => {
@@ -2071,7 +2071,7 @@ export const IconPause = ({ style = {}, size, color }) => {
       width='9'
       x='16'
       y='17'
-    /><path d='M118,36V64h-8V36h8m1-1H109V65h10V35Z' transform='translate(-93.5 -18.5)' /><rect
+  /><path d='M118,36V64h-8V36h8m1-1H109V65h10V35Z' transform='translate(-93.5 -18.5)' /><rect
       height='29'
       width='9'
       x='38'
@@ -2135,7 +2135,7 @@ export const IconNotification = ({ style = {}, size, color }) => {
       fill='red'
       height={size}
       width={size}
-    ></path><path d='M11.9334 14.2132C12.6256 14.2132 13.1867 13.6521 13.1867 12.9599C13.1867 12.2677 12.6256 11.7065 11.9334 11.7065C11.2412 11.7065 10.6801 12.2677 10.6801 12.9599C10.6801 13.6521 11.2412 14.2132 11.9334 14.2132Z'></path><path d='M19.9335 14.1862C20.6109 14.1862 21.1601 13.637 21.1601 12.9596C21.1601 12.2821 20.6109 11.7329 19.9335 11.7329C19.256 11.7329 18.7068 12.2821 18.7068 12.9596C18.7068 13.637 19.256 14.1862 19.9335 14.1862Z'></path><path d='M15.9333 14.2532C16.6476 14.2532 17.2267 13.6741 17.2267 12.9598C17.2267 12.2455 16.6476 11.6665 15.9333 11.6665C15.2191 11.6665 14.64 12.2455 14.64 12.9598C14.64 13.6741 15.2191 14.2532 15.9333 14.2532Z'></path></svg>
+  ></path><path d='M11.9334 14.2132C12.6256 14.2132 13.1867 13.6521 13.1867 12.9599C13.1867 12.2677 12.6256 11.7065 11.9334 11.7065C11.2412 11.7065 10.6801 12.2677 10.6801 12.9599C10.6801 13.6521 11.2412 14.2132 11.9334 14.2132Z'></path><path d='M19.9335 14.1862C20.6109 14.1862 21.1601 13.637 21.1601 12.9596C21.1601 12.2821 20.6109 11.7329 19.9335 11.7329C19.256 11.7329 18.7068 12.2821 18.7068 12.9596C18.7068 13.637 19.256 14.1862 19.9335 14.1862Z'></path><path d='M15.9333 14.2532C16.6476 14.2532 17.2267 13.6741 17.2267 12.9598C17.2267 12.2455 16.6476 11.6665 15.9333 11.6665C15.2191 11.6665 14.64 12.2455 14.64 12.9598C14.64 13.6741 15.2191 14.2532 15.9333 14.2532Z'></path></svg>
 }
 export const IconPromo = ({ style = {}, size, color }) => {
   return <svg
@@ -2150,5 +2150,5 @@ export const IconPromo = ({ style = {}, size, color }) => {
       fill='red'
       height={size}
       width={size}
-    ></path><path d='M11.9334 14.2132C12.6256 14.2132 13.1867 13.6521 13.1867 12.9599C13.1867 12.2677 12.6256 11.7065 11.9334 11.7065C11.2412 11.7065 10.6801 12.2677 10.6801 12.9599C10.6801 13.6521 11.2412 14.2132 11.9334 14.2132Z'></path><path d='M19.9335 14.1862C20.6109 14.1862 21.1601 13.637 21.1601 12.9596C21.1601 12.2821 20.6109 11.7329 19.9335 11.7329C19.256 11.7329 18.7068 12.2821 18.7068 12.9596C18.7068 13.637 19.256 14.1862 19.9335 14.1862Z'></path><path d='M15.9333 14.2532C16.6476 14.2532 17.2267 13.6741 17.2267 12.9598C17.2267 12.2455 16.6476 11.6665 15.9333 11.6665C15.2191 11.6665 14.64 12.2455 14.64 12.9598C14.64 13.6741 15.2191 14.2532 15.9333 14.2532Z'></path></svg>
+  ></path><path d='M11.9334 14.2132C12.6256 14.2132 13.1867 13.6521 13.1867 12.9599C13.1867 12.2677 12.6256 11.7065 11.9334 11.7065C11.2412 11.7065 10.6801 12.2677 10.6801 12.9599C10.6801 13.6521 11.2412 14.2132 11.9334 14.2132Z'></path><path d='M19.9335 14.1862C20.6109 14.1862 21.1601 13.637 21.1601 12.9596C21.1601 12.2821 20.6109 11.7329 19.9335 11.7329C19.256 11.7329 18.7068 12.2821 18.7068 12.9596C18.7068 13.637 19.256 14.1862 19.9335 14.1862Z'></path><path d='M15.9333 14.2532C16.6476 14.2532 17.2267 13.6741 17.2267 12.9598C17.2267 12.2455 16.6476 11.6665 15.9333 11.6665C15.2191 11.6665 14.64 12.2455 14.64 12.9598C14.64 13.6741 15.2191 14.2532 15.9333 14.2532Z'></path></svg>
 }

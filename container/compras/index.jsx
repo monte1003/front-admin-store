@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { AwesomeModal } from 'components/AwesomeModal'
-import { useFormTools } from 'components/BaseForm'
+import { useFormTools } from 'npm-pkg-hook'
 import { useSetState } from 'components/hooks/useState'
 import InputHooks from 'components/InputHooks/InputHooks'
 import NewSelect from 'components/NewSelectHooks/NewSelect'
@@ -14,8 +15,8 @@ import { CREATE_SHOPPING, GET_ALL_SHOPPING } from './queries'
 import { Button, Item, Container } from './styled'
 import { numberFormat, updateCache } from 'utils'
 
-export const ShoppingC = () => { 
-  const HandleGetOne = () => {}
+export const ShoppingC = () => {
+  const HandleGetOne = () => { return }
   const OPEN_MODAL = useSetState()
   const [newShopping] = useMutation(CREATE_SHOPPING)
   const { data } = useQuery(GET_ALL_SHOPPING)
@@ -189,7 +190,7 @@ export const ShoppingC = () => {
             <span> {moment(x.createAt).format('DD-MM-YYYY')}</span>
           </Item>
           <Item>
-            <Button onClick={() => {return HandleGetOne({})}}>
+            <Button onClick={() => {return HandleGetOne()}}>
                             Ver detalles
             </Button>
           </Item>

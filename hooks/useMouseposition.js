@@ -32,7 +32,7 @@ export function useFakeSvgDrag() {
 
   return {
     coordinates,
-    startDrag: coordinates => {
+    startDrag: () => {
       setDragging(true)
     },
     drag: coordinates => {
@@ -40,7 +40,7 @@ export function useFakeSvgDrag() {
         setCoordinates(coordinates)
       }
     },
-    stopDrag: _ => {
+    stopDrag: () => {
       setDragging(false)
     }
   }

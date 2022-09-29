@@ -1,8 +1,20 @@
+import React, { useContext, useState } from 'react'
 import { RippleButton } from 'components/Ripple'
 import { Table } from 'components/Table'
 import { Section } from 'components/Table/styled'
-import { APColor, BColor, BGColor, BGVColor, DarkSilver, PColor, PLColor, SCColor, SECColor, TBGEColor, WColor } from 'public/colors'
-import React, { useContext, useState } from 'react'
+import {
+  APColor,
+  BColor,
+  BGColor,
+  BGVColor,
+  DarkSilver,
+  PColor,
+  PLColor,
+  SCColor,
+  SECColor,
+  TBGEColor,
+  WColor
+} from 'public/colors'
 import styled, { css, keyframes } from 'styled-components'
 import moment from 'moment'
 import { useMutation } from '@apollo/client'
@@ -17,7 +29,12 @@ import { IconLocationMap } from 'public/icons'
 import { useStore } from '../../components/hooks/useStore'
 import { CLIENT_URL_BASE } from 'apollo/urls'
 
-export const ListPedidos = ({ data, fetchMore, setMore, more, errorForm, handleChange, dataForm }) => {
+export const ListPedidos = ({
+  data,
+  fetchMore,
+  setMore,
+  more
+}) => {
   const [modal, setModal] = useState(false)
   const [dataModal, setDataModal] = useState(null)
   const handleOpenModal = elem => {
@@ -223,7 +240,7 @@ export const CheckStatus = ({ setModal, modal, dataModal }) => {
                         </div>
                         {/* <IconMiniCheck size={'15px'} color={'#009b3a'} /> */}
                       </GarnishChoicesHeader>
-                      {ExtProductFoodsAll?.map(extra => {return (
+                      {[]?.map(extra => {return (
                         <CardsComponent key={extra.exPid}>
                           <div>
                             <h3 className='title_card'>{extra.extraName}</h3>
@@ -232,7 +249,7 @@ export const CheckStatus = ({ setModal, modal, dataModal }) => {
                           <RippleButton
                             bgColor={'transparent'}
                             margin='0px'
-                            onClick={() => {return console.log(extra)}}
+                            onClick={() => {return }}
                             type='button'
                             widthButton='min-content'
                           >
@@ -256,14 +273,14 @@ export const CheckStatus = ({ setModal, modal, dataModal }) => {
                               <input
                                 id='cat'
                                 name='subOptional'
-                                onChange={handleChangeClickOnTable}
+                                onChange={() => { return }}
                                 type='checkbox'
                                 value={x?.opSubExPid}
                               />
                               <RippleButton
                                 bgColor={'transparent'}
                                 margin='0px'
-                                onClick={() => {return console.log(x)}}
+                                onClick={() => { return }}
                                 type='button'
                                 widthButton='min-content'
                               >

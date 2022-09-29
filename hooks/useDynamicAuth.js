@@ -5,7 +5,7 @@ import { GET_ONE_DYNAMIC_PASS } from '~/container/services/auth/DynamicPass/quer
 export const useDynamicAuth = () => {
   const [dynamicPass, setDynamicPass] = useState({})
   const { loading, error } = useQuery(GET_ONE_DYNAMIC_PASS, {
-    onCompleted: (res) => { 
+    onCompleted: (res) => {
       setDynamicPass(res.getAOneDynamicPassword)
     }
   })

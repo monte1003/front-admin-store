@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useQuery } from '@apollo/client'
 import { useContext, useEffect, useState } from 'react'
 import { GET_ALL_PEDIDOS } from 'container/PedidosStore/queries'
@@ -23,8 +24,8 @@ export const useOrders = ({
     nextFetchPolicy: nextFetchPolicy,
     onError: onError
       ? onError
-      : e => {
-        return console.log(e)
+      : () => {
+        return
       },
     variables: {
       statusOrder: statusOrder

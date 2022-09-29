@@ -1,4 +1,8 @@
-import React, { createContext, useContext, useReducer } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useReducer
+} from 'react'
 
 const initialState = {
   containerRef: null,
@@ -7,7 +11,7 @@ const initialState = {
 }
 
 // No operation
-const noop = () => { }
+const noop = () => { return }
 
 const initialDispatch = {
   setContainerRef: noop,
@@ -31,7 +35,7 @@ function reducer(state, action) {
       return Object.assign(state, {
         containerRef: { current: payload.containerRef }
       })
-    case ActionType.addStickyRef:
+    case ActionType.addStickyRef: {
       const { topSentinelRef, bottomSentinelRef, stickyRef } = payload
 
       state.stickyRefs.set(topSentinelRef.current, stickyRef)
@@ -40,6 +44,7 @@ function reducer(state, action) {
       return Object.assign(state, {
         stickyRefs: state.stickyRefs
       })
+    }
     case ActionType.toggleDebug:
       return { ...state, debug: !state.debug }
     default:

@@ -1,23 +1,18 @@
-import PropTypes from 'prop-types'
-import { useContext, useState } from 'react'
-import { useFormTools } from '../../components/BaseForm'
+import { useState } from 'react'
 import { useUser } from '../../components/hooks/useUser'
 import { useQuery } from '@apollo/client'
-import InputHooks from '../../components/InputHooks/InputHooks'
-import OTPInput from '../../components/OTPInputHook'
 import { RippleButton } from '../../components/Ripple'
-import { BColor, BGColor, EColor, PVColor } from '../../public/colors'
-import { Card2, ContentCardInfo, Text } from './styled'
+import { BColor, EColor } from '../../public/colors'
+import {
+  Card2,
+  ContentCardInfo,
+  Text
+} from './styled'
 import { GET_ONE_STORE } from './queries'
-// import { generatePdfDocumentInvoice } from './PdfStore'
 import { useRouter } from 'next/router'
-import useLocalStorage from '../../components/hooks/useLocalSorage'
-import Context from '../../context/Context'
 
-const CheckYourData = props => {
-  // const { setCompanyLink } = useContext(Context)
-  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm, setForcedError }] = useFormTools()
-  const [step, setStep] = useState(0)
+const CheckYourData = () => {
+  const [step] = useState(0)
   const [dataUser] = useUser()
   const router = useRouter()
   const { data } = useQuery(GET_ONE_STORE)

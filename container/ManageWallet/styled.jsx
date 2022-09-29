@@ -1,14 +1,9 @@
 import styled, { css, keyframes } from 'styled-components'
-import { BGColor, EColor, PColor, PLAColor, PLVColor, PSColor, PVColor, SECColor, SFVColor } from '../../public/colors'
+import { BGColor, PColor, SFVColor } from '../../public/colors'
 
 export const Action = styled.div`
     background-color: ${BGColor};
-    /* border-top: 1px solid #ccc;
-    padding: 10px;
-    margin: 15px 0;
-    bottom: 0; */
-    /* top: 0; */
-    /* position: fixed; */
+
 `
 export const CtnList = styled.div`
     overflow: hidden auto;

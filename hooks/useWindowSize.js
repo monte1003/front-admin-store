@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 
 export default function useWindowSize() {
@@ -6,7 +7,7 @@ export default function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
     width: undefined,
     height: undefined,
-    mobile: undefined,
+    mobile: undefined
   })
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export default function useWindowSize() {
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
-        mobile: windowSize.width <  768 ?  true : false
+        mobile: windowSize.width <  768 ? true : false
       })
     }
 

@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router'
-import PropTypes from 'prop-types'
 import { useState } from 'react'
-import { useFormTools } from '../../components/BaseForm'
+import { useFormTools } from 'npm-pkg-hook'
 import InputHooks from '../../components/InputHooks/InputHooks'
 import OTPInput from '../../components/OTPInputHook'
 import { RippleButton } from '../../components/Ripple'
 import { EColor } from '../../public/colors'
-import { Cards, ContentCards, Text } from './styled'
+import { ContentCards, Text } from './styled'
 
-const CodeValidation = props => {
+const CodeValidation = () => {
+  // eslint-disable-next-line
   const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm, setForcedError }] = useFormTools()
   const [step, setStep] = useState(0)
   const router = useRouter()
@@ -32,7 +32,7 @@ const CodeValidation = props => {
               inputClassName='otpInput'
               isNumberInput
               length={6}
-              onChangeOTP={(otp) => {return console.log('String OTP: ', otp)}}
+              onChangeOTP={() => {return }}
             />
             <Text
               align='center'

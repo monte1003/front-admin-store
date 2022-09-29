@@ -1,21 +1,62 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import moment from 'moment'
-import { useContext, useEffect, useState } from 'react'
+import {
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import { numberFormat } from '../../utils'
-import { IconConfig, IconDelete, IconEdit, IconPlus } from 'public/icons'
+import {
+  IconConfig,
+  IconDelete,
+  IconEdit,
+  IconPlus
+} from 'public/icons'
 import { RippleButton } from 'components/Ripple'
 import { useSetState } from 'components/hooks/useState'
 import Image from 'next/image'
 import { AwesomeModal } from 'components/AwesomeModal'
-import { BColor, BGColor, PColor } from 'public/colors'
+import {
+  BColor,
+  BGColor,
+  PColor
+} from 'public/colors'
 import { Context } from 'context/Context'
-import { Content, CardContent, Action, CtnList, Grid, SubTitle, Container, CardDynamic, FooterOptionWallet, Input } from './styled'
 import { CardProduct } from 'container/wallet/styled'
+import {
+  Content,
+  CardContent,
+  Action,
+  CtnList,
+  Grid,
+  SubTitle,
+  Container,
+  CardDynamic,
+  FooterOptionWallet,
+  Input
+} from './styled'
 
-export const ManageWallet = ({ data, dataProducto, product, dispatch, loading, search, handleChangeFilter, dataFree, fetchMoreProduct, OPEN_MODAL }) => {
-  const { getAllWalletDebtProduct, RefDebtCode, debtName, phoneWalletUser, debtAmount } = data
+export const ManageWallet = ({
+  data,
+  dataProducto,
+  product,
+  dispatch,
+  loading,
+  search,
+  handleChangeFilter,
+  dataFree,
+  fetchMoreProduct,
+  OPEN_MODAL
+}) => {
+  const {
+    getAllWalletDebtProduct,
+    RefDebtCode,
+    debtName,
+    phoneWalletUser,
+    debtAmount
+  } = data
   const { setAlertBox } = useContext(Context)
   const [amount, setAmount] = useState(0)
-  const [modalOptions, setOpenModalOptions] = useState(true)
   const [amountPro, setAmountPro] = useState(0)
   const [showMoreProduct, setShowMoreProducts] = useState(100)
 
@@ -34,14 +75,10 @@ export const ManageWallet = ({ data, dataProducto, product, dispatch, loading, s
     setAmountPro(amountCountPro)
   }, [product])
   const handleAddProduct = elem => {
-    const { pName } = elem || {}
     dispatch({ type: 'ADD_PRODUCT_WALLET', payload: elem })
   }
   const OPEN_OPTION = useSetState(false)
-  function handleOpen() {
-    OPEN_MODAL.setState(!OPEN_MODAL.state)
-    setOpenModalOptions(!modalOptions)
-  }
+
   return (
     <Container>
       {<Content>

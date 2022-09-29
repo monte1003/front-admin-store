@@ -1,22 +1,37 @@
-import PropTypes from 'prop-types'
 import { useEffect } from 'react'
 import ActiveLink from '../../components/common/Link'
 import { useSetState } from '../../components/hooks/useState'
 import { RippleButton } from '../../components/Ripple'
-import { BColor, BGColor, SECColor } from '../../public/colors'
+import {
+  BColor,
+  BGColor,
+  SECColor
+} from '../../public/colors'
 import { IconArrowBottom, IconCancel } from '../../public/icons'
-import { BtnClose, BtnItem, ButtonTheme, Card, Cards, CardWrap, ContentCards, ContentCarPrice, ContentPrice, ContentPricing, ContentToggle, FeatureItem, Line, Module, ModuleInfo, Pricing, SwitchButton, Text } from './styled'
+import { BtnClose,
+  BtnItem,
+  ButtonTheme,
+  CardWrap, ContentCards,
+  ContentCarPrice,
+  ContentPrice,
+  ContentPricing,
+  ContentToggle,
+  FeatureItem,
+  Line,
+  Module,
+  ModuleInfo,
+  Pricing,
+  SwitchButton,
+  Text
+} from './styled'
 
 const Planes = () => {
   const show = useSetState(0)
   const Switch = useSetState(0)
-  const handleShow = index => {
-    show.setState(index === show.state ? false : index)
-  }
 
   useEffect(() => {
     if (show) window.addEventListener('keyup', e => {return e.code === 'Escape' && show.setState(false)})
-    return () => {return window.removeEventListener('keyup', () => { })}
+    return () => {return window.removeEventListener('keyup', () => { return })}
   }, [show])
   return (
     <div>

@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types'
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
-import React, { useContext, useEffect, useState } from 'react'
-import { useGetProducts } from '../../../components/hooks/useGetProducts'
+import { useMutation, useQuery } from '@apollo/client'
+import React, { useState } from 'react'
 import { CategoriesStoreComponent } from '../../../components/Update/CategoriesStore'
 import { CREATE_CAT_STORE, GET_ALL_CAT_STORE, SET_DES_CAT } from '../../../gql/catStore'
-import moment from 'moment'
 
 export const CategoriesStore = ({ setAlertBox }) => {
   // ------------ ESTADOS ------------
@@ -12,7 +10,7 @@ export const CategoriesStore = ({ setAlertBox }) => {
   const [values, setValues] = useState({})
   //-----------QUERIES ------------
   const [registerCategoryStore] = useMutation(CREATE_CAT_STORE)
-  const { data, loading, error } = useQuery(GET_ALL_CAT_STORE)
+  const { data } = useQuery(GET_ALL_CAT_STORE)
   const [desCategoryStore] = useMutation(SET_DES_CAT)
 
   // ------------ HANDLES ------------
@@ -49,7 +47,8 @@ export const CategoriesStore = ({ setAlertBox }) => {
     }
   }
   const handleDelete = pId => {
-    const value = finalData?.getAllCatStore?.filter(x => {return (x.pId === pId)})
+    // const value = finalData?.getAllCatStore?.filter(x => {return (x.pId === pId)})
+    const value = []
     const pState = value[0]?.pState
     registerCategoryStore({
       variables: {
@@ -81,7 +80,7 @@ export const CategoriesStore = ({ setAlertBox }) => {
           }
         })
       }
-    }).catch(err => {return console.log(err)})
+    }).catch(() => { return })
   }
   return (
     <CategoriesStoreComponent

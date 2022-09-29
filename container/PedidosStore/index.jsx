@@ -1,32 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { LocationName } from 'components/hooks/useLocationName'
 import { Container } from './styled'
-import { ListPedidos } from './ListPedidos'
-import Tabs from 'components/Tabs'
 import { useOrders } from 'hooks/useOrders'
-import { useFormTools } from 'components/BaseForm'
 import DragOrders from './DragOrders'
 
 const PedidosStore = () => {
   // STATES
-  const [
-    handleChange,
-    handleSubmit,
-    setDataValue,
-    { dataForm, errorForm }
-  ] = useFormTools()
-  const [more, setMore] = useState(100)
   const ACEPTA_STATUS_ORDER = 1
   const PROCESSING_STATUS_ORDER = 2
   const READY_STATUS_ORDER = 3
   const CONCLUDES_STATUS_ORDER = 4
   const RECHAZADOS_STATUS_ORDER = 5
 
-  const [data, { loading: a, fetchMore }] = useOrders({
+  const [data] = useOrders({
     statusOrder: ACEPTA_STATUS_ORDER
   })
 
-  console.log(data)
   const [dataProgressOrder] = useOrders({
     statusOrder: PROCESSING_STATUS_ORDER
   })
@@ -108,7 +97,6 @@ const PedidosStore = () => {
           </Column>
         </Row>
       </Column> */}
-  
       </Container>
     </div>
   )
