@@ -1,0 +1,17 @@
+name: Deployment Pipeline
+
+on:
+  push:
+    branches: [develop, staging, master]
+  pull_request:
+    branches: [develop, staging, master]
+    types: [opened, synchronize]
+
+jobs:
+  hello_word:
+  runs-on: ubuntu-18.04
+  steps:
+    - name: Deployment Pipeline
+      run: |
+      echo "Deployment Pipeline is running successfully!"
+
