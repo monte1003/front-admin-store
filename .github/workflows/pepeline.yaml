@@ -8,17 +8,16 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
-    - name: Install dependencies
-      run: npm install -no-audit --no-fund --no-optional -f
     - run: npm run check:eslint -f
-    - name: Build
-      run: npm run build -f
+
+  install_dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: npm install -no-audit --no-fund --no-optional -f
