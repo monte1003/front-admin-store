@@ -1,4 +1,4 @@
-name: Deployment Pipeline
+name: test
 
 on:
   push:
@@ -8,7 +8,7 @@ jobs:
   hello_word:
     runs-on: ubuntu-18.04
     steps:
-      - name: Deployment Pipeline
+      - name: test
         run: |
-          echo "Deployment Pipeline is running successfully"
+          echo "test is running successfully"
 
