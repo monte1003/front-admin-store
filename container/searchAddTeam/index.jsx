@@ -1,5 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
 import { RippleButton } from '../../components/Ripple'
 import {
@@ -30,8 +31,8 @@ export const AddEmployee = () => {
   const SHOW_ADD_EMPLOYEE = useSetState(false)
   const [createOneEmployeeStore] = useMutation(CREATE_ONE_TEAM_USER)
   const [createOneEmployeeStoreAndUser] = useMutation(CREATE_ONE_TEAM_USER_INVITE)
-  const [getOneUser, { data, loading, error, called }] = useLazyQuery(GET_ONE_TEAM_USER, {
-    onError: (err) => { return }
+  const [getOneUser, { data, loading, called }] = useLazyQuery(GET_ONE_TEAM_USER, {
+    onError: () => { return }
   })
   const { id, email } = data?.getOneUser || {}
   const handleForm = (e, show) => {return handleSubmit({

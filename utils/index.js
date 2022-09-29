@@ -946,7 +946,7 @@ export default function useKeypress(key, action) {
     }
     window.addEventListener('keyup', onKeyup)
     return () => { return window.removeEventListener('keyup', onKeyup) }
-  }, [])
+  }, [action, key])
 }
 export const CalculateIva = (quantity, rate, iPercentage, state) => {
   const rateNumber = parseInt(rate)

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import { PColor } from 'public/colors'
 import Image from 'next/image'
 import React, {

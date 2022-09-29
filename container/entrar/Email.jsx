@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
+/* eslint-disable consistent-return */
 import React, { useState } from 'react'
 import { RippleButton } from '../../components/Ripple'
 import { BColor, EColor, PLColor } from '../../public/colors'
@@ -17,7 +20,7 @@ export const Email = () => {
   const [otp, setOTP] = useState(0)
   const [step, setStep] = useState(0)
   const router = useRouter()
-  const [registerEmailLogin, { loading }] = useMutation(EMAIL_SESSION)
+  const [registerEmailLogin] = useMutation(EMAIL_SESSION)
   const body = {
     email: dataForm.email,
     otp: otp

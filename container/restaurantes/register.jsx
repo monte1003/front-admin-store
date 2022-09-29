@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import { RippleButton } from '../../components/Ripple'
 import { EColor } from '../../public/colors'
 import InputHooks from '../../components/InputHooks/InputHooks'
-import { useFormTools } from '../../components/BaseForm'
+import { useFormTools } from 'npm-pkg-hook'
 import { Content, Form } from './styled'
 
 export const RegisterRestaurant = () => {

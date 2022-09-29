@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable consistent-return */
 import PropTypes from 'prop-types'
 import React,

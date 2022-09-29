@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import { useLazyQuery } from '@apollo/client'

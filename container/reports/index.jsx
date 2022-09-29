@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import { AwesomeModal } from 'components/AwesomeModal'
 import { useFormTools } from 'npm-pkg-hook'
@@ -14,7 +15,7 @@ import { Container } from './styled'
 
 export const ReportsC = () => {
   const OPEN_MODAL = useSetState()
-  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm, setForcedError }] = useFormTools()
+  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm }] = useFormTools()
   return (
     <Container>
       <MainCard title={`Ventas por meses del año`} weight={'200'}>

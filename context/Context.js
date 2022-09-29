@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
 import React, {
   createContext,
@@ -194,7 +195,7 @@ const Provider = ({ children }) => {
         setAlertBox: err => { return setError(err) }
       }
     },
-    [error, hidden, status, salesOpen, openSchedule, selectedStore, setStoreChatActive, DataCompany, setCompanyLink, countPedido, isCompany, handleMenu, menu, collapsed, isSession, authData, setSessionActive, useCompany, company, alert, state_product_card]
+    [error, hidden, status, setSalesOpen, salesOpen, openSchedule, selectedStore, setStoreChatActive, DataCompany, setCompanyLink, countPedido, isCompany, handleMenu, menu, collapsed, isSession, authData, setSessionActive, useCompany, company, alert, state_product_card]
   )
 
   return <Context.Provider value={value}>

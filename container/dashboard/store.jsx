@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import React, {
   useContext,
@@ -389,7 +390,6 @@ export const CardProducts = ({ food, onClick, setAlertBox }) => {
   return (
     <div ref={setRef}>
       {<WrapperCard>
-        {/* {da}     */}
         <TooltipCardProduct>
           <button onClick={() => { return router.push(`/update/products/editar/${food.pId}`) }}>
             <IconEdit color={PColor} size={20} />
