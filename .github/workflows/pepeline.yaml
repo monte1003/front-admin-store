@@ -21,6 +21,7 @@ jobs:
       run: npm install -no-audit --no-fund --no-optional -f
 
   test:
+    needs: [install_dependencies]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -33,6 +34,7 @@ jobs:
       run: npm run check:eslint -f
 
   build:
+    needs: [install_dependencies, test]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
