@@ -3,6 +3,9 @@ name: Deployment Pipeline
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [develop]
+    types: [opened, synchronize]
 
 jobs:
   deploy:
@@ -19,8 +22,3 @@ jobs:
     - run: npm run check:eslint -f
     - name: Build
       run: npm run build -f
-
-
-
-
-
