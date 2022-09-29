@@ -1,6 +1,12 @@
-import { APColor, BColor, BGColor, PColor, PVColor } from 'public/colors'
+import {
+  APColor,
+  BColor,
+  BGColor,
+  DarkSilver,
+  PColor,
+  PVColor
+} from 'public/colors'
 import styled, { css } from 'styled-components'
-import { DarkSilver } from '../../../front-client/public/colors'
 
 export const ContentImage = styled.div`
     display: flex;
