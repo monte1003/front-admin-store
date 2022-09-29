@@ -1303,7 +1303,7 @@ export const organizeArray = (arrayP, arrayS, priorityP, priorityS) => {
 
 export const indexExport = async (req, res, url) => {
   const filePath = resolve(__dirname, '../public', 'index.html')
-  let fileString = await readFileSync(filePath, 'utf8')
+  let fileString = await (filePath, 'utf8')
   fileString = fileString.replace('<title>Winby</title>', '<title>Winby</title>')
   fileString = fileString.replace('<meta property="og:title" content="Winby"/>', '<meta property="og:title" content="Winby"/>')
   fileString = fileString.replace('<meta name="description" content="El Centro Comercial Virtual más Grande de Latinoamérica."/>', '<meta name="description" content="El Centro Comercial Virtual más Grande de Latinoamérica."/>')

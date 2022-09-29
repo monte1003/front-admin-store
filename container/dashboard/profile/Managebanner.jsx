@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import { PColor } from 'public/colors'
@@ -238,10 +239,6 @@ const Banner = ({ isMobile }) => {
     })
   }
   const refInput = useRef('')
-  // const handleEdit = () => {
-  //   // refInput?.current?.focus()
-  //   setOpenSName(!openSName)
-  // }
   return (
     <div>
       <Section>
