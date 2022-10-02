@@ -5,7 +5,7 @@ import { OptionalExtraProducts } from 'container/producto/extras'
 import { ExtrasProductsItems } from 'container/producto/extras/ExtrasProductsItems'
 import Image from 'next/image'
 import Link from 'next/link'
-import { APColor } from 'public/colors'
+import { APColor, GraniteGray } from 'public/colors'
 import React from 'react'
 import {
   CardProductsModal,
@@ -65,7 +65,7 @@ export const Product = ({
             <Text size='1.1em'>{pName}</Text>
           </HeadSticky>
           <Text
-            color='#676464'
+            color={GraniteGray}
             margin='20px 0'
             size='14px'
           >{ProDescription}</Text>
@@ -109,7 +109,7 @@ export const Product = ({
         height={'100vh'}
         onHide={() => {return setShowDessert(!showDessert)}}
         show={showDessert}
-        size={'90vw'}
+        size={'100vw'}
       >
         <OptionalExtraProducts
           dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}

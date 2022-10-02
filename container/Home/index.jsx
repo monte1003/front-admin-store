@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import InputHooks from 'components/InputHooks/InputHooks'
+import { RippleButton } from 'components/Ripple'
 import Image from 'next/image'
+import { useFormTools } from 'npm-pkg-hook'
+import { Button } from 'pkg-components'
 import {
   Container,
   ContainerLeft,
   ContentImage,
   Form
 } from './styled'
-import InputHooks from 'components/InputHooks/InputHooks'
-import { RippleButton } from 'components/Ripple'
-import { useFormTools } from 'npm-pkg-hook'
 
 
 const Index = () => {
@@ -20,6 +20,7 @@ const Index = () => {
   }
   return (
     <div>
+      <Button label='papu'></Button>
       <Container>
         <ContainerLeft>
           <ContentImage>

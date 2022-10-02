@@ -8,6 +8,7 @@ import {
   BGColor,
   BGVColor,
   DarkSilver,
+  GraniteGray,
   PColor,
   PLColor,
   SCColor,
@@ -197,7 +198,7 @@ export const CheckStatus = ({ setModal, modal, dataModal }) => {
                         <Text size='1.5em'>Cantidad: {p.getAllShoppingCard.cantProducts} </Text>
                       </HeadSticky>
                       <Text
-                        color='#676464'
+                        color={GraniteGray}
                         margin='20px 0'
                         size='14px'
                       >{p?.getAllShoppingCard?.productFood?.ProDescription}</Text>

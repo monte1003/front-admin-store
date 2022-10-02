@@ -1,25 +1,23 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-import PropTypes from 'prop-types'
-import Context from '../context/Context'
-import Head from 'next/head'
-import { Layout as MainLayout } from '../components/Layout'
 import { ApolloProvider } from '@apollo/client'
-import { useApollo } from '../apollo/apolloClient'
-import Auth from '../apollo/Auth'
-import { GlobalStyle } from '../public/styles/GlobalStyle'
-import { ProgressBar } from '../components/common/Nprogres'
-import Script from 'next/script'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 import Noscript from 'components/Noscript'
+import { useRouter } from 'next/router'
+import Script from 'next/script'
+import PropTypes from 'prop-types'
+import { useEffect, useState } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
-import '../styles/globals.css'
+import { useApollo } from '../apollo/apolloClient'
+import Auth from '../apollo/Auth'
+import { ProgressBar } from '../components/common/Nprogres'
+import { Layout as MainLayout } from '../components/Layout'
+import Context from '../context/Context'
+import { GlobalStyle } from '../public/styles/GlobalStyle'
 import '../public/styles/tokens.css'
-// where: { u_id: deCode(u_id), ua_date: { [Op.startsWith]: ua_date } }
+import '../styles/globals.css'
 export default function App({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps)
   const router = useRouter()
@@ -192,30 +190,6 @@ export default function App({ Component, pageProps }) {
         <ProgressBar progress={animating} />
         <Noscript>
         </Noscript>
-
-        <Head>
-          <link href='/manifest.json' rel='manifest' />
-          <meta content='yes' name='mobile-web-app-capable' />
-          <meta content='#0b6580' name='theme-color' />
-          <meta content='/' name='msapplication-starturl' />
-          <meta content='yes' name='apple-mobile-web-app-capable' />
-          <meta content='black' name='apple-mobile-web-app-status-bar-style' />
-          <link
-            href='/favicon.ico'
-            rel='shortcut icon'
-            type='image/x-icon'
-          />
-          <link
-            href='/favicon.ico'
-            rel='icon'
-            type='image/x-icon'
-          />
-          <link
-            href='logo-apple.png'
-            rel='apple-touch-icon'
-            sizes='192x192'
-          />
-        </Head>
         {getLayout(<Auth>
           <Component {...{ ...pageProps, isMobile: false }} />
         </Auth>)}

@@ -5,7 +5,7 @@
   "scripts": {
     "rm": "rm -rf node_modules .next  package-lock.json && npm install -f",
     "check:eslint": "eslint '*/**/*.{js,jsx,tsx}' --fix --max-warnings=0 --no-error-on-unmatched-pattern",
-    "link:pkgch": "npm link npm-pkg-hook && rm -rf .next -f",
+    "link:pkgch": "npm link npm-pkg-hook pkg-components &&  rm -rf .next -f",
     "server": "nodemon node server.js",
     "dev": "next dev -p 3001",
     "build": "next build",
@@ -47,6 +47,7 @@
     "next-transpile-modules": "9.0.0",
     "nodemailer": "6.7.5",
     "npm-pkg-hook": "latest",
+    "pkg-components": "^1.0.0",
     "react": "^18.2.0",
     "react-canvas-draw": "1.2.1",
     "react-chartjs-2": "4.1.0",

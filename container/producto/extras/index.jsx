@@ -247,7 +247,9 @@ export const OptionalExtraProducts = ({ pId }) => {
           padding='0'
           type='button'
           widthButton='100%'
-        >Adicionar Categoría de sobremesa</RippleButton>
+        >
+          Adicionar Categoría de sobremesa
+        </RippleButton>
       </GarnishChoicesHeader>
     </div>
   </Row>

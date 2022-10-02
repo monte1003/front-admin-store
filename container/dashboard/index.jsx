@@ -1,25 +1,26 @@
-import React from 'react'
-import { LastedStatistic } from './LastedStatistic'
-import { OurFood } from './OurFood'
-import { AlertStatistic } from './AlertClients'
-import { DeliveryFood } from './Delivery'
-import { Wrapper, ContentGrid } from './styled'
-import { SalesWeek } from './salesWeek'
-import { SalesWeekShortDays } from './salesWeekShortDays'
+import { MainCard } from 'components/common/Reusable/ShadowCard'
 import { Devices } from 'components/Devices'
 import { TeamStore } from 'container/TeamStore'
-import { MainCard } from 'components/common/Reusable/ShadowCard'
-import { Main } from './Main'
 import { ChatStatistic } from 'container/ventas/ListVentas'
+import { Button } from 'pkg-components'
 import { useMultiKeyPress } from '~/hooks/useKeypress'
+import { AlertStatistic } from './AlertClients'
+import { DeliveryFood } from './Delivery'
+import { LastedStatistic } from './LastedStatistic'
+import { OurFood } from './OurFood'
+import { SalesWeek } from './salesWeek'
+import { SalesWeekShortDays } from './salesWeekShortDays'
+import { ContentGrid, Wrapper } from './styled'
 
 const Dashboard = ({ ...props }) => {
   // eslint-disable-next-line
   const happySadPress = useMultiKeyPress('Control', 'f')
+  console.log('🚀 ~ file: index.jsx ~ line 18 ~ Dashboard ~ happySadPress', happySadPress)
 
   return (<>
     <Wrapper>
-      <Main {...props} />
+      <Button label={'ksdfhksdj'} />
+      {/* <Main {...props} /> */}
       <ChatStatistic />
       <SalesWeekShortDays />
       <SalesWeek />
