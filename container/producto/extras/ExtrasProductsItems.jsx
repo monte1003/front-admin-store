@@ -15,7 +15,7 @@ import {
   useMemo,
   useState
 } from 'react'
-import { updateCache } from 'utils'
+import { RandomCode, updateCache } from 'utils'
 import Column from 'components/common/Atoms/Column'
 import { useFormTools } from 'npm-pkg-hook'
 import Items from './Items'
@@ -40,6 +40,7 @@ export const ExtrasProductsItems = ({
 
   const initialLine = useMemo(() => {
     return {
+      id: RandomCode(9),
       extraName: '',
       extraPrice: '',
       exState: false
@@ -81,6 +82,12 @@ export const ExtrasProductsItems = ({
     const Lines = [...LineItems.Lines, { ...initialLine }, { ...initialLine }]
     setLine({ ...LineItems, Lines })
   }
+  const handleFocusChange = useCallback((index) => {
+    const lastItem = LineItems.Lines.length -1
+    if (lastItem === index) {
+      handleAdd()
+    }
+  }, [LineItems.Lines.length])
   const handleLineChange = useCallback((index, name, value) => {
     const Lines = LineItems.Lines.map((salesLine, i) => {
       if (i === index) {
@@ -208,6 +215,7 @@ export const ExtrasProductsItems = ({
         dataOptional={dataOptional}
         editing={editing}
         handleDeleteItemSubOptional={handleDeleteItemSubOptional}
+        handleFocusChange={handleFocusChange}
         handleLineChange={handleLineChange}
         handleOpenExtra={handleOpenExtra}
       />
@@ -217,6 +225,7 @@ export const ExtrasProductsItems = ({
           CleanLines={CleanLines}
           LineItems={LineItems}
           handleAdd={handleAdd}
+          handleFocusChange={handleFocusChange}
           handleLineChange={handleLineChange}
           handleRemove={handleRemove}
           modal={modal}

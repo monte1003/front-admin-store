@@ -1,55 +1,54 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import React, {
+import { useLazyQuery, useMutation } from '@apollo/client'
+import { useStore } from 'components/hooks/useStore'
+import { Skeleton } from 'components/Skeleton'
+import { Context } from 'context/Context'
+import { useOnScreen } from 'hooks/useIntersection'
+import moment from 'moment'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { useFormTools, useMobile } from 'npm-pkg-hook'
+import { Button } from 'pkg-components'
+import PropTypes from 'prop-types'
+import { IconDelete, IconEdit } from 'public/icons'
+import {
   useContext,
   useEffect,
   useState
 } from 'react'
-import PropTypes from 'prop-types'
-import Image from 'next/image'
-import { useLazyQuery, useMutation } from '@apollo/client'
-import { PColor, APColor } from '../../public/colors'
-import { Loading } from '../../components/Loading'
-import { useRouter } from 'next/router'
-import {
-  Container,
-  Wrapper,
-  CardProductsContent,
-  TooltipCardProduct,
-  WrapperCard,
-  CtnBox } from './styled'
-import { useFormTools } from 'npm-pkg-hook'
-import { Food } from '../update/Products/food'
-import { useSetState } from '../../components/hooks/useState'
 import { AwesomeModal } from '../../components/AwesomeModal'
-import { GET_ALL_CATEGORIES_WITH_PRODUCT, GET_ALL_EXTRA_PRODUCT } from './queries'
-import {
-  WrapperOptions,
-  ContentSearch,
-  Title,
-  ContainerCarrusel
-} from './styledStore'
+import { useSetState } from '../../components/hooks/useState'
 import InputHooks from '../../components/InputHooks/InputHooks'
+import { Loading } from '../../components/Loading'
+import { APColor, PColor } from '../../public/colors'
+import { numberFormat } from '../../utils'
 import { GET_ONE_PRODUCTS_FOOD } from '../producto/queries'
+import { Food } from '../update/Products/food'
 import { GET_EXTRAS_PRODUCT_FOOD_OPTIONAL, UPDATE_PRODUCT_FOOD } from '../update/Products/queries'
-import { Context } from 'context/Context'
-import moment from 'moment'
-import { GET_ALL_PRODUCT_STORE } from './queriesStore'
-import { useStore } from 'components/hooks/useStore'
 import { ManageCategories } from './ManageCategories'
+import { Product } from './Product'
 import { Managebanner } from './profile/Managebanner'
+import { GET_ALL_CATEGORIES_WITH_PRODUCT, GET_ALL_EXTRA_PRODUCT } from './queries'
+import { GET_ALL_PRODUCT_STORE } from './queriesStore'
 import {
   Sticky,
   StickyBoundary,
   StickyViewport
 } from './stickyheader'
-import { IconDelete, IconEdit } from 'public/icons'
-import { numberFormat } from '../../utils'
-import { Skeleton } from 'components/Skeleton'
-import { useOnScreen } from 'hooks/useIntersection'
-import { Product } from './Product'
-import { ItemFilter } from 'components/Update/Kit/styled'
-import { useMobile } from 'npm-pkg-hook'
+import {
+  CardProductsContent,
+  Container,
+  CtnBox,
+  TooltipCardProduct,
+  Wrapper,
+  WrapperCard
+} from './styled'
+import {
+  ContainerCarrusel,
+  ContentSearch,
+  Title, WrapperOptions
+} from './styledStore'
 
 const DashboardStore = () => {
   // STATE
@@ -80,13 +79,37 @@ const DashboardStore = () => {
   const [hour, setHour] = useState(null)
   const [day, setDay] = useState()
   const SET_OPEN_PRODUCT = useSetState(false)
-
+  const router = useRouter()
+  const {
+    name,
+    plato,
+    categories,
+    food,
+    dissert
+  } = router.query
+  useEffect(() => {
+    if (dissert) {
+      setModal(true)
+    }
+  }, [])
+  
+  const handleOpenModalAdditional = () => {
+    router.push(
+      {
+        query: {
+          ...router.query,
+          dissert: true
+        }
+      },
+      undefined,
+      { shallow: true }
+    )
+    setModal(!modal)
+  }
   const containerStyle = {
     height: '100vh'
   }
-  const router = useRouter()
-  const { name, plato } = router.query
-  const formatRouter = `/dashboard/${name[0]}/${name[1]}`
+
   // QUERY
   const [getCatProductsWithProduct, { data: dataProductAndCategory, loading: loadCatPro }] = useLazyQuery(GET_ALL_CATEGORIES_WITH_PRODUCT, {
     fetchPolicy: 'network-only',
@@ -109,13 +132,23 @@ const DashboardStore = () => {
 
   // HANDLE
   const handleGetOneProduct = (food) => {
+    const { pId } = food
     try {
-      router.replace(`/dashboard/${name[0]}/${name[1]}/?plato=${food.pId}`)
+      router.push(
+        {
+          query: {
+            ...router.query,
+            plato: pId
+          }
+        },
+        undefined,
+        { shallow: true }
+      )
       setModalStore(!modalStore)
       SET_OPEN_PRODUCT.setState(!SET_OPEN_PRODUCT.state)
-      productFoodsOne({ variables: { pId: food.pId || plato } })
-      ExtProductFoodsOptionalAll({ variables: { pId: food.pId || plato } })
-      ExtProductFoodsAll({ variables: { pId: food.pId || plato } }).then(() => { return setAlertBox({ message: '' }) }).catch(() => { return setAlertBox({ message: 'Lo sentimo no pudimos traer Los sub platos' }) })
+      productFoodsOne({ variables: { pId: pId || plato } })
+      ExtProductFoodsOptionalAll({ variables: { pId: pId || plato } })
+      ExtProductFoodsAll({ variables: { pId: pId || plato } }).then(() => { return setAlertBox({ message: '' }) }).catch(() => { return setAlertBox({ message: 'Lo sentimo no pudimos traer Los sub platos' }) })
     } catch (error) {
       setAlertBox({ message: 'Lo sentimos, ocurrió un error' })
     }
@@ -210,14 +243,31 @@ const DashboardStore = () => {
         </StickyBoundary>
       </div>)
   })
-
   const handleHidden = () => {
-    router.replace(formatRouter)
+    router.push(
+      {
+        pathname: `${name.join('/')}`,
+        query: {}
+      },
+      undefined,
+      {
+        shallow: true
+      }
+    )
     setModalStore(!modalStore)
   }
   const handleOpenModal = (option) => {
     if (option) {
-      router.replace(`${formatRouter}/update/${option}`)
+      router.push(
+        {
+          query: {
+            ...router.query,
+            [option]: true
+          }
+        },
+        undefined,
+        { shallow: true }
+      )
       setModalStore(!modalStore)
     }
   }
@@ -238,11 +288,7 @@ const DashboardStore = () => {
     }
     // eslint-disable-next-line
   }, [plato])
-  const component = {
-    food: name[3] === 'food' && <Food />,
-    categories: name[3] === 'categories' && <ManageCategories />,
-    plato: plato && <h1>Hola</h1>
-  }
+
   const handleDelete = product => {
     const { pId, pState, pName } = product || dataProduct.productFoodsOne
     updateProductFoods({
@@ -273,25 +319,27 @@ const DashboardStore = () => {
   const Buttons = () => {
     return (
       <WrapperOptions>
-        <ItemFilter
+        <Button
+          fontFamily= 'PFont-Light'
+          fontWeight='300'
+          label='Subir productos'
           onClick={() => { return handleOpenModal('food') }}
-          padding={'10px'}
-        > Subir productos</ItemFilter >
-        <ItemFilter
-          onClick={() => { return setOpenSchedule(!openSchedule) }}
-          padding={'10px'}
-          radius={'19px'}
-        > Editar agenda </ItemFilter>
-        <ItemFilter
+          size='small'
+        />
+        <Button
+          fontFamily= 'PFont-Light'
+          fontWeight='300'
+          label='Categorías'
           onClick={() => { return handleOpenModal('categories') }}
-          padding={'10px'}
-          radius={'19px'}
-        > Administrar Categorías</ItemFilter>
-        <ItemFilter
-          onClick={() => { return openTable(!table) }}
-          padding={'10px'}
-          radius={'19px'}
-        > Ver sobre mesa</ItemFilter>
+          size='small'
+        />
+        <Button
+          fontFamily= 'PFont-Light'
+          fontWeight='300'
+          label='Organizar agenda'
+          onClick={() => { return setOpenSchedule(!openSchedule) }}
+          size='small'
+        />
       </WrapperOptions>
     )
   }
@@ -315,22 +363,27 @@ const DashboardStore = () => {
           {StickySectionElements}
         </StickyViewport>
       </Container>
-      {(modalStore || name[3])
-      && <AwesomeModal
-        backdrop='static'
+      {modalStore &&
+      <AwesomeModal
+        borderRadius='4px'
         btnCancel={true}
         btnConfirm={false}
         footer={false}
         header={true}
-        height='100vh'
+        height='100%'
         onCancel={() => { return handleHidden() }}
         onHide={() => { handleHidden() }}
+        padding={0}
+        question={false}
         show={modalStore}
-        size='large'
-        zIndex='999'
+        size='100%'
+        sizeIconClose='35px'
+        title='Añade las sobre mesas'
+        zIndex='9999'
       >
-        {(plato && modalStore)
-          ? <Product
+        {
+          plato &&
+          <Product
             ProDescription={ProDescription}
             ProDescuento={ProDescuento}
             ProImage={ProImage}
@@ -342,14 +395,15 @@ const DashboardStore = () => {
             nameStore={nameStore}
             pId={pId}
             pName={pName}
-            setModal={setModal}
+            setModal={handleOpenModalAdditional}
             setShowDessert={setShowDessert}
             showDessert={showDessert}
             store={store}
             storeName={storeName}
-
-          /> : component[name[3]]
+          />
         }
+        {categories && <ManageCategories />}
+        {food && <Food />}
       </AwesomeModal>}
     </Wrapper>
   </>

@@ -21,7 +21,7 @@ export default withIronSessionApiRoute(async function isAuth(req, res) {
     }
     if (!token) {
       // req.session.destroy()
-      res.setHeader('location', '/app/entrar')
+      res.setHeader('location', '/entrar')
       res.statusCode = 302
       res.end()
       return res.status(200).json({
@@ -32,7 +32,7 @@ export default withIronSessionApiRoute(async function isAuth(req, res) {
     const { error } = await getUserFromToken(token)
     if (error) {
       // req.session.destroy()
-      res.setHeader('location', '/app/entrar')
+      res.setHeader('location', '/entrar')
       res.statusCode = 302
       res.end()
       return res.status(200).json({

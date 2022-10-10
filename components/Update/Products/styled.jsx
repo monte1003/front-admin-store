@@ -1,5 +1,10 @@
 import styled, { css } from 'styled-components'
-import { BColor, BGColor, DarkSilver, PColor, PLColor } from '../../../public/colors'
+import {
+  BColor,
+  BGColor,
+  PColor,
+  PLColor
+} from '../../../public/colors'
 
 export const Button = styled.button` 
     position: absolute;
@@ -282,22 +287,6 @@ export const ContainerFilter = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-`
-export const ItemFilter = styled.button` 
-    display: flex;
-    margin-left: 5px;
-    align-items: center;
-    justify-content: center;
-    height: 32px;
-    background: #ffffff;
-    border: 1px solid #dcdcdc;
-    border-radius: 20px;
-    padding: 7px 14px;
-    color: ${DarkSilver};
-    font-size: 0.875rem;
-    cursor: pointer;
-    min-width: 5.375rem;
-    font-family: PFont-Light;
 `
 export const ContainerBurger = styled.div`
     .BurgerMenu__container {

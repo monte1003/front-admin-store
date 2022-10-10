@@ -224,7 +224,7 @@ export const Action = styled.div`
     background: #fff;
     border-top: 2px solid #f5f0eb;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 20px;
     height: 80px;
     width: 100%;

@@ -7,6 +7,7 @@ import { useMultiKeyPress } from '~/hooks/useKeypress'
 import { AlertStatistic } from './AlertClients'
 import { DeliveryFood } from './Delivery'
 import { LastedStatistic } from './LastedStatistic'
+import { Main } from './Main'
 import { OurFood } from './OurFood'
 import { SalesWeek } from './salesWeek'
 import { SalesWeekShortDays } from './salesWeekShortDays'
@@ -15,12 +16,11 @@ import { ContentGrid, Wrapper } from './styled'
 const Dashboard = ({ ...props }) => {
   // eslint-disable-next-line
   const happySadPress = useMultiKeyPress('Control', 'f')
-  console.log('🚀 ~ file: index.jsx ~ line 18 ~ Dashboard ~ happySadPress', happySadPress)
 
   return (<>
     <Wrapper>
       <Button label={'ksdfhksdj'} />
-      {/* <Main {...props} /> */}
+      <Main {...props} />
       <ChatStatistic />
       <SalesWeekShortDays />
       <SalesWeek />

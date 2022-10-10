@@ -20,17 +20,16 @@ const Index = () => {
   }
   return (
     <div>
-      <Button label='papu'></Button>
       <Container>
         <ContainerLeft>
           <ContentImage>
             <Image
               alt={'Picture of the author'}
-              blurDataURL='/app/images/sign-in_3f701ac0c6.png'
+              blurDataURL='/images/sign-in_3f701ac0c6.png'
               layout='fill'
               objectFit='cover'
               placeholder='blur'
-              src={'/app/images/sign-in_3f701ac0c6.png'}
+              src={'/images/sign-in_3f701ac0c6.png'}
             />
           </ContentImage>
         </ContainerLeft>
@@ -77,11 +76,11 @@ export const Home = () => {
         <ContentImage>
           <Image
             alt={'Picture of the author'}
-            blurDataURL='/app/images/sign-in_3f701ac0c6.png'
+            blurDataURL='/images/sign-in_3f701ac0c6.png'
             layout='fill'
             objectFit='cover'
             placeholder='blur'
-            src={'/app/images/sign-in_3f701ac0c6.png'}
+            src={'/images/sign-in_3f701ac0c6.png'}
           />
         </ContentImage>
       </ContainerLeft>

@@ -41,7 +41,7 @@ function sendNotification() {
  *
  */
 function registerServiceWorker() {
-  return navigator.serviceWorker.register('/app/sw.js')
+  return navigator.serviceWorker.register('/sw.js')
 }
 
 /**

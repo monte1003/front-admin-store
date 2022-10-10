@@ -309,6 +309,7 @@ export const InputHookProducts = ({
   borderRadius,
   value,
   onChange,
+  onFocus,
   inputText,
   type,
   color,
@@ -322,6 +323,7 @@ export const InputHookProducts = ({
         color={color}
         inputText={inputText}
         onChange={onChange ? e => { return onChange(e.target.value) } : undefined}
+        onFocus={onFocus}
         placeholder={placeholder || ''}
         type={type || 'text'}
         value={value || ''}

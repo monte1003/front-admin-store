@@ -1,7 +1,7 @@
 # Image Size: 221MB
 # Linux + Node + Source + Project dependencies
 FROM node:lts-alpine as base
-WORKDIR /app
+WORKDIR 
 COPY . .
 ARG NODE_ENV
 ENV APP_ENV=${NODE_ENV}
@@ -26,7 +26,7 @@ ENV CONSUL_HTTP_ADDR=consul.smu-labs.cl
 ARG CONSUL_HTTP_TOKEN
 ENV PORT=3000
 WORKDIR /build
-COPY --from=base /app ./
+COPY --from=base  ./
 COPY . .
 RUN export NODE_OPTIONS=--openssl-legacy-provider
 RUN npm run build
@@ -35,7 +35,7 @@ RUN npm run build
 FROM node:current-alpine AS production
 ENV NODE_ENV=production
 ENV PORT=3000
-WORKDIR /app
+WORKDIR 
 COPY --from=build /build/package*.json ./
 COPY --from=build /build/.next ./.next
 COPY --from=build /build/public ./public

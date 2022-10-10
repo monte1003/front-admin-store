@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { useStore } from 'npm-pkg-hook'
-import React from 'react'
 import {
   Content,
   Item,

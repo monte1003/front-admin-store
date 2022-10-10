@@ -1,13 +1,18 @@
-import { BGColor, EColor } from '@/public/colors'
-import { IconDelete, IconPlus } from '@/public/icons'
 import React from 'react'
+import { BGAColor, EColor } from '@/public/colors'
+import { IconDelete } from '@/public/icons'
 import { AwesomeModal } from '~/components/AwesomeModal'
 import { Checkbox } from '~/components/Checkbox'
 import Row from '~/components/common/Atoms/Row'
+import { QuantityButton, Button } from 'pkg-components'
 import { RippleButton } from '~/components/Ripple'
 import { numberFormat } from '~/utils'
 import { InputHookProducts } from '.'
-import { Action, ContentLinesItems, ContentModal } from './styled'
+import {
+  Action,
+  ContentLinesItems,
+  ContentModal
+} from './styled'
 
 export const CreateExtra = ({
   setModal,
@@ -17,8 +22,10 @@ export const CreateExtra = ({
   onSubmitUpdate,
   handleAdd,
   CleanLines,
-  handleLineChange
+  handleLineChange,
+  handleFocusChange
 }) => {
+  const disabled = LineItems?.Lines?.length <= 2
   return (
     <div>
       <AwesomeModal
@@ -26,16 +33,16 @@ export const CreateExtra = ({
         btnCancel={true}
         btnConfirm={false}
         footer={false}
-        header={false}
+        header={true}
         height='60vh'
         onCancel={() => { return setModal(false) }}
         onHide={() => { return setModal(false) }}
         padding={0}
         question={false}
         show={modal}
-        size='600px'
+        size='900px'
         sizeIconClose='30px'
-        title='Crea una venta'
+        title='Añade adicionales'
         zIndex='9999'
       >
         <ContentModal>
@@ -52,6 +59,7 @@ export const CreateExtra = ({
                       margin='0 10px 0 0'
                       name={salesLine.extraName}
                       onChange={value => { return handleLineChange(i, 'extraName', value) }}
+                      onFocus={() => { return handleFocusChange(i) }}
                       outline='none'
                       padding='10px'
                       placeholder='Nombre'
@@ -62,6 +70,8 @@ export const CreateExtra = ({
                       margin='0 15px 0 0'
                       name={salesLine.extraPrice}
                       onChange={value => { return handleLineChange(i, 'extraPrice', value) }}
+                      onFocus={() => { return handleFocusChange(i) }}
+                      padding='10px'
                       placeholder='Precio'
                       value={numberFormat(salesLine.extraPrice)}
                     />
@@ -75,6 +85,7 @@ export const CreateExtra = ({
                   />
                   <RippleButton
                     bgColor='transparent'
+                    disabled={disabled}
                     margin='0px'
                     onClick={() => { return handleRemove(i) }}
                     type='button'
@@ -87,30 +98,39 @@ export const CreateExtra = ({
             })}
           </div>
           <Action>
-            <RippleButton
+            <Button
               bgColor={'transparent'}
+              borderRadius='5px'
+              child={<IconDelete color={BGAColor} size='20px' />}
+              disabled={disabled}
+              fontFamily='PFont-Light'
+              fontWeight='300'
               margin='0px'
               onClick={() => { return CleanLines() }}
+              padding='7px 10px'
+              primary
+              size='large'
               type='button'
-              widthButton='240px'
+              width='100px'
             >
               <IconDelete color={EColor} size='25px' />
-            </RippleButton>
-            <RippleButton
-              margin='0px'
-              onClick={() => { return handleAdd() }}
-              type='button'
-              widthButton='240px'
-            >
-              <IconPlus color={BGColor} size='20px' />
-            </RippleButton>
-            <RippleButton
-              margin='0px'
+            </Button>
+            <QuantityButton
+              handleIncrement={() => { return handleAdd() }}
+              quantity={LineItems?.Lines?.length}
+              showNegativeButton
+              style={{ margin: '0 20px 0 0', width: '60%' }}
+            />
+            <Button
+              borderRadius='5px'
+              disabled={disabled}
+              fontFamily='PFont-Light'
+              fontWeight='300'
+              label='Guardar'
               onClick={(e) => { e.preventDefault(); onSubmitUpdate() }}
-              widthButton='240px'
-            >
-            Update
-            </RippleButton>
+              primary
+              size='large'
+            />
           </Action>
         </ContentModal>
       </AwesomeModal>

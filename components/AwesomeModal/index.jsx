@@ -110,16 +110,21 @@ export const AwesomeModal = ({
           size={size}
           state={state}
         >
+          {header &&
+          <>
+            <ModalHeader>
+              <ModalTitle>{title}</ModalTitle>
+              <BtnClose onClick={() => { return question ? onShowQuestion() : hide() }}><IconCancel size={sizeIconClose} /></BtnClose>
+            </ModalHeader>
+          </>
+          }
           <ModalBody
             borderRadius={borderRadius}
             display={display}
             height={height}
             padding={padding}
           >
-            {header && <ModalHeader>
-              <ModalTitle>{title}</ModalTitle>
-              <BtnClose onClick={() => { return question ? onShowQuestion() : hide() }}><IconCancel size={sizeIconClose} /></BtnClose>
-            </ModalHeader>}
+            
             {modal &&
               <div className='modal-wrapper'>
                 <h2>{`¿Seguro que quieres cerrar ${title}?`}</h2>

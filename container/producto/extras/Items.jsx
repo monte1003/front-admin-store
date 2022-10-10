@@ -42,7 +42,7 @@ const Items = ({
                   showNegativeButton={false}
                   style={{ display: 'flex', justifyContent: 'flex-end' }}
                   validationZero={true}
-                  width={'min-content'}
+                  width='min-content'
                 />
               </div>
 

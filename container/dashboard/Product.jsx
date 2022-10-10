@@ -1,12 +1,17 @@
 import PropTypes from 'prop-types'
 import { CLIENT_URL_BASE } from 'apollo/urls'
-import { ContainerFilter, ItemFilter } from 'components/Update/Products/styled'
+import { ContainerFilter } from 'components/Update/Products/styled'
 import { OptionalExtraProducts } from 'container/producto/extras'
 import { ExtrasProductsItems } from 'container/producto/extras/ExtrasProductsItems'
 import Image from 'next/image'
 import Link from 'next/link'
-import { APColor, GraniteGray } from 'public/colors'
+import {
+  APColor,
+  BColor,
+  GraniteGray
+} from 'public/colors'
 import React from 'react'
+import { Button } from 'pkg-components'
 import {
   CardProductsModal,
   ContentImage,
@@ -42,10 +47,33 @@ export const Product = ({
   return (
     <div {...props}>
       <ContainerFilter>
-        <ItemFilter onClick={() => { return setModal(!modal) }}>Añadir Adicionales</ItemFilter>
-        <ItemFilter onClick={() => { return setShowDessert(!showDessert) }}>Añadir Extra Sobremesa </ItemFilter>
-        <ItemFilter onClick={() => { return router.push(`/update/products/editar/${pId}`) }} >Editar</ItemFilter>
-        <ItemFilter onClick={() => { return handleDelete() }}>Eliminar</ItemFilter>
+        <Button
+          backgroundColor='transparent'
+          color={BColor}
+          fontFamily='PFont-Light'
+          fontWeight='300'
+          label='Añadir Adicionales'
+          onClick={() => { return setModal() }}
+          ripple
+        />
+        <Button
+          fontFamily='PFont-Light'
+          fontWeight='300'
+          label='Añadir Sobremesa'
+          onClick={() => { return setShowDessert(!showDessert) }}
+        />
+        <Button
+          fontFamily='PFont-Light'
+          fontWeight='300'
+          label='Editar'
+          onClick={() => { return router.push(`/update/products/editar/${pId}`) }}
+        />
+        <Button
+          fontFamily='PFont-Light'
+          fontWeight='300'
+          label='Eliminar'
+          onClick={() => { return handleDelete()}}
+        />
       </ContainerFilter>
       <CardProductsModal>
         <ContentImage>
@@ -56,7 +84,7 @@ export const Product = ({
             height={440}
             objectFit='contain'
             placeholder='blur'
-            src={ProImage || '/app/images/DEFAULTBANNER.png'}
+            src={ProImage || '/images/DEFAULTBANNER.png'}
             width={440}
           />
         </ContentImage>
@@ -103,13 +131,14 @@ export const Product = ({
           />
         </ContentInfo>
       </CardProductsModal>
+      
       <AwesomeModal
         footer={false}
-        header={false}
-        height={'100vh'}
+        header={true}
+        height='80vh'
         onHide={() => {return setShowDessert(!showDessert)}}
         show={showDessert}
-        size={'100vw'}
+        size='80vw'
       >
         <OptionalExtraProducts
           dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}

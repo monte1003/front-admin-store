@@ -1,24 +1,64 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-import { ContainerCardProduct, ContainerFilter, ContentProducts, ItemFilter, Text, WrapperProducts } from './styled'
 import { CardProducts } from 'components/CartProduct'
-import { Skeleton } from 'components/Skeleton'
-import { InputHook } from './Input'
 import { RippleButton } from 'components/Ripple'
+import { Skeleton } from 'components/Skeleton'
+import PropTypes from 'prop-types'
+import { Button } from 'pkg-components'
+import { InputHook } from './Input'
+import {
+  ContainerCardProduct,
+  ContainerFilter,
+  ContentProducts,
+  Text,
+  WrapperProducts
+} from './styled'
 
-export const ListProducts = ({ onClickClear, data, organice, pState, filter, OPEN_MODAL_ORGANICE, dataFree, handleDelete, handleChangeFilter, search, showMore, fetchMore, loading, setShowMore }) => {
+export const ListProducts = ({
+  onClickClear,
+  data,
+  organice,
+  pState,
+  filter,
+  OPEN_MODAL_ORGANICE,
+  dataFree,
+  handleDelete,
+  handleChangeFilter,
+  search,
+  showMore,
+  fetchMore,
+  loading,
+  setShowMore
+}) => {
   const isData = data?.length > 0
   return (
     <div>
       <ContentProducts>
         {isData && <Text size='30px'>Lista de productos registrados {pState === 1 ? 'Activos' : 'Desactivados'}</Text>}
         {organice && <ContainerFilter>
-          <ItemFilter onClick={() => { return OPEN_MODAL_ORGANICE.setState(!OPEN_MODAL_ORGANICE.state) }}>Ordenar</ItemFilter>
-          <ItemFilter onClick={() => { return onClickClear() }}>Limpio</ItemFilter>
-          <ItemFilter>{data?.length ? `${data?.length} Productos` : 'No hay productos'}</ItemFilter>
-          <ItemFilter>{dataFree?.length ? `${dataFree?.length} Productos con envio gratis` : 'No hay productos con envio gratis'}</ItemFilter>
+          <Button
+            fontFamily='PFont-Light'
+            fontWeight='300'
+            label='Ordenar'
+            onClick={() => { return OPEN_MODAL_ORGANICE.setState(!OPEN_MODAL_ORGANICE.state) }}
+          />
+          <Button
+            fontFamily='PFont-Light'
+            fontWeight='300'
+            label='Limpio'
+            onClick={() => { return onClickClear() }}
+          />
+          <Button
+            fontFamily='PFont-Light'
+            fontWeight='300'
+            label={data?.length ? `${data?.length} Productos` : 'No hay productos'}
+          ></Button>
+          <Button
+            fontFamily='PFont-Light'
+            fontWeight='300'
+            label={dataFree?.length ? `${dataFree?.length} Productos con envío gratis` : 'No hay productos con envío gratis'}
+          />
         </ContainerFilter>}
-        {filter && <>
+        {filter &&
+        <>
           <Text size='30px'>Filtrar productos</Text>
           <InputHook
             label='Busca tus productos'

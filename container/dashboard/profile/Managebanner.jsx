@@ -139,7 +139,7 @@ const Banner = ({ isMobile }) => {
     }
   })
   const { path, bnState, bnId, bnImageFileName } = dataBanner?.getOneBanners || {}
-  const initialState = { alt: '/app/images/DEFAULTBANNER.png', src: '/app/images/DEFAULTBANNER.png' }
+  const initialState = { alt: '/images/DEFAULTBANNER.png', src: '/images/DEFAULTBANNER.png' }
   // eslint-disable-next-line
   const [{ alt, src }, setPreviewImg] = useState(initialState)
   // HANDLES
@@ -258,7 +258,7 @@ const Banner = ({ isMobile }) => {
         />
         {(loading || loaStore)
           ? <Skeleton height={isMobile ? 118: 250} />
-          : <MerchantBannerWrapperInfo bannerImage={(path || src) ? `url(${path || src})` : `url("/app/images/DEFAULTBANNER.png")`} >
+          : <MerchantBannerWrapperInfo bannerImage={(path || src) ? `url(${path || src})` : `url("/images/DEFAULTBANNER.png")`} >
             <span>
               <svg
                 height={53}
@@ -340,19 +340,19 @@ const Banner = ({ isMobile }) => {
               height={70}
               objectFit='contain'
               onClick={(e) => { return onTargetClickLogo(e) }}
-              src={dataStore?.Image ?? '/app/images/DEFAULTBANNER.png'}
+              src={dataStore?.Image ?? '/images/DEFAULTBANNER.png'}
               width={70}
             />
             :
             <Image
               alt={altLogo || 'logo'}
-              blurDataURL='/app/images/DEFAULTBANNER.png'
+              blurDataURL='/images/DEFAULTBANNER.png'
               className='logo'
               height={70}
               objectFit='contain'
               onClick={(e) => { return onTargetClickLogo(e) }}
               placeholder='blur'
-              src={srcLogo ?? '/app/images/DEFAULTBANNER.png'}
+              src={srcLogo ?? '/images/DEFAULTBANNER.png'}
               width={70}
             />}
           <MerchantInfoTitle >

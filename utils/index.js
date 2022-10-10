@@ -1225,7 +1225,7 @@ export const numbers = () => {
 
 export const defaultReturnObject = {
   redirect: {
-    destination: '/entrar',
+    destination: '/',
     permanent: false
   }
 }

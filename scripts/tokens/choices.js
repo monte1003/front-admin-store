@@ -2,7 +2,7 @@ const choices = {
   color: {
     brand: {
       // Primary
-      alizarinCrimson: '#D9291C',
+      alizarinCrimson: '#ff0000',
       guardsmanRed: '#C00000',
       tabasco: '#A21B11',
       chablis: '#FFF4F4',

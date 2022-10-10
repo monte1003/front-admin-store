@@ -54,12 +54,12 @@ export const OurFood = () => {
           <Box key={i + 1}>
             <Image
               alt={'Picture of the author'}
-              // blurDataURL='/app/images/DEFAULTBANNER.png'
+              // blurDataURL='/images/DEFAULTBANNER.png'
               className='store_image'
               height={100}
               objectFit='cover'
               // placeholder='blur'
-              src={'/app/images/202109081904_64O5_i.jpg'}
+              src={'/images/202109081904_64O5_i.jpg'}
               width={100}
             />
             <Text color='#3f3e3e' size='1em'>{item.name}</Text>
