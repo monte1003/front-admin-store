@@ -152,7 +152,6 @@ export const CtnItemOps = styled.div`
   width: fit-content;
   place-content: center;
   place-items: center;
-  flex-wrap: wrap;
 `
 export const HeaderWrapperButton = styled.div`
     display: flex;

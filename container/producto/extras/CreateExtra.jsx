@@ -3,11 +3,11 @@ import { BGAColor, EColor } from '@/public/colors'
 import { IconDelete } from '@/public/icons'
 import { AwesomeModal } from '~/components/AwesomeModal'
 import { Checkbox } from '~/components/Checkbox'
-import Row from '~/components/common/Atoms/Row'
 import { QuantityButton, Button } from 'pkg-components'
 import { RippleButton } from '~/components/Ripple'
 import { numberFormat } from '~/utils'
 import { InputHookProducts } from '.'
+import Row from '~/components/common/Atoms/Row'
 import {
   Action,
   ContentLinesItems,
@@ -20,12 +20,13 @@ export const CreateExtra = ({
   LineItems,
   handleRemove,
   onSubmitUpdate,
+  loading,
   handleAdd,
   CleanLines,
   handleLineChange,
   handleFocusChange
 }) => {
-  const disabled = LineItems?.Lines?.length <= 2
+  const disabled = LineItems?.Lines?.length <= 1
   return (
     <div>
       <AwesomeModal
@@ -51,7 +52,7 @@ export const CreateExtra = ({
           <div className='content'>
             {LineItems && LineItems?.Lines?.map((salesLine, i) => {
               return (
-                <ContentLinesItems key={salesLine._id}>
+                <ContentLinesItems key={i}>
                   <Row noBorder >
                     <InputHookProducts
                       borderRadius='0px'
@@ -123,13 +124,15 @@ export const CreateExtra = ({
             />
             <Button
               borderRadius='5px'
-              disabled={disabled}
               fontFamily='PFont-Light'
               fontWeight='300'
               label='Guardar'
+              loading={loading}
               onClick={(e) => { e.preventDefault(); onSubmitUpdate() }}
+              padding={loading ? '9px' : '13px'}
               primary
               size='large'
+              width='140px'
             />
           </Action>
         </ContentModal>

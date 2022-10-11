@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { BColor, PColor } from 'public/colors'
+import { BColor, NorthTexasGreen, PColor } from 'public/colors'
 import React from 'react'
 
 export const IconLove = ({ size, style }) => {
@@ -1794,7 +1794,7 @@ export const IconBrazil = ({ style = {}, size }) => {
     width={size}
   >
     <rect
-      fill='#009b3a'
+      fill={NorthTexasGreen}
       height='100%'
       width='100%'
       x='-50%'

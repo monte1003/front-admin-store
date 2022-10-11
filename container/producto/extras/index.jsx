@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { RippleButton } from '../../../components/Ripple'
-import { EColor } from '../../../public/colors'
+import { EColor, NorthTexasGreen } from '../../../public/colors'
 import { IconDelete, IconMiniCheck } from '../../../public/icons'
 import { RandomCode, updateCache } from '../../../utils'
 import { MockData } from '../../../components/common/mockData'
@@ -11,8 +11,10 @@ import {
   UPDATE_EXTRAS_PRODUCT_FOOD_OPTIONAL
 } from '../../update/Products/queries'
 import {
+  BodyDnd,
   CardsComponent,
   ContentCheckbox,
+  ContentModal,
   GarnishChoicesHeader,
   Input
 } from './styled'
@@ -20,6 +22,8 @@ import { Checkbox } from 'components/Checkbox'
 import Column from 'components/common/Atoms/Column'
 import Row from 'components/common/Atoms/Row'
 import { QuantityButton } from '~/components/QuantityButton'
+import { Container } from '~/components/AwesomeModal/styled'
+import { ResisesColumns } from '~/../pkg-components'
 
 
 export const OptionalExtraProducts = ({ pId }) => {
@@ -128,131 +132,136 @@ export const OptionalExtraProducts = ({ pId }) => {
   }
 
   const filterData = data?.listIds?.filter(x => {return x !== '01list'})
-  return <Row
-    flexWrap='wrap'
-    margin='102px 0'
-    width='100%'
-  >
-    {filterData && filterData?.map((listID, index) => {
-      const list = data.lists[listID]
-      return (
-        <Column
-          key={index}
-          role='list'
-          width='30%'
-        >
+  return (
+    // <>
+    // </>
+    <BodyDnd>
+      <ResisesColumns>
+        <div className='first-column'>
+          {filterData && filterData?.map((listID, index) => {
+            const list = data.lists[listID]
+            return (
+              <Column
+                key={index}
+                role='list'
+                width='95%'
+              >
+                <GarnishChoicesHeader>
+                  <div>
+                    <p className='garnish-choices__title'>{list?.title}</p>
+                    <p className='garnish-choices__title-desc'>Escoge hasta {list?.numberLimit} opciones.</p>
+                    <div className='garnish-choices'>
+                      {list?.required === 1 && <span className='marmita-minitag'>OBLIGATORIO</span>}
+                    </div>
+                  </div>
+                  <IconMiniCheck color={NorthTexasGreen} size={'15px'} />
+                  <RippleButton
+                    bgColor={'transparent'}
+                    margin='0px'
+                    onClick={() => { return handleRemoveList(index) }}
+                    type='button'
+                    widthButton='min-content'
+                  >
+                    <IconDelete color={EColor} size='25px' />
+                  </RippleButton>
+                </GarnishChoicesHeader>
+                <span>{list?.cards?.length}</span>
+                <List
+                  data={data}
+                  index={index}
+                  list={list}
+                  setData={setData}
+                />
+                <Input
+                  aria-disabled
+                  autoFocus
+                  card
+                  name='title'
+                  onChange={(e) => { return setTitle(e.target.value) }}
+                  onKeyDown={(event) => { return (event.key === 'Enter' && handleAdd({ listId: listID })) }}
+                  placeholder='enter card'
+                  value={listID.title}
+                />
+                <RippleButton
+                  margin='20px auto'
+                  onClick={() => { return handleAdd({ listId: listID }) }}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleAdd({ listId: listID })
+                    }
+                  }}
+                  widthButton='100%'
+                >
+            Adicionar sobremesa
+                </RippleButton>
+              </Column>
+            )
+          })}
+        </div>
+        <div>
           <GarnishChoicesHeader>
             <div>
-              <p className='garnish-choices__title'>{list?.title}</p>
-              <p className='garnish-choices__title-desc'>Escoge hasta {list?.numberLimit} opciones.</p>
-              <div className='garnish-choices'>
-                {list?.required === 1 && <span className='marmita-minitag'>OBLIGATORIO</span>}
+              <p className='garnish-choices__title'>{title ? title : 'Escoge tu... '}</p>
+              <p className='garnish-choices__title-desc'>Escoge hasta {numberLimit} opciones.</p>
+            </div>
+            <div className='garnish-choices'>
+              {setCheck.exState === true && <span className='marmita-minitag'>OBLIGATORIO</span>}
+            </div>
+            <div>
+              <div>
+                <RippleButton
+                  bgColor={'transparent'}
+                  margin='0px'
+                  type='button'
+                  widthButton='min-content'
+                >
+                  <IconDelete color={`${EColor}90`} size='25px' />
+                </RippleButton>
               </div>
             </div>
-            <IconMiniCheck color={'#009b3a'} size={'15px'} />
-            <RippleButton
-              bgColor={'transparent'}
-              margin='0px'
-              onClick={() => { return handleRemoveList(index) }}
-              type='button'
-              widthButton='min-content'
-            >
-              <IconDelete color={EColor} size='25px' />
-            </RippleButton>
           </GarnishChoicesHeader>
-          <span>{list?.cards?.length}</span>
-          <List
-            data={data}
-            index={index}
-            list={list}
-            setData={setData}
-          />
           <Input
-            aria-disabled
-            autoFocus
             card
+            margin='10px 0'
             name='title'
             onChange={(e) => { return setTitle(e.target.value) }}
-            onKeyDown={(event) => { return (event.key === 'Enter' && handleAdd({ listId: listID })) }}
-            placeholder='enter card'
-            value={listID.title}
+            placeholder='Añadir nueva lista'
+            type='text'
+            value={title}
           />
-          <RippleButton
-            margin='20px auto'
-            onClick={() => { return handleAdd({ listId: listID }) }}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                handleAdd({ listId: listID })
-              }
-            }}
-            widthButton='100%'
-          >
-            Adicionar sobremesa
-          </RippleButton>
-        </Column>
-      )
-    })}
-    <div className='wrapper-list'>
-      <GarnishChoicesHeader>
-        <div>
-          <p className='garnish-choices__title'>{title ? title : 'Escoge tu... '}</p>
-          <p className='garnish-choices__title-desc'>Escoge hasta {numberLimit} opciones.</p>
-        </div>
-        <div className='garnish-choices'>
-          {setCheck.exState === true && <span className='marmita-minitag'>OBLIGATORIO</span>}
-        </div>
-        <div>
-          <div>
+          <GarnishChoicesHeader>
+            <ContentCheckbox>
+              <Checkbox
+                checkbox
+                checked={setCheck.exState}
+                id={setCheck.exState}
+                margin='10px 0'
+                name={'exState'}
+                onChange={e => { return handleCheck(e) }}
+                type='checkbox'
+              />
+            </ContentCheckbox>
+            <QuantityButton
+              handleDecrement={() => { return setNumberLimit(numberLimit  === 0 ? 0 : numberLimit - 1) }}
+              handleIncrement={() => {return setNumberLimit(numberLimit + 1)}}
+              quantity={numberLimit}
+              showNegativeButton={numberLimit  === 0}
+            />
             <RippleButton
-              bgColor={'transparent'}
-              margin='0px'
+              margin='0'
+              onClick={() => { return handleAddList({ title: title, numberLimit: numberLimit }) }}
+              padding='0'
               type='button'
-              widthButton='min-content'
+              widthButton='100%'
             >
-              <IconDelete color={`${EColor}90`} size='25px' />
-            </RippleButton>
-          </div>
-        </div>
-      </GarnishChoicesHeader>
-      <Input
-        card
-        margin='10px 0'
-        name='title'
-        onChange={(e) => { return setTitle(e.target.value) }}
-        placeholder='Añadir nueva lista'
-        type='text'
-        value={title}
-      />
-      <GarnishChoicesHeader>
-        <ContentCheckbox>
-          <Checkbox
-            checkbox
-            checked={setCheck.exState}
-            id={setCheck.exState}
-            margin='10px 0'
-            name={'exState'}
-            onChange={e => { return handleCheck(e) }}
-            type='checkbox'
-          />
-        </ContentCheckbox>
-        <QuantityButton
-          handleDecrement={() => { return setNumberLimit(numberLimit  === 0 ? 0 : numberLimit - 1) }}
-          handleIncrement={() => {return setNumberLimit(numberLimit + 1)}}
-          quantity={numberLimit}
-          showNegativeButton={numberLimit  === 0}
-        />
-        <RippleButton
-          margin='0'
-          onClick={() => { return handleAddList({ title: title, numberLimit: numberLimit }) }}
-          padding='0'
-          type='button'
-          widthButton='100%'
-        >
           Adicionar Categoría de sobremesa
-        </RippleButton>
-      </GarnishChoicesHeader>
-    </div>
-  </Row>
+            </RippleButton>
+          </GarnishChoicesHeader>
+
+        </div>
+      </ResisesColumns>
+    </BodyDnd>
+  )
 
 }
 

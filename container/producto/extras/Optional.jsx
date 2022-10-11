@@ -1,4 +1,4 @@
-import { EColor } from '@/public/colors'
+import { EColor, NorthTexasGreen } from '@/public/colors'
 import { IconDelete, IconMiniCheck } from '@/public/icons'
 import React from 'react'
 import { Checkbox } from '~/components/Checkbox'
@@ -23,7 +23,7 @@ export const Optional = ({
                 {!!x.numbersOptionalOnly && <p className='garnish-choices__title-desc'>Escoge hasta {x.numbersOptionalOnly} opciones.</p>}
               </div>
               <div className='garnish-choices'>
-                <IconMiniCheck color={'#009b3a'} size={'15px'} />
+                <IconMiniCheck color={NorthTexasGreen} size={'15px'} />
                 {x.required ? <span className='marmita-minitag' span>OBLIGATORIO</span> : <span className='marmita-minitag' style={{ backgroundColor: 'transparent', color: 'transparent', width: '8  0px', zIndex: '0' }}>OBLIGATORIO</span>}
               </div>
             </GarnishChoicesHeader>

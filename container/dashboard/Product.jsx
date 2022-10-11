@@ -125,20 +125,21 @@ export const Product = ({
           <ExtrasProductsItems
             dataExtra={dataExtra?.ExtProductFoodsAll || []}
             dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}
+            editing={true}
             modal={modal}
             pId={pId}
             setModal={setModal}
           />
         </ContentInfo>
       </CardProductsModal>
-      
       <AwesomeModal
         footer={false}
         header={true}
-        height='80vh'
+        height='100vh'
         onHide={() => {return setShowDessert(!showDessert)}}
         show={showDessert}
-        size='80vw'
+        size='100vw'
+        zIndex={'999999900'}
       >
         <OptionalExtraProducts
           dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}

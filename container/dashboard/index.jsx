@@ -2,7 +2,6 @@ import { MainCard } from 'components/common/Reusable/ShadowCard'
 import { Devices } from 'components/Devices'
 import { TeamStore } from 'container/TeamStore'
 import { ChatStatistic } from 'container/ventas/ListVentas'
-import { Button } from 'pkg-components'
 import { useMultiKeyPress } from '~/hooks/useKeypress'
 import { AlertStatistic } from './AlertClients'
 import { DeliveryFood } from './Delivery'
@@ -19,7 +18,6 @@ const Dashboard = ({ ...props }) => {
 
   return (<>
     <Wrapper>
-      <Button label={'ksdfhksdj'} />
       <Main {...props} />
       <ChatStatistic />
       <SalesWeekShortDays />

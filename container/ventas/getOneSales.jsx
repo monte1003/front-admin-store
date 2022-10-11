@@ -99,7 +99,6 @@ export const GetOneSales = ({ setOpen, open, data }) => {
                       <p className='garnish-choices__title'>Adicionales</p>
                       <p className='garnish-choices__title-desc'>Escoge hasta opciones.</p>
                     </div>
-                    {/* <IconMiniCheck size={'15px'} color={'#009b3a'} /> */}
                   </GarnishChoicesHeader>}
                   {![1, 2, 4]?.map(itemOptional => {return (
                     <div key={itemOptional}>
@@ -108,7 +107,6 @@ export const GetOneSales = ({ setOpen, open, data }) => {
                           <p className='garnish-choices__title'>{itemOptional?.OptionalProName}</p>
                           <p className='garnish-choices__title-desc'>Escoge hasta {itemOptional?.numbersOptionalOnly} opciones.</p>
                         </div>
-                        {/* <IconMiniCheck size={'15px'} color={'#009b3a'} /> */}
                       </GarnishChoicesHeader>
                       {itemOptional?.ExtProductFoodsSubOptionalAll?.map(x => {return (
                         <CardsComponent key={x.opSubExPid}>

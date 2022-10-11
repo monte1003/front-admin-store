@@ -2,7 +2,8 @@ import styled, { css } from 'styled-components'
 import {
   BGColor,
   PColor,
-  BColor
+  BColor,
+  NorthTexasGreen
 } from '../../../public/colors'
 
 export const Div = styled.div`
@@ -86,7 +87,7 @@ export const CardsComponent = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 16px 20px;
-    .title_card{
+    .title_card {
         word-break: break-word;
         font-family: PFont-Light;
         color: ${BColor};
@@ -95,7 +96,7 @@ export const CardsComponent = styled.div`
         line-height: 1.25em;
         font-weight: 500;
     }
-    .price {
+    .price-value {
         word-break: break-word;
         font-family: PFont-Light;
         color: ${PColor};
@@ -103,6 +104,9 @@ export const CardsComponent = styled.div`
         font-size: 1rem;
         line-height: 1.25em;
         font-weight: 600;
+    }
+    .price-free {
+        color: ${NorthTexasGreen};
     }
 `
 export const ContentModal = styled.form`
@@ -128,6 +132,12 @@ export const ContentModal = styled.form`
     padding: 16px 20px;
 
         }
+`
+export const BodyDnd = styled.div`
+.first-column {
+    display: grid;
+    grid-template-columns: 20% repeat(auto-fill, 20%);
+}
 `
 export const ContentLinesItems = styled.div`
     display: flex;
