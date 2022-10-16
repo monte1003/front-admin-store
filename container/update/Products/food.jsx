@@ -1,21 +1,20 @@
-/* eslint-disable consistent-return */
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
-import React, {
+import {
+  useLazyQuery,
+  useMutation,
+  useQuery
+} from '@apollo/client'
+import { useCategoriesProduct } from 'components/hooks/useCategoriesProducts'
+import { Context } from 'context/Context'
+import {
   useContext,
   useEffect,
   useReducer,
   useRef,
   useState
 } from 'react'
-import {
-  GET_ALL_FOOD_PRODUCTS,
-  UPDATE_IMAGE_PRODUCT_FOOD,
-  UPDATE_PRODUCT_FOOD
-} from './queries'
 import useLocalStorage from '../../../components/hooks/useLocalSorage'
 import { useSetState } from '../../../components/hooks/useState'
 import { FoodComponent } from '../../../components/Update/Products/food'
-import { GET_ONE_STORE } from '../../Restaurant/queries'
 import {
   convertBase64,
   getFileSizeByUnit,
@@ -23,8 +22,13 @@ import {
   validationImg
 } from '../../../utils'
 import { GET_ALL_PRODUCT_STORE } from '../../dashboard/queriesStore'
-import { Context } from 'context/Context'
-import { useCategoriesProduct } from 'components/hooks/useCategoriesProducts'
+import { GET_ONE_STORE } from '../../Restaurant/queries'
+import {
+  GET_ALL_FOOD_PRODUCTS,
+  UPDATE_IMAGE_PRODUCT_FOOD,
+  UPDATE_PRODUCT_FOOD
+} from './queries'
+
 export const Food = () => {
   const [errors, setErrors] = useState({})
   const [values, setValues] = useState({})
@@ -108,12 +112,13 @@ export const Food = () => {
       const { ProPrice, ProDescuento, ProDescription, ProWeight, ProHeight, ValueDelivery, carProId } = values
       const ProImage = `${process.env.URL_ADMIN_SERVER}static/platos/${image?.name}`
       const pCode = RandomCode(9)
+      const formatPrice = ProPrice ? parseFloat(ProPrice.replace(/\./g, '')) : 0
       try {
         updateProductFoods({
           variables: {
             input: {
               idStore: dataStore?.getStore?.idStore || '',
-              ProPrice: check ? 0 : ProPrice ? parseFloat(ProPrice.replace(/\./g, '')) : 0,
+              ProPrice: check ? 0 : formatPrice,
               ProDescuento: check ? 0 : parseInt(ProDescuento),
               ValueDelivery: check ? 0 : parseFloat(ValueDelivery),
               ProDescription: ProDescription,
@@ -140,7 +145,7 @@ export const Food = () => {
             setAlertBox({ message: `El producto ${names} subido con éxito`, color: 'success', duration: 7000 })
           }
         }).then(() => {
-          // setValues({})
+          setValues({})
         }).catch(err => { return setAlertBox({ message: `${err}`, duration: 7000 }) })
         if (image !== null) {
           setImageProducts({

@@ -1,6 +1,5 @@
 /* eslint-disable indent */
 import { BColor, NorthTexasGreen, PColor } from 'public/colors'
-import React from 'react'
 
 export const IconLove = ({ size, style }) => {
   return <svg

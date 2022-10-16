@@ -1,11 +1,23 @@
 import PropTypes from 'prop-types'
 import React, { useContext, useRef } from 'react'
-import { useObserveBottomSentinels, useObserveTopSentinels, useSentinelOffsets } from '../../components/hooks/useSetHeader'
-// eslint-disable-next-line no-unused-vars
-import { StickyProvider, StickySectionContext, useStickyActions } from '../../context/contextsticky'
+import {
+  useObserveBottomSentinels,
+  useObserveTopSentinels,
+  useSentinelOffsets
+} from '../../components/hooks/useSetHeader'
+import {
+  StickyProvider,
+  StickySectionContext,
+  useStickyActions
+} from '../../context/contextsticky'
 import styles from './Home.module.css'
 
-function Sticky({ children, as = 'div', className = '', ...rest }) {
+function Sticky({
+  children,
+  as = 'div',
+  className = '',
+  ...rest 
+}) {
   const { topSentinelRef, bottomSentinelRef } = useContext(StickySectionContext)
   const dispatch = useStickyActions()
   const addStickyRef = stickyRef => {
@@ -41,7 +53,6 @@ function StickyBoundary({
   ...rest
 }) {
   const Component = as
-
   // const { debug } = useStickyState();
   // console.log(debug)
   const topSentinelRef = useRef(null)

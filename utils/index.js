@@ -1,8 +1,8 @@
 /* eslint-disable consistent-return */
-import { resolve } from 'path'
-import moment from 'moment'
-import { useEffect } from 'react'
 import jwt, { decode } from 'jsonwebtoken'
+import moment from 'moment'
+import { resolve } from 'path'
+import { useEffect } from 'react'
 moment.locale('es')
 // https://codesandbox.io/s/calculadora-de-salario-qi0ft?file=/src/index.js:293-298
 export const REFRESH_TOKEN_COOKIE_OPTIONS = {
@@ -1242,6 +1242,7 @@ export const formatDate = ({ date, local = 'ES' }) => {
   const day = fullDate.split('/')[0]
   const month = fullDate.split('/')[1]
   const year = fullDate.split('/')[2]
+  const numberDay = dateToFormat.getDay()
   const shortDayName = dateToFormat.toLocaleDateString(local, { weekday: 'short' })
   const longDayName = dateToFormat.toLocaleDateString(local, { weekday: 'long' })
   const hourMinutes12 = dateToFormat.toLocaleTimeString('ES-CO', { hour: '2-digit', minute: '2-digit' })
@@ -1250,6 +1251,7 @@ export const formatDate = ({ date, local = 'ES' }) => {
     day,
     fullDate,
     hourMinutes12,
+    numberDay,
     hourMinutes24,
     longDayName,
     shortDayName,

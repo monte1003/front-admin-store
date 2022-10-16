@@ -1,27 +1,28 @@
+import { useApolloClient } from '@apollo/client'
+import { AwesomeModal } from 'components/AwesomeModal'
+import Column from 'components/common/Atoms/Column'
+import Text from 'components/common/Atoms/Text'
 import { Context } from 'context/Context'
 import Link from 'next/link'
-import React, {
+import { useRouter } from 'next/router'
+import { useMobile } from 'npm-pkg-hook'
+import {
   useCallback,
   useContext,
   useEffect,
-  useState } from 'react'
+  useState
+} from 'react'
 import styled from 'styled-components'
 import {
   DarkSilver,
   PColor,
   SECBGColor
 } from '../../public/colors'
-import { useApolloClient } from '@apollo/client'
 import { IconLogo, IconSales } from '../../public/icons'
-import useScrollHook, { useScrollColor } from '../hooks/useScroll'
-import { Options } from './options'
-import { useRouter } from 'next/router'
-import { AwesomeModal } from 'components/AwesomeModal'
-import Text from 'components/common/Atoms/Text'
-import Column from 'components/common/Atoms/Column'
-import { useMobile } from 'npm-pkg-hook'
-import { Hamburguer } from './Burguer'
 import Row from '../common/Atoms/Row'
+import useScrollHook, { useScrollColor } from '../hooks/useScroll'
+import { Hamburguer } from './Burguer'
+import { Options } from './options'
 
 
 export const Header = () => {

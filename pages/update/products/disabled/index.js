@@ -1,9 +1,9 @@
 import { ListProducts } from 'components/Update/Products/ListProducts'
-import { useGetProductsFood } from 'hooks/useProductsFood'
+import { useProductsFood } from 'hooks/useProductsFood'
 
 export default function ProductsDisabled() {
   let search = ''
-  const [data, { loading, error, fetchMore, setShowMore, showMore }] = useGetProductsFood({ search })
+  const [data, { loading, error, fetchMore, setShowMore, showMore }] = useProductsFood({ search })
   return (<ListProducts
     data={data}
     error={error}

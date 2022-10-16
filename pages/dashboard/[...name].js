@@ -8,12 +8,11 @@ export default function dashboard ({ idStore }) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const router = useRouter()
   const { name } = router.query
-  const isValidate = idStore === name[1] 
+  const isValidate = idStore === name[1]
   if (isValidate) {
     return <DashboardStore />
-  } 
+  }
   return <NotFountView />
-  
 }
 
 export const getServerSideProps = withIronSessionSsr(

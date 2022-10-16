@@ -1,12 +1,15 @@
 import { useQuery } from '@apollo/client'
-import { GET_ULTIMATE_CATEGORY_PRODUCTS } from 'container/dashboard/queries'
-import { GET_MIN_PEDIDO } from 'container/dashboard/queriesStore'
-import { IconSales } from 'public/icons'
-import { RippleButton } from 'components/Ripple'
 import { CardProducts } from 'components/CartProduct'
 import { useCheckboxState } from 'components/hooks/useCheckbox'
-import { Skeleton } from 'components/Skeleton'
 import { LoadingBabel } from 'components/Loading/LoadingBabel'
+import { RippleButton } from 'components/Ripple'
+import { Skeleton } from 'components/Skeleton'
+import { GET_ULTIMATE_CATEGORY_PRODUCTS } from 'container/dashboard/queries'
+import { GET_MIN_PEDIDO } from 'container/dashboard/queriesStore'
+import { useGetClients, useSales } from 'npm-pkg-hook'
+import { IconSales } from 'public/icons'
+import { BoxProductSales } from './BoxProductSales'
+import { FormFilterSales } from './formFilterSales'
 import { ModalSales } from './ModalSales'
 import { SwiperSliderCategory } from './SlideCategories'
 import {
@@ -15,9 +18,6 @@ import {
   ScrollbarProduct,
   Wrapper
 } from './styled'
-import { FormFilterSales } from './formFilterSales'
-import { BoxProductSales } from './BoxProductSales'
-import { useSales, useGetClients } from 'npm-pkg-hook'
 import { SubItems } from './SubItems'
 
 const GenerateSales = () => {

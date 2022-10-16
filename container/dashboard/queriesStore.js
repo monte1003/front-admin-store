@@ -90,24 +90,24 @@ query productFoodsAll($search: String, $min: Int, $max: Int, $gender: [String], 
     ProPrice
     ProDescuento
     free
-	  ProUniDisponibles
-	  ProDescription
-	  ProProtegido
-	  ProAssurance
-	  ValueDelivery
-	  ProStar
+      ProUniDisponibles
+      ProDescription
+      ProProtegido
+      ProAssurance
+      ValueDelivery
+      ProStar
     sTateLogistic
-	  ProImage
-	  ProWidth
-	  ProHeight
-	  ProLength
-	  ProWeight
-	  ProQuantity
-	  ProOutstanding
+      ProImage
+      ProWidth
+      ProHeight
+      ProLength
+      ProWeight
+      ProQuantity
+      ProOutstanding
     pDatCre
     pDatMod
-	  ProDelivery
-	  ProVoltaje
+      ProDelivery
+      ProVoltaje
     pState
     feat {
       fId

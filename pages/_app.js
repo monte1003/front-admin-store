@@ -87,13 +87,15 @@ export default function App({ Component, pageProps }) {
         id='afterInteractive'
         strategy='afterInteractive'
       />
+      <ProgressBar progress={animating} />
       <ApolloProvider client={apolloClient}>
         <GlobalStyle />
-        <ProgressBar progress={animating} />
         <Noscript>
         </Noscript>
         {getLayout(<Auth>
+          {/* <ErrorBoundary> */}
           <Component {...{ ...pageProps, isMobile: false }} />
+          {/* </ErrorBoundary> */}
         </Auth>)}
       </ApolloProvider >
     </Context>

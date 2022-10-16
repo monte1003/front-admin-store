@@ -1,6 +1,5 @@
 import { EColor, NorthTexasGreen } from '@/public/colors'
 import { IconDelete, IconMiniCheck } from '@/public/icons'
-import React from 'react'
 import { Checkbox } from '~/components/Checkbox'
 import { RippleButton } from '~/components/Ripple'
 import { CardsComponent, GarnishChoicesHeader } from './styled'

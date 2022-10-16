@@ -41,7 +41,7 @@ export default withIronSessionApiRoute(async function isAuth(req, res) {
       })
 
     }
-    return res.status(404).json({
+    return res.status(200).json({
       ok: req.session,
       isSession: true
     })

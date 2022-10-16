@@ -1,7 +1,6 @@
 import { EColor } from '@/public/colors'
 import { IconDelete } from '@/public/icons'
 import moment from 'moment'
-import React from 'react'
 import { AwesomeModal } from '~/components/AwesomeModal'
 import InputHooks from '~/components/InputHooks/InputHooks'
 import { RippleButton } from '~/components/Ripple'

@@ -1,3 +1,6 @@
+import { NorthTexasGreen } from '@/public/colors'
+import { useMutation } from '@apollo/client'
+import Column from 'components/common/Atoms/Column'
 import {
   DELETE_CAT_EXTRA_PRODUCTS,
   DELETE_CAT_EXTRA_SUB_OPTIONAL_PRODUCTS,
@@ -7,7 +10,7 @@ import {
 import { GET_EXTRAS_PRODUCT_FOOD_OPTIONAL, UPDATE_MULTI_EXTRAS_PRODUCT_FOOD } from 'container/update/Products/queries'
 import { Context } from 'context/Context'
 import { useSetState } from 'hooks/useState'
-import { useMutation } from '@apollo/client'
+import { useFormTools } from 'npm-pkg-hook'
 import { IconMiniCheck } from 'public/icons'
 import {
   useCallback,
@@ -16,15 +19,11 @@ import {
   useState
 } from 'react'
 import { updateCache } from 'utils'
-import Column from 'components/common/Atoms/Column'
-import { useFormTools } from 'npm-pkg-hook'
-import Items from './Items'
-import { Optional } from './Optional'
 import { CreateExtra } from './CreateExtra'
 import { EditExtra } from './EditExtra'
+import Items from './Items'
+import { Optional } from './Optional'
 import { GarnishChoicesHeader } from './styled'
-import { NorthTexasGreen } from '@/public/colors'
-import { useRouter } from 'next/router'
 
 export const ExtrasProductsItems = ({
   pId,
@@ -79,25 +78,14 @@ export const ExtrasProductsItems = ({
   })
   const [DeleteExtProductFoodsOptional] = useMutation(DELETE_CAT_EXTRA_PRODUCTS)
   const [DeleteExtFoodSubsOptional] = useMutation(DELETE_CAT_EXTRA_SUB_OPTIONAL_PRODUCTS)
-  const router = useRouter()
 
   const handleAdd = useCallback(() => {
     const Lines = [...LineItems.Lines, { ...initialLine }, { ...initialLine }]
     setLine({ ...LineItems, Lines })
   }, [LineItems, initialLine])
 
-  const closeModalDessert = () => {
-    router.push(
-      {
-        query: {
-          ...router.query,
-          dissert: ''
-        }
-      },
-      undefined,
-      { shallow: true }
-    )
-    setModal(!modal)
+  const handleHidden = () => {
+    setModal(false)
   }
   const handleFocusChange = useCallback((index) => {
     const lastItem = LineItems.Lines.length -1
@@ -151,8 +139,6 @@ export const ExtrasProductsItems = ({
             dataNew: ExtProductFoodsAll
           })
         }
-      }).then(() => {
-        closeModalDessert()
       })
     } catch (error) {
       setAlertBox({ message: `${error}`, duration: 7000 })
@@ -253,7 +239,7 @@ export const ExtrasProductsItems = ({
           loading={loading}
           modal={modal}
           onSubmitUpdate={onSubmitUpdate}
-          setModal={setModal}
+          setModal={handleHidden}
         />
         <EditExtra
           INFO_EXTRA={INFO_EXTRA}

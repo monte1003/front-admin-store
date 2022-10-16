@@ -1,13 +1,15 @@
-import React from 'react'
 import { BGAColor, EColor } from '@/public/colors'
 import { IconDelete } from '@/public/icons'
+import {
+  Button,
+  InputHookProducts,
+  QuantityButton
+} from 'pkg-components'
 import { AwesomeModal } from '~/components/AwesomeModal'
 import { Checkbox } from '~/components/Checkbox'
-import { QuantityButton, Button } from 'pkg-components'
+import Row from '~/components/common/Atoms/Row'
 import { RippleButton } from '~/components/Ripple'
 import { numberFormat } from '~/utils'
-import { InputHookProducts } from '.'
-import Row from '~/components/common/Atoms/Row'
 import {
   Action,
   ContentLinesItems,
@@ -36,8 +38,8 @@ export const CreateExtra = ({
         footer={false}
         header={true}
         height='60vh'
-        onCancel={() => { return setModal(false) }}
-        onHide={() => { return setModal(false) }}
+        onCancel={() => { return setModal() }}
+        onHide={() => { return setModal() }}
         padding={0}
         question={false}
         show={modal}

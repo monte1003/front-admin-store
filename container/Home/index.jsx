@@ -3,8 +3,8 @@
 import InputHooks from 'components/InputHooks/InputHooks'
 import { RippleButton } from 'components/Ripple'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { useFormTools } from 'npm-pkg-hook'
-import { Button } from 'pkg-components'
 import {
   Container,
   ContainerLeft,
@@ -15,8 +15,11 @@ import {
 
 const Index = () => {
   const [handleChange, handleSubmitMain, setDataValue, { dataForm, errorForm }] = useFormTools()
+  const router = useRouter()
   const handleRedirect = e => {
     e.stopPropagation()
+    router.push('/entrar')
+
   }
   return (
     <div>

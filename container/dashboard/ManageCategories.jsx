@@ -131,7 +131,7 @@ export const ManageCategories = ({ SHOW_MODAL_UPDATE_PRODUCTS }) => {
                   return cache.writeQuery({ query: GET_ULTIMATE_CATEGORY_PRODUCTS, data: dataOld })
                 }
               }
-            }),
+            })
             cache.modify({
               fields: {
                 getCatProductsWithProduct(dataOld = []) {
@@ -372,7 +372,6 @@ export const ManageCategories = ({ SHOW_MODAL_UPDATE_PRODUCTS }) => {
           <CtnItems>
             {data?.PRODUCT?.map((x, idx) => {
               return (
-
                 <CardProducts
                   ProDescription={x.ProDescription}
                   ProDescuento={x.ProDescuento}

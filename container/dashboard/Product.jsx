@@ -1,28 +1,26 @@
-import PropTypes from 'prop-types'
 import { CLIENT_URL_BASE } from 'apollo/urls'
 import { ContainerFilter } from 'components/Update/Products/styled'
 import { OptionalExtraProducts } from 'container/producto/extras'
 import { ExtrasProductsItems } from 'container/producto/extras/ExtrasProductsItems'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { Button } from 'pkg-components'
+import PropTypes from 'prop-types'
 import {
   APColor,
   BColor,
   GraniteGray
 } from 'public/colors'
-import React from 'react'
-import { Button } from 'pkg-components'
+import { AwesomeModal } from '~/components/AwesomeModal'
+import Column from '~/components/common/Atoms/Column'
 import {
   CardProductsModal,
   ContentImage,
   ContentInfo,
   DisRestaurant,
-  Flex,
-  HeadSticky,
-  Text
+  Flex, Text
 } from './styled'
-import { useRouter } from 'next/router'
-import { AwesomeModal } from '~/components/AwesomeModal'
 
 export const Product = ({
   store,
@@ -38,10 +36,12 @@ export const Product = ({
   nameStore,
   dataOptional,
   showDessert,
+  onHideDessert,
   setShowDessert,
   handleDelete,
   pId,
-  ...props }) => {
+  ...props
+}) => {
   const router = useRouter()
 
   return (
@@ -89,9 +89,9 @@ export const Product = ({
           />
         </ContentImage>
         <ContentInfo>
-          <HeadSticky>
-            <Text size='1.1em'>{pName}</Text>
-          </HeadSticky>
+          <Column margin='10px 0'>
+            <Text size='1.8em'>{pName}</Text>
+          </Column>
           <Text
             color={GraniteGray}
             margin='20px 0'
@@ -123,8 +123,8 @@ export const Product = ({
             <label className='dish-observation-form__label' tabIndex='0' >¿Algún comentario?</label>
           </DisRestaurant>
           <ExtrasProductsItems
-            dataExtra={dataExtra?.ExtProductFoodsAll || []}
-            dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}
+            dataExtra={dataExtra || []}
+            dataOptional={dataOptional || []}
             editing={true}
             modal={modal}
             pId={pId}
@@ -136,13 +136,13 @@ export const Product = ({
         footer={false}
         header={true}
         height='100vh'
-        onHide={() => {return setShowDessert(!showDessert)}}
+        onHide={() => { return onHideDessert()}}
         show={showDessert}
         size='100vw'
-        zIndex={'999999900'}
+        zIndex='999999999'
       >
         <OptionalExtraProducts
-          dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}
+          dataOptional={dataOptional || []}
           pId={pId}
         />
       </AwesomeModal>

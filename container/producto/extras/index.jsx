@@ -1,147 +1,59 @@
-import React, { useState } from 'react'
-import { useMutation } from '@apollo/client'
-import { RippleButton } from '../../../components/Ripple'
-import { EColor, NorthTexasGreen } from '../../../public/colors'
-import { IconDelete, IconMiniCheck } from '../../../public/icons'
-import { RandomCode, updateCache } from '../../../utils'
-import { MockData } from '../../../components/common/mockData'
-import {
-  GET_EXTRAS_PRODUCT_FOOD_OPTIONAL,
-  GET_EXTRAS_PRODUCT_FOOD_SUB_OPTIONAL,
-  UPDATE_EXTRAS_PRODUCT_FOOD_OPTIONAL
-} from '../../update/Products/queries'
-import {
-  BodyDnd,
-  CardsComponent,
-  ContentCheckbox,
-  ContentModal,
-  GarnishChoicesHeader,
-  Input
-} from './styled'
 import { Checkbox } from 'components/Checkbox'
 import Column from 'components/common/Atoms/Column'
-import Row from 'components/common/Atoms/Row'
+import { useDessert } from 'npm-pkg-hook'
+import {
+  Button, List,
+  ResisesColumns,
+  Tag
+} from 'pkg-components'
+import { useState } from 'react'
+import InputHooks from '~/components/InputHooks/InputHooks'
 import { QuantityButton } from '~/components/QuantityButton'
-import { Container } from '~/components/AwesomeModal/styled'
-import { ResisesColumns } from '~/../pkg-components'
+import { RippleButton } from '../../../components/Ripple'
+import {
+  BGColor,
+  EColor,
+  NorthTexasGreen,
+  PColor
+} from '../../../public/colors'
+import { IconDelete, IconMiniCheck } from '../../../public/icons'
+import {
+  BodyDnd, ContentCheckbox,
+  GarnishChoicesHeader
+} from './styled'
 
 
 export const OptionalExtraProducts = ({ pId }) => {
   // STATES
-  const [data, setData] = useState(MockData)
-  const [numberLimit, setNumberLimit] = useState(2)
-  const [title, setTitle] = useState('')
-  const [setCheck, setChecker] = useState({})
-  // QUERIES
-  const [updateExtProductFoodsOptional] = useMutation(UPDATE_EXTRAS_PRODUCT_FOOD_OPTIONAL)
-  const [updateExtProductFoodsSubOptional] = useMutation(GET_EXTRAS_PRODUCT_FOOD_SUB_OPTIONAL)
-  // HANDLES
-  const handleCheck = (e) => {
-    const { name, checked } = e.target
-    setChecker({ ...setCheck, [name]: checked ? true : false })
-  }
-  const addCard = async (title, listId) => {
-    const id = await RandomCode(9)
-    const newCard = {
-      id: id,
-      title: title,
-      numberLimit: 5,
-      required: setCheck.exState ? 1 : 0
-    }
-    const list = data.lists[listId]
-    list.cards = [...list.cards, newCard]
-    setData({
-      ...data,
-      lists: {
-        ...data.lists,
-        [listId]: list
-      }
-    })
-    await updateExtProductFoodsSubOptional({
-      variables: {
-        input: {
-          pId,
-          OptionalSubProName: title,
-          exCodeOptionExtra: listId,
-          exCode: id,
-          state: 1
-        }
-      }, update: (cache, { data: { ExtProductFoodsOptionalAll } }) => {
-        return updateCache({
-          cache,
-          query: GET_EXTRAS_PRODUCT_FOOD_OPTIONAL,
-          nameFun: 'ExtProductFoodsOptionalAll',
-          dataNew: ExtProductFoodsOptionalAll
-        })
-      }
-    })
-    setTitle('')
-  }
-
-  const handleRemoveList = i => {
-    const Lines = data?.listIds?.filter((salesLine, index) => { return index !== i })
-    setData({
-      listIds: [...Lines],
-      lists: {
-        ...data.lists
-      }
-    })
-  }
-  const handleAdd = ({ listId }) => {
-    if (title !== '') {
-      addCard(title, listId)
-    }
-  }
-  const handleAddList = async ({ title, numberLimit }) => {
-    if (title !== '') {
-      const newListId = await RandomCode(9)
-      setData({
-        listIds: [...data.listIds, newListId],
-        lists: {
-          ...data.lists,
-          [newListId]: {
-            id: newListId,
-            title: title,
-            required: setCheck.exState ? 1 : 0,
-            numberLimit: numberLimit,
-            cards: []
-          }
-        }
-      })
-      await updateExtProductFoodsOptional({
-        variables: {
-          input: {
-            pId,
-            code: newListId,
-            OptionalProName: title,
-            required: setCheck.exState ? 1 : 0,
-            numbersOptionalOnly: numberLimit
-          }
-        },
-        update: (cache, { data: { ExtProductFoodsOptionalAll } }) => {
-          return updateCache({
-            cache,
-            query: GET_EXTRAS_PRODUCT_FOOD_OPTIONAL,
-            nameFun: 'ExtProductFoodsOptionalAll',
-            dataNew: ExtProductFoodsOptionalAll
-          })
-        }
-      })
-      setTitle('')
-    }
-  }
-
-  const filterData = data?.listIds?.filter(x => {return x !== '01list'})
+  const [numberLimit, setNumberLimit] = useState(1)
+  // HOOKS
+  const {
+    handleCheck,
+    handleRemoveList,
+    setTitle,
+    title,
+    setCheck,
+    dataListIds,
+    data,
+    handleChangeItems,
+    handleAdd,
+    removeOneItem,
+    handleAddList,
+    setData
+  } = useDessert({ pId })
   return (
-    // <>
-    // </>
     <BodyDnd>
       <ResisesColumns>
         <div className='first-column'>
-          {filterData && filterData?.map((listID, index) => {
+          {dataListIds && dataListIds?.map((listID, index) => {
             const list = data.lists[listID]
+            const numberLimit = list.numberLimit
+            const incompleteList = list.numberLimit === list.cards.length
+            const messageLimit = `${ numberLimit } ${numberLimit > 1 ? 'opciones' : 'opción'}`
             return (
               <Column
+                border={`2px solid ${incompleteList ? NorthTexasGreen : 'transparent' }`}
+                height='min-content'
                 key={index}
                 role='list'
                 width='95%'
@@ -149,14 +61,13 @@ export const OptionalExtraProducts = ({ pId }) => {
                 <GarnishChoicesHeader>
                   <div>
                     <p className='garnish-choices__title'>{list?.title}</p>
-                    <p className='garnish-choices__title-desc'>Escoge hasta {list?.numberLimit} opciones.</p>
+                    <p className='garnish-choices__title-desc'>Escoge hasta {messageLimit}.</p>
                     <div className='garnish-choices'>
-                      {list?.required === 1 && <span className='marmita-minitag'>OBLIGATORIO</span>}
+                      {list?.required === 1 && <Tag />}
                     </div>
                   </div>
-                  <IconMiniCheck color={NorthTexasGreen} size={'15px'} />
                   <RippleButton
-                    bgColor={'transparent'}
+                    bgColor='transparent'
                     margin='0px'
                     onClick={() => { return handleRemoveList(index) }}
                     type='button'
@@ -165,25 +76,30 @@ export const OptionalExtraProducts = ({ pId }) => {
                     <IconDelete color={EColor} size='25px' />
                   </RippleButton>
                 </GarnishChoicesHeader>
-                <span>{list?.cards?.length}</span>
+                <Tag label={`Total de items ${list?.cards?.length} / ${numberLimit}`} />
+                {incompleteList && <IconMiniCheck color={NorthTexasGreen} size={10} />}
                 <List
                   data={data}
                   index={index}
                   list={list}
+                  listID={listID}
+                  removeOneItem={removeOneItem}
                   setData={setData}
                 />
-                <Input
+                <InputHooks
                   aria-disabled
-                  autoFocus
-                  card
-                  name='title'
-                  onChange={(e) => { return setTitle(e.target.value) }}
-                  onKeyDown={(event) => { return (event.key === 'Enter' && handleAdd({ listId: listID })) }}
-                  placeholder='enter card'
-                  value={listID.title}
+                  autoFocus={true}
+                  margin='5px 0'
+                  name='list_value'
+                  onChange={value => { return handleChangeItems({ listID, id: list.id, value, name: 'list_value' }) }}
+                  onFocus={true}
+                  required={true}
+                  title='Añade un item'
+                  value={list?.value}
                 />
                 <RippleButton
-                  margin='20px auto'
+                  disabled={incompleteList}
+                  margin='16px 0 auto'
                   onClick={() => { return handleAdd({ listId: listID }) }}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
@@ -192,7 +108,7 @@ export const OptionalExtraProducts = ({ pId }) => {
                   }}
                   widthButton='100%'
                 >
-            Adicionar sobremesa
+                  Adicionar sobremesa
                 </RippleButton>
               </Column>
             )
@@ -200,32 +116,21 @@ export const OptionalExtraProducts = ({ pId }) => {
         </div>
         <div>
           <GarnishChoicesHeader>
-            <div>
-              <p className='garnish-choices__title'>{title ? title : 'Escoge tu... '}</p>
-              <p className='garnish-choices__title-desc'>Escoge hasta {numberLimit} opciones.</p>
-            </div>
-            <div className='garnish-choices'>
-              {setCheck.exState === true && <span className='marmita-minitag'>OBLIGATORIO</span>}
-            </div>
-            <div>
+            <div className='content'>
               <div>
-                <RippleButton
-                  bgColor={'transparent'}
-                  margin='0px'
-                  type='button'
-                  widthButton='min-content'
-                >
-                  <IconDelete color={`${EColor}90`} size='25px' />
-                </RippleButton>
+                <p className='garnish-choices__title'>{title ? title : 'Escoge tu... '}</p>
+                <p className='garnish-choices__title-desc'>Escoge hasta {numberLimit} opciones.</p>
+              </div>
+              <div className='garnish-choices'>
+                {setCheck.exState === true && <Tag />}
               </div>
             </div>
           </GarnishChoicesHeader>
-          <Input
-            card
-            margin='10px 0'
+          <InputHooks
             name='title'
             onChange={(e) => { return setTitle(e.target.value) }}
-            placeholder='Añadir nueva lista'
+            required={true}
+            title='Añadir nueva lista'
             type='text'
             value={title}
           />
@@ -236,7 +141,7 @@ export const OptionalExtraProducts = ({ pId }) => {
                 checked={setCheck.exState}
                 id={setCheck.exState}
                 margin='10px 0'
-                name={'exState'}
+                name='exState'
                 onChange={e => { return handleCheck(e) }}
                 type='checkbox'
               />
@@ -247,15 +152,18 @@ export const OptionalExtraProducts = ({ pId }) => {
               quantity={numberLimit}
               showNegativeButton={numberLimit  === 0}
             />
-            <RippleButton
-              margin='0'
+            <Button
+              backgroundColor={PColor}
+              borderRadius='0'
+              color={BGColor}
+              fontWeight='300'
+              label='Add List'
               onClick={() => { return handleAddList({ title: title, numberLimit: numberLimit }) }}
-              padding='0'
               type='button'
-              widthButton='100%'
+              width='100%'
             >
-          Adicionar Categoría de sobremesa
-            </RippleButton>
+              Adicionar Categoría de sobremesa
+            </Button>
           </GarnishChoicesHeader>
 
         </div>
@@ -263,80 +171,4 @@ export const OptionalExtraProducts = ({ pId }) => {
     </BodyDnd>
   )
 
-}
-
-export const List = ({ list, setData, data }) => {
-  return (
-    <Column>
-      {list?.cards?.map((card, index) => {
-        return (
-          <Column key={card?.id}>
-            <Card
-              card={card}
-              data={data}
-              id={list?.id}
-              index={index}
-              key={card?.id}
-              list={list}
-              setData={setData}
-            />
-              s
-          </Column>
-        )
-      })}
-    </Column>
-  )
-}
-
-export const Card = ({ card, index }) => {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const handleRemoveItemCard = async () => {
-  }
-  return (
-    <Column>
-      <CardsComponent>
-        <Column>
-          <h3 className='title_card'>{card?.title}</h3>
-          <h3 className='title_card'>Item: {index + 1}</h3>
-        </Column>
-        <RippleButton
-          bgColor={'transparent'}
-          margin='0px'
-          onClick={() => { return handleRemoveItemCard(index) }}
-          type='button'
-          widthButton='min-content'
-        >
-          <IconDelete color={EColor} size='25px' />
-        </RippleButton>
-      </CardsComponent>
-    </Column>
-  )
-}
-
-export const InputHookProducts = ({
-  placeholder,
-  borderRadius,
-  value,
-  onChange,
-  onFocus,
-  inputText,
-  type,
-  color,
-  ...props
-}) => {
-  return (
-    <>
-      <Input
-        {...props}
-        borderRadius={borderRadius}
-        color={color}
-        inputText={inputText}
-        onChange={onChange ? e => { return onChange(e.target.value) } : undefined}
-        onFocus={onFocus}
-        placeholder={placeholder || ''}
-        type={type || 'text'}
-        value={value || ''}
-      />
-    </>
-  )
 }

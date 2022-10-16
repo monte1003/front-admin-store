@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
-import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Wrapper, Modal, ModalHeader, ModalTitle, BtnClose, ModalBody, ModalFooter } from './styled'
-import { MODAL_SIZES, BUTTONS_TEXT } from './constanst'
+import { useCallback, useEffect, useState } from 'react'
 import { IconCancel } from '../../public/icons'
 import { RippleButton } from '../Ripple'
+import { BUTTONS_TEXT, MODAL_SIZES } from './constanst'
+import { BtnClose, Container, Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, Wrapper } from './styled'
 export const AwesomeModal = ({
   title,
   size = MODAL_SIZES.medium,
@@ -31,9 +31,9 @@ export const AwesomeModal = ({
   header = true,
   sizeIconClose = '20px',
   borderRadius = '.3rem',
-  onHide = () => { return undefined },
-  onCancel = () => { return undefined },
-  onConfirm = () => { return undefined }
+  onHide = () => { return },
+  onCancel = () => { return },
+  onConfirm = () => { return }
 }) => {
   const [state, setState] = useState(show)
   const [modal, setSModal] = useState(false)
@@ -46,6 +46,7 @@ export const AwesomeModal = ({
   }, [onCancel, onHide, timeOut])
   const onShowQuestion = () => { return setSModal(!modal) }
   // eslint-disable-next-line consistent-return
+
   useEffect(() => {
     if (question && backdrop === 'static' && state === true && show === true) {
       window.addEventListener('keyup', e => { return e.code === 'Escape' && setSModal(true) })
@@ -124,10 +125,9 @@ export const AwesomeModal = ({
             height={height}
             padding={padding}
           >
-            
             {modal &&
               <div className='modal-wrapper'>
-                <h2>{`¿Seguro que quieres cerrar ${title}?`}</h2>
+                <h2>{`¿Seguro que quieres cerrar ${title ?? ''}?`}</h2>
                 <div className='modal-confirm'>
                   <RippleButton
                     border

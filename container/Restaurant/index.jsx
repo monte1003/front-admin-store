@@ -1,28 +1,43 @@
-import React, { useContext, useState } from 'react'
-import { RippleButton } from '../../components/Ripple'
-import { EColor, PLColor } from '../../public/colors'
-import InputHooks from '../../components/InputHooks/InputHooks'
-import { useFormTools } from '../../components/BaseForm'
-import { useMutation, useQuery, useLazyQuery } from '@apollo/client'
-import { IconArrowLeft } from '../../public/icons'
-import { useRouter } from 'next/router'
-import { Content, Form, Card, GoBack, WrapDirection } from './styled'
-import { CREATE_ONE_STORE } from './queries'
-import { StepsComponent } from '../../components/Steps'
-import styled, { css, keyframes } from 'styled-components'
-import NewSelect from '../../components/NewSelectHooks/NewSelect'
-import { GET_ALL_CITIES, GET_ALL_COUNTRIES, GET_ALL_DEPARTMENTS, GET_ALL_ROAD } from '../../gql/Location'
-import { useUser } from '../../components/hooks/useUser'
-import { GET_ALL_CAT_STORE } from '../../gql/catStore'
-import { CardInput } from '../../components/Update/Products/styled'
-import { AwesomeModal } from '../../components/AwesomeModal'
-import { Context } from '../../context/Context'
-import useLocalStorage from '../../components/hooks/useLocalSorage'
-import { Loading } from 'components/Loading'
+import {
+  useLazyQuery,
+  useMutation,
+  useQuery
+} from '@apollo/client'
 import { Checkbox } from 'components/Checkbox'
+import { Loading } from 'components/Loading'
+import { useRouter } from 'next/router'
+import { useFormTools } from 'npm-pkg-hook'
+import React, { useContext, useState } from 'react'
+import styled, { css, keyframes } from 'styled-components'
 import { CalcularDigitoVerificacion } from 'utils'
 import { Row } from '~/components/Acordion/Styled'
 import Column from '~/components/common/Atoms/Column'
+import { AwesomeModal } from '../../components/AwesomeModal'
+import useLocalStorage from '../../components/hooks/useLocalSorage'
+import { useUser } from '../../components/hooks/useUser'
+import InputHooks from '../../components/InputHooks/InputHooks'
+import NewSelect from '../../components/NewSelectHooks/NewSelect'
+import { RippleButton } from '../../components/Ripple'
+import { StepsComponent } from '../../components/Steps'
+import { CardInput } from '../../components/Update/Products/styled'
+import { Context } from '../../context/Context'
+import { GET_ALL_CAT_STORE } from '../../gql/catStore'
+import {
+  GET_ALL_CITIES,
+  GET_ALL_COUNTRIES,
+  GET_ALL_DEPARTMENTS,
+  GET_ALL_ROAD
+} from '../../gql/Location'
+import { EColor, PLColor } from '../../public/colors'
+import { IconArrowLeft } from '../../public/icons'
+import { CREATE_ONE_STORE } from './queries'
+import {
+  Card,
+  Content,
+  Form,
+  GoBack,
+  WrapDirection
+} from './styled'
 export const Restaurant = ({ userToken }) => {
   const { email } = userToken || {}
   const [step] = useState(0)
@@ -41,7 +56,7 @@ export const Restaurant = ({ userToken }) => {
   })
   const [dataUser] = useUser()
   // eslint-disable-next-line
-  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm, setForcedError }] = useFormTools()
+  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm, setForcedError, errorSubmit }] = useFormTools()
   // const { suggestions: { data }, setValue } = usePlacesAutocomplete({
   //   requestOptions: {
   //     // types: ['restaurant'],
@@ -163,7 +178,6 @@ export const Restaurant = ({ userToken }) => {
           </Row>
         </Column>
       </AwesomeModal>
-      
       <Card></Card>
       <div className='container-step'>
         <StepsComponent
@@ -427,9 +441,11 @@ export const Restaurant = ({ userToken }) => {
 
           <RippleButton
             bgColor={EColor}
+            // disabled={errorSubmit}
             margin='20px auto'
-            onClick={() => { return setNextStep(nextStep + 1) }}
-            type={nextStep === 3 ? 'submit' : 'button'}
+            onClick={() => { return setNextStep((prv) =>{ return prv + 1 } ) }}
+            // type={nextStep === 3 ? 'submit' : 'button'}
+            type='submit'
             widthButton='100%'
           >
             {step !== 1 ? 'Continuar' : 'Enviar'}

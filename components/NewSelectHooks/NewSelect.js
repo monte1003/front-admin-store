@@ -1,11 +1,41 @@
-import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+
+import {
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import styled, { css } from 'styled-components'
-import { BGColor, PColor, PVColor, SFColor, SFVColor } from '../../public/colors'
+import {
+  BGColor,
+  PColor,
+  PVColor,
+  SFColor,
+  SFVColor
+} from '../../public/colors'
 import { IconArrowBottom, IconCancel as IconWarning } from '../../public/icons'
 
 // eslint-disable-next-line
-export default function NewSelect({ options, disabled, id, idD, name, onChange, optionName, value, width, search, title, padding, margin, minWidth, error, required, accessor, fullName }) {
+export default function NewSelect({
+  options,
+  disabled,
+  id,
+  idD,
+  name,
+  onChange,
+  optionName,
+  value,
+  width,
+  search,
+  title,
+  padding,
+  margin,
+  minWidth,
+  error,
+  required,
+  accessor,
+  fullName
+}) {
   /** Hooks */
   const [select, setSelect] = useState(false)
   const [selectRef, setSelectRef] = useState(0)
@@ -197,7 +227,10 @@ const LabelInput = styled.label`
     font-size: ${({ value }) => { return value ? '17px' : '16px' }};
     top: ${({ value }) => { return value ? '-5px' : '18px' }};
     left: 40px;
-    color: ${({ value, error }) => { return value ? SFColor : (error ? BGColor : SFVColor) }};
+    color: ${({ value, error }) => {
+    const defaultValue = error ? BGColor : SFVColor
+    return value ? SFColor : defaultValue
+  }};
     transition: .3s;
     pointer-events: none;
     white-space: nowrap;
@@ -207,13 +240,19 @@ const LabelInput = styled.label`
     font-family: PFont-Light;
     background-color: ${({ value }) => { return value ? BGColor : 'transparent' }};
     padding-left: ${({ value }) => { return value ? '10px' : '0px' }};
-    
     `
 // Select
 const CustomButtonS = styled.button`
     position: relative;
     display: block;
-    background-color: ${({ bgColor, disabled, error }) => { return disabled ? 'rgba(239, 239, 239, 0.3)' : (error ? '#FBCACA' : (bgColor || '#fff')) }};
+    background-color: ${({
+    bgColor,
+    disabled,
+    error
+  }) => {
+    const defaultValueColor = error ? '#FBCACA' : bgColor
+    return disabled ? 'rgba(239, 239, 239, 0.3)' : defaultValueColor
+  }};
     outline: 0;
     border: ${({ option }) => { return option ? 'none' : `1px solid ${SFVColor}` }};
     border-radius: 5px;
@@ -261,7 +300,7 @@ const SpanText = styled.label`
 const TextNotResult = styled.span`
     font-size: 10px;
     color: ${SFVColor};
-    padding: 0 10px; 
+    padding: 0 10px;
 `
 // Input Text (buscador)
 export const InputText = styled.input`

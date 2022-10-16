@@ -1,11 +1,15 @@
-import React, { Fragment, useEffect } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
-import UserProfileSettings from '../../components/UserProfile'
+import { useEffect } from 'react'
 import { useFormTools } from '../../components/BaseForm'
-import { GET_ALL_DEVICES, GET_USER_PROFILE, SET_USER_PROFILE } from './queries'
-import { filterKeyObject } from '../../utils'
-import { GET_USER } from '../../gql/LoginAut'
 import { Loading } from '../../components/Loading'
+import UserProfileSettings from '../../components/UserProfile'
+import { GET_USER } from '../../gql/LoginAut'
+import { filterKeyObject } from '../../utils'
+import {
+  GET_ALL_DEVICES,
+  GET_USER_PROFILE,
+  SET_USER_PROFILE
+} from './queries'
 
 export const UserProfile = () => {
   const [handleChange, handleSubmit, handleForcedData, { dataForm }] = useFormTools()

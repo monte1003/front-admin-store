@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { GET_ALL_PRODUCT_STORE } from 'container/dashboard/queriesStore'
 import { useEffect, useState } from 'react'
 
-export const useGetProductsFood = ({
+export const useProductsFood = ({
   categories,
   desc,
   fetchPolicy = 'network-only',

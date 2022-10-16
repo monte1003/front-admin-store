@@ -1,6 +1,5 @@
 import { EColor } from '@/public/colors'
 import { IconDelete } from '@/public/icons'
-import React from 'react'
 import { QuantityButton } from '~/components/QuantityButton'
 import { RippleButton } from '~/components/Ripple'
 import { numberFormat } from '~/utils'

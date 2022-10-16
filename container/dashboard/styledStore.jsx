@@ -60,9 +60,9 @@ export const Section = styled.div`
     padding: 35px 30px 0;
     max-width: 1366px;
     margin: auto;
+    overflow: hidden;
     transition: 0.2s;
     /* height: 150px; */
-    // overflow: hidden;
     cursor: pointer;
     position: relative;
     transition: .2s ease-in-out;
@@ -205,7 +205,7 @@ export const MerchantBannerWrapperInfo = styled.div`
     position: relative;
     justify-content: unset;
     padding-left: 30px;
-    background-color: rgb(0 0 0 / 6%);
+    background-color: ${({ Open }) => {return Open ? 'rgb(0 0 0 / 6%)' : 'rgb(0 0 0 / 61%)'} };
     background-blend-mode: overlay;
     @media only screen and (max-width: 960px) {
       height: 118px;
