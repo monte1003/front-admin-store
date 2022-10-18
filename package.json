@@ -26,6 +26,7 @@
     "apollo-server-plugin-http-headers": "0.1.4",
     "apollo-upload-client": "17.0.0",
     "chart.js": "3.8.0",
+    "clientjs": "^0.2.1",
     "deepmerge": "4.2.2",
     "file-saver": "2.0.5",
     "googleapis": "100.0.0",

@@ -205,7 +205,7 @@ export const MerchantBannerWrapperInfo = styled.div`
     position: relative;
     justify-content: unset;
     padding-left: 30px;
-    background-color: ${({ Open }) => {return Open ? 'rgb(0 0 0 / 6%)' : 'rgb(0 0 0 / 61%)'} };
+    background-color: ${({ Open }) => {return Open ? 'rgb(0 0 0 / 20%)' : 'rgb(0 0 0 / 61%)'} };
     background-blend-mode: overlay;
     @media only screen and (max-width: 960px) {
       height: 118px;

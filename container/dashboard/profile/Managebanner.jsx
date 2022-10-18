@@ -57,14 +57,10 @@ const Banner = ({ isMobile }) => {
   const [endDate, setEndDate] = useState(false)
   useEffect(() => {
     (() => {
-      const now = moment().format('hh:mm')
-      const hourDate = new Date(`1/1/1999 ${now}`)
-      let isOpened = false
-      let isAreOpen = new Date('1/1/1999 ' + schHoSta)
-      let isClose = new Date('1/1/1999 ' + schHoEnd)
+      const now = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+      const hourDate = new Date(`1/1/1999 ${now}`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+      let isClose = new Date('1/1/1999 ' + schHoEnd).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
       setEndDate(hourDate >= isClose)
-      isOpened = isOpened || (hourDate >= isAreOpen && isClose >= hourDate)
-      setOpen(isOpened)
     })()
   }, [schHoEnd, schHoSta, dataSchedules])
 
@@ -94,8 +90,24 @@ const Banner = ({ isMobile }) => {
         const hourDate = new Date(`1/1/1999 ${hour}`)
         return (hour, isOpen(hourDate) ? 'ABIERTO' : 'CERRADO')
       })
+
+
+      function dateObj(d) {
+        if (!d) return null
+        let parts = d.split(/:|\s/)
+        let date = new Date()
+        if (parts.pop().toLowerCase() == 'pm') parts[0] = (+parts[0]) + 12
+        date.setHours(+parts.shift())
+        date.setMinutes(+parts.shift())
+        return date
+      }
+      let now2 = new Date()
+      let startDate = dateObj(schHoSta)
+      let endDate = dateObj(schHoEnd)
+      let open = now2 < endDate && now2 > startDate ? true : false
+      setOpen(open)
     })()
-  }, [dataSchedules, lsc])
+  }, [dataSchedules, lsc, schHoEnd, schHoSta])
   useEffect(() => {
     const date = new Date()
     const currentDay = date.getDay()
@@ -152,7 +164,7 @@ const Banner = ({ isMobile }) => {
             </span>
             <div className='merchant-banner__status-description' data-test-id='merchant-banner-status-description'>
               <h2 className='merchant-banner__status-title'>{`Restaurante  ${Open ? 'Abierto' : 'Cerrado'}`}</h2>
-              {!Open && <h3 className='merchant-banner__status-message'>{`Abre ${endDate ? 'mañana' : '' } a las ${dateTow}`}</h3>}
+              {/* {!Open && <h3 className='merchant-banner__status-message'>{`Abre ${endDate && dateTow ? 'mañana' : '' } a las ${dateTow}`}</h3>} */}
             </div>
           </MerchantBannerWrapperInfo>}
         <ButtonCard onClick={() => { return path && bnImageFileName && HandleDeleteBanner() }}>

@@ -13,6 +13,7 @@ import {
   Title
 } from '../styledStore'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 export const ProductCategories = ({
   data = [],
@@ -44,6 +45,15 @@ export const ProductCategories = ({
                   return (
                     <CardProducts
                       food={food}
+                      image={
+                        <Image
+                          alt={food.ProDescription || 'img'}
+                          blurDataURL='/images/DEFAULTBANNER.png'
+                          layout='fill'
+                          objectFit='cover'
+                          src={food.ProImage}
+                        />
+                      }
                       isVisible={isVisible}
                       key={food.pId}
                       onClick={() => { return handleGetOneProduct(food) }}

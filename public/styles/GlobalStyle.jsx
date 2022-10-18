@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import { BGColor } from '../colors'
+import { BGColor, PColor } from '../colors'
 
 export const GlobalStyle = createGlobalStyle`
     * {
@@ -13,7 +13,75 @@ export const GlobalStyle = createGlobalStyle`
         background-color: ${BGColor};
 
     }
+    input::-webkit-calendar-picker-indicator{
+    display: block;
+    }
 
+input[type="time"]::-webkit-input-placeholder{ 
+    visibility: visible !important;
+}
+input[type=time] {
+  border: none;
+  color: #2a2c2d;
+  font-size: 14px;
+  font-family: helvetica;
+  width: 100px;
+  outline: none;
+}
+
+/* Wrapper around the hour, minute, second, and am/pm fields as well as 
+the up and down buttons and the 'X' button */
+input[type=time]::-webkit-datetime-edit-fields-wrapper {
+  display: flex;
+}
+
+/* The space between the fields - between hour and minute, the minute and 
+second, second and am/pm */
+input[type=time]::-webkit-datetime-edit-text {
+  padding: 19px 4px;
+}
+
+/* Hour */
+input[type=time]::-webkit-datetime-edit-hour-field {
+  background-color: #f2f4f5;
+  border-radius: 15%;
+  padding: 19px 13px;
+  color: #000;
+}
+
+/* Minute */
+input[type=time]::-webkit-datetime-edit-minute-field {
+  background-color: #f2f4f5;
+  border-radius: 15%;
+  color: #000;
+  padding: 19px 13px;
+}
+
+/* AM/PM */
+input[type=time]::-webkit-datetime-edit-ampm-field {
+  background-color:  #f2f4f5;
+  border-radius: 15%;
+  color: #000000;
+  padding: 19px 13px;
+  /* here */
+  display: block;
+  font-size: 20px;
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+   filter: invert(0.5) sepia(2) saturate(5) hue-rotate(175deg);
+   /* color: ${PColor}; */
+   font-size: 30px;
+}
+
+/* 'X' button for resetting/clearing time */
+input[type=time]::-webkit-clear-button {
+  display: none;
+}
+
+/* Up/Down arrows for incrementing/decrementing the value */
+/* input[type=time]::-webkit-inner-spin-button {
+  display: none;
+} */
     body {
         margin: 0;
         transition: .3s;

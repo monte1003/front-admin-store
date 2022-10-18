@@ -1,13 +1,10 @@
-import PropTypes from 'prop-types'
 import React, {
-  Fragment,
   useEffect,
   useState,
   useContext
 } from 'react'
 import { useMutation } from '@apollo/client'
 import { GET_ONE_SCHEDULE_STORE, GET_SCHEDULE_STORE } from './queriesStore'
-import moment from 'moment'
 import { Card } from './styled'
 import styled, { css } from 'styled-components'
 import {
@@ -27,7 +24,6 @@ export const ScheduleTimings = () => {
   const [data, { loading: lsc }] = useSchedules({ schDay: 1 })
   const [showTiming, setShowTiming] = useState(1)
   const SHOW_TIMING = useSetState(false)
-  const SHOW_ALERT = useSetState(false)
   const handleClick = n => {
     setShowTiming(n)
     SHOW_TIMING.setState(!SHOW_TIMING.state)
@@ -38,27 +34,41 @@ export const ScheduleTimings = () => {
     setShowTiming(currentDay)
   }, [])
   const [values, setValues] = useState({})
-  const starTime = moment(values.startTime, 'HH:mm:ss')
-  const endTime = moment(values.endTime, 'HH:mm:ss')
   const handleChange = e => { return setValues({ ...values, [e.target.name]: e.target.value }) }
   const [setStoreSchedule, { loading }] = useMutation(CREATE_STORE_CALENDAR)
+  const { startTime, endTime } = values || {}
+
+  function amPm (time) {
+    return new Date(`1/1/1999 ${time}`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+  }
+  // eslint-disable-next-line
+  const handleValidateDates = () => {
+    const start = startTime
+    const now = new Date()
+    const dateStart = new Date(now)
+    dateStart.setHours(start.split(':')[0])
+    dateStart.setMinutes(start.split(':')[1])
+    const end = endTime
+    const dateEnd = new Date( now)
+    dateEnd.setHours(end.split(':')[0])
+    dateEnd.setMinutes(end.split(':')[1])
+    // validamos que la fecha de ingreso sea menor que la de salida
+    const validate = dateStart < dateEnd
+    return validate
+  }
+  // eslint-disable-next-line
   const handleForm = (e) => {
     e.preventDefault()
-    if (moment(starTime).isAfter(endTime)) {
-      SHOW_ALERT.setState(!SHOW_ALERT.state)
-      return setAlertBox({ message: 'La Hora Final no puede ser menor que la Hora de Inicio.' })
-    } else if (moment(starTime).isSame(endTime)) {
-      SHOW_ALERT.setState(!SHOW_ALERT.state)
-      return setAlertBox({ message: 'La Hora final no puede ser igual que la Hora de inicio.' })
-    }
-    if (!values.endTime || !values.startTime) {
-      return setAlertBox({ message: 'No dejes campos vacios.' })
-    }
-    return setStoreSchedule({
+    const val = handleValidateDates()
+    if (!startTime && !endTime) return setAlertBox({ message: 'Llena todos los campos' })
+    if (!val) return setAlertBox({ message: 'Error, la hora de ingreso debe ser menor que la de salida' })
+    const start = amPm(startTime)
+    const end = amPm(endTime)
+    setStoreSchedule({
       variables: {
         input: {
-          schHoSta: values.startTime,
-          schHoEnd: values.endTime,
+          schHoSta: start,
+          schHoEnd: end,
           schState: 1,
           schDay: showTiming
         }
@@ -80,7 +90,21 @@ export const ScheduleTimings = () => {
       }
     }).then(() => {
       SHOW_TIMING.setState(!SHOW_TIMING.state)
+      setValues({
+        endTime: null,
+        startTime: null
+      })
     })
+    // }
+  }
+  const days = {
+    1: 'Lunes',
+    2: 'Martes',
+    3: 'Miércoles',
+    4: 'Jueves',
+    5: 'Viernes',
+    6: 'Sabado',
+    0: 'Domingo'
   }
   // eslint-disable-next-line
   const PortalContent = (
@@ -97,30 +121,37 @@ export const ScheduleTimings = () => {
       padding='25px'
       show={SHOW_TIMING.state}
       size='small'
-      title={showTiming === 1 ? 'Lunes' : showTiming === 2 ? 'Martes ' : showTiming === 3 ? 'Miércoles' : showTiming === 4 ? 'Jueves ' : showTiming === 5 ? 'Viernes' : showTiming === 6 ? 'Sábado' : showTiming === 7 ? 'Domingo' : null}
+      title={days[showTiming]}
       zIndex='9990'
     >
       <Form onSubmit={(e) => {return handleForm(e)}}>
-        {[1]?.map((x, i) => {return <AModalRow key={i + 10}>
-          <SelectInfo
-            handleChange={handleChange}
-            hide={x.schState}
-            index={i}
-            name={'startTime'}
-            title='Hora Inicial'
+        <label>
+          Hora Inicial
+          <input
+            name='startTime'
+            onChange={handleChange}
+            style={{ width: '100%' }}
+            type='time'
             value={values.schHoSta}
           />
-          <SelectInfo
-            handleChange={handleChange}
-            hide={x.schState}
-            index={i}
-            name={'endTime'}
+        </label>
+        <label>
+        Hora Final
+          <input
+            disabled={!startTime}
+            id='tiempo12'
+            name='endTime'
+            onChange={handleChange}
+            pattern='^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$'
+            style={{ width: '100%' }}
             title='Hora Final'
+            type='time'
+            
             value={values.schHoEnd}
           />
-        </AModalRow>})}
+        </label>
         <RippleButton
-          disabled={loading || lsc}
+          disabled={loading || lsc || !endTime || !startTime}
           type={'submit'}
         >
           {loading ? 'Cargando...' : 'Guardar'}
@@ -128,6 +159,7 @@ export const ScheduleTimings = () => {
       </Form>
     </AwesomeModal>
   )
+
   return (
     <div>
       {PortalContent}
@@ -151,8 +183,7 @@ export const ScheduleTimings = () => {
             onClick={() => {return handleClick(s.schDay)}}
           >
             <Text>
-              {s.schDay === 1 ? 'Lunes' : s.schDay === 2 ? 'Martes ' : s.schDay === 3 ? 'Miercoles' : s.schDay === 4 ? 'Jueves ' : s.schDay === 5 ? 'Viernes' : s.schDay === 6 ? 'Sabado' : s.schDay === 0 ? 'Domingo' : null}
-            </Text>
+              {days[s.schDay]}</Text>
             <Text size='1em'>
               {s.schHoSta} - {s.schHoEnd}
             </Text>
@@ -164,37 +195,6 @@ export const ScheduleTimings = () => {
   )
 
 }
-
-const SelectInfo = ({ title, name, value, handleChange, index, hide }) => {return (
-  <ModalSelectC hide={hide} >
-    <CardSelectLabel>{title} </CardSelectLabel>
-    <Select
-      id={index}
-      name={name}
-      onChange={handleChange}
-      value={value}
-    >
-      <CardSelectOption>Seleccionar</CardSelectOption>
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24].map(x => {return <Fragment key={x}>
-        <CardSelectOption value={`${x}:00`}> {moment(`${x}:00`, 'HH:mm:ss').format('hh:mm A')}</CardSelectOption>
-        {x !== 24 && <CardSelectOption value={`${x}:30`}> {moment(`${x}:30`, 'HH:mm:ss').format('hh:mm A')}</CardSelectOption>}
-      </Fragment>})}
-    </Select>
-  </ModalSelectC>
-)}
-
-SelectInfo.propTypes = {
-  handleChange: PropTypes.any,
-  hide: PropTypes.any,
-  index: PropTypes.any,
-  name: PropTypes.any,
-  title: PropTypes.any,
-  value: PropTypes.any
-}
-ScheduleTimings.propTypes = {
-
-}
-
 export const Text = styled.h3`
     padding: 7px 0;
     font-size: ${({ size }) => {return size || '13px'}};
