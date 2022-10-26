@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useRef, useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import { BGColor, DarkSilver, PColor } from '../../public/colors'
+import { BGColor, DarkSilver } from '../../public/colors'
 
 export const RippleButton = props => {
   const { label, onClick, style, family, standard, active, type, widthButton } = props

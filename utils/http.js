@@ -1,4 +1,4 @@
-const host = process.env.NODE_ENV === 'production' ? 'http://localhost:4000' : 'ws://server-image-food.herokuapp.com/graphql'
+const host = process.env.NODE_ENV === 'production' ? 'http://localhost:4000' : 'http://localhost:4000'
 
 function post(path, body) {
   return fetch(`${host}${path}`, {

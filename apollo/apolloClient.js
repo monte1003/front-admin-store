@@ -56,7 +56,7 @@ const httpLink = createUploadLink({
 })
 // Create Second Link
 const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
-  uri: process.env.NODE_ENV === 'development' ? 'ws://localhost:4000/graphql' : 'ws://server-image-food.herokuapp.com/graphql',
+  uri: process.env.NODE_ENV === 'development' ? 'ws://localhost:4000/graphql' : 'ws://localhost:4000/graphql',
   options: {
     reconnect: true,
     lazy: true,

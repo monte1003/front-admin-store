@@ -13,6 +13,7 @@ import { deCode, getAttributes } from '../../utils/util'
 import ratingStoreStart from '../../models/Store/ratingStoreStart'
 import ScheduleStore from '../../models/Store/scheduleStore'
 import { Op } from 'sequelize'
+import StatusPedidosModel from '../../models/Store/statusPedidoFinal'
 
 // eslint-disable-next-line
 export const newRegisterStore = async (_, { input }, ctx) => {
@@ -103,29 +104,25 @@ const registerSalesStore = async (root, { input, totalProductsPrice, pickUp, id,
         idStore: deCode(context.restaurant)
       })
     }
+    // status sales success
+    await StatusPedidosModel.create({
+      id: deCode(id),
+      locationUser: null,
+      idStore: idStore ? deCode(idStore) : deCode(context.restaurant),
+      pSState: 4,
+      pCodeRef: pCodeRef,
+      valueDelivery: valueDelivery,
+      change: change,
+      payMethodPState: payMethodPState,
+      pickUp,
+      totalProductsPrice
+    })
     return {
-      success: true,
-      message: 'Venta exitosa'
+      Response: {
+        success: true,
+        message: 'Venta exitosa'
+      }
     }
-    // // status sales success
-    // await StatusPedidosModel.create({
-    //   id: deCode(id),
-    //   locationUser: null,
-    //   idStore: idStore ? deCode(idStore) : deCode(context.restaurant),
-    //   pSState: 4,
-    //   pCodeRef: pCodeRef,
-    //   valueDelivery: valueDelivery,
-    //   change: change,
-    //   payMethodPState: payMethodPState,
-    //   pickUp,
-    //   totalProductsPrice
-    // })
-    // return {
-    //   Response: {
-    //     success: true,
-    //     message: 'Venta exitosa'
-    //   }
-    // }
   } catch (e) {
     const error = new Error('Lo sentimos, ha ocurrido un error interno')
     return error

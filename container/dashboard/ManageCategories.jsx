@@ -1,22 +1,29 @@
+import {
+  useLazyQuery, useMutation,
+  useQuery
+} from '@apollo/client'
+import { CardProducts } from 'components/CartProduct'
+import { Table } from 'components/Table'
+import { Section } from 'components/Table/styled'
+import { Context } from 'context/Context'
 import PropTypes from 'prop-types'
-import React, {
+import {
   useContext,
   useEffect,
   useReducer,
   useState
 } from 'react'
-import {
-  useMutation,
-  useQuery,
-  useLazyQuery
-} from '@apollo/client'
-import { GET_ALL_PRODUCT_STORE, REGISTER_CAT_OF_PRODUCTS } from './queriesStore'
-import { CtnItems, FlexContent } from './styled'
-import { useFormTools } from '../../components/BaseForm'
-import InputHooks from '../../components/InputHooks/InputHooks'
+import styled from 'styled-components'
+import { Loading } from '~/components/Loading'
 import { AwesomeModal } from '../../components/AwesomeModal'
+import { useFormTools } from '../../components/BaseForm'
 import { useSetState } from '../../components/hooks/useState'
-import { ButtonAction } from './styledStore'
+import InputHooks from '../../components/InputHooks/InputHooks'
+import { RippleButton } from '../../components/Ripple'
+import { SkeletonP } from '../../components/Update/Products/food'
+import { Item } from '../../components/Update/Products/styled'
+import { PColor, WColor } from '../../public/colors'
+import { IconBuy, IconDelete, IconEdit, IconPause } from '../../public/icons'
 import {
   DELETE_ONE_CAT_PRODUCTS,
   DELETE_ONE_CAT_PRODUCTS_FINAL,
@@ -24,17 +31,9 @@ import {
   GET_ULTIMATE_CATEGORY_PRODUCTS,
   UPDATE_CAT_IN_PRODUCT
 } from './queries'
-import { IconBuy, IconDelete, IconEdit, IconPause } from '../../public/icons'
-import { RippleButton } from '../../components/Ripple'
-import { PColor, WColor } from '../../public/colors'
-import { Item } from '../../components/Update/Products/styled'
-import { SkeletonP } from '../../components/Update/Products/food'
-import { Table } from 'components/Table'
-import styled from 'styled-components'
-import { Section } from 'components/Table/styled'
-import { CardProducts } from 'components/CartProduct'
-import { Context } from 'context/Context'
-import { Loading } from '~/components/Loading'
+import { GET_ALL_PRODUCT_STORE, REGISTER_CAT_OF_PRODUCTS } from './queriesStore'
+import { CtnItems, FlexContent } from './styled'
+import { ButtonAction } from './styledStore'
 
 export const ManageCategories = ({ SHOW_MODAL_UPDATE_PRODUCTS }) => {
   // STATES
@@ -252,7 +251,7 @@ export const ManageCategories = ({ SHOW_MODAL_UPDATE_PRODUCTS }) => {
         </form>
         <ButtonAction onClick={() => { return SHOW_CATEGORIES.setState(!SHOW_CATEGORIES.state) }}> Registrar  Categorías de productos </ButtonAction>
       </AwesomeModal>
-      <ButtonAction onClick={() => { return SHOW_CATEGORIES.setState(!SHOW_CATEGORIES.state) }}> Adicionar Categorías</ButtonAction>
+      <ButtonAction onClick={() => { return SHOW_CATEGORIES.setState(!SHOW_CATEGORIES.state) }}> Adicionarasdsasd Categorías</ButtonAction>
       <Table
         data={datCat?.catProductsAll}
         labelBtn='Product'

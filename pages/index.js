@@ -4,7 +4,6 @@ import { cookie } from '~/utils'
 
 const HOME = dynamic(
   import('../container/Home'), {
-    loading: () => {return (<p>CARGANDO</p>)},
     ssr: false
   }
 )

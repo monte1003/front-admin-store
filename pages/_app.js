@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 import { ApolloProvider } from '@apollo/client'
+import ErrorBoundary from 'components/Error'
 import Noscript from 'components/Noscript'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -92,11 +91,13 @@ export default function App({ Component, pageProps }) {
         <GlobalStyle />
         <Noscript>
         </Noscript>
-        {getLayout(<Auth>
-          {/* <ErrorBoundary> */}
-          <Component {...{ ...pageProps, isMobile: false }} />
-          {/* </ErrorBoundary> */}
-        </Auth>)}
+        {getLayout(
+          <Auth>
+            <ErrorBoundary>
+              <Component {...{ ...pageProps, isMobile: false }} />
+            </ErrorBoundary>
+          </Auth>
+        )}
       </ApolloProvider >
     </Context>
   )

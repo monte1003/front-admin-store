@@ -47,6 +47,7 @@ export const AwesomeModal = ({
   const onShowQuestion = () => { return setSModal(!modal) }
   // eslint-disable-next-line consistent-return
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (question && backdrop === 'static' && state === true && show === true) {
       window.addEventListener('keyup', e => { return e.code === 'Escape' && setSModal(true) })

@@ -1,7 +1,7 @@
 import { getCoordinates, useFakeSvgDrag } from 'hooks/useMouseposition'
 import { EmptyLayout } from 'pages/_app'
 import { BGColor } from 'public/colors'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import styled from 'styled-components'
 const DragNDrop = () => {
   // https://codesandbox.io/s/k355wo7jk3?file=/index.js
@@ -11,6 +11,10 @@ const DragNDrop = () => {
     {
       title: 'group 1',
       items: ['1', '2', '3']
+    },
+    {
+      title: 'group 2',
+      items: ['4', '24', '33']
     }
   ]
   const [list, setList] = useState(data)

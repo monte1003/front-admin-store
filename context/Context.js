@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
-import React, {
+import {
   createContext,
   useCallback,
   useContext,
@@ -9,7 +9,9 @@ import React, {
   useReducer,
   useState
 } from 'react'
+
 export const Context = createContext()
+
 const Provider = ({ children }) => {
   // STATE
   const router = useRouter()
@@ -99,7 +101,30 @@ const Provider = ({ children }) => {
       setIsSession(isSession)
     }
   }, [isSession])
+  const [messagesToast, setMessagesToast] = useState([])
 
+  const sendNotification = ({
+    title,
+    description,
+    backgroundColor
+  }) => {
+    if (messagesToast.length >= 5) {
+      const deleteToast = (id) => {
+        const listItemIndex = messagesToast.findIndex((e) => {return e.id === id})
+        messagesToast.splice(listItemIndex, 1)
+        setMessagesToast([...messagesToast])
+      }
+      deleteToast(messagesToast[0].id)
+    }
+    const id = Math.floor(Math.random() * 101 + 1)
+    const newMessage = {
+      id,
+      title,
+      backgroundColor,
+      description
+    }
+    setMessagesToast([...messagesToast, newMessage ])
+  }
   const authData = useMemo(
     () => {
       return {
@@ -157,6 +182,7 @@ const Provider = ({ children }) => {
     () => {
       return {
         error,
+        messagesToast,
         setStatus,
         hidden,
         setSelectedStore,
@@ -184,6 +210,7 @@ const Provider = ({ children }) => {
         // State login
         authData,
         setSessionActive,
+        sendNotification,
         // UseCompany
         useCompany,
         company,
@@ -195,7 +222,7 @@ const Provider = ({ children }) => {
         setAlertBox: err => { return setError(err) }
       }
     },
-    [error, hidden, status, setSalesOpen, salesOpen, openSchedule, selectedStore, setStoreChatActive, DataCompany, setCompanyLink, countPedido, isCompany, handleMenu, menu, collapsed, isSession, authData, setSessionActive, useCompany, company, alert, state_product_card]
+    [error, hidden, status, setSalesOpen,messagesToast, sendNotification, salesOpen, openSchedule, selectedStore, setStoreChatActive, DataCompany, setCompanyLink, countPedido, isCompany, handleMenu, menu, collapsed, isSession, authData, setSessionActive, useCompany, company, alert, state_product_card]
   )
 
   return <Context.Provider value={value}>
@@ -205,3 +232,4 @@ const Provider = ({ children }) => {
 const useAuth = () => { return useContext(Context) }
 
 export { Provider as default, useAuth }
+

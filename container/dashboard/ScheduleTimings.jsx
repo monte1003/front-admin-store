@@ -9,6 +9,7 @@ import { Card } from './styled'
 import styled, { css } from 'styled-components'
 import {
   BGColor,
+  GraniteGray,
   PVColor,
   TFSColor
 } from '../../public/colors'
@@ -196,21 +197,21 @@ export const ScheduleTimings = () => {
 
 }
 export const Text = styled.h3`
-    padding: 7px 0;
-    font-size: ${({ size }) => {return size || '13px'}};
-    color: ${TFSColor};
-    font-family:  PFont-Light;
-    font-weight: 400;
+  color: ${TFSColor};
+  font-family:  PFont-Light;
+  font-size: ${({ size }) => {return size || '13px'}};
+  font-weight: 400;
+  padding: 7px 0;
 `
 export const Select = styled.select`
-  font-size: 1rem;
+  background-color: ${BGColor};
   border-radius: 4px;
-  border: 1px solid #dcdcdc;
-  padding: 13px 20px;
+  border: 1px solid ${GraniteGray};
+  color: ${GraniteGray};
+  font-size: 1rem;
   height: 48px;
-  color: #3e3e3e;
+  padding: 13px 20px;
   width: 100%;
-  background-color: #fff;
 `
 export const CardSelectLabel = styled.label`
     margin: 20px 0px 12px 0px;
@@ -223,18 +224,14 @@ export const Form = styled.form`
     justify-content: space-between;
 `
 const ScheduleHeader = styled.div`
-    /* display:flex; */
     padding: 10px 0;
-    border: 1px solid #ccc; 
     display: grid;
-    grid-template-columns: 33.33% repeat(auto-fill, 33.33%);
-    flex-wrap:wrap;
     grid-template-columns: repeat( auto-fit,minmax(150px,1fr) );
 `
 export const CardSelect = styled.select`
     font-size: 16px;
     padding: 7px 17px;
-    border: 1px solid ${({ theme }) => {return theme.PLVColor}}; 
+    border: 1px solid ${({ theme }) => {return theme.PLVColor}};
     background-color: ${({ theme }) => {return theme.BGAColor}};
     width: 200px;
 `
@@ -251,37 +248,24 @@ const ScheduleHeaderNav = styled.button`
     font-size: 11px;
     background-color: ${({ current }) => {return current ? PVColor : 'transparent'}};
     color: ${({ current }) => {return current ? BGColor : TFSColor}};
-    /* color: ${TFSColor}; */
     text-align: center;
     transition: 0.3s;
     cursor: pointer;
-    
     ${({ current }) => {return !current && css`
-    :hover{
+    :hover {
         background-color:${({ theme }) => {return theme.BGColor}};
         color:${({ theme }) => {return theme.SFColor}}; 
-        
     }`} }
 `
 export const AModalRow = styled.div`
     padding: 10px;
-    /* display: grid; */
-    /* grid-template-columns: repeat( auto-fit, minmax(50%, 1fr) ); */
-    /* display: flex; */
-    /* display: flex;
-    justify-content: space-between;
-    align-items: center;
-    @media only screen and (max-width: 860px){
-        width:100%;
-        display:block;
-    } */
 `
 export const AModalBtnDelete = styled.div`
     display:flex;
     justify-content: center;
     align-items: center;
     height: 38px;
-    margin-top: 50px;   
+    margin-top: 50px;
     width: 68px;
     background-color: ${({ theme }) => {return theme.EColor}};
     color: ${({ theme }) => {return theme.BGAColor}};
@@ -296,10 +280,9 @@ export const AModalBtnDelete = styled.div`
     }
 `
 export const CardSelectOption = styled.option`
-     :checked{
-            background-color:${({ theme }) => {return theme.PLVColor}}
-        }
-    
+  :checked {
+    background-color:${({ theme }) => {return theme.PLVColor}}
+  }
 `
 export const CardSelectC = styled.div`
     display:flex;
@@ -313,7 +296,6 @@ export const ModalSelectC = styled(CardSelectC)`
     @media only screen and (max-width: 860px){
         width:100%;
     }
-    
 `
 
 // ----- SELECT DEL MODAL

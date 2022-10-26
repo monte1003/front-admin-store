@@ -1,4 +1,3 @@
-import React, { useContext, useEffect } from 'react'
 import { gql, useSubscription } from '@apollo/client'
 import { AwesomeModal } from 'components/AwesomeModal'
 import { BtnClose } from 'components/AwesomeModal/styled'
@@ -7,8 +6,10 @@ import { ScheduleTimings } from 'container/dashboard/ScheduleTimings'
 import { LateralModal } from 'container/dashboard/styled'
 import GenerateSales from 'container/Sales'
 import { useRouter } from 'next/router'
+import { Toast } from 'pkg-components'
 import PropTypes from 'prop-types'
 import { IconCancel } from 'public/icons'
+import { useContext, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { Context } from '../../context/Context'
 import { AlertBox } from '../AlertBox'
@@ -23,7 +24,9 @@ export const Layout = ({ children, watch, settings }) => {
     setAlertBox,
     openSchedule,
     setOpenSchedule,
+    sendNotification,
     salesOpen,
+    messagesToast,
     setSalesOpen
   } = useContext(Context)
   const { latitude, longitude } = usePosition(watch, settings)
@@ -53,6 +56,7 @@ export const Layout = ({ children, watch, settings }) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataWS])
+
   return (
     <>
       <AlertBox err={error} />
@@ -60,6 +64,7 @@ export const Layout = ({ children, watch, settings }) => {
         <Header />
         <Aside />
         <div style={{ gridArea: 'main', overflowY: 'auto' }}>
+          <button onClick={() => {return sendNotification({ title: Math.floor(Math.random() * 101 + 1), description: 'Esta es la descr' })}}>WOW</button>
           {children}
           <AwesomeModal
             backdrop='static'
@@ -81,6 +86,12 @@ export const Layout = ({ children, watch, settings }) => {
           >
             {salesOpen && <GenerateSales />}
           </AwesomeModal>
+          <Toast
+            autoDelete={'true'}
+            autoDeleteTime={7000}
+            position={'bottom-right'}
+            toastList={messagesToast}
+          />
         </div>
         <Footer />
         <div style={{ gridArea: 'right' }}>

@@ -1,7 +1,20 @@
 /* eslint-disable no-unused-expressions */
-import React, { useCallback, useContext, useState } from 'react'
-import { useApolloClient } from '@apollo/client'
+import {
+  gql,
+  useApolloClient,
+  useSubscription
+} from '@apollo/client'
+import { Context } from 'context/Context'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useMobile, useStore } from 'npm-pkg-hook'
 import PropTypes from 'prop-types'
+import {
+  useCallback,
+  useContext,
+  useState
+} from 'react'
+import { Overline } from '~/components/common/Reusable'
 import { BGColor, PColor } from '../../../public/colors'
 import {
   IconHome,
@@ -13,12 +26,13 @@ import {
   IconWallet
 } from '../../../public/icons'
 import ActiveLink from '../../common/Link'
-import { 
+import { ButtonOption } from '../styled'
+import {
   Anchor,
   AnchorRouter,
-  ButtonGlobalCreate, 
+  ButtonGlobalCreate,
   Card,
-  ContainerAside, 
+  ContainerAside,
   ContentAction,
   DynamicNav,
   Info,
@@ -26,21 +40,12 @@ import {
   OptionButton,
   Router
 } from './styled'
-import { useRouter } from 'next/router'
-import { ButtonOption } from '../styled'
-import { useStore } from 'components/hooks/useStore'
-import { Context } from 'context/Context'
-import { gql } from '@apollo/client'
-import Link from 'next/link'
-import { Skeleton } from 'components/Skeleton'
-import { useSubscription } from '@apollo/client'
-import { useMobile } from 'npm-pkg-hook'
-import { Overline } from '~/components/common/Reusable'
 
 const Aside = () => {
   const { isMobile } = useMobile()
   const { client } = useApolloClient()
   const location = useRouter()
+  const pathname = location.pathname === '/dashboard/[...name]'
   const {
     openSchedule,
     setOpenSchedule,
@@ -71,7 +76,11 @@ const Aside = () => {
 
   }, [client, location])
   const [dataStore, { loading }] = useStore()
-  const { storeName, idStore, uState } = dataStore || {}
+  const {
+    storeName,
+    idStore,
+    uState
+  } = dataStore || {}
   const GET_STATE_ORDER = gql`
     subscription {
       numberIncremented
@@ -86,7 +95,8 @@ const Aside = () => {
 
   return (
     <>
-      {isMobile && <Overline
+      {isMobile &&
+      <Overline
         bgColor='rgba(0,0,0,.4)'
         onClick={() => {return setCollapsed(!collapsed)}}
         show={collapsed}
@@ -142,17 +152,22 @@ const Aside = () => {
                 </ActiveLink>
               </Info>
             </LeftNav>
-            {loading ? <Skeleton height={50} margin={'10px 0'} /> : <Link href={`/dashboard/${storeName?.replace(/\s/g, '-').toLowerCase()}/${idStore}`}>
+            {(loading) ? null : (!pathname && <Link href={`/dashboard/${storeName?.replace(/\s/g, '-').toLowerCase()}/${idStore}`}>
               <a>
                 <h1 className='title_store'>{storeName}</h1>
                 {dataWS?.numberIncremented}
 
               </a>
-            </Link>}
-            {uState == 1 && <div className='program_state'>
+            </Link>)}
+            {pathname &&
+                <h1 className='title_store'>{storeName}</h1>
+            }
+            {uState == 1 &&
+            <div className='program_state'>
               <IconLogo color={PColor} size='20px' />
               <h3 className='sub_title_store'>En pausa programada</h3>
-            </div>}
+            </div>
+            }
           </Info>
           <Router>
             <ActiveLink activeClassName='active' href='/dashboard'>
