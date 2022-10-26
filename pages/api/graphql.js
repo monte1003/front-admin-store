@@ -12,8 +12,6 @@ import { getUserFromToken } from './auth'
 import { getIronSession } from 'iron-session'
 import { requestDidStartPlugin } from './lib/hooks/apollo-plugin'
 import { parseCookies } from './lib/utils'
-// import { withIronSessionApiRoute } from 'iron-session/next'
-// import Cors from './lib/hooks/micro-cors'
 
 const corsMultipleAllowOrigin = (options = {}) => {
   const { origin: optionsOrigin } = options || {}

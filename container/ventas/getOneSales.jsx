@@ -12,7 +12,7 @@ import {
   GarnishChoicesHeader
 } from './styled'
 import Image from 'next/image'
-import { APColor, PLColor } from 'public/colors'
+import { APColor, GraniteGray, PLColor } from 'public/colors'
 import { numberFormat } from '../../utils'
 import { useStore } from 'npm-pkg-hook'
 import Link from 'next/link'
@@ -58,7 +58,7 @@ export const GetOneSales = ({ setOpen, open, data }) => {
                     <Text size='1.5em'>Cantidad: {p.getAllShoppingCard.cantProducts} </Text>
                   </HeadSticky>
                   <Text
-                    color='#676464'
+                    color={GraniteGray}
                     margin='20px 0'
                     size='14px'
                   >{p?.getAllShoppingCard?.productFood?.ProDescription}</Text>
@@ -99,7 +99,6 @@ export const GetOneSales = ({ setOpen, open, data }) => {
                       <p className='garnish-choices__title'>Adicionales</p>
                       <p className='garnish-choices__title-desc'>Escoge hasta opciones.</p>
                     </div>
-                    {/* <IconMiniCheck size={'15px'} color={'#009b3a'} /> */}
                   </GarnishChoicesHeader>}
                   {![1, 2, 4]?.map(itemOptional => {return (
                     <div key={itemOptional}>
@@ -108,7 +107,6 @@ export const GetOneSales = ({ setOpen, open, data }) => {
                           <p className='garnish-choices__title'>{itemOptional?.OptionalProName}</p>
                           <p className='garnish-choices__title-desc'>Escoge hasta {itemOptional?.numbersOptionalOnly} opciones.</p>
                         </div>
-                        {/* <IconMiniCheck size={'15px'} color={'#009b3a'} /> */}
                       </GarnishChoicesHeader>
                       {itemOptional?.ExtProductFoodsSubOptionalAll?.map(x => {return (
                         <CardsComponent key={x.opSubExPid}>

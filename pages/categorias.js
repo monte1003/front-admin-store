@@ -1,2 +1,2 @@
-import { Categories } from '~/container/Categories/index.jsx'
+import { Categories } from '~/container/Categories'
 export default function HomeView() { return (<Categories />) }

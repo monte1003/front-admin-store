@@ -1,12 +1,17 @@
 import { useQuery } from '@apollo/client'
-import { GET_ULTIMATE_CATEGORY_PRODUCTS } from 'container/dashboard/queries'
-import { GET_MIN_PEDIDO } from 'container/dashboard/queriesStore'
-import { IconSales } from 'public/icons'
-import { RippleButton } from 'components/Ripple'
 import { CardProducts } from 'components/CartProduct'
 import { useCheckboxState } from 'components/hooks/useCheckbox'
-import { Skeleton } from 'components/Skeleton'
 import { LoadingBabel } from 'components/Loading/LoadingBabel'
+import { RippleButton } from 'components/Ripple'
+import { Skeleton } from 'components/Skeleton'
+import { GET_ULTIMATE_CATEGORY_PRODUCTS } from 'container/dashboard/queries'
+import { GET_MIN_PEDIDO } from 'container/dashboard/queriesStore'
+import { useGetClients, useSales } from 'npm-pkg-hook'
+import { IconSales } from 'public/icons'
+import { useContext } from 'react'
+import { Context } from '~/context/Context'
+import { BoxProductSales } from './BoxProductSales'
+import { FormFilterSales } from './formFilterSales'
 import { ModalSales } from './ModalSales'
 import { SwiperSliderCategory } from './SlideCategories'
 import {
@@ -15,45 +20,47 @@ import {
   ScrollbarProduct,
   Wrapper
 } from './styled'
-import { FormFilterSales } from './formFilterSales'
-import { BoxProductSales } from './BoxProductSales'
-import { useSales, useGetClients } from 'npm-pkg-hook'
 import { SubItems } from './SubItems'
 
 const GenerateSales = () => {
   // STATES
+  const { sendNotification, setAlertBox } = useContext(Context)
   const {
-    handleChangeFilter,
-    handleChangeFilterProduct,
-    search,
-    finalFilter,
-    loading,
-    max,
-    valuesDates,
     data,
-    onChangeInput,
-    dispatch,
-    productsFood,
-    fetchMore,
-    handleProduct,
-    inputValue,
-    print,
-    product,
-    setShowMore,
-    setDelivery,
-    handleChange,
-    delivery,
-    values,
-    handleSubmit,
-    showMore,
-    setModalItem,
-    modalItem,
     dataExtra,
     dataOptional,
     dataProduct,
+    delivery,
+    dispatch,
+    fetchMore,
+    finalFilter,
+    handleChange,
+    handleChangeFilter,
+    handleChangeFilterProduct,
+    handleProduct,
+    handleSubmit,
+    inputValue,
+    loading,
+    max,
+    modalItem,
+    onChangeInput,
+    print,
+    product,
+    productsFood,
+    search,
+    setDelivery,
+    setModalItem,
+    setShowMore,
+    setPrint,
+    showMore,
     totalProductPrice,
-    setPrint
-  } = useSales()
+    values,
+    valuesDates
+  } = useSales({
+    disabled: false,
+    sendNotification,
+    setAlertBox
+  })
   const [dataClientes, { loading: loadingClients }] = useGetClients()
   // QUERIES
   const { data: datCat } = useQuery(GET_ULTIMATE_CATEGORY_PRODUCTS)

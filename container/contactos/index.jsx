@@ -1,5 +1,5 @@
 import { AwesomeModal } from 'components/AwesomeModal'
-import { useFormTools } from 'components/BaseForm'
+import { useFormTools } from 'npm-pkg-hook'
 import { useSetState } from 'components/hooks/useState'
 import InputHooks from 'components/InputHooks/InputHooks'
 import NewSelect from 'components/NewSelectHooks/NewSelect'
@@ -19,8 +19,8 @@ export const Contact = () => {
   const HandleGetOne = () => { return }
   const OPEN_MODAL = useSetState()
   const [createContacts] = useMutation(CREATE_CONTACTS)
+  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm }] = useFormTools()
   const { data } = useQuery(GET_ALL_CONTACTS)
-  const [handleChange, handleSubmit, { dataForm, errorForm }] = useFormTools()
   const handleForm = (e) =>
   {return handleSubmit({
     event: e,

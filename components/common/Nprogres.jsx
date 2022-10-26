@@ -30,7 +30,7 @@ export const ProgressBar = styled.div`
     animation-duration: 1s;
     animation-fill-mode: forwards;
     animation-delay: 1s;
-    
+    z-index: 9999;
     ` : css`
     opacity: 0% !important;
     `}}

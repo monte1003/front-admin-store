@@ -24,7 +24,7 @@ export const useOnScreen = (threshold = 0.1) => {
         if (ref && observer) observer.unobserve(ref)
       }
     },
-    [ref, threshold]
+    []
   )
 
   return [setRef, isVisible]

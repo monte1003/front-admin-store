@@ -1,8 +1,9 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import {
-  BGColor,
-  PColor,
-  BColor
+    BColor,
+    BGColor,
+    NorthTexasGreen,
+    PColor
 } from '../../../public/colors'
 
 export const Div = styled.div`
@@ -35,12 +36,19 @@ export const GarnishChoicesHeader = styled.div`
     border-bottom: 1px solid #ccc;
     z-index: 99;
     margin-bottom: 80px;
+    .content {
+        display: flex;
+        user-select: none;
+    }
     .garnish-choices__title { 
         margin: 0;
         font-size: 1rem;
         line-height: 1.25em;
         font-weight: 500;
         color: #3f3e3e;
+        overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     }
     .garnish-choices__title-desc {
         font-weight: 100;
@@ -74,10 +82,9 @@ export const GarnishChoicesHeader = styled.div`
     padding: 6px 6px 4px;
      }
      .garnish-choices {
-            justify-content: space-around;
-            display: flex;
-            
-
+        justify-content: flex-end;
+        display: flex;
+        align-items: center;
      }
 `
 export const CardsComponent = styled.div`
@@ -86,7 +93,7 @@ export const CardsComponent = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 16px 20px;
-    .title_card{
+    .title_card {
         word-break: break-word;
         font-family: PFont-Light;
         color: ${BColor};
@@ -95,7 +102,7 @@ export const CardsComponent = styled.div`
         line-height: 1.25em;
         font-weight: 500;
     }
-    .price {
+    .price-value {
         word-break: break-word;
         font-family: PFont-Light;
         color: ${PColor};
@@ -103,6 +110,9 @@ export const CardsComponent = styled.div`
         font-size: 1rem;
         line-height: 1.25em;
         font-weight: 600;
+    }
+    .price-free {
+        color: ${NorthTexasGreen};
     }
 `
 export const ContentModal = styled.form`
@@ -129,6 +139,16 @@ export const ContentModal = styled.form`
 
         }
 `
+export const BodyDnd = styled.div`
+.first-column {
+    display: grid;
+    grid-template-columns: 24% repeat(auto-fill,24%) 24%;
+    width: 100%;
+    grid-gap: 19px 12px;
+    overflow: auto;
+    height: 100%;
+}
+`
 export const ContentLinesItems = styled.div`
     display: flex;
     align-items: center;
@@ -145,72 +165,7 @@ export const ContentCheckbox = styled.div`
     position: relative;
     margin-right: 2px;
 `
-export const Input = styled.input`
-    width: 100%;
-    box-shadow: 0 0 0 1px rgb(0 0 0 / 25%);
-    outline: none;
-    border: none;
-    ${props => { return props.margin && css`margin: ${props.margin};` }}
-    ${props => { return props.padding && css`padding: ${props.padding};` }}
-    ${props => { return props.borderRadius && css`border-radius: ${props.borderRadius};` }}
-    ${props => {
-    return props.card && css`
-    padding: 25px;
-    border: 2px solid ${PColor};
-    `}}
-    ${props => {
-    return props.inputText && css`
-        font-weight: 500;
-        margin: 0.625rem 0 0;
-        overflow: visible;
-        border: none;
-        margin: 0 0 0 5px;
-        color: ${({ color }) => { return color }};
-        outline: none;
-        /* padding: 5px; */
-        border: 2px solid transparent;
-    `}}
-    ${props => {
-    return props.inputText && css`
-        overflow: visible;
-        border: none;
-        margin: 0 0 0 5px;
-        color: ${({ color }) => { return color }};
-        outline: none;
-        padding: 5px;
-        border: 2px solid transparent;
-    `}}
-    ${props => {
-    return props.checkbox && css`
-        cursor: inherit;
-        zoom: inherit;
-        margin: 0;
-        z-index: 2;
-    `}}
-    &&::after {
-        border-width: 6px;
-        visibility: visible;
-        border: 1 solid #ea1d2c;
-        border: 1 solid #ea1d2c;
-        background: transparent;
-        z-index: 1;
-        transition: .15s cubic-bezier(.25,.46,.45,.94);
-        visibility: hidden;
-        background: transparent;
-        z-index: 1;
-        content: "";
-        width: 24px;
-        height: 24px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        background: transparent;
-        -webkit-transform: translate(-50%,-50%);
-        -moz-transform: translate(-50%,-50%);
-        transform: translate(-50%,-50%);
-        border-radius: 50%;
-    }
-`
+
 export const Container = styled.div`
     padding: 20px;
     overflow: auto;
@@ -224,7 +179,7 @@ export const Action = styled.div`
     background: #fff;
     border-top: 2px solid #f5f0eb;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 20px;
     height: 80px;
     width: 100%;

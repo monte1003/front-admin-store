@@ -80,6 +80,7 @@ type Store {
     cId: ID
     id: ID
     dId: ID
+    open: Int
     ctId: ID
     catStore: ID
     neighborhoodStore: String

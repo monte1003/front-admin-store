@@ -95,9 +95,7 @@ function useObserveBottomSentinels(
         const bottomSentinelRect = entry.boundingClientRect
         const rootBounds = entry.rootBounds
         const intersectionRatio = entry.intersectionRatio
-
         let type = undefined
-
         if (
           bottomSentinelRect.top >= rootBounds.top &&
           bottomSentinelRect.bottom <= rootBounds.bottom &&
@@ -138,3 +136,4 @@ export {
   useObserveTopSentinels,
   useObserveBottomSentinels
 }
+

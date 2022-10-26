@@ -9,7 +9,7 @@ export const BannerDashboard = () => {
   const { data } = useQuery(GET_BANNER_PROMO_DASHBOARD, {
     variables: {
       min: 3,
-      max: 3,
+      max: 3
     }
   })
   return (
@@ -18,12 +18,12 @@ export const BannerDashboard = () => {
         <div className='wrapper' key={i + 1}>
           <Image
             alt={'Picture of the author'}
-            blurDataURL='/app/images/DEFAULTBANNER.png'
+            blurDataURL='/images/DEFAULTBANNER.png'
             height={100}
             layout='fixed'
             objectFit='cover'
             placeholder='blur'
-            src={'/app/images/bannerdashboard.jpg'}
+            src={'/images/bannerdashboard.jpg'}
             width={1000}
           />
         </div>

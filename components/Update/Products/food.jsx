@@ -1,14 +1,31 @@
-import PropTypes from 'prop-types'
-import { numberFormat } from '../../../utils'
-import { Skeleton } from '../../Skeleton/SkeletonCard'
-import { PColor, PVColor, TFSColor } from '../../../public/colors'
-import { Container, Card, CardProduct, Img, ContentImg, Title, Text, ContentInfo, ButtonCard, ActionName, Grid } from './styled'
-import { useSetState } from '../../hooks/useState'
-import { AwesomeModal } from '../../AwesomeModal'
-import { IconDelete, IconDollar, IconEdit, IconLove } from 'public/icons'
-import FormProduct from './Form'
 import { CardProducts } from 'components/CartProduct'
+import PropTypes from 'prop-types'
+import {
+  IconDelete,
+  IconDollar,
+  IconEdit,
+  IconLove
+} from 'public/icons'
+import { PColor, PVColor, TFSColor } from '../../../public/colors'
+import { numberFormat } from '../../../utils'
+import { AwesomeModal } from '../../AwesomeModal'
+import { useSetState } from '../../hooks/useState'
+import { Skeleton } from '../../Skeleton/SkeletonCard'
+import FormProduct from './Form'
 import { ListProducts } from './ListProducts'
+import {
+  ActionName,
+  ButtonCard,
+  Card,
+  CardProduct,
+  Container,
+  ContentImg,
+  ContentInfo,
+  Grid,
+  Img,
+  Text,
+  Title
+} from './styled'
 
 export const FoodComponent = ({
   alt,

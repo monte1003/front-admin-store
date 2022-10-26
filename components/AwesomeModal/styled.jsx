@@ -117,6 +117,9 @@ export const Modal = styled.div`
     border-radius: ${({ borderRadius }) => { return borderRadius }};
     border: 1px solid rgba(0,0,0,.2);
     z-index: 999;
+    height: ${({ height }) => { return height || 'auto' }};
+    min-height: ${({ height }) => { return height || 'auto' }};
+    min-height: ${({ height }) => { return height || 'auto' }};
     ${({ state }) => { return state ? css`animation: ${fadeInTop} .2s forwards;` : css`animation: ${fadeOutTop} .2s forwards;` }}
 `
 

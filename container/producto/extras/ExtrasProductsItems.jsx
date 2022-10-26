@@ -1,3 +1,6 @@
+import { NorthTexasGreen } from '@/public/colors'
+import { useMutation } from '@apollo/client'
+import Column from 'components/common/Atoms/Column'
 import {
   DELETE_CAT_EXTRA_PRODUCTS,
   DELETE_CAT_EXTRA_SUB_OPTIONAL_PRODUCTS,
@@ -7,7 +10,7 @@ import {
 import { GET_EXTRAS_PRODUCT_FOOD_OPTIONAL, UPDATE_MULTI_EXTRAS_PRODUCT_FOOD } from 'container/update/Products/queries'
 import { Context } from 'context/Context'
 import { useSetState } from 'hooks/useState'
-import { useMutation } from '@apollo/client'
+import { useFormTools } from 'npm-pkg-hook'
 import { IconMiniCheck } from 'public/icons'
 import {
   useCallback,
@@ -16,12 +19,10 @@ import {
   useState
 } from 'react'
 import { updateCache } from 'utils'
-import Column from 'components/common/Atoms/Column'
-import { useFormTools } from 'npm-pkg-hook'
-import Items from './Items'
-import { Optional } from './Optional'
 import { CreateExtra } from './CreateExtra'
 import { EditExtra } from './EditExtra'
+import Items from './Items'
+import { Optional } from './Optional'
 import { GarnishChoicesHeader } from './styled'
 
 export const ExtrasProductsItems = ({
@@ -66,7 +67,8 @@ export const ExtrasProductsItems = ({
   }, [initialLineItems])
 
   //  QUERIES
-  const [updateMultipleExtProductFoods] = useMutation(UPDATE_MULTI_EXTRAS_PRODUCT_FOOD, {
+  const [updateMultipleExtProductFoods, { loading }] = useMutation(UPDATE_MULTI_EXTRAS_PRODUCT_FOOD, {
+
     onCompleted: () => {
       CleanLines()
     }
@@ -77,10 +79,20 @@ export const ExtrasProductsItems = ({
   const [DeleteExtProductFoodsOptional] = useMutation(DELETE_CAT_EXTRA_PRODUCTS)
   const [DeleteExtFoodSubsOptional] = useMutation(DELETE_CAT_EXTRA_SUB_OPTIONAL_PRODUCTS)
 
-  const handleAdd = () => {
+  const handleAdd = useCallback(() => {
     const Lines = [...LineItems.Lines, { ...initialLine }, { ...initialLine }]
     setLine({ ...LineItems, Lines })
+  }, [LineItems, initialLine])
+
+  const handleHidden = () => {
+    setModal(false)
   }
+  const handleFocusChange = useCallback((index) => {
+    const lastItem = LineItems.Lines.length -1
+    if (lastItem === index) {
+      handleAdd()
+    }
+  }, [LineItems.Lines.length, handleAdd])
   const handleLineChange = useCallback((index, name, value) => {
     const Lines = LineItems.Lines.map((salesLine, i) => {
       if (i === index) {
@@ -105,11 +117,15 @@ export const ExtrasProductsItems = ({
     const Lines = LineItems?.Lines?.filter((_, index) => { return index !== i })
     setLine({ ...LineItems, Lines })
   }
-  const dataArr = LineItems?.Lines?.map(x => { return { extraPrice: parseFloat(x.extraPrice), exState: x.exState === true ? 1 : 0, extraName: x.extraName, pId: pId } })
   const onSubmitUpdate = async () => {
-    // e.preventDefault()
+    const dataArr = LineItems?.Lines?.map(x => { return { extraPrice: parseFloat(x.extraPrice), exState: x.exState === true ? 1 : 0, extraName: x.extraName, pId: pId } })
+    const message = 'Complete los campos vacíos'
+    const findInputEmpty = dataArr.find(lineItems => {return lineItems.extraName === '' })
+    const findInputEmptyPrice = dataArr.find(lineItems => {return isNaN(lineItems.extraPrice) || lineItems.extraPrice === '' || lineItems.extraPrice === 0 })
     try {
-      await updateMultipleExtProductFoods({
+      if (findInputEmpty) return setAlertBox({ message: message })
+      if (findInputEmptyPrice) return setAlertBox({ message: message })
+      return await updateMultipleExtProductFoods({
         variables: {
           inputLineItems: {
             setData: dataArr || []
@@ -123,8 +139,7 @@ export const ExtrasProductsItems = ({
             dataNew: ExtProductFoodsAll
           })
         }
-      }).then(() => { return {} })
-      // setModal(false)
+      })
     } catch (error) {
       setAlertBox({ message: `${error}`, duration: 7000 })
     }
@@ -192,9 +207,9 @@ export const ExtrasProductsItems = ({
         <GarnishChoicesHeader onClick={() => { return editing && setModal(!modal) }}>
           <div>
             <p className='garnish-choices__title'>Adicionales</p>
-            <p className='garnish-choices__title-desc'>Escoge hasta 3 opciones.</p>
+            <p className='garnish-choices__title-desc'>Escoge las opciones.</p>
           </div>
-          <IconMiniCheck color={'#009b3a'} size={'15px'} />
+          <IconMiniCheck color={NorthTexasGreen} size='15px' />
         </GarnishChoicesHeader>
         <Items
           dataExtra={dataExtra}
@@ -208,6 +223,7 @@ export const ExtrasProductsItems = ({
         dataOptional={dataOptional}
         editing={editing}
         handleDeleteItemSubOptional={handleDeleteItemSubOptional}
+        handleFocusChange={handleFocusChange}
         handleLineChange={handleLineChange}
         handleOpenExtra={handleOpenExtra}
       />
@@ -217,11 +233,13 @@ export const ExtrasProductsItems = ({
           CleanLines={CleanLines}
           LineItems={LineItems}
           handleAdd={handleAdd}
+          handleFocusChange={handleFocusChange}
           handleLineChange={handleLineChange}
           handleRemove={handleRemove}
+          loading={loading}
           modal={modal}
           onSubmitUpdate={onSubmitUpdate}
-          setModal={setModal}
+          setModal={handleHidden}
         />
         <EditExtra
           INFO_EXTRA={INFO_EXTRA}

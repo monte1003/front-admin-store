@@ -216,7 +216,7 @@ export const CardProducts = ({
               className='store_image'
               layout='fill'
               objectFit='cover'
-              src={ProImage || src || '/app/images/DEFAULTBANNER.png'}
+              src={ProImage || src || '/images/DEFAULTBANNER.png'}
             />
           </div>
         </Card>

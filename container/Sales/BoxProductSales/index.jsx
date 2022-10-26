@@ -32,7 +32,8 @@ export const BoxProductSales = ({
   modalItem,
   values,
   handleProduct,
-  dataClientes
+  dataClientes,
+  callback = () => { return }
 }) => {
   const selectProduct = (product) => {
     if (!product) return
@@ -146,7 +147,7 @@ export const BoxProductSales = ({
                 handleFreeProducts={() => { return dispatch({ type: 'TOGGLE_FREE_PRODUCT', payload: producto }) }}
                 handleIncrement={() => { return dispatch({ id: producto.pId, type: 'INCREMENT' }) }}
                 index={idx}
-                key={idx + 1}
+                key={producto.pId}
                 onClick={() => { return selectProduct(producto)}}
                 pId={producto.pId}
                 pName={producto.pName}
@@ -162,8 +163,9 @@ export const BoxProductSales = ({
         <div style={{ width: 100, height: 100, backgroundColor: 'grey' }} />
       </Draggable> */}
       <FooterCalcules
+        callback={callback}
         counter={Math.abs(data.counter)}
-        disabled={!values?.cliId}
+        disabled={false}
         dispatch={dispatch}
         print={print}
         setPrint={setPrint}

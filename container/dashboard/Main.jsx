@@ -1,15 +1,20 @@
-import { BGColor, SFVColor } from 'public/colors'
-import React from 'react'
-import { Card, CardPrimary, Content, Text, CircleUser, ButtonStore } from './styled'
-import { useStore } from 'components/hooks/useStore'
-import { useUser } from 'components/hooks/useUser'
 import Link from 'next/link'
+import { useStore, useUser } from 'npm-pkg-hook'
+import { BGColor, SFVColor } from 'public/colors'
 import { BannerDashboard } from './BannerDashboard'
+import {
+  ButtonStore,
+  Card,
+  CardPrimary,
+  CircleUser,
+  Content,
+  Text
+} from './styled'
 
 export const Main = ({ user = {} }) => {
   const [dataUser] = useUser()
   const { email } = dataUser || {}
-  const [dataStore] = useStore()
+  const [dataStore, { loading }] = useStore()
   const { storeName, idStore } = dataStore || {}
   const nameStore = storeName?.replace(/\s/g, '-').toLowerCase()
   return (
@@ -19,7 +24,7 @@ export const Main = ({ user = {} }) => {
           <Text size='15px' >{user.email || email}</Text>
         </CardPrimary>
         <CardPrimary padding='' >
-          {dataStore !== null && <Link activeClassName='active' href={`/dashboard/${nameStore}/${idStore}`}>
+          {!loading && <Link activeClassName='active' href={`/dashboard/${nameStore}/${idStore}`}>
             <a>
               <ButtonStore
                 margin='50px 0'
@@ -27,7 +32,9 @@ export const Main = ({ user = {} }) => {
                 size='10px'
                 style={{ justifyContent: 'center' }}
                 widthButton='100%'
-              >Ir a la tienda</ButtonStore>
+              >
+                Ir a la tienda
+              </ButtonStore>
             </a>
           </Link>}
           <CircleUser>

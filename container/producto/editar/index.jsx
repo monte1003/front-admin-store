@@ -44,7 +44,7 @@ import { ExtrasProductsItems } from '../extras/ExtrasProductsItems'
 export const ProductEdit = ({ id }) => {
   // STATES
   const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm }] = useFormTools()
-  const initialState = { alt: '/app/images/DEFAULTBANNER.png', src: '/app/images/DEFAULTBANNER.png' }
+  const initialState = { alt: '/images/DEFAULTBANNER.png', src: '/images/DEFAULTBANNER.png' }
   const [modal, openModal] = useState(false)
   const { setAlertBox } = useContext(Context)
   const [{ alt, src }, setPreviewImg] = useState(initialState)

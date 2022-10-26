@@ -1,49 +1,72 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useReducer, useRef, useState } from 'react'
+import {
+  useEffect,
+  useReducer,
+  useRef,
+  useState
+} from 'react'
 import { SFVColor } from '../../public/colors'
 import { IconNoShow, IconShowEye } from '../../public/icons'
-import { isCC, isEmail, isNull, isPassword, onlyLetters, passwordConfirm, rangeLength, valNit } from '../../utils'
+import {
+  isCC,
+  isEmail, isPassword,
+  onlyLetters,
+  passwordConfirm,
+  rangeLength,
+  valNit
+} from '../../utils'
 import { useKeyPress } from '../hooks/useKeypress'
-import { BoxInput, InputV, LabelInput, List, Listbox, ShowPass, TextAreaInput, Tooltip } from './styled'
+import {
+  BoxInput,
+  InputV,
+  LabelInput,
+  List,
+  Listbox,
+  ShowPass,
+  TextAreaInput,
+  Tooltip
+} from './styled'
 
 const InputHooks = ({
-  reference,
-  title = '',
-  disabled,
-  onBlur = () => { return },
-  fontSize = '14px',
-  paddingInput = '',
-  setDataValue = () => { return },
-  width = '100%',
-  dataForm,
-  minWidth = '',
-  display = '',
-  maxWidth = '',
-  TypeTextarea = '',
-  padding = '',
-  radius = '',
-  margin,
-  Cc,
-  labelColor,
-  placeholder,
-  type,
-  value,
-  onChange,
-  name,
-  required,
-  numeric,
-  nit,
-  border,
-  checked,
-  letters,
-  height,
   autoComplete,
-  range,
+  border,
+  Cc,
+  checked,
+  autoFocus,
+  dataForm,
+  disabled,
+  display = '',
   email,
-  pass,
+  error,
+  fontSize = '14px',
+  height,
+  labelColor,
+  letters,
+  margin,
+  maxWidth = '',
+  minWidth = '',
+  name,
+  nit,
+  numeric,
+  onChange,
   onFocus,
+  padding = '',
+  paddingInput = '',
+  pass,
   passConfirm,
-  error
+  placeholder,
+  radius = '',
+  range,
+  reference,
+  required,
+  title = '',
+  type,
+  TypeTextarea = '',
+  value,
+  width = '100%',
+  setDataValue = () => { return },
+  onBlur = () => { return }
+
 }) => {
   // STATE
   const [errors, setError] = useState(error)
@@ -109,6 +132,7 @@ const InputHooks = ({
         const errorMessage = simpleVerifyEmail(email)
         // eslint-disable-next-line no-empty
         if (errorMessage) {
+          throw new Error(errorMessage)
         }
       }
     }
@@ -117,7 +141,7 @@ const InputHooks = ({
   const backSpace = useKeyPress('backSpace')
   const arrowDownPressed = useKeyPress('ArrowDown')
   const initialState = { selectedIndex: 0 }
-  
+
   function reducer(state, action) {
     switch (action.type) {
       case 'arrowUp':
@@ -172,7 +196,7 @@ const InputHooks = ({
     autoCompleteEmail(e.target.value)
     // Valida que el campo no sea nulo
     if (required) {
-      if (isNull(e.target.value)) return errorFunc(e, true, 'El campo no debe estar vacío')
+      if (e.target.value.length == 0) return errorFunc(e, true, 'El campo no debe estar vacío')
       errorFunc(e, false, '')
     }
     // Valida que el campo sea tipo numérico
@@ -228,13 +252,14 @@ const InputHooks = ({
     }
     return errorMessage
   }
+  const isAutoComplete = !autoComplete ? 'off' : autoComplete
+  const isEmailValue = email ? 'off' : isAutoComplete
   const handleBlur = () => {
     // setTimeout(() => setShowSuggestions(false))
   }
   const handleFocus = () => {
     // setTimeout(() => setShowSuggestions(true))
   }
-
   return (
     <BoxInput
       maxWidth={maxWidth}
@@ -248,7 +273,8 @@ const InputHooks = ({
       {!TypeTextarea
         ? <div>
           <InputV
-            autoComplete={type === 'password' ? 'current-password' : email ? 'off' : !autoComplete ? 'off' : autoComplete}
+            autoComplete={type === 'password' ? 'current-password' : isEmailValue }
+            autoFocus={autoFocus}
             border={border}
             checked={checked}
             disabled={disabled}
@@ -300,6 +326,7 @@ const InputHooks = ({
           )}
         </div>
         : <TextAreaInput
+          autoFocus={autoFocus}
           border={border}
           disabled={disabled}
           error={errors}

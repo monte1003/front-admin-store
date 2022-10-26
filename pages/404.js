@@ -1,7 +1,11 @@
 import NotFount from '../container/404'
-import { EmptyLayout } from './_app'
-
 export default function NotFountView() {
   return <NotFount />
 }
-NotFountView.Layout = EmptyLayout
+NotFountView.getLayout = function getLayout(page) {
+  return (
+    <div>
+      <>{page}</>
+    </div>
+  )
+}

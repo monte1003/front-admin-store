@@ -1,23 +1,26 @@
-import PropTypes from 'prop-types'
 import { CLIENT_URL_BASE } from 'apollo/urls'
-import { ContainerFilter, ItemFilter } from 'components/Update/Products/styled'
+import { ContainerFilter } from 'components/Update/Products/styled'
 import { OptionalExtraProducts } from 'container/producto/extras'
 import { ExtrasProductsItems } from 'container/producto/extras/ExtrasProductsItems'
 import Image from 'next/image'
 import Link from 'next/link'
-import { APColor } from 'public/colors'
-import React from 'react'
+import { useRouter } from 'next/router'
+import { Button } from 'pkg-components'
+import PropTypes from 'prop-types'
+import {
+  APColor,
+  BColor,
+  GraniteGray
+} from 'public/colors'
+import { AwesomeModal } from '~/components/AwesomeModal'
+import Column from '~/components/common/Atoms/Column'
 import {
   CardProductsModal,
   ContentImage,
   ContentInfo,
   DisRestaurant,
-  Flex,
-  HeadSticky,
-  Text
+  Flex, Text
 } from './styled'
-import { useRouter } from 'next/router'
-import { AwesomeModal } from '~/components/AwesomeModal'
 
 export const Product = ({
   store,
@@ -33,19 +36,44 @@ export const Product = ({
   nameStore,
   dataOptional,
   showDessert,
+  onHideDessert,
   setShowDessert,
   handleDelete,
   pId,
-  ...props }) => {
+  ...props
+}) => {
   const router = useRouter()
 
   return (
     <div {...props}>
       <ContainerFilter>
-        <ItemFilter onClick={() => { return setModal(!modal) }}>Añadir Adicionales</ItemFilter>
-        <ItemFilter onClick={() => { return setShowDessert(!showDessert) }}>Añadir Extra Sobremesa </ItemFilter>
-        <ItemFilter onClick={() => { return router.push(`/update/products/editar/${pId}`) }} >Editar</ItemFilter>
-        <ItemFilter onClick={() => { return handleDelete() }}>Eliminar</ItemFilter>
+        <Button
+          backgroundColor='transparent'
+          color={BColor}
+          fontFamily='PFont-Light'
+          fontWeight='300'
+          label='Añadir Adicionales'
+          onClick={() => { return setModal() }}
+          ripple
+        />
+        <Button
+          fontFamily='PFont-Light'
+          fontWeight='300'
+          label='Añadir Sobremesa'
+          onClick={() => { return setShowDessert(!showDessert) }}
+        />
+        <Button
+          fontFamily='PFont-Light'
+          fontWeight='300'
+          label='Editar'
+          onClick={() => { return router.push(`/update/products/editar/${pId}`) }}
+        />
+        <Button
+          fontFamily='PFont-Light'
+          fontWeight='300'
+          label='Eliminar'
+          onClick={() => { return handleDelete()}}
+        />
       </ContainerFilter>
       <CardProductsModal>
         <ContentImage>
@@ -56,16 +84,16 @@ export const Product = ({
             height={440}
             objectFit='contain'
             placeholder='blur'
-            src={ProImage || '/app/images/DEFAULTBANNER.png'}
+            src={ProImage || '/images/DEFAULTBANNER.png'}
             width={440}
           />
         </ContentImage>
         <ContentInfo>
-          <HeadSticky>
-            <Text size='1.1em'>{pName}</Text>
-          </HeadSticky>
+          <Column margin='10px 0'>
+            <Text size='1.8em'>{pName}</Text>
+          </Column>
           <Text
-            color='#676464'
+            color={GraniteGray}
             margin='20px 0'
             size='14px'
           >{ProDescription}</Text>
@@ -95,8 +123,9 @@ export const Product = ({
             <label className='dish-observation-form__label' tabIndex='0' >¿Algún comentario?</label>
           </DisRestaurant>
           <ExtrasProductsItems
-            dataExtra={dataExtra?.ExtProductFoodsAll || []}
-            dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}
+            dataExtra={dataExtra || []}
+            dataOptional={dataOptional || []}
+            editing={true}
             modal={modal}
             pId={pId}
             setModal={setModal}
@@ -105,14 +134,15 @@ export const Product = ({
       </CardProductsModal>
       <AwesomeModal
         footer={false}
-        header={false}
-        height={'100vh'}
-        onHide={() => {return setShowDessert(!showDessert)}}
+        header={true}
+        height='100vh'
+        onHide={() => { return onHideDessert()}}
         show={showDessert}
-        size={'90vw'}
+        size='100vw'
+        zIndex='999999999'
       >
         <OptionalExtraProducts
-          dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}
+          dataOptional={dataOptional || []}
           pId={pId}
         />
       </AwesomeModal>

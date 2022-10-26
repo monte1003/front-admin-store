@@ -13,6 +13,7 @@ import { deCode, getAttributes } from '../../utils/util'
 import ratingStoreStart from '../../models/Store/ratingStoreStart'
 import ScheduleStore from '../../models/Store/scheduleStore'
 import { Op } from 'sequelize'
+import StatusPedidosModel from '../../models/Store/statusPedidoFinal'
 
 // eslint-disable-next-line
 export const newRegisterStore = async (_, { input }, ctx) => {
@@ -103,31 +104,27 @@ const registerSalesStore = async (root, { input, totalProductsPrice, pickUp, id,
         idStore: deCode(context.restaurant)
       })
     }
+    // status sales success
+    await StatusPedidosModel.create({
+      id: deCode(id),
+      locationUser: null,
+      idStore: idStore ? deCode(idStore) : deCode(context.restaurant),
+      pSState: 4,
+      pCodeRef: pCodeRef,
+      valueDelivery: valueDelivery,
+      change: change,
+      payMethodPState: payMethodPState,
+      pickUp,
+      totalProductsPrice
+    })
     return {
-      success: true,
-      message: 'Venta exitosa'
+      Response: {
+        success: true,
+        message: 'Venta exitosa'
+      }
     }
-    // // status sales success
-    // await StatusPedidosModel.create({
-    //   id: deCode(id),
-    //   locationUser: null,
-    //   idStore: idStore ? deCode(idStore) : deCode(context.restaurant),
-    //   pSState: 4,
-    //   pCodeRef: pCodeRef,
-    //   valueDelivery: valueDelivery,
-    //   change: change,
-    //   payMethodPState: payMethodPState,
-    //   pickUp,
-    //   totalProductsPrice
-    // })
-    // return {
-    //   Response: {
-    //     success: true,
-    //     message: 'Venta exitosa'
-    //   }
-    // }
   } catch (e) {
-    const error = new Error('Lo sentimos, ha ocurrido un error interno papu')
+    const error = new Error('Lo sentimos, ha ocurrido un error interno')
     return error
   }
 }
@@ -180,7 +177,11 @@ export const getAllShoppingCard = async (_root, { input }, context, info) => {
 // eslint-disable-next-line
 export const getAllStoreInStore = async (root, args, context, _info) => {
   try {
-    const { search, min, max } = args
+    const {
+      search,
+      min,
+      max
+    } = args
     let whereSearch = {}
     if (search) {
       whereSearch = {
@@ -191,11 +192,9 @@ export const getAllStoreInStore = async (root, args, context, _info) => {
     }
     const data = await Store.findAll({
       attributes: [
-        'idStore', 'cId',
-        'id',
-        'dId',
-        'ctId',
-        'catStore',
+        'idStore','cId',
+        'id', 'dId',
+        'ctId','catStore',
         'neighborhoodStore', 'Viaprincipal',
         'storeOwner', 'storeName',
         'emailStore', 'storePhone',
@@ -228,7 +227,10 @@ export const getAllStoreInStore = async (root, args, context, _info) => {
         ['id', 'DESC']
       ]
     })
-    return data
+    const array = await data.map((store) => {
+      return store
+    })
+    return array
   } catch (e) {
     const error = new Error('Lo sentimos, ha ocurrido un error interno')
     return error
@@ -592,7 +594,5 @@ export default {
     registerShoppingCard
   },
   SUBSCRIPTION: {
-    
   }
-  
 }

@@ -7,6 +7,8 @@ export const SEGColor = '#1f1c2f'
 export const SVColor = '#edf2f9'
 
 export const DarkSilver = '#717171'
+export const GraniteGray = '#646767'
+export const NorthTexasGreen = '#009b3a'
 
 /** Colores de fuente */
 

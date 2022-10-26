@@ -82,8 +82,8 @@ export const updateCatInProduct = async (_root, { input }) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const updatedCatWithProducts = async (_, input, _ctx) => {
   const { setData, idCat } = input.input || {}
-  for (let i = 0; i < setData.length; i++) {
-    const { idProduct } = setData[i]
+  for (const element of setData) {
+    const { idProduct } = element
     await updateCatInProduct(null, { input: { idProduct, idCat } })
   }
   return {

@@ -1,23 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
 import { PColor } from 'public/colors'
 import Image from 'next/image'
-import React, {
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react'
 import {
-  CREATE_BANNER_STORE,
-  CREATE_LOGO,
-  DELETE_ONE_BANNER_STORE,
-  DELETE_ONE_LOGO_STORE,
-  GET_ONE_BANNER_STORE,
-  GET_ONE_SCHEDULE_STORE
-} from '../queriesStore'
+  useEffect,
+  useState,
+  memo
+} from 'react'
 import {
   ActionName,
   ButtonCard,
@@ -27,238 +14,126 @@ import {
   MerchantInfo,
   MerchantInfoTitle
 } from '../styledStore'
-import { useMutation, useQuery } from '@apollo/client'
 import {
   IconDelete,
   IconEdit,
   IconPromo
 } from 'public/icons'
-import { GET_ONE_STORE } from 'container/Restaurant/queries'
-import { Context } from 'context/Context'
 import moment from 'moment'
 import { Skeleton } from 'components/Skeleton/index'
-import { SET_EDIT_STORE_NAME } from 'container/producto/queries'
-
+import {
+  useStore,
+  useSchedule,
+  useBanner,
+  useSchedules,
+  useImageStore
+} from 'npm-pkg-hook'
 
 const Banner = ({ isMobile }) => {
   // STATES
-  const { setAlertBox } = useContext(Context)
-  const fileInputRef = useRef(null)
-  const fileInputRefLogo = useRef(null)
   const [day, setDay] = useState()
-  // eslint-disable-next-line
-  const [hour, setHour] = useState(null)
-  const [openStore, SetStoreOpen] = useState(false)
-  const [{ altLogo, srcLogo }, setPreviewImgLogo] = useState({})
-  let date = new Date().getTime()
-  const { data: dataSchedule, loading } = useQuery(GET_ONE_SCHEDULE_STORE, { variables: { schDay: day } })
-  const { schHoSta, schHoEnd } = dataSchedule?.getOneStoreSchedules || {}
+  const [Open, setOpen] = useState(false)
+  // HOOKS
+  const [data, { loading: loaStore }] = useStore()
+  const {
+    altLogo,
+    fileInputRef,
+    fileInputRefLogo,
+    HandleDeleteBanner,
+    handleInputChangeLogo,
+    handleUpdateBanner,
+    onTargetClick,
+    onTargetClickLogo,
+    src,
+    srcLogo
+  } = useImageStore(data?.idStore)
+  const [banner, { loading: loadBanner }] = useBanner()
+  const [dataSchedule, { loading }] = useSchedule({ day: day })
+  const [dataScheduleTow] = useSchedule({ day: day + 1 })
+  const [dataSchedules, { loading: lsc }] = useSchedules({ schDay: 1 })
+  const { path, bnImageFileName } = banner || {}
+  const { schHoSta, schHoEnd } = dataSchedule || {}
+  const { schHoSta: dateTow } = dataScheduleTow || {}
+  const [endDate, setEndDate] = useState(false)
+  useEffect(() => {
+    (() => {
+      const now = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+      const hourDate = new Date(`1/1/1999 ${now}`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+      let isClose = new Date('1/1/1999 ' + schHoEnd).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+      setEndDate(hourDate >= isClose)
+    })()
+  }, [schHoEnd, schHoSta, dataSchedules])
 
   useEffect(() => {
-    if (!loading) {
-      // console.log(moment().isoWeekday())
-      setDay(moment().isoWeekday())
-      setHour(moment(date).format('hh:mm'))
-      // const start = moment(schHoSta)
-      if (moment(schHoSta).isAfter(schHoEnd)) {
-        SetStoreOpen(true)
-        // return setAlertBox({ message: 'La Hora Final no puede ser menor que la Hora de Inicio.' })
-      } else if (moment(schHoSta).isBefore(schHoEnd)) {
-        SetStoreOpen(false)
-      } else if (moment(schHoSta).isSame(schHoEnd)) {
-        // return setAlertBox({ message: 'La Hora final no puede ser igual que la Hora de inicio.' })
+    (() => {
+      const newArray = dataSchedules?.map((date) => { return { open: date.schHoSta, close: date.schHoEnd } }) || []
+      function isOpen(hour) {
+        let opened = false
+        newArray.forEach(item => {
+          let open = new Date('1/1/1999 ' + item.open)
+          let close = new Date('1/1/1999 ' + item.close)
+          opened = opened || (hour >= open && close >= hour)
+        })
+        return opened
       }
-    }
+      const now = moment().format('hh:mm')
+      const testHours = [
+        `${now}`,
+        `${now}`,
+        `${now}`,
+        `${now}`,
+        `${now}`,
+        `${now}`,
+        `${now}`
+      ]
+      testHours.forEach(hour => {
+        const hourDate = new Date(`1/1/1999 ${hour}`)
+        return (hour, isOpen(hourDate) ? 'ABIERTO' : 'CERRADO')
+      })
 
+
+      function dateObj(d) {
+        if (!d) return null
+        let parts = d.split(/:|\s/)
+        let date = new Date()
+        if (parts.pop().toLowerCase() == 'pm') parts[0] = (+parts[0]) + 12
+        date.setHours(+parts.shift())
+        date.setMinutes(+parts.shift())
+        return date
+      }
+      let now2 = new Date()
+      let startDate = dateObj(schHoSta)
+      let endDate = dateObj(schHoEnd)
+      let open = now2 < endDate && now2 > startDate ? true : false
+      setOpen(open)
+    })()
+  }, [dataSchedules, lsc, schHoEnd, schHoSta])
+  useEffect(() => {
+    const date = new Date()
+    const currentDay = date.getDay()
+    setDay(currentDay)
   }, [])
-
-  // QUERIES
-  const { data, loading: loaStore } = useQuery(GET_ONE_STORE)
-  const dataStore = useMemo(() => { return data?.getStore }, [data])
-  const [nameStore, setNameStore] = useState(dataStore?.storeName)
-  useEffect(() => {
-    setNameStore(dataStore?.storeName)
-  }, [dataStore])
-  const [openSName, setOpenSName] = useState(false)
-  const [setEditNameStore] = useMutation(SET_EDIT_STORE_NAME)
-  const handleEditNameStore = () => {
-    setEditNameStore({
-      variables: {
-        StoreName: nameStore
-      }, update(cache) {
-        cache.modify({
-          fields: {
-            getStore(dataOld = []) {
-              return cache.writeQuery({ query: GET_ONE_STORE, data: dataOld })
-            }
-          }
-        })
-      }
-    }).then(() => {
-      setOpenSName(false)
-    })
-  }
-
-  const [setALogoStore] = useMutation(CREATE_LOGO, {
-    onCompleted: (data) => { return setAlertBox({ message: data?.setALogoStore?.message }) },
-    context: { clientName: 'admin-server' }
-  })
-  const [registerBanner] = useMutation(CREATE_BANNER_STORE, {
-    onCompleted: (data) => { return setAlertBox({ message: data?.registerBanner?.message }) },
-    context: { clientName: 'admin-server' }
-  })
-  const [DeleteOneBanner] = useMutation(DELETE_ONE_BANNER_STORE, {
-    onCompleted: (data) => { return setAlertBox({ message: data?.DeleteOneBanner?.message }) },
-    context: { clientName: 'admin-server' }
-  })
-  // eslint-disable-next-line
-  const [deleteALogoStore] = useMutation(DELETE_ONE_LOGO_STORE, {
-    onCompleted: (data) => {
-      setAlertBox({
-        message: data.deleteALogoStore.message
-      })
-      setPreviewImgLogo(initialState)
-    },
-    context: { clientName: 'admin-server' },
-    update(cache) {
-      cache.modify({
-        fields: {
-          getStore(dataOld = []) {
-            return cache.writeQuery({ query: GET_ONE_STORE, data: dataOld })
-          }
-        }
-      })
-    }
-  })
-
-  const { idStore } = data?.getStore || {}
-  const { data: dataBanner } = useQuery(GET_ONE_BANNER_STORE, {
-    context: { clientName: 'admin-server' },
-    variables: {
-      idStore
-    }
-  })
-  const { path, bnState, bnId, bnImageFileName } = dataBanner?.getOneBanners || {}
-  const initialState = { alt: '/app/images/DEFAULTBANNER.png', src: '/app/images/DEFAULTBANNER.png' }
-  // eslint-disable-next-line
-  const [{ alt, src }, setPreviewImg] = useState(initialState)
-  // HANDLES
-  const onTargetClickLogo = e => {
-    e.preventDefault()
-    fileInputRefLogo.current.click()
-  }
-  const onFileInputChange = event => {
-    try {
-      const { files } = event.target
-      setPreviewImg(
-        files.length
-          ? {
-            src: URL.createObjectURL(files[0]),
-            alt: files[0].name
-          }
-          : initialState
-      )
-      registerBanner({
-        variables: {
-          input: {
-            bnImage: files[0],
-            idStore: idStore
-          }
-        }, update(cache) {
-          cache.modify({
-            fields: {
-              getOneBanners(dataOld = []) {
-                return cache.writeQuery({ query: GET_ONE_BANNER_STORE, data: dataOld })
-              }
-            }
-          })
-        }
-      }).catch(() => {
-        setAlertBox({ message: 'No pudimos cargar la imagen', duration: 7000 })
-        setPreviewImg(initialState)
-      })
-
-    } catch {
-      setPreviewImg(initialState)
-      setAlertBox({ message: 'No pudimos cargar la imagen', duration: 7000 })
-    }
-
-  }
-  const onFileInputChangeLogo = event => {
-    const { files } = event.target
-    setPreviewImgLogo(
-      files.length
-        ? {
-          srcLogo: URL.createObjectURL(files[0]),
-          altLogo: files[0].name
-        }
-        : initialState
-    )
-    setALogoStore({
-      variables: {
-        logo: files[0],
-        idStore: idStore
-      }, update(cache) {
-        cache.modify({
-          fields: {
-            getStore(dataOld = []) {
-              return cache.writeQuery({ query: GET_ONE_STORE, data: dataOld })
-            }
-          }
-        })
-      }
-    }).catch(() => {
-      setAlertBox({ message: 'No pudimos cargar el banner', duration: 7000 })
-      setPreviewImgLogo(initialState)
-    })
-  }
-  const onTargetClick = e => {
-    e.preventDefault()
-    fileInputRef.current.click()
-  }
-  const HandleDeleteBanner = async () => {
-    setPreviewImg(initialState)
-
-    DeleteOneBanner({
-      variables: {
-        bnState: bnState,
-        bnImageFileName: bnImageFileName,
-        idStore,
-        bnId
-      }, update(cache) {
-        cache.modify({
-          fields: {
-            getOneBanners(dataOld = []) {
-              return cache.writeQuery({ query: GET_ONE_BANNER_STORE, data: dataOld })
-            }
-          }
-        })
-      }
-    }).then(() => {
-      setPreviewImg(initialState)
-    })
-  }
-  const refInput = useRef('')
+  const isLoading = loadBanner || loaStore || loading
   return (
     <div>
       <Section>
         <InputFile
           accept='.jpg, .png'
           id='iFile'
-          onChange={onFileInputChange}
+          onChange={handleUpdateBanner}
           ref={fileInputRef}
           type='file'
         />
         <InputFile
           accept='.jpg, .png'
           id='iFile'
-          onChange={onFileInputChangeLogo}
+          onChange={handleInputChangeLogo}
           ref={fileInputRefLogo}
           type='file'
         />
-        {(loading || loaStore)
-          ? <Skeleton height={isMobile ? 118: 250} />
-          : <MerchantBannerWrapperInfo bannerImage={(path || src) ? `url(${path || src})` : `url("/app/images/DEFAULTBANNER.png")`} >
+        {isLoading
+          ? <Skeleton height={isMobile ? 118 : 250} />
+          : <MerchantBannerWrapperInfo Open={Open} bannerImage={(path || src) ? `url(${path || src})` : `url('/images/DEFAULTBANNER.png')`} >
             <span>
               <svg
                 height={53}
@@ -288,11 +163,10 @@ const Banner = ({ isMobile }) => {
               </svg>
             </span>
             <div className='merchant-banner__status-description' data-test-id='merchant-banner-status-description'>
-              {openStore && <h2 className='merchant-banner__status-title'>{'Restaurante  cerrado'}</h2>}
-              {/* <h3 className="merchant-banner__status-message">{dataSchedule?.getOneStoreSchedules?.schHoEnd > hour ? `Abre mañana a las ${dataScheduleTomorrow?.getOneStoreSchedules?.schHoSta}` : null}</h3> */}
+              <h2 className='merchant-banner__status-title'>{`Restaurante  ${Open ? 'Abierto' : 'Cerrado'}`}</h2>
+              {/* {!Open && <h3 className='merchant-banner__status-message'>{`Abre ${endDate && dateTow ? 'mañana' : '' } a las ${dateTow}`}</h3>} */}
             </div>
           </MerchantBannerWrapperInfo>}
-        {/* actions */}
         <ButtonCard onClick={() => { return path && bnImageFileName && HandleDeleteBanner() }}>
           <IconDelete color={PColor} size={20} />
           <ActionName >
@@ -321,56 +195,34 @@ const Banner = ({ isMobile }) => {
           </ActionName>
         </ButtonCard>
         <MerchantInfo >
-          {/* <button>
-            {dataStore?.Image && <button
-              onClick={() => {
-                return deleteALogoStore({
-                  variables: {
-                    Image: ImageName || null
-                  }
-                })
-              }}
-            >Eliminar Logo <IconDelete color={PColor} size={20} /> </button>}
-            <button onClick={(e) => { return onTargetClickLogo(e) }}>Subir Logo</button>
-          </button> */}
-          {dataStore?.Image ?
+          {data?.Image ?
             <Image
               alt={altLogo ?? 'logo'}
               className='logo'
               height={70}
               objectFit='contain'
               onClick={(e) => { return onTargetClickLogo(e) }}
-              src={dataStore?.Image ?? '/app/images/DEFAULTBANNER.png'}
+              src={data?.Image ?? '/images/DEFAULTBANNER.png'}
               width={70}
             />
             :
             <Image
               alt={altLogo || 'logo'}
-              blurDataURL='/app/images/DEFAULTBANNER.png'
+              blurDataURL='/images/DEFAULTBANNER.png'
               className='logo'
               height={70}
               objectFit='contain'
               onClick={(e) => { return onTargetClickLogo(e) }}
               placeholder='blur'
-              src={srcLogo ?? '/app/images/DEFAULTBANNER.png'}
+              src={srcLogo ?? '/images/DEFAULTBANNER.png'}
               width={70}
             />}
           <MerchantInfoTitle >
-            {openSName ? <input
-              autoFocus='on'
-              name='nameStore'
-              onBlur={() => { return setOpenSName(!openSName) }}
-              onChange={(e) => { return setNameStore(e.target.value) }}
-              onKeyUp={(event) => { return (event.key === 'Enter' ? handleEditNameStore() : null) }}
-              ref={refInput}
-              style={{ border: 'none', outline: 'none' }}
-              value={nameStore}
-            /> : dataStore?.storeName}
-            {/* <button onClick={() => { return handleEdit() }}>{loadingEditName ? <LoadEllipsis /> : <IconEdit color={PColor} size={'20px'} />}</button> */}
+            {data?.storeName}
           </MerchantInfoTitle>
         </MerchantInfo>
       </Section>
     </div>
   )
 }
-export const Managebanner = React.memo(Banner)
+export const ManageBanner = memo(Banner)

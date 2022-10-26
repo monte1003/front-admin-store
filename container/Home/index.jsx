@@ -1,22 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import InputHooks from 'components/InputHooks/InputHooks'
+import { RippleButton } from 'components/Ripple'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { useFormTools } from 'npm-pkg-hook'
 import {
   Container,
   ContainerLeft,
   ContentImage,
   Form
 } from './styled'
-import InputHooks from 'components/InputHooks/InputHooks'
-import { RippleButton } from 'components/Ripple'
-import { useFormTools } from 'npm-pkg-hook'
 
 
 const Index = () => {
   const [handleChange, handleSubmitMain, setDataValue, { dataForm, errorForm }] = useFormTools()
+  const router = useRouter()
   const handleRedirect = e => {
     e.stopPropagation()
+    router.push('/entrar')
+
   }
   return (
     <div>
@@ -25,11 +28,11 @@ const Index = () => {
           <ContentImage>
             <Image
               alt={'Picture of the author'}
-              blurDataURL='/app/images/sign-in_3f701ac0c6.png'
+              blurDataURL='/images/sign-in_3f701ac0c6.png'
               layout='fill'
               objectFit='cover'
               placeholder='blur'
-              src={'/app/images/sign-in_3f701ac0c6.png'}
+              src={'/images/sign-in_3f701ac0c6.png'}
             />
           </ContentImage>
         </ContainerLeft>
@@ -76,11 +79,11 @@ export const Home = () => {
         <ContentImage>
           <Image
             alt={'Picture of the author'}
-            blurDataURL='/app/images/sign-in_3f701ac0c6.png'
+            blurDataURL='/images/sign-in_3f701ac0c6.png'
             layout='fill'
             objectFit='cover'
             placeholder='blur'
-            src={'/app/images/sign-in_3f701ac0c6.png'}
+            src={'/images/sign-in_3f701ac0c6.png'}
           />
         </ContentImage>
       </ContainerLeft>

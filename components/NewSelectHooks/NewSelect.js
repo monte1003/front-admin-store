@@ -1,11 +1,41 @@
-import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+
+import {
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import styled, { css } from 'styled-components'
-import { BGColor, PColor, PVColor, SFColor, SFVColor } from '../../public/colors'
+import {
+  BGColor,
+  PColor,
+  PVColor,
+  SFColor,
+  EColor
+} from 'public/colors'
 import { IconArrowBottom, IconCancel as IconWarning } from '../../public/icons'
 
 // eslint-disable-next-line
-export default function NewSelect({ options, disabled, id, idD, name, onChange, optionName, value, width, search, title, padding, margin, minWidth, error, required, accessor, fullName }) {
+export default function NewSelect({
+  options,
+  disabled,
+  id,
+  idD,
+  name,
+  onChange,
+  optionName,
+  value,
+  width,
+  search,
+  title,
+  padding,
+  margin,
+  minWidth,
+  error,
+  required,
+  accessor,
+  fullName
+}) {
   /** Hooks */
   const [select, setSelect] = useState(false)
   const [selectRef, setSelectRef] = useState(0)
@@ -89,7 +119,7 @@ export default function NewSelect({ options, disabled, id, idD, name, onChange, 
       >
         <SpanText>{renderVal(val)}</SpanText>
         <IconSel>
-          <IconArrowBottom color={error ? BGColor : SFVColor} size='13px' />
+          <IconArrowBottom color={error ? BGColor : EColor} size={20} />
         </IconSel>
       </CustomButtonS>
       <LabelInput error={error} value={value}>{title}</LabelInput>
@@ -144,7 +174,7 @@ const BoxSelect = styled.div`
     flex-direction: column;
     min-width: ${({ minWidth }) => { return minWidth || 'auto' }};
     width: ${({ width }) => { return width || '100%' }};
-    padding: ${({ padding }) => { return padding || '10px 5px' }};
+    padding: ${({ padding }) => { return padding || '15px 5px' }};
     border-radius: ${({ radius }) => { return radius || '8px' }};
     ${({ padding }) => { return !!padding && css`padding: ${padding};` }}
     position: relative;
@@ -195,27 +225,36 @@ const LabelInput = styled.label`
     position: absolute;
     text-align: left;
     font-size: ${({ value }) => { return value ? '17px' : '16px' }};
-    top: ${({ value }) => { return value ? '-5px' : '18px' }};
-    left: 40px;
-    color: ${({ value, error }) => { return value ? SFColor : (error ? BGColor : SFVColor) }};
+    top: ${({ value }) => { return value ? '-5px' : '30px' }};
+    left: ${({ value }) => { return value ? '6px' : '40px' }};
+    color: ${({ value, error }) => {
+    const defaultValue = error ? BGColor : EColor
+    return value ? SFColor : defaultValue
+  }};
     transition: .3s;
     pointer-events: none;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    width: 80%;
+    width: min-content;
     font-family: PFont-Light;
-    background-color: ${({ value }) => { return value ? BGColor : 'transparent' }};
+    background-color: ${({ value }) => { return value && 'transparent' }};
     padding-left: ${({ value }) => { return value ? '10px' : '0px' }};
-    
     `
 // Select
 const CustomButtonS = styled.button`
     position: relative;
     display: block;
-    background-color: ${({ bgColor, disabled, error }) => { return disabled ? 'rgba(239, 239, 239, 0.3)' : (error ? '#FBCACA' : (bgColor || '#fff')) }};
+    background-color: ${({
+    bgColor,
+    disabled,
+    error
+  }) => {
+    const defaultValueColor = error ? '#FBCACA' : bgColor
+    return disabled ? 'rgba(239, 239, 239, 0.3)' : defaultValueColor
+  }};
     outline: 0;
-    border: ${({ option }) => { return option ? 'none' : `1px solid ${SFVColor}` }};
+    border: ${({ option }) => { return option ? 'none' : `1px solid ${EColor}` }};
     border-radius: 5px;
     padding: 17px ;
     text-align: left;
@@ -260,8 +299,8 @@ const SpanText = styled.label`
 `
 const TextNotResult = styled.span`
     font-size: 10px;
-    color: ${SFVColor};
-    padding: 0 10px; 
+    color: ${EColor};
+    padding: 0 10px;
 `
 // Input Text (buscador)
 export const InputText = styled.input`

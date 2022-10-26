@@ -1,0 +1,53 @@
+{
+    "short_name": "Next PWA",
+    "name": "Food delivery service",
+    "description": "...",
+    "icons": [
+      {
+        "src": "/images/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "36x36"
+      },
+      {
+        "src": "/images/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "48x48"
+      },
+      {
+        "src": "/images/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "72x72"
+      },
+      {
+        "src": "/images/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "96x96"
+      },
+      {
+        "src": "/images/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "144x144"
+      },
+      {
+        "src": "/images/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/images/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      },
+      {
+        "src": "/images/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "192x192",
+        "purpose": "maskable"
+      }
+    ],
+    "start_url": "/",
+    "background_color": "#FFFFFF",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#000000"
+  }

@@ -1,11 +1,11 @@
-import React, { useState, Fragment } from 'react'
-import { ArrowsLabel, ButtonAction, ButtonCode, ButtonNext, ButtonPagination, ButtonPrev, ButtonStatus, CardsComponent, CheckBox, CheckBoxLabel, CheckBoxWrapper, CicleStatus, ContentItems, ContentList, ContentTable, ContentTitles, Image, Input, ListActions, Pagination, SectionTitles, Text, Title, WrapperTable } from './styled'
+import moment from 'moment'
+import { useState } from 'react'
+import { MockData } from '../../components/common/mockData'
+import { RippleButton } from '../../components/Ripple'
 import { BColor, SECColor } from '../../public/colors'
 import { IconArrowLeft, IconArrowRight, IconDost } from '../../public/icons'
-import { MockData } from '../../components/common/mockData'
 import { RandomCode } from '../../utils'
-import { RippleButton } from '../../components/Ripple'
-import moment from 'moment'
+import { ArrowsLabel, ButtonAction, ButtonCode, ButtonNext, ButtonPagination, ButtonPrev, ButtonStatus, CardsComponent, CheckBox, CheckBoxLabel, CheckBoxWrapper, CicleStatus, ContentItems, ContentList, ContentTable, ContentTitles, Image, Input, ListActions, Pagination, SectionTitles, Text, Title, WrapperTable } from './styled'
 
 export const CustomTable = () => {
   const [data, setData] = useState(MockData)
@@ -123,7 +123,7 @@ export const CustomTable = () => {
                         autoFocus
                         name='title'
                         onChange={(e) => { return setTitle(e.target.value) }}
-                        placeholder='enter card'
+                        placeholder='Añade un item'
                         value={listID.title}
                       />
                       <RippleButton

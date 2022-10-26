@@ -1,8 +1,10 @@
 import Contract from 'container/contract'
 const NestedLayout = (props) => {
-  <div>
-    {props.children}
-  </div>
+  return(
+    <div>
+      {props.children}
+    </div>
+  )
 }
 
 export default function Contrato() {
