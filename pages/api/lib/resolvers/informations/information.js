@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ApolloError } from 'apollo-server-micro'
+import { Op } from 'sequelize'
 import CatStore from '../../models/information/CategorieStore'
 import CitiesModel from '../../models/information/CitiesModel'
 import colorModel from '../../models/information/color'
@@ -9,8 +10,11 @@ import DepartmentsModel from '../../models/information/DepartmentsModel'
 import SizeModel from '../../models/information/size'
 import TypeIdentitiesModel from '../../models/information/TypeIdentitiesModel'
 import TypeRoad from '../../models/information/TypeOfRoad'
-import { deCode, filterKeyObject, getAttributes } from '../../utils/util'
-import { Op } from 'sequelize'
+import {
+  deCode,
+  filterKeyObject,
+  getAttributes
+} from '../../utils/util'
 
 // cities
 export const getCities = async (_root, _args, _context, info) => {
