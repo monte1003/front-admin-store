@@ -79,7 +79,7 @@ input[type=time]::-webkit-clear-button {
 }
 
 /* Up/Down arrows for incrementing/decrementing the value */
-/* input[type=time]::-webkit-inner-spin-button {
+/* input[   ]::-webkit-inner-spin-button {
   display: none;
 } */
     body {

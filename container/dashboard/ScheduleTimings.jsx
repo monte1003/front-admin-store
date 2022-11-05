@@ -1,28 +1,28 @@
-import React, {
-  useEffect,
-  useState,
-  useContext
-} from 'react'
 import { useMutation } from '@apollo/client'
-import { GET_ONE_SCHEDULE_STORE, GET_SCHEDULE_STORE } from './queriesStore'
-import { Card } from './styled'
+import { useSchedules } from 'npm-pkg-hook'
+import {
+  useContext, useEffect,
+  useState
+} from 'react'
 import styled, { css } from 'styled-components'
+import { AwesomeModal } from '../../components/AwesomeModal'
+import { useSetState } from '../../components/hooks/useState'
+import { RippleButton } from '../../components/Ripple'
+import { Context } from '../../context/Context'
 import {
   BGColor,
   GraniteGray,
   PVColor,
   TFSColor
 } from '../../public/colors'
-import { useSetState } from '../../components/hooks/useState'
-import { AwesomeModal } from '../../components/AwesomeModal'
 import { CREATE_STORE_CALENDAR } from './queries'
-import { RippleButton } from '../../components/Ripple'
-import { Context } from '../../context/Context'
-import { useSchedules } from 'npm-pkg-hook'
+import { GET_ONE_SCHEDULE_STORE, GET_SCHEDULE_STORE } from './queriesStore'
+import { Card } from './styled'
 
 export const ScheduleTimings = () => {
   const { setAlertBox } = useContext(Context)
   const [data, { loading: lsc }] = useSchedules({ schDay: 1 })
+  console.log('🚀 ~ file: ScheduleTimings.jsx ~ line 25 ~ ScheduleTimings ~ data', data)
   const [showTiming, setShowTiming] = useState(1)
   const SHOW_TIMING = useSetState(false)
   const handleClick = n => {
@@ -50,7 +50,7 @@ export const ScheduleTimings = () => {
     dateStart.setHours(start.split(':')[0])
     dateStart.setMinutes(start.split(':')[1])
     const end = endTime
-    const dateEnd = new Date( now)
+    const dateEnd = new Date(now)
     dateEnd.setHours(end.split(':')[0])
     dateEnd.setMinutes(end.split(':')[1])
     // validamos que la fecha de ingreso sea menor que la de salida
@@ -68,8 +68,8 @@ export const ScheduleTimings = () => {
     setStoreSchedule({
       variables: {
         input: {
-          schHoSta: start,
-          schHoEnd: end,
+          schHoSta: startTime,
+          schHoEnd: endTime,
           schState: 1,
           schDay: showTiming
         }
@@ -91,10 +91,10 @@ export const ScheduleTimings = () => {
       }
     }).then(() => {
       SHOW_TIMING.setState(!SHOW_TIMING.state)
-      setValues({
-        endTime: null,
-        startTime: null
-      })
+      // setValues({
+      //   endTime: null,
+      //   startTime: null
+      // })
     })
     // }
   }

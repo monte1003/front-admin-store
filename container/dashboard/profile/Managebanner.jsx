@@ -1,38 +1,31 @@
-import { PColor } from 'public/colors'
+import { Skeleton } from 'components/Skeleton/index'
+import moment from 'moment'
 import Image from 'next/image'
 import {
-  useEffect,
-  useState,
-  memo
-} from 'react'
-import {
-  ActionName,
-  ButtonCard,
-  InputFile,
-  Section,
-  MerchantBannerWrapperInfo,
-  MerchantInfo,
-  MerchantInfoTitle
-} from '../styledStore'
+  useBanner, useImageStore, useSchedule, useSchedules, useStore
+} from 'npm-pkg-hook'
+import { PColor } from 'public/colors'
 import {
   IconDelete,
   IconEdit,
   IconPromo
 } from 'public/icons'
-import moment from 'moment'
-import { Skeleton } from 'components/Skeleton/index'
 import {
-  useStore,
-  useSchedule,
-  useBanner,
-  useSchedules,
-  useImageStore
-} from 'npm-pkg-hook'
+  memo, useEffect,
+  useState
+} from 'react'
+import {
+  ActionName,
+  ButtonCard,
+  InputFile, MerchantBannerWrapperInfo,
+  MerchantInfo,
+  MerchantInfoTitle, Section
+} from '../styledStore'
 
 const Banner = ({ isMobile }) => {
   // STATES
   const [day, setDay] = useState()
-  const [Open, setOpen] = useState(false)
+  const [Open, setOpen] = useState('')
   // HOOKS
   const [data, { loading: loaStore }] = useStore()
   const {
@@ -49,20 +42,12 @@ const Banner = ({ isMobile }) => {
   } = useImageStore(data?.idStore)
   const [banner, { loading: loadBanner }] = useBanner()
   const [dataSchedule, { loading }] = useSchedule({ day: day })
-  const [dataScheduleTow] = useSchedule({ day: day + 1 })
+  const [dataScheduleTow] = useSchedule({ day: day >= 6 ? 0 : day })
   const [dataSchedules, { loading: lsc }] = useSchedules({ schDay: 1 })
   const { path, bnImageFileName } = banner || {}
   const { schHoSta, schHoEnd } = dataSchedule || {}
   const { schHoSta: dateTow } = dataScheduleTow || {}
-  const [endDate, setEndDate] = useState(false)
-  useEffect(() => {
-    (() => {
-      const now = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-      const hourDate = new Date(`1/1/1999 ${now}`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-      let isClose = new Date('1/1/1999 ' + schHoEnd).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-      setEndDate(hourDate >= isClose)
-    })()
-  }, [schHoEnd, schHoSta, dataSchedules])
+
 
   useEffect(() => {
     (() => {
@@ -90,24 +75,57 @@ const Banner = ({ isMobile }) => {
         const hourDate = new Date(`1/1/1999 ${hour}`)
         return (hour, isOpen(hourDate) ? 'ABIERTO' : 'CERRADO')
       })
-
-
-      function dateObj(d) {
-        if (!d) return null
-        let parts = d.split(/:|\s/)
-        let date = new Date()
-        if (parts.pop().toLowerCase() == 'pm') parts[0] = (+parts[0]) + 12
-        date.setHours(+parts.shift())
-        date.setMinutes(+parts.shift())
-        return date
+      // https://codereview.stackexchange.com/questions/268899/find-when-the-shop-will-next-open-or-close
+      const openings = {
+        'openingMon' : `${schHoSta} - ${schHoEnd} ; 02:00 - 20:00`,
+        'openingTue' : `${schHoSta} - ${schHoEnd}`,
+        'openingWed' : `${schHoSta} - ${schHoEnd}`,
+        'openingThu' : `${schHoSta} - ${schHoEnd}`,
+        'openingFri' : `${schHoSta} - ${schHoEnd}`,
+        // "openingSat" : "03:00 - 20:00 ; 02:00 - 20:00",
+        'openingSat' : `${schHoSta} - ${schHoEnd}`,
+        'openingSun' : `${schHoSta} - ${schHoEnd}`
       }
-      let now2 = new Date()
-      let startDate = dateObj(schHoSta)
-      let endDate = dateObj(schHoEnd)
-      let open = now2 < endDate && now2 > startDate ? true : false
-      setOpen(open)
+      let timeToInt = function(text) {
+        let hour = parseInt(text.substring(0, 2))
+        let minute = parseInt(text.substring(3))
+        return hour * 60 + minute
+      }
+      let set_opening = function (openings) {
+        let date = new Date()
+        let currentTime = date.getHours() * 60 + date.getMinutes()
+        let startDay = date.getDay()
+        let dayOfWeek = startDay
+        let weekDayLookup = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        let nextTime = false
+        for (; ;) {
+          let dayName = weekDayLookup[dayOfWeek % 7]
+          let opening = openings && openings['opening' + dayName.substring(0, 3)]
+          let timeSpans = opening?.split(';').map(item => {return item.trim()})
+          for (let span of timeSpans) {
+            let hours = span.split('-').map(item => {return item.trim()})
+            if (nextTime == false) {
+              let openTime = timeToInt(hours[0])
+              let closeTime = timeToInt(hours[1])
+              if (currentTime >= openTime && currentTime <= closeTime)
+                return setOpen('Abierto Ahora - Cierra a las: ' + hours[1])
+              nextTime = true
+            }
+            else {
+              if (dayOfWeek == startDay) return setOpen('Cerrado ahora - Abre a las: ' + dayName + ' ' + hours[0])
+              const openNextDay = (dayOfWeek - startDay == 1 ? 'Mañana' : dayName)
+              const tow = `A las ${dateTow ? dateTow : null}`
+              return setOpen(`Cerrado hoy - Abre: ${openNextDay} ${tow}`)
+            }
+          }
+          dayOfWeek++
+          if (dayOfWeek > 14 || !dateTow || !schHoSta || !schHoEnd)
+            return setOpen('No opening time found')
+        }
+      }
+      set_opening(openings)
     })()
-  }, [dataSchedules, lsc, schHoEnd, schHoSta])
+  }, [dataSchedules, lsc, schHoEnd, schHoSta, dateTow])
   useEffect(() => {
     const date = new Date()
     const currentDay = date.getDay()
@@ -163,8 +181,7 @@ const Banner = ({ isMobile }) => {
               </svg>
             </span>
             <div className='merchant-banner__status-description' data-test-id='merchant-banner-status-description'>
-              <h2 className='merchant-banner__status-title'>{`Restaurante  ${Open ? 'Abierto' : 'Cerrado'}`}</h2>
-              {/* {!Open && <h3 className='merchant-banner__status-message'>{`Abre ${endDate && dateTow ? 'mañana' : '' } a las ${dateTow}`}</h3>} */}
+              <h2 className='merchant-banner__status-title'>{`Restaurante  ${Open}`}</h2>
             </div>
           </MerchantBannerWrapperInfo>}
         <ButtonCard onClick={() => { return path && bnImageFileName && HandleDeleteBanner() }}>

@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
+import { useLazyQuery } from '@apollo/client'
+import { MainCard } from 'components/common/Reusable/ShadowCard'
+import { Skeleton } from 'components/Skeleton'
+import { GET_ALL_SALES_STATISTICS } from 'container/ventas/queries'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
-import { useLazyQuery } from '@apollo/client'
 import styled, { css } from 'styled-components'
-import { Flex } from './styled'
-import moment from 'moment'
-import { MainCard } from 'components/common/Reusable/ShadowCard'
-import { GET_ALL_SALES_STATISTICS } from 'container/ventas/queries'
 import { numberFormat } from '../../utils'
-import { Skeleton } from 'components/Skeleton'
+import { Flex } from './styled'
 
 export const SalesWeek = () => {
   const [getAllSalesStoreStatistic, { data, loading }] = useLazyQuery(GET_ALL_SALES_STATISTICS)
