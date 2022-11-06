@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { useSchedules } from 'npm-pkg-hook'
+import { useSchedules, useFormatDate } from 'npm-pkg-hook'
 import {
   useContext, useEffect,
   useState
@@ -22,13 +22,14 @@ import { Card } from './styled'
 export const ScheduleTimings = () => {
   const { setAlertBox } = useContext(Context)
   const [data, { loading: lsc }] = useSchedules({ schDay: 1 })
-  console.log('🚀 ~ file: ScheduleTimings.jsx ~ line 25 ~ ScheduleTimings ~ data', data)
   const [showTiming, setShowTiming] = useState(1)
   const SHOW_TIMING = useSetState(false)
   const handleClick = n => {
     setShowTiming(n)
     SHOW_TIMING.setState(!SHOW_TIMING.state)
   }
+  const { handleHourPmAM } = useFormatDate({ })
+
   useEffect(() => {
     const date = new Date()
     const currentDay = date.getDay()
@@ -39,9 +40,6 @@ export const ScheduleTimings = () => {
   const [setStoreSchedule, { loading }] = useMutation(CREATE_STORE_CALENDAR)
   const { startTime, endTime } = values || {}
 
-  function amPm (time) {
-    return new Date(`1/1/1999 ${time}`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-  }
   // eslint-disable-next-line
   const handleValidateDates = () => {
     const start = startTime
@@ -63,8 +61,6 @@ export const ScheduleTimings = () => {
     const val = handleValidateDates()
     if (!startTime && !endTime) return setAlertBox({ message: 'Llena todos los campos' })
     if (!val) return setAlertBox({ message: 'Error, la hora de ingreso debe ser menor que la de salida' })
-    const start = amPm(startTime)
-    const end = amPm(endTime)
     setStoreSchedule({
       variables: {
         input: {
@@ -174,22 +170,25 @@ export const ScheduleTimings = () => {
         <ScheduleHeaderNav current={showTiming === 0 && 1} onClick={() => {return handleClick(0)}}>Domingo</ScheduleHeaderNav>
       </ScheduleHeader>
       <ScheduleHeader>
-        {data ? data?.map((s, i) => {return (
-          <Card
-            active={s.schDay === showTiming}
-            current={s.schDay === showTiming}
-            direction='column'
-            key={i + 1}
-            margin='10px'
-            onClick={() => {return handleClick(s.schDay)}}
-          >
-            <Text>
-              {days[s.schDay]}</Text>
-            <Text size='1em'>
-              {s.schHoSta} - {s.schHoEnd}
-            </Text>
-          </Card>
-        )}) : <div>Agenda tus horarios</div>}
+        {data ? data?.map((s, i) => {
+          const start = handleHourPmAM(s.schHoSta)
+          const end = handleHourPmAM(s.schHoEnd)
+          return (
+            <Card
+              active={s.schDay === showTiming}
+              current={s.schDay === showTiming}
+              direction='column'
+              key={i + 1}
+              margin='10px'
+              onClick={() => {return handleClick(s.schDay)}}
+            >
+              <Text>
+                {days[s.schDay]}</Text>
+              <Text size='1em'>
+                {start} - {end}
+              </Text>
+            </Card>
+          )}) : <div>Agenda tus horarios</div>}
       </ScheduleHeader>
     </div>
 

@@ -55,19 +55,19 @@ export const Messages = () => {
     // fetchPolicy: 'network-only'
   })
   const { data: messageDataNew, error: messageError } = useSubscription(NEW_MESSAGE, {
-    pollInterval: 10,
-    onSubscriptionData: () => {
-      // client.writeQuery({
-      //     query: GET_MESSAGES,
-      //     // data: {
-      //     //     ...messageData?.getMessages,
-      //     //     getMessages: [
-      //     //         ...messageData?.getMessages,
-      //     //         newMessage,
-      //     //     ]
-      //     // }
-      // })
-    }
+    pollInterval: 10
+    // onSubscriptionData: () => {
+    // client.writeQuery({
+    //     query: GET_MESSAGES,
+    //     // data: {
+    //     //     ...messageData?.getMessages,
+    //     //     getMessages: [
+    //     //         ...messageData?.getMessages,
+    //     //         newMessage,
+    //     //     ]
+    //     // }
+    // })
+    // }
   })
   const [dataMessage, setDataMessage] = useState([])
   useEffect(() => {

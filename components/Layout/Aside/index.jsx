@@ -88,9 +88,9 @@ const Aside = () => {
 `
   const { data: dataWS } = useSubscription(GET_STATE_ORDER, {
     // context: { clientName: "admin-server" },
-    onSubscriptionData: () => {
-      // console.log(subscriptionData.data.numberIncremented)
-    }
+    // onSubscriptionData: () => {
+    //   // console.log(subscriptionData.data.numberIncremented)
+    // }
   })
 
   return (

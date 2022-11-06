@@ -112,15 +112,17 @@ const Banner = ({ isMobile }) => {
               nextTime = true
             }
             else {
-              if (dayOfWeek == startDay) return setOpen('Cerrado ahora - Abre a las: ' + dayName + ' ' + hours[0])
+              if (dayOfWeek === startDay) return setOpen('Cerrado ahora - Abre a las: ' + dayName + ' ' + hours[0])
+              // eslint-disable-next-line
               const openNextDay = (dayOfWeek - startDay == 1 ? 'Mañana' : dayName)
+              // eslint-disable-next-line
               const tow = `A las ${dateTow ? dateTow : null}`
-              return setOpen(`Cerrado hoy - Abre: ${openNextDay} ${tow}`)
+              // return setOpen(`Cerrado hoy - Abre: ${openNextDay} ${tow}`)
             }
           }
           dayOfWeek++
           if (dayOfWeek > 14 || !dateTow || !schHoSta || !schHoEnd)
-            return setOpen('No opening time found')
+            return setOpen('Cerrado')
         }
       }
       set_opening(openings)
@@ -242,4 +244,6 @@ const Banner = ({ isMobile }) => {
     </div>
   )
 }
-export const ManageBanner = memo(Banner)
+export const ManageBanner = memo(Banner, (currentProps, nextProps) => {
+  return currentProps.isMobile === nextProps.isMobile
+})
