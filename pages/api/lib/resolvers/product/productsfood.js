@@ -135,6 +135,7 @@ export const productFoodsAll = async (root, args, context, info) => {
     })
     return data
   } catch (e) {
+    console.log(e)
     const error = new Error('Lo sentimos, ha ocurrido un error interno')
     return error
   }

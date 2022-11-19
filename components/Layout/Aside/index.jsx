@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-expressions */
 import {
-  gql,
-  useApolloClient,
-  useSubscription
+  // gql,
+  useApolloClient
+  // useSubscription
 } from '@apollo/client'
 import { Context } from 'context/Context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMobile, useStore } from 'npm-pkg-hook'
 import PropTypes from 'prop-types'
-import {
+import React, {
   useCallback,
   useContext,
   useState
@@ -41,7 +41,7 @@ import {
   Router
 } from './styled'
 
-const Aside = () => {
+const MemoAside = () => {
   const { isMobile } = useMobile()
   const { client } = useApolloClient()
   const location = useRouter()
@@ -81,17 +81,17 @@ const Aside = () => {
     idStore,
     uState
   } = dataStore || {}
-  const GET_STATE_ORDER = gql`
-    subscription {
-      numberIncremented
-    }
-`
-  const { data: dataWS } = useSubscription(GET_STATE_ORDER, {
-    // context: { clientName: "admin-server" },
-    // onSubscriptionData: () => {
-    //   // console.log(subscriptionData.data.numberIncremented)
-    // }
-  })
+  //   const GET_STATE_ORDER = gql`
+  //     subscription {
+  //       numberIncremented
+  //     }
+  // `
+  // const { data: dataWS } = useSubscription(GET_STATE_ORDER, {
+  //   // context: { clientName: "admin-server" },
+  //   // onSubscriptionData: () => {
+  //   //   // console.log(subscriptionData.data.numberIncremented)
+  //   // }
+  // })
 
   return (
     <>
@@ -155,7 +155,7 @@ const Aside = () => {
             {(loading) ? null : (!pathname && <Link href={`/dashboard/${storeName?.replace(/\s/g, '-').toLowerCase()}/${idStore}`}>
               <a>
                 <h1 className='title_store'>{storeName}</h1>
-                {dataWS?.numberIncremented}
+                {/* {dataWS?.numberIncremented} */}
 
               </a>
             </Link>)}
@@ -253,9 +253,9 @@ const Aside = () => {
     </>
   )
 }
-export default Aside
+export default React.memo(MemoAside)
 
-Aside.propTypes = {
+MemoAside.propTypes = {
   handleClickMenu: PropTypes.func,
   closeSession: PropTypes.func,
   filter: PropTypes.func,

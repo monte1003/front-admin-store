@@ -16,10 +16,9 @@ import {
   WrapperButton,
   WrapperCard
 } from './styled'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { numberFormat } from '../../utils'
-
-export const CardProducts = ({
+export const MemoCardProducts = ({
   del,
   edit,
   fileInputRef,
@@ -216,7 +215,7 @@ export const CardProducts = ({
               className='store_image'
               layout='fill'
               objectFit='cover'
-              src={ProImage || src || '/images/DEFAULTBANNER.png'}
+              src={ProImage ?? src ?? '/images/DEFAULTBANNER.png'}
             />
           </div>
         </Card>
@@ -224,8 +223,9 @@ export const CardProducts = ({
     </>
   )
 }
+export const CardProducts = React.memo(MemoCardProducts)
 
-CardProducts.propTypes = {
+MemoCardProducts.propTypes = {
   ProDescription: PropTypes.any,
   ProDescuento: PropTypes.number || PropTypes.string,
   ProImage: PropTypes.string,

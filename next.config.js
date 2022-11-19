@@ -6,7 +6,7 @@ const {
   PHASE_DEVELOPMENT_SERVER,
   PHASE_PRODUCTION_BUILD
 } = require('next/constants')
-
+const runtimeCaching = require('next-pwa/cache')
 const withTM = require('next-transpile-modules')(['pkg-components']) // pass the modules you would like to see transpiled
 const withPWA = require('next-pwa')({
   dest: 'public'
@@ -88,7 +88,7 @@ module.exports = (phase) => {
   //     }
   //   ]
   // }
-  const basePath = ''
+  // const basePath = ''
   // puedes sobre escribir la ruta
   // const rewrites = async () => {
   //   return [
@@ -104,8 +104,10 @@ module.exports = (phase) => {
   return withPWA(withTM({
     env,
     pwa: {
-      disable: process.env.NODE_ENV === 'development',
-      register: true
+      register: true,
+      dest: 'public',
+      runtimeCaching,
+      disable: process.env.NODE_ENV === 'development'
     },
     images,
     reactStrictMode: true,

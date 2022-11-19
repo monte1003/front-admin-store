@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import { Toast } from 'pkg-components'
 import PropTypes from 'prop-types'
 import { IconCancel } from 'public/icons'
-import { useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { Context } from '../../context/Context'
 import { AlertBox } from '../AlertBox'
@@ -17,7 +17,7 @@ import Aside from './Aside'
 import { Footer } from './footer'
 import { Header } from './header'
 
-export const Layout = ({ children, watch, settings }) => {
+export const MemoLayout = ({ children, watch, settings }) => {
   const location = useRouter()
   const {
     error,
@@ -105,8 +105,8 @@ export const Layout = ({ children, watch, settings }) => {
     </>
   )
 }
-
-Layout.propTypes = {
+export const Layout = React.memo(MemoLayout)
+MemoLayout.propTypes = {
   children: PropTypes.any,
   settings: PropTypes.any,
   watch: PropTypes.any

@@ -6,7 +6,7 @@ import { Context } from 'context/Context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMobile } from 'npm-pkg-hook'
-import {
+import React, {
   useCallback,
   useContext,
   useEffect,
@@ -25,7 +25,7 @@ import { Hamburguer } from './Burguer'
 import { Options } from './options'
 
 
-export const Header = () => {
+export const MemoHeader = () => {
   const style = useScrollHook()
   const {
     setSalesOpen,
@@ -58,7 +58,258 @@ export const Header = () => {
       })
     setLoading(false)
   }, [client, location, setAlertBox])
+  // useEffect(() => {
+  //   //localStorage.clear();
+  //   manage_crash()
+  //   //Create a windows ID for each windows that is oppened
+  //   let current_window_id = Date.now() + ''//convert to string
+  //   let time_period = 3000//ms
+  //   //Check to see if PageVisibility API is supported or not
+  //   let PV_API = page_visibility_API_check()
+  //   /************************
+  //  ** PAGE VISIBILITY API **
+  //  *************************/
+  //   function page_visibility_API_check ()
+  //   {
+  //     let page_visibility_API = false
+  //     let visibility_change_handler = false
+  //     if ('hidden' in document)
+  //     {
+  //       page_visibility_API = 'hidden'
+  //       visibility_change_handler = 'visibilitychange'
+  //     }
+  //     else
+  //     {
+  //       let prefixes = ['webkit','moz','ms','o']
+  //       //loop over all the known prefixes
+  //       for (const element of prefixes){
+  //         if ((element + 'Hidden') in document)
+  //         {
+  //           page_visibility_API = element + 'Hidden'
+  //           visibility_change_handler = element + 'visibilitychange'
+  //         }
+  //       }
+  //     }
+       
+  //     if (!page_visibility_API)
+  //     {
+  //       //PageVisibility API is not supported in this device
+  //       return page_visibility_API
+  //     }
+       
+  //     return {'hidden': page_visibility_API, 'handler': visibility_change_handler}
+  //   }
+   
+  //   if (PV_API)
+  //   {
+  //     document.addEventListener(PV_API.handler, function(){
+  //       //console.log("current_window_id", current_window_id, "document[PV_API.hidden]", document[PV_API.hidden]);
+  //       if (document[PV_API.hidden])
+  //       {
+  //         //windows is hidden now
+  //         remove_from_active_windows(current_window_id)
+  //         //skip_once = true;
+  //       }
+  //       else
+  //       {
+  //         //windows is visible now
+  //         //add_to_active_windows(current_window_id);
+  //         //skip_once = false;
+  //         check_current_window_status ()
+  //       }
+  //     }, false)
+  //   }
+   
+  //   /********************************************
+  //  ** ADD CURRENT WINDOW TO main_windows LIST **
+  //  *********************************************/
+  //   add_to_main_windows_list(current_window_id)
+  //   //update active_window to current window
+  //   localStorage.active_window = current_window_id
+   
+  //   /**************************************************************************
+  //  ** REMOVE CURRENT WINDOWS FROM THE main_windows LIST ON CLOSE OR REFRESH **
+  //  ***************************************************************************/
+  //   window.addEventListener('beforeunload', function ()
+  //   {
+  //     remove_from_main_windows_list(current_window_id)
+      
+  //   })
+   
+  //   /*****************************
+  //  ** ADD TO main_windows LIST **
+  //  ******************************/
+  //   function add_to_main_windows_list(window_id)
+  //   {
+  //     let temp_main_windows_list = get_main_windows_list()
+  //     let index = temp_main_windows_list.indexOf(window_id)
+       
+  //     if (index < 0)
+  //     {
+  //       //this windows is not in the list currently
+  //       temp_main_windows_list.push(window_id)
+  //     }
+       
+  //     localStorage.main_windows = temp_main_windows_list.join(',')
+       
+  //     return temp_main_windows_list
+  //   }
+   
+  //   /**************************
+  //  ** GET main_windows LIST **
+  //  ***************************/
+  //   function get_main_windows_list()
+  //   {
+  //     let temp_main_windows_list = []
+  //     if (localStorage.main_windows)
+  //     {
+  //       temp_main_windows_list = (localStorage.main_windows).split(',')
+  //     }
+       
+  //     return temp_main_windows_list
+  //   }
+   
+  //   /**********************************************
+  //  ** REMOVE WINDOWS FROM THE main_windows LIST **
+  //  ***********************************************/
+  //   function remove_from_main_windows_list(window_id)
+  //   {
+  //     let temp_main_windows_list = []
+  //     if (localStorage.main_windows)
+  //     {
+  //       temp_main_windows_list = (localStorage.main_windows).split(',')
+  //     }
+       
+  //     let index = temp_main_windows_list.indexOf(window_id)
+  //     if (index > -1) {
+  //       temp_main_windows_list.splice(index, 1)
+  //     }
+       
+  //     localStorage.main_windows = temp_main_windows_list.join(',')
+       
+  //     //remove from active windows too
+  //     remove_from_active_windows(window_id)
+       
+  //     return temp_main_windows_list
+  //   }
+   
+  //   /**************************
+  //  ** GET active_windows LIST **
+  //  ***************************/
+  //   function get_active_windows_list()
+  //   {
+  //     let temp_active_windows_list = []
+  //     if (localStorage.actived_windows)
+  //     {
+  //       temp_active_windows_list = (localStorage.actived_windows).split(',')
+  //     }
+  //     return temp_active_windows_list
+  //   }
+  //   /*************************************
+  //  ** REMOVE FROM actived_windows LIST **
+  //  **************************************/
+  //   function remove_from_active_windows(window_id)
+  //   {
+  //     let temp_active_windows_list = get_active_windows_list()
+  //     let index = temp_active_windows_list.indexOf(window_id)
+  //     if (index > -1) {
+  //       temp_active_windows_list.splice(index, 1)
+  //     }
+  //     localStorage.actived_windows = temp_active_windows_list.join(',')
+  //     return temp_active_windows_list
+  //   }
+  //   /********************************
+  //  ** ADD TO actived_windows LIST **
+  //  *********************************/
+  //   function add_to_active_windows(window_id)
+  //   {
+  //     let temp_active_windows_list = get_active_windows_list()
+  //     let index = temp_active_windows_list.indexOf(window_id)
+  //     if (index < 0)
+  //     {
+  //       //this windows is not in active list currently
+  //       temp_active_windows_list.push(window_id)
+  //     }
 
+  //     localStorage.actived_windows = temp_active_windows_list.join(',')
+  //     return temp_active_windows_list
+  //   }
+  //   /*****************
+  //  ** MANAGE CRASH **
+  //  ******************/
+  //   //If the last update didn't happened recently (more than time_period*2)
+  //   //we will clear saved localStorage's data and reload the page
+  //   function manage_crash()
+  //   {
+  //     if (localStorage.last_update)
+  //     {
+  //       if (parseInt(localStorage.last_update) + (time_period * 2) < Date.now())
+  //       {
+  //         //seems a crash came! who knows!?
+  //         //localStorage.clear();
+  //         localStorage.removeItem('main_windows')
+  //         localStorage.removeItem('actived_windows')
+  //         localStorage.removeItem('active_window')
+  //         localStorage.removeItem('last_update')
+  //         location.reload()
+  //       }
+  //     }
+  //   }
+  //   /********************************
+  //  ** CHECK CURRENT WINDOW STATUS **
+  //  *********************************/
+  //   function check_current_window_status(test)
+  //   {
+  //     manage_crash()
+  //     if (PV_API)
+  //     {
+  //       let active_status = 'Inactive'
+  //       let windows_list = get_main_windows_list()
+  //       let active_windows_list = get_active_windows_list()
+  //       if (windows_list.indexOf(localStorage.active_window) < 0)
+  //       {
+  //         //last actived windows is not alive anymore!
+  //         //remove_from_main_windows_list(localStorage.active_window);
+  //         //set the last added window, as active_window
+  //         localStorage.active_window = windows_list[windows_list.length - 1]
+  //       }
+  //       if (!document[PV_API.hidden])
+  //       {
+  //         //Window's page is visible
+  //         localStorage.active_window = current_window_id
+  //       }
+  //       if (localStorage.active_window === current_window_id) { active_status = 'Active' }
+  //       if (active_status === 'Active')
+  //       {
+  //         window.document.title = 'Active'
+  //         active_windows_list = add_to_active_windows(current_window_id)
+  //       }
+  //       else
+  //       {
+  //         active_windows_list = remove_from_active_windows(current_window_id)
+  //         window.document.title = 'InActive'
+
+  //       }
+  //       let element_holder = document.getElementById('holder_element')
+  //       if (element_holder?.insertAdjacentHTML) {
+  //         // element_holder?.insertAdjacentHTML('afterbegin', '<div>'+element_holder.childElementCount+') Current Windows is '+ active_status +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+active_windows_list.length+' window(s) is visible and active of '+ windows_list.length +' windows</div>')
+  //       }
+  //     }
+  //     else
+  //     {
+  //       console.log('PageVisibility API is not supported :(')
+  //       //our INACTIVE pages, will remain INACTIVE forever, you need to make some action in this case!
+  //     }
+  //     localStorage.last_update = Date.now()
+  //   }
+  //   //check storage continuously
+  //   setInterval(function(){
+  //     check_current_window_status ()
+  //   }, time_period)
+   
+  //   //initial check
+  //   check_current_window_status ()
+  // }, [location])
 
   const { isMobile } = useMobile()
   const [timer, setTimer] = useState(0)
@@ -81,7 +332,7 @@ export const Header = () => {
       window.removeEventListener('focus', () => { return })
       window.removeEventListener('blur', () => { return })
     }
-  }, [isOn])
+  }, [])
   const [openAlerCloseSessions, setOpenAlertCloseSessions] = useState(false)
   useEffect(() => {
     if (timer >= 300) {
@@ -94,6 +345,7 @@ export const Header = () => {
   }, [onClickLogout, timer])
   return (
     <HeaderC scrollNav={scrollNav} style={style} >
+      <div id='holder_element'></div>
       <AwesomeModal
         backdrop='static'
         borderRadius='10px'
@@ -147,6 +399,8 @@ export const Header = () => {
     </HeaderC>
   )
 }
+
+export const Header = React.memo(MemoHeader)
 
 export const CtnItemOps = styled.div`
   display: flex;

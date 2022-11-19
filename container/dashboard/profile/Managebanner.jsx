@@ -1,8 +1,12 @@
 import { Skeleton } from 'components/Skeleton/index'
-import moment from 'moment'
 import Image from 'next/image'
 import {
-  useBanner, useImageStore, useSchedule, useSchedules, useStore
+  useBanner, 
+  useImageStore,
+  useSchedule,
+  useSchedules,
+  useStore,
+  useFormatDate
 } from 'npm-pkg-hook'
 import { PColor } from 'public/colors'
 import {
@@ -10,8 +14,10 @@ import {
   IconEdit,
   IconPromo
 } from 'public/icons'
-import {
-  memo, useEffect,
+import React, {
+  memo, 
+  useEffect,
+  useRef,
   useState
 } from 'react'
 import {
@@ -47,34 +53,75 @@ const Banner = ({ isMobile }) => {
   const { path, bnImageFileName } = banner || {}
   const { schHoSta, schHoEnd } = dataSchedule || {}
   const { schHoSta: dateTow } = dataScheduleTow || {}
+  const { handleHourPmAM } = useFormatDate({ })
+  const fullText = 'Pene suela'
+  const useAnimationFrame = (callback, start, end, duration = 1000) => {
+    // Use useRef for mutable variables that we want to persist
+    // without triggering a re-render on their change
+    const functionRef = React.useRef()
+    const delta = Math.abs(start - end)
+    const frameCount = Math.ceil(60 * (duration / 1000))
+    const iteration = React.useRef(frameCount)
+    React.useEffect(() => {
+      const animate = (rafId) => {
+        if (iteration.current <= 0) {
+          cancelAnimationFrame(rafId)
+          iteration.current = frameCount
+        }
+  
+        callback(Math.max(delta / iteration.current, 1))
+        iteration.current--
+      }
+  
+      if (delta > 0) functionRef.current = requestAnimationFrame(animate)
+  
+      return () => {return cancelAnimationFrame(functionRef.current)}
+    }, [callback, delta, frameCount, iteration])
+  }
+  const Counter = ({ numeral = 0 }) => {
+    const [currentValue, setCurrentValue] = React.useState(0)
+    const fxOperator = currentValue > numeral ? 'subtraction' : 'addition'
+  
+    useAnimationFrame(
+      (diffValue) => {
+        // Pass on a function to the setter of the state
+        // to make sure we always have the latest state
+        setCurrentValue((prevCount) =>
+        {return fxOperator === 'addition'
+          ? prevCount + diffValue
+          : prevCount - diffValue}
+        )
+      },
+      currentValue,
+      numeral,
+      300
+    )
+  
+    return <div>{new Intl.NumberFormat().format(Math.round(currentValue))}</div>
+  }
+  const useAnimatedText = textMessage => {
+    const fullTextRef = useRef(textMessage)
+    const [text, setText] = useState('')
+    const [index, setIndex] = useState(0)
+    useEffect(() => {
+      if (index < fullText.length) {
+        window.requestAnimationFrame(() => {
+        // eslint-disable-next-line
+                setText(text => text + fullTextRef.current[index]);
+          setIndex(() => {return index + 1})
+        })
+      }
+    }, [index])
+    useEffect(() => {
+      if(fullText?.current) {
+        fullText.current = textMessage
+      }
+    }, [textMessage])
 
-
+    return text
+  }
   useEffect(() => {
     (() => {
-      const newArray = dataSchedules?.map((date) => { return { open: date.schHoSta, close: date.schHoEnd } }) || []
-      function isOpen(hour) {
-        let opened = false
-        newArray.forEach(item => {
-          let open = new Date('1/1/1999 ' + item.open)
-          let close = new Date('1/1/1999 ' + item.close)
-          opened = opened || (hour >= open && close >= hour)
-        })
-        return opened
-      }
-      const now = moment().format('hh:mm')
-      const testHours = [
-        `${now}`,
-        `${now}`,
-        `${now}`,
-        `${now}`,
-        `${now}`,
-        `${now}`,
-        `${now}`
-      ]
-      testHours.forEach(hour => {
-        const hourDate = new Date(`1/1/1999 ${hour}`)
-        return (hour, isOpen(hourDate) ? 'ABIERTO' : 'CERRADO')
-      })
       // https://codereview.stackexchange.com/questions/268899/find-when-the-shop-will-next-open-or-close
       const openings = {
         'openingMon' : `${schHoSta} - ${schHoEnd} ; 02:00 - 20:00`,
@@ -97,6 +144,15 @@ const Banner = ({ isMobile }) => {
         let startDay = date.getDay()
         let dayOfWeek = startDay
         let weekDayLookup = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        const days = {
+          Monday: 'Lunes',
+          Tuesday: 'Martes',
+          Wednesday: 'Miércoles',
+          Thursday: 'Jueves',
+          Friday: 'Viernes',
+          Saturday: 'Sabado',
+          Sunday: 'Domingo'
+        }
         let nextTime = false
         for (; ;) {
           let dayName = weekDayLookup[dayOfWeek % 7]
@@ -112,12 +168,12 @@ const Banner = ({ isMobile }) => {
               nextTime = true
             }
             else {
-              if (dayOfWeek === startDay) return setOpen('Cerrado ahora - Abre a las: ' + dayName + ' ' + hours[0])
+              if (dayOfWeek === startDay) return setOpen('Cerrado ahora - Abre hoy: ' + days[dayName] + ' ' + handleHourPmAM(schHoSta))
               // eslint-disable-next-line
               const openNextDay = (dayOfWeek - startDay == 1 ? 'Mañana' : dayName)
               // eslint-disable-next-line
               const tow = `A las ${dateTow ? dateTow : null}`
-              // return setOpen(`Cerrado hoy - Abre: ${openNextDay} ${tow}`)
+              return setOpen(`Cerrado hoy - Abre: ${openNextDay} ${tow}`)
             }
           }
           dayOfWeek++
@@ -127,15 +183,32 @@ const Banner = ({ isMobile }) => {
       }
       set_opening(openings)
     })()
-  }, [dataSchedules, lsc, schHoEnd, schHoSta, dateTow])
+  }, [dataSchedules, lsc, schHoEnd, schHoSta, dateTow, handleHourPmAM])
   useEffect(() => {
     const date = new Date()
     const currentDay = date.getDay()
     setDay(currentDay)
   }, [])
-  const isLoading = loadBanner || loaStore || loading
+  // const isLoading = loadBanner || loaStore || loading
+  const isLoading = false
+  const text = useAnimatedText(fullText)
+  const [digit, setDigit] = React.useState(1337)
+
   return (
     <div>
+      {/* <span>{text} </span>
+      <div>
+        <Counter numeral={digit} />
+        <input
+          onChange={({ target: { value } }) =>
+          {return setDigit(() => {
+            return value
+          })}
+          }
+          type='number'
+          value={digit}
+        />
+      </div> */}
       <Section>
         <InputFile
           accept='.jpg, .png'

@@ -125,7 +125,6 @@ const GenerateSales = () => {
     setPrint,
     handleSubmit
   }
-
   return (
     <Wrapper>
       <ModalSales {...restPropsSalesModal} />
@@ -134,7 +133,6 @@ const GenerateSales = () => {
           <div className='child'>
             <SwiperSliderCategory {...restPropsSliderCategory} />
             <FormFilterSales {...restPropsFormFilter} />
-            
             <ScrollbarProduct>
               <ContainerGrid>
                 {loading || productsFood?.length <= 0 ? (

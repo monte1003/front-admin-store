@@ -59,7 +59,24 @@ export const FoodComponent = ({
 }) => {
   const OPEN_MODAL_ORGANICE = useSetState(0)
   const propsForm = { handleRegister, setName, names, check, handleChange, values, dataCategoriesProducts, handleCheckEnvioGratis, image, ...props }
-  const propsListProducts = { onClickClear, data, OPEN_MODAL_ORGANICE, dataFree, filter: true, organice: true, handleChangeFilter, grid, search, showMore, fetchMore, loading, setShowMore, pState: 1, handleDelete, ...props }
+  const propsListProducts = {
+    onClickClear,
+    data,
+    OPEN_MODAL_ORGANICE,
+    dataFree,
+    filter: true,
+    organice: true,
+    handleChangeFilter,
+    grid,
+    search,
+    showMore,
+    fetchMore,
+    loading,
+    setShowMore,
+    pState: 1,
+    handleDelete,
+    ...props
+  }
 
   return (<>
     <Container>
@@ -83,6 +100,10 @@ export const FoodComponent = ({
           src={src}
         />
       </Card>
+      <Card>
+      asdas
+      </Card>
+
     </Container>
     {/* <Dessert /> */}
     <ListProducts {...propsListProducts} />

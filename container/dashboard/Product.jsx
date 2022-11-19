@@ -131,6 +131,10 @@ export const Product = ({
             setModal={setModal}
           />
         </ContentInfo>
+        <div>
+        asfsd
+        </div>
+
       </CardProductsModal>
       <AwesomeModal
         footer={false}

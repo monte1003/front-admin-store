@@ -1,13 +1,8 @@
-import {
-  useLazyQuery,
-  useMutation,
-  useQuery
-} from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { useCategoriesProduct } from 'components/hooks/useCategoriesProducts'
 import { Context } from 'context/Context'
 import {
   useContext,
-  useEffect,
   useReducer,
   useRef,
   useState
@@ -28,30 +23,27 @@ import {
   UPDATE_IMAGE_PRODUCT_FOOD,
   UPDATE_PRODUCT_FOOD
 } from './queries'
-
+import { useProductsFood } from 'npm-pkg-hook'
 export const Food = () => {
   const [errors, setErrors] = useState({})
   const [values, setValues] = useState({})
   const { state, changeState } = useSetState(null)
   const [names, setName] = useLocalStorage('namefood', '')
   const { setAlertBox } = useContext(Context)
-  const [dataProducto, setData] = useState([])
   const [showMore, setShowMore] = useState(50)
   const [search, setSearch] = useState('')
   /* Filtro  */
   const [searchFilter, setSearchFilter] = useState({ gender: [], desc: [], speciality: [] })
   const [filter, setFilter] = useState({ gender: [], desc: [], speciality: [] })
   //-----------QUERIES ------------
-  // Lógica para registrar productos a una categoría
-  const [productFoodsAll, { data: dataProduct, fetchMore }] = useLazyQuery(GET_ALL_PRODUCT_STORE, {
-    fetchPolicy: 'network-only',
-    variables:
-    {
-      search: search,
-      gender: searchFilter?.gender,
-      desc: searchFilter?.desc,
-      categories: searchFilter?.speciality
-    }
+
+  const [productsFood, { loading, fetchMore }] = useProductsFood({
+    search: search?.length >= 4 ? search : '',
+    gender: searchFilter?.gender || [],
+    desc: searchFilter?.desc || [],
+    categories: searchFilter?.speciality,
+    max: showMore,
+    min: 0
   })
   // ------------ HANDLES ------------
   const handleChange = (e, error) => {
@@ -96,9 +88,9 @@ export const Food = () => {
     )
   }
   const onTargetClick = () => {
-    // e.preventDefault()
     fileInputRef.current.click()
   }
+  // eslint-disable-next-line
   const handleRegister = async e => {
     e.preventDefault()
     const isImage = validationImg(image)
@@ -178,15 +170,6 @@ export const Food = () => {
     setSearchFilter({ ...filter })
   }
 
-  useEffect(() => {
-    if (dataProduct?.productFoodsAll) {
-      // eslint-disable-next-line no-unsafe-optional-chaining
-      setData([...dataProduct?.productFoodsAll])
-    }
-  }, [dataProduct, searchFilter, search])
-  useEffect(() => {
-    productFoodsAll({ variables: { max: showMore, search: search } })
-  }, [searchFilter, showMore, search, productFoodsAll])
   const onChangeRange = () => {
     // const { value } = e.target
     // setFilterPrice(s => ({ ...s, [name]: s[name].filter(f => f !== value) }))
@@ -220,7 +203,7 @@ export const Food = () => {
   const freeDelivery = dataProductFree => {
     return dataProductFree.ProDelivery === 1
   }
-  const productFree = dataProducto.filter(freeDelivery)
+  const productFree = productsFood.filter(freeDelivery)
   const initialStateInvoice = {
     PRODUCT_RECOGER: [],
     PRODUCT_EFFECTIVE: []
@@ -268,33 +251,34 @@ export const Food = () => {
       dispatch({ type: 'ADD_PRODUCT', payload: elem })
     }
   }
-  const YearArray = dataProduct?.productFoodsAll?.length > 0 && dataProduct?.productFoodsAll.map(x => { return parseInt(x.pDatCre?.replace(/\D/gi, '').substring(0, 4)) })
-  let min = YearArray
-  let years = []
-  const currentYear = new Date().getFullYear()
-  useEffect(() => {
-    const Years = (startYear) => {
-      for (let i = 0; i < YearArray?.length; i++) {
-        if (YearArray[i] < min) {
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-          min = YearArray[i]
-        }
-      }
+  // const YearArray = dataProduct?.productFoodsAll?.length > 0 && dataProduct?.productFoodsAll.map(x => { return parseInt(x.pDatCre?.replace(/\D/gi, '').substring(0, 4)) })
+  // let min = YearArray
+  // let years = []
+  // const currentYear = new Date().getFullYear()
+  // useEffect(() => {
+  //   const Years = (startYear) => {
+  //     for (let i = 0; i < YearArray?.length; i++) {
+  //       if (YearArray[i] < min) {
+  //         // eslint-disable-next-line react-hooks/exhaustive-deps
+  //         min = YearArray[i]
+  //       }
+  //     }
 
-      while (startYear <= currentYear) {
-        years.push(startYear++)
-      }
-      return years
-    }
-    Years(min)
-  }, [YearArray, dataProduct, years])
+  //     while (startYear <= currentYear) {
+  //       years.push(startYear++)
+  //     }
+  //     return years
+  //   }
+  //   Years(min)
+  // }, [YearArray, years])
   const [dataCategoriesProducts] = useCategoriesProduct()
+
   return (
     <FoodComponent
       alt={alt}
       changeState={changeState}
       check={check}
-      data={dataProducto}
+      data={productsFood}
       dataCategoriesProducts={dataCategoriesProducts || []}
       dataFree={productFree}
       dispatch={dispatch}
@@ -310,6 +294,7 @@ export const Food = () => {
       handleRegister={handleRegister}
       image={image}
       intPorcentaje={intPorcentaje}
+      loading={loading}
       names={names}
       onChangeRange={onChangeRange}
       onClickClear={onClickClear}

@@ -1,9 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { CateItem, CtnSwiper } from '../styled'
 import { Checkbox } from 'components/Checkbox'
+import PropTypes from 'prop-types'
+import { A11y, Navigation, Pagination, Parallax, Virtual } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Virtual, Navigation, Pagination, A11y, Parallax } from 'swiper'
+import { CateItem, CtnSwiper } from '../styled'
 
 export const SwiperSliderCategory = ({ datCat, checkedItems, disabledItems, handleChangeCheck }) => {
   return (
@@ -16,6 +15,7 @@ export const SwiperSliderCategory = ({ datCat, checkedItems, disabledItems, hand
           slidesPerView={5}
           spaceBetween={10}
           virtual
+          
         >
           {datCat && datCat?.catProductsAll?.map((slideContent, index) => {
             return (
