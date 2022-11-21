@@ -1,5 +1,6 @@
 /* eslint-disable consistent-return */
 import { ApolloError } from 'apollo-server-micro'
+import { Op } from 'sequelize'
 import AreasModel from '../../models/areas/AreasModel'
 import Feature from '../../models/feature/feature'
 import CitiesModel from '../../models/information/CitiesModel'
@@ -12,7 +13,6 @@ import trademarkModel from '../../models/product/trademark'
 import Store from '../../models/Store/Store'
 import ThirdPartiesModel from '../../models/thirdParties/ThirdPartiesModel'
 import { deCode, getAttributes } from '../../utils/util'
-import { Op } from 'sequelize'
 
 export const productsOne = async (root, { pId }, context, info) => {
   try {
@@ -135,7 +135,6 @@ export const productFoodsAll = async (root, args, context, info) => {
     })
     return data
   } catch (e) {
-    console.log(e)
     const error = new Error('Lo sentimos, ha ocurrido un error interno')
     return error
   }

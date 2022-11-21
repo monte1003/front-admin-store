@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import {
-  // gql,
-  useApolloClient
-  // useSubscription
+  gql, useApolloClient,
+  useSubscription
 } from '@apollo/client'
 import { Context } from 'context/Context'
 import Link from 'next/link'
@@ -81,18 +80,29 @@ const MemoAside = () => {
     idStore,
     uState
   } = dataStore || {}
-  //   const GET_STATE_ORDER = gql`
-  //     subscription {
-  //       numberIncremented
-  //     }
-  // `
+  const GET_STATE_ORDER = gql`
+      subscription {
+        numberIncremented
+      }
+  `
   // const { data: dataWS } = useSubscription(GET_STATE_ORDER, {
-  //   // context: { clientName: "admin-server" },
-  //   // onSubscriptionData: () => {
-  //   //   // console.log(subscriptionData.data.numberIncremented)
-  //   // }
+  //   context: { clientName: 'admin-server' },
+  //   onSubscriptionData: (data) => {
+  //     console.log(data?.subscriptionData?.data?.numberIncremented)
+  //   }
   // })
 
+  const NEW_NOTIFICATION = gql`
+  subscription {
+  newNotification
+  }
+  `
+  const { data: lol } = useSubscription(NEW_NOTIFICATION, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      console.log(subscriptionData)
+    }
+  })
+  console.log('🚀 ~ file: index.jsx ~ line 105 ~ MemoAside ~ lol', lol)
   return (
     <>
       {isMobile &&

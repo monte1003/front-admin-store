@@ -1,11 +1,11 @@
+import { Op } from 'sequelize'
 import productModelFood from '../../models/product/productFood'
 import pedidosModel from '../../models/Store/pedidos'
 import ShoppingCard from '../../models/Store/ShoppingCard'
 import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 import Users from '../../models/Users'
 import { deCode, getAttributes } from '../../utils/util'
-import { deleteOneItem, getOneStore } from './store'
-import { Op } from 'sequelize'
+import { getOneStore } from './store'
 
 export const createOnePedidoStore = async (_, { input }) => {
   const {
@@ -85,7 +85,7 @@ const createMultipleOrderStore = async (_, { input }, ctx) => {
     })
     for (const element of setInput) {
       const { ShoppingCard, idStore } = element
-      await deleteOneItem(null, { ShoppingCard, cState: 1 })
+      // await deleteOneItem(null, { ShoppingCard, cState: 1 })
       await createOnePedidoStore(null, {
         input: {
           id: ctx.User.id,

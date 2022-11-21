@@ -5,7 +5,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
 import PropTypes from 'prop-types'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -42,34 +42,35 @@ export default function App({ Component, pageProps }) {
       router.events.off('routeChangeError', handleStop)
     }
   }, [router])
-  const timerId = useRef()
-  const onClickLogout = useCallback(async () => {
-    await window
-      .fetch(`${process.env.URL_BASE}api/auth/logout/`, {})
-      .then(res => {
-        if (res) {
-          localStorage.removeItem('session')
-          localStorage.removeItem('usuario')
-          localStorage.removeItem('restaurant')
-          router.replace('/entrar')
-        }
-      })
-      .catch(() => {
-        return
-      })
-  }, [router])
-  const handleMouseMove = () => {
-    clearInterval(timerId.current)
-    timerId.current = setInterval(() => {
-      // onClickLogout()
-    }, 3000)
-  }
-  useEffect(() => {
-    clearInterval(timerId.current)
-    timerId.current = setInterval(() => {
-      // onClickLogout()
-    }, 3000)
-  }, [])
+  // const timerId = useRef()
+  // eslint-disabled-next-line
+  // const onClickLogout = useCallback(async () => {
+  //   await window
+  //     .fetch(`${process.env.URL_BASE}api/auth/logout/`, {})
+  //     .then(res => {
+  //       if (res) {
+  //         localStorage.removeItem('session')
+  //         localStorage.removeItem('usuario')
+  //         localStorage.removeItem('restaurant')
+  //         router.replace('/entrar')
+  //       }
+  //     })
+  //     .catch(() => {
+  //       return
+  //     })
+  // }, [router])
+  // const handleMouseMove = () => {
+  //   clearInterval(timerId.current)
+  //   timerId.current = setInterval(() => {
+  //     // onClickLogout()
+  //   }, 3000)
+  // }
+  // useEffect(() => {
+  //   clearInterval(timerId.current)
+  //   timerId.current = setInterval(() => {
+  //     // onClickLogout()
+  //   }, 3000)
+  // }, [])
   const [showChild, setShowChild] = useState(false)
   useEffect(() => {
     setShowChild(true)
@@ -83,7 +84,7 @@ export default function App({ Component, pageProps }) {
   }
 
   return (
-    <div onMouseMove={handleMouseMove}>
+    <div onMouseMove={() => { return {} }}>
       <Context>
         <Head>
           <link

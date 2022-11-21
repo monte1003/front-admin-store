@@ -332,6 +332,7 @@ export const MemoHeader = () => {
       window.removeEventListener('focus', () => { return })
       window.removeEventListener('blur', () => { return })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const [openAlerCloseSessions, setOpenAlertCloseSessions] = useState(false)
   useEffect(() => {

@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
-import { WrapperOptions } from '../styledStore'
 import { Button } from 'pkg-components'
+import { useContext } from 'react'
 import { Context } from '~/context/Context'
+import { WrapperOptions } from '../styledStore'
 
 export const ButtonsAction = ({ handle = () => { return } }) => {
   const { openSchedule, setOpenSchedule } = useContext(Context)

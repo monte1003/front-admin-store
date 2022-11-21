@@ -1,8 +1,5 @@
-import { getCoordinates, useFakeSvgDrag } from 'hooks/useMouseposition'
 import { EmptyLayout } from 'pages/_app'
-import { BGColor } from 'public/colors'
 import { useRef, useState } from 'react'
-import styled from 'styled-components'
 const DragNDrop = () => {
   // https://codesandbox.io/s/k355wo7jk3?file=/index.js
   // https://codesandbox.io/s/react-drag-and-drop-hook-o67yn?file=/src/components/DragNDrop.tsx
@@ -72,16 +69,13 @@ const DragNDrop = () => {
     return 'box-items'
   }
   // menu
-  const openedSize = 150
-
-  const { coordinates, startDrag, drag, stopDrag } = useFakeSvgDrag()
-  const [position, setCoordPosition] = useState(false)
   const styedOnDrag = {
     transform: 'rotateZ(-2deg)',
     zIndex: 1000,
     opacity: 1,
     transition: 'all 0.3s ease-in-out'
   }
+  // eslint-disable-next-line
   const useDropImage = (e) => {
     const image = e.target.files[0]
     const reader = new FileReader()
@@ -95,15 +89,8 @@ const DragNDrop = () => {
         canvas.width = image.width
         canvas.height = image.height
         ctx.drawImage(image, 0, 0)
-        const dataURL = canvas.toDataURL('image/png')
-        console.log(dataURL)
       }
     }
-    
-  }
-  const openModal = (e) => {
-    console.log('x, y')
-
   }
   const onDragElastic = (e) => {
     const aninateElastic = (e) => {
@@ -171,7 +158,7 @@ const DragNDrop = () => {
           </li>
         </ContainerMenu>
       </DraggableMenu> */}
-      <input onChange={(e) => {return useDropImage(e)}} type='file' />
+      {/* <input onChange={(e) => {return useDropImage(e)}} type='file' /> */}
       <div className='box-container' >
         {list.map((grp, grpIdx) => {
           return (
@@ -214,34 +201,6 @@ const DragNDrop = () => {
     </div>
   )
 }
-const DraggableMenu = styled.div`
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    background-color: red;
 
-`
-const ContainerMenu = styled.div`
-    position: absolute;
-    pointer-events: none;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    border: 1px solid blue;
-    color: ${BGColor};
-    transition: 250ms;
-    width: ${({ openedSize }) => { return openedSize && `${openedSize}px` }};
-    transform: ${({ openedSize, offset }) => {
-    if (offset < 20) {
-      return false
-    }
-    else if (offset > 20 && offset < 50) {
-      return (openedSize, offset) && `translateX(${offset - openedSize}px)`
-    }
-    return `translateX(${-openedSize}px)`
-  }};
-`
 export default DragNDrop
 DragNDrop.Layout = EmptyLayout

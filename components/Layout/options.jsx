@@ -1,31 +1,37 @@
-import React, { useState } from 'react'
-import Link from '../common/Link'
+import Button from 'components/common/Atoms/Button'
+import Column from 'components/common/Atoms/Column'
+import Row from 'components/common/Atoms/Row'
+import Text from 'components/common/Atoms/Text'
+import { LoadingClosed } from 'components/Loading'
+import Portal from 'components/portal'
+import usePushNotifications from 'hooks/usePushNotifications'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 import styled from 'styled-components'
-import { 
+import {
   BGColor,
   PColor,
   SECColor
 } from '../../public/colors'
 import {
+  IconLogout,
+  IconMessageMain,
+  IconNotification,
+  IconShopping,
+  IconUser
+} from '../../public/icons'
+import Link from '../common/Link'
+import {
   ButtonOption,
   FloatingBoxTwo,
   Overline
 } from './styled'
-import { IconLogout,
-  IconMessageMain, 
-  IconNotification,
-  IconShopping,
-  IconUser } from '../../public/icons'
-import { useRouter } from 'next/router'
-import { LoadingClosed } from 'components/Loading'
-import usePushNotifications from 'hooks/usePushNotifications'
-import Column from 'components/common/Atoms/Column'
-import Text from 'components/common/Atoms/Text'
-import Portal from 'components/portal'
-import Button from 'components/common/Atoms/Button'
-import Row from 'components/common/Atoms/Row'
 
-export const Options = ({ onClickLogout, loading, error }) => {
+export const Options = ({
+  onClickLogout,
+  loading,
+  error
+}) => {
   const [show, setShow] = useState(false)
   const location = useRouter()
 

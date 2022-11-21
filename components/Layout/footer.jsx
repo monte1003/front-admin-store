@@ -1,14 +1,14 @@
+import { PColor } from '../../public/colors'
 import {
   IconConfig,
   IconHome,
-  IconSearch, 
-  IconUser 
+  IconSearch,
+  IconUser
 } from '../../public/icons'
-import { PColor } from '../../public/colors'
 import ActiveLink from '../common/Link'
-import { 
+import {
   Anchor,
-  FooterComponent, 
+  FooterComponent,
   Text
 } from './styled'
 

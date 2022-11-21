@@ -46,9 +46,9 @@ export const MemoLayout = ({ children, watch, settings }) => {
     }
     `
   const { data: dataWS } = useSubscription(NEW_NOTIFICATION, {
-    // onSubscriptionData: ({ subscriptionData }) => {
-    // //   console.log(subscriptionData.newNotification)
-    // }
+    onSubscriptionData: ({ subscriptionData }) => {
+      console.log(subscriptionData.newNotification)
+    }
   })
   useEffect(() => {
     if (dataWS) {

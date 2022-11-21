@@ -26,7 +26,7 @@ export default function App() {
   useEffect(() => {
     // Activate beforeunload listener
     function activateListener() {
-      console.log('The add event is activating')
+      // console.log('The add event is activating')
       window.addEventListener('beforeunload', onBeforeUnload)
     }
 
@@ -34,7 +34,7 @@ export default function App() {
     // Issues: It seems that after the listener was activated, it cannot be deactivated.
     // Need to research how to do that
     function deactivateListener() {
-      console.log('The remove event is activating')
+      // console.log('The remove event is activating')
       window.removeEventListener('beforeunload', onBeforeUnload)
     }
 
@@ -46,7 +46,7 @@ export default function App() {
     }
 
     // Just testing how the values change
-    console.log(`Changed: ${changed} and value: ${value}`)
+    // console.log(`Changed: ${changed} and value: ${value}`)
   }, [changed, value])
 
   return (
