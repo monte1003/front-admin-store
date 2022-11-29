@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable no-undef */
-import { ApolloServer } from 'apollo-server-micro'
-import httpHeadersPlugin from './lib/hooks/apollo-plugin-http-header'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
-import Cors from 'micro-cors'
-import typeDefs from '../api/lib/typeDefs'
-import jwt from 'jsonwebtoken'
-import resolvers from '../api/lib/resolvers/index'
-import { getUserFromToken } from './auth'
+import { ApolloServer } from 'apollo-server-micro'
 import { getIronSession } from 'iron-session'
+import jwt from 'jsonwebtoken'
+import Cors from 'micro-cors'
+import resolvers from '../api/lib/resolvers/index'
+import typeDefs from '../api/lib/typeDefs'
+import { getUserFromToken } from './auth'
 import { requestDidStartPlugin } from './lib/hooks/apollo-plugin'
+import httpHeadersPlugin from './lib/hooks/apollo-plugin-http-header'
 import { parseCookies } from './lib/utils'
 
 const corsMultipleAllowOrigin = (options = {}) => {

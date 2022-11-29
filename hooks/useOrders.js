@@ -1,6 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useQuery } from '@apollo/client'
-import { useContext, useEffect, useState } from 'react'
+import {
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import { GET_ALL_PEDIDOS } from 'container/PedidosStore/queries'
 import { Context } from 'context/Context'
 import { numberFormat } from '~/utils'
@@ -15,7 +19,11 @@ export const useOrders = ({
   pollInterval = 60000,
   onError
 }) => {
+  const [orders, setOrders] = useState([])
   const { data, loading, error, fetchMore } = useQuery(GET_ALL_PEDIDOS, {
+    onCompleted: () => {
+      setOrders(data)
+    },
     refetchWritePolicy: refetchWritePolicy,
     pollInterval,
     fetchPolicy,
@@ -33,10 +41,8 @@ export const useOrders = ({
   })
   const { setCountPedido } = useContext(Context)
 
-  const [orders, setOrders] = useState(data)
   useEffect(() => {
     if (data?.getAllPedidoStoreFinal?.length) {
-      setOrders(orders)
       setCountPedido(numberFormat(data?.getAllPedidoStoreFinal?.length) || 0)
     }
   }, [orders, data])

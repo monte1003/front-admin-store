@@ -134,7 +134,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300&display=swap');
 /* Normalizes margin, padding */
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, p, blockquote
-    { margin : 0; padding : 0; width: 100%;      text-align: start;  }
+    { margin : 0; padding : 0; width: 100%;  text-align: start;  }
 
 /* Normalizes font-size for headers */
 h1,h2,h3,h4,h5,h6 { font-size : 100%; }
@@ -182,19 +182,31 @@ code {
 
 @font-face {
   font-family: PFont-Bold;
-  src: url('../public/fonts/Poppins-Bold.ttf')
+  src: url('../public/fonts/Poppins-Bold.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
   font-family: PFont-Medium;
-  src: url('../public/fonts/Poppins-Medium.ttf')
+  src: url('../public/fonts/Poppins-Medium.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
   font-family: PFont-Regular;
-  src: url('../public/fonts/Poppins-Regular.ttf')
+  src: url('../public/fonts/Poppins-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
   font-family: PFont-Light;
-  src: url('../public/fonts/Poppins-Light.ttf')
+  src: url('../public/fonts/Poppins-Light.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 .text-blue {
   border-top: 1px solid #61d2b4;

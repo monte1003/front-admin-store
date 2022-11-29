@@ -1,4 +1,5 @@
 import { CardProducts } from 'components/CartProduct'
+import { Button, Tag } from 'pkg-components'
 import PropTypes from 'prop-types'
 import {
   IconDelete,
@@ -6,7 +7,11 @@ import {
   IconEdit,
   IconLove
 } from 'public/icons'
-import { PColor, PVColor, TFSColor } from '../../../public/colors'
+import {
+  PColor,
+  PVColor,
+  TFSColor
+} from '../../../public/colors'
 import { numberFormat } from '../../../utils'
 import { AwesomeModal } from '../../AwesomeModal'
 import { useSetState } from '../../hooks/useState'
@@ -49,6 +54,7 @@ export const FoodComponent = ({
   onTargetClick,
   product_state,
   search,
+  tagsProps,
   setName,
   setShowMore,
   showMore,
@@ -58,7 +64,19 @@ export const FoodComponent = ({
   ...props
 }) => {
   const OPEN_MODAL_ORGANICE = useSetState(0)
-  const propsForm = { handleRegister, setName, names, check, handleChange, values, dataCategoriesProducts, handleCheckEnvioGratis, image, ...props }
+  const { dataTags, handleAddTag, tags } = tagsProps
+  const propsForm = {
+    handleRegister,
+    setName,
+    names,
+    check,
+    handleChange,
+    values,
+    dataCategoriesProducts,
+    handleCheckEnvioGratis,
+    image,
+    ...props
+  }
   const propsListProducts = {
     onClickClear,
     data,
@@ -98,10 +116,24 @@ export const FoodComponent = ({
           onTargetClick={onTargetClick}
           pName={names}
           src={src}
+          tag={tags}
         />
       </Card>
       <Card>
-      asdas
+        {dataTags.map((tag) => {
+          return(
+            <Button
+              border='none'
+              borderRadius='0'
+              key={tag.id}
+              onClick={() => { return handleAddTag(tag.id, tag.tag) }}
+              padding='0'
+              style={{ display: 'flex', flexWrap: 'wrap' }}
+            >
+              <Tag label={tag.tag} />
+            </Button>
+          )
+        })}
       </Card>
 
     </Container>

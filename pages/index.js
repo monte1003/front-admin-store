@@ -1,6 +1,7 @@
 import { withIronSessionSsr } from 'iron-session/next'
 import dynamic from 'next/dynamic'
 import { cookie } from '~/utils'
+import { useLazyScript } from 'npm-pkg-hook'
 
 const HOME = dynamic(
   import('../container/Home'), {
@@ -8,6 +9,7 @@ const HOME = dynamic(
   }
 )
 export default function HomeView({ isMobile, user }) {
+  useLazyScript('https://www.googletagmanager.com/ns.html?id=GTM-59SFH7N', 8000)
   return user ? (
     <div>Logged</div>
   ) :<HOME isMobile={isMobile} />
@@ -48,8 +50,8 @@ HomeView.getLayout = function getLayout(page) {
       {page}
     </div>
   ) : (
-    <di>
+    <div>
       {page}
-    </di>
+    </div>
   )
 }

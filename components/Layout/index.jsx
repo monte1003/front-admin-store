@@ -17,7 +17,11 @@ import Aside from './Aside'
 import { Footer } from './footer'
 import { Header } from './header'
 
-export const MemoLayout = ({ children, watch, settings }) => {
+export const MemoLayout = ({
+  children,
+  watch,
+  settings
+}) => {
   const location = useRouter()
   const {
     error,
@@ -41,21 +45,38 @@ export const MemoLayout = ({ children, watch, settings }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const NEW_NOTIFICATION = gql`
-    subscription {
-    newNotification
-    }
+  subscription {
+  newStoreOrder{
+    pdpId
+    id
+    idStore
+    pId
+    ppState
+    pCodeRef
+    pPDate
+    pSState
+    pPStateP
+    payMethodPState
+    pPRecoger
+    totalProductsPrice
+    unidProducts
+    pDatCre
+    pDatMod
+  }
+}
     `
   const { data: dataWS } = useSubscription(NEW_NOTIFICATION, {
     onSubscriptionData: ({ subscriptionData }) => {
-      console.log(subscriptionData.newNotification)
+      setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
+      sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
     }
   })
-  useEffect(() => {
-    if (dataWS) {
-      setAlertBox({ message: dataWS?.newNotification, duration: 30000 })
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataWS])
+  // useEffect(() => {
+  //   if (dataWS) {
+  //     setAlertBox({ message: dataWS?.newNotification, duration: 30000 })
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [dataWS])
 
   return (
     <>
@@ -87,7 +108,7 @@ export const MemoLayout = ({ children, watch, settings }) => {
             {salesOpen && <GenerateSales />}
           </AwesomeModal>
           <Toast
-            autoDelete={'true'}
+            autoDelete={true}
             autoDeleteTime={7000}
             position={'bottom-right'}
             toastList={messagesToast}

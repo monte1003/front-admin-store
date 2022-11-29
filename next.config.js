@@ -1,18 +1,24 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable consistent-return */
 /** @type {import('next').NextConfig} */
-
 const {
   PHASE_DEVELOPMENT_SERVER,
   PHASE_PRODUCTION_BUILD
 } = require('next/constants')
 const runtimeCaching = require('next-pwa/cache')
+const withPlugins = require('./scripts/next-compose-plugins/lib')
 const withTM = require('next-transpile-modules')(['pkg-components']) // pass the modules you would like to see transpiled
+
+const prod = process.env.NODE_ENV !== 'production'
+
 const withPWA = require('next-pwa')({
-  dest: 'public'
+  dest: 'public',
+  register: true,
+  disable: prod ? false : true
 })
 
-module.exports = (phase) => {
+module.exports = async (phase) => {
+  /** @type {import('next').NextConfig} */
   // npm run dev or next dev
   const isDev = phase === PHASE_DEVELOPMENT_SERVER
   // npm run build or next build
@@ -43,7 +49,7 @@ module.exports = (phase) => {
     URL_BASE: (() => {
       if (isDev) return 'http://localhost:3001/'
       if (isProd) return 'http://localhost:3000/'
-      // if (isStaging) return 'Title Stg'
+      if (isStaging) return 'Title Stg'
     })(),
     MAIN_URL_BASE: (() => {
       if (isDev) return 'http://localhost:3000/'
@@ -53,7 +59,6 @@ module.exports = (phase) => {
     // URL_BASE_WS
     URL_ADMIN_SERVER: (() => {
       if (isDev) return 'http://localhost:4000/'
-      // if (isDev) return 'https://server-image-food.herokuapp.com/'
       if (isProd) return 'http://localhost:4000/'
     })(),
     // BANCOLOMBIA
@@ -65,6 +70,9 @@ module.exports = (phase) => {
     ACCESS_SID_TWILIO: 'AC7c9ccbdb50400c504faf629e35aea8e4',
     REACT_APP_API_KEY_GOOGLE_MAPS: 'AIzaSyAy0SY1G3OFqesWSTQRHJvzyJzNgURPoN8',
     ACCESS_TOKEN_AUTH_TWILIO: '22e090d4d776ace7bb596ca77cba6b18'
+  }
+  const images = {
+    domains: ['http2.mlstatic.com', 'localhost', 'server-image-food.herokuapp.com', '*']
   }
   const headers = async () => {
     return [
@@ -79,43 +87,38 @@ module.exports = (phase) => {
       }
     ]
   }
-  // const redirects = async () => {
-  //   return [
-  //     {
-  //       source: '/',
-  //       destination: '/',
-  //       permanent: false
-  //     }
-  //   ]
-  // }
-  // const basePath = ''
-  // puedes sobre escribir la ruta
-  // const rewrites = async () => {
-  //   return [
-  //     {
-  //       source: '/ab',
-  //       destination: '/about'
-  //     }
-  //   ]
-  // }
-  const images = {
-    domains: ['http2.mlstatic.com', 'localhost', 'server-image-food.herokuapp.com', '*']
+  // eslint-disable-next-line
+  const redirects = async () => {
+    return [
+      {
+        source: '/',
+        destination: '/',
+        permanent: false
+      }
+    ]
   }
-  return withPWA(withTM({
+  // eslint-disable-next-line
+  const basePath = ''
+  // puedes sobre escribir la ruta
+  // eslint-disable-next-line
+  const rewrites = async () => {
+    return [
+      {
+        source: '/ab',
+        destination: '/about'
+      }
+    ]
+  }
+  const nextConfig = {
     env,
-    pwa: {
-      register: true,
-      dest: 'public',
-      runtimeCaching,
-      disable: process.env.NODE_ENV === 'development'
-    },
     images,
     reactStrictMode: true,
-    // rewrites,
     headers,
+    runtimeCaching,
+    // rewrites,
     // redirects,
     // basePath,
-    optimizeFonts: false,
+    optimizeFonts: true,
     swcMinify: false,
     webpack: (config) => {
       config.resolve.alias = {
@@ -126,5 +129,9 @@ module.exports = (phase) => {
       }
       return config
     }
-  }))
+  }
+
+  const defaultConfig = nextConfig
+
+  return withPlugins( [withTM], [withPWA], nextConfig)(phase, { defaultConfig })
 }

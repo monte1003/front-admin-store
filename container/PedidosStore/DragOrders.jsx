@@ -10,17 +10,22 @@ import Column from 'components/common/Atoms/Column'
 import Row from 'components/common/Atoms/Row'
 import Text from 'components/common/Atoms/Text'
 import { Context } from 'context/Context'
-import { BGColor, PVColor, SEGColor } from 'public/colors'
-import { IconDost } from 'public/icons'
+import {
+  BGColor,
+  PVColor,
+  SEGColor
+} from 'public/colors'
 import { updateCache } from 'utils'
+import { ModalDetailOrder } from 'pkg-components'
 import { useMutation } from '@apollo/client'
 import { CHANGE_STATE_STORE_PEDIDO, GET_ALL_PEDIDOS } from './queries'
+import { useStore } from 'npm-pkg-hook';
 
-const DragOrders = ({ 
-  dataReadyOrder, 
-  dataRechazados, 
-  dataConcludes, 
-  dataProgressOrder, 
+const DragOrders = ({
+  dataReadyOrder,
+  dataRechazados,
+  dataConcludes,
+  dataProgressOrder,
   data: dataInitial
 }) => {
   // STATES
@@ -28,7 +33,6 @@ const DragOrders = ({
   const data = [
     {
       title: `Pedidos entrantes`,
-
       items: dataInitial || []
     },
     {
@@ -115,7 +119,6 @@ const DragOrders = ({
             return
           }
         }
-    
       } catch (error) {
         return
       }
@@ -124,7 +127,6 @@ const DragOrders = ({
   )
 
   // const handleDragEnter = (e, groupIndex, itemIndex, item) => {
-  
   // }
   const getStyles = (groupIndex, itemIndex) => {
     const currentItem = dragItem.current
@@ -151,125 +153,141 @@ const DragOrders = ({
         nameFun: 'getAllPedidoStoreFinal',
         dataNew: getAllPedidoStoreFinal
       })}
-      
     })
   }
-  return (
-    <Column
-      alignItems='stretch'
-      backgroundColor={BGColor}
-      height='100%'
-      justifyContent='flex-start'
-      padding='0 0 40px 34px'
-      userSelect='none'
-      with='fit-content'
-    >
-      <Row backgroundColor={BGColor} >
-        {list?.length > 0 && list.map((grp, grpIdx) => {
-          return (
-            <Column
-              background='#f4f5f7'
-              borderRadius='10px'
-              key={grp.title}
-              margin={'0 15px 0 0 '}
-              maxWidth='260px'
-              onDragEnter={
-                dragging && !grp.items.length
-                  ? (e) => {
-                    handleDragEnter(e, grpIdx, 0)
-                  }
-                  : undefined
-              }
-              transition='1s ease'
-              width='260px'
+  const [openModalDetails, setOpenModalDetails] = useState(false)
+  const [openAction, setOpenAction] = useState(false)
+  const [dataModal, setDataModal] = useState({})
+  const handleGetOneOrder = (item) => {
+    const { pCodeRef } = item || {}
+    console.log("🚀 ~ file: DragOrders.jsx ~ line 162 ~ handleGetOneOrder ~ item", item)
+    setDataModal(item)
+    setOpenModalDetails(!openModalDetails)
+  }
+  const [dataStore, { loading }] = useStore()
 
-            >
+  const handleOpenActions = () => {
+    setOpenAction(!openAction)
+  }
+  const propsModal = {
+    openAction,
+    dataModal,
+    dataStore,
+    loading: loading,
+    handleOpenActions,
+    onPress: handleGetOneOrder,
+  }
+  return (
+    <>
+      {openModalDetails &&
+        <ModalDetailOrder {...propsModal} />
+      }
+      <Column
+        alignItems='stretch'
+        backgroundColor={BGColor}
+        height='100%'
+        justifyContent='flex-start'
+        padding='0 0 40px 34px'
+        userSelect='none'
+        with='fit-content'
+      >
+        <Row backgroundColor={BGColor} >
+          {list?.length > 0 && list.map((grp, grpIdx) => {
+            return (
               <Column
-                height={'45px'}
-                maxHeight='calc(100%  - 45px)'
-                overflow={'hidden'}
-                textOverflow='ellipsis'
+                background='#f4f5f7'
+                borderRadius='10px'
+                key={grp.title}
+                margin='0 15px 0 0 '
+                maxWidth='260px'
+                // onDragEnter={
+                //   dragging && !grp.items.length
+                //     ? (e) => {
+                //       handleDragEnter(e, grpIdx, 0)
+                //     }
+                //     : undefined
+                // }
+                transition='1s ease'
+                width='260px'
               >
-                <Text
-                  as='h2'
-                  className='group-title'
-                  color='#5e6c84'
-                  fontSize='10px'
-                  margin='15px 0 0 10px'
-                  textAlign={'start'}
+                <Column
+                  height={'45px'}
+                  maxHeight='calc(100%  - 45px)'
+                  overflow={'hidden'}
                   textOverflow='ellipsis'
-                  textTransform='uppercase'
-                >{grp.title}</Text>
-              </Column>
-              {
-                dragging && <Column
-                  backgroundColor={`${PVColor}10`}
-                  border={`1px solid ${PVColor}`}
-                  borderRadius='5px'
-                  display='grid'
-                  height='40px'
-                  margin='auto'
-                  placeContent='center'
-                  width='95%'
                 >
                   <Text
-                    color={SEGColor}
-                    family='PFont-Regular'
+                    as='h2'
+                    className='group-title'
+                    color='#5e6c84'
                     fontSize='10px'
-                  >{grp.title}</Text>
-                </Column>
-
-              }
-              {grp.items.length > 0 && grp.items.map((item, itemIdx) => {
-                return (
-                  <Column
-                    borderRadius='5px '
-                    className={dragging ? getStyles(grpIdx, itemIdx) : 'box-items'}
-                    display='grid'
-                    draggable={true}
-                    gridTemplate={`"image" 157px "info-price" 1fr "info" 1fr`}
-                    key={item?.pCodeRef}
-                    margin='auto'
-                    onDragEnter={dragging ? (e) => { return handleDragEnter(e, grpIdx, itemIdx, item) } : undefined}
-                    onDragStart={(e) => { return handleDragStart(e, grpIdx, itemIdx, item) }}
-                    position={'relative'}
-                    width='96%'
+                    margin='15px 0 0 10px'
+                    textAlign={'start'}
+                    textOverflow='ellipsis'
+                    textTransform='uppercase'
                   >
-
-                    <Column
-                      as='button'
-                      borderRadius='2px'
-                      display='grid'
-                      height='35px'
-                      placeContent='center'
-                      position='absolute'
-                      right='15px'
-                      top='15px'
-                      width='min-content'
+                    {grp.title}
+                  </Text>
+                </Column>
+                {
+                  dragging && <Column
+                    backgroundColor={`${PVColor}10`}
+                    border={`1px solid ${PVColor}`}
+                    borderRadius='5px'
+                    display='grid'
+                    height='40px'
+                    margin='auto'
+                    placeContent='center'
+                    width='95%'
+                  >
+                    <Text
+                      color={SEGColor}
+                      family='PFont-Regular'
+                      fontSize='10px'
                     >
-                      <IconDost size='20px' />
-                    </Column>
-                    <Column gridArea='image'>
-                      {item?.pCodeRef}
-                    </Column>
-                    <Column gridArea='info-price'>
-                      <Text
-                        color={SEGColor}
-                        family='PFont-Regular'
-                        fontSize='10px'
-                      >{grp.title}</Text>
-                    </Column>
-                    <Column gridArea='info'>
-                      <Text fontSize='10px' >{item?.pCodeRef}</Text>
-                    </Column>
+                      {grp.title}
+                    </Text>
                   </Column>
-                )
-              })}
-            </Column>
-          )
-        })}
-      </Row>
-    </Column>
+
+                }
+                {grp.items.length > 0 && grp.items.map((item, itemIdx) => {
+                  return (
+                    <Column
+                      borderRadius='5px '
+                      className={dragging ? getStyles(grpIdx, itemIdx) : 'box-items'}
+                      display='grid'
+                      draggable={false}
+                      key={item?.pCodeRef}
+                      margin='auto'
+                      onClick={() => { return handleGetOneOrder(item) }}
+                      // onDragEnter={dragging ? (e) => { return handleDragEnter(e, grpIdx, itemIdx, item) } : undefined}
+                      // onDragStart={(e) => { return handleDragStart(e, grpIdx, itemIdx, item) }}
+                      padding='10px'
+                      position='relative'
+                      width='96%'
+                    >
+                      <Column >
+                        {item?.pCodeRef}
+                      </Column>
+                      <Column>
+                        <Text
+                          color={SEGColor}
+                          family='PFont-Regular'
+                          fontSize='10px'
+                        >{grp.title}</Text>
+                      </Column>
+                      <Column>
+                        <Text fontSize='10px' >{item?.pCodeRef}</Text>
+                      </Column>
+                    </Column>
+                  )
+                })}
+              </Column>
+            )
+          })}
+        </Row>
+      </Column>
+    </>
   )
 }
 

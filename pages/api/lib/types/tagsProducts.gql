@@ -20,6 +20,7 @@ input ITag {
 # Query
 type Query {
   getAllTags(idStore: ID): [TagsProduct]
+  getOneTags(idStore: ID): TagsProduct
 }
 # Mutations
 type Mutation {

@@ -102,7 +102,6 @@ const MemoAside = () => {
       console.log(subscriptionData)
     }
   })
-  console.log('🚀 ~ file: index.jsx ~ line 105 ~ MemoAside ~ lol', lol)
   return (
     <>
       {isMobile &&

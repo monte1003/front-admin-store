@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useCategoriesProduct } from 'components/hooks/useCategoriesProducts'
 import { Context } from 'context/Context'
+import { useProductsFood, useTagsProducts } from 'npm-pkg-hook'
 import {
   useContext,
   useReducer,
@@ -23,7 +24,6 @@ import {
   UPDATE_IMAGE_PRODUCT_FOOD,
   UPDATE_PRODUCT_FOOD
 } from './queries'
-import { useProductsFood } from 'npm-pkg-hook'
 export const Food = () => {
   const [errors, setErrors] = useState({})
   const [values, setValues] = useState({})
@@ -45,6 +45,7 @@ export const Food = () => {
     max: showMore,
     min: 0
   })
+  console.log(productsFood)
   // ------------ HANDLES ------------
   const handleChange = (e, error) => {
     setValues({ ...values, [e.target.name]: e.target.value })
@@ -90,6 +91,13 @@ export const Food = () => {
   const onTargetClick = () => {
     fileInputRef.current.click()
   }
+  const {
+    handleRegister: handleRegisterTags,
+    data,
+    handleAddTag,
+    tags
+  } = useTagsProducts()
+  console.log('🚀 ~ file: food.jsx ~ line 100 ~ Food ~ tags', tags)
   // eslint-disable-next-line
   const handleRegister = async e => {
     e.preventDefault()
@@ -136,8 +144,15 @@ export const Food = () => {
             })
             setAlertBox({ message: `El producto ${names} subido con éxito`, color: 'success', duration: 7000 })
           }
-        }).then(() => {
-          setValues({})
+        }).then((res) => {
+          const { updateProductFoods } = res || {}
+          const { pId } = updateProductFoods || {}
+          const objTag = {
+            aName: tags.tag,
+            pId
+          }
+          handleRegisterTags(objTag)
+          // setValues({})
         }).catch(err => { return setAlertBox({ message: `${err}`, duration: 7000 }) })
         if (image !== null) {
           setImageProducts({
@@ -273,6 +288,12 @@ export const Food = () => {
   // }, [YearArray, years])
   const [dataCategoriesProducts] = useCategoriesProduct()
 
+  const tagsProps = {
+    handleRegisterTags,
+    handleAddTag,
+    dataTags: data,
+    tags
+  }
   return (
     <FoodComponent
       alt={alt}
@@ -308,6 +329,7 @@ export const Food = () => {
       showMore={showMore}
       src={src}
       state={state}
+      tagsProps={tagsProps}
       values={values}
       valuesForm={values}
     />

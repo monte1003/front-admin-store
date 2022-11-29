@@ -5,7 +5,18 @@ import { numberFormat } from '../../../utils'
 import { Input } from '../styled'
 import { Prints } from '../Printsale'
 
-export const ModalSales = ({ handleSubmit, print, setPrint, totalProductPrice, values, code, data, setDelivery, delivery, handleChange }) => {
+export const ModalSales = ({ 
+  handleSubmit, 
+  print, 
+  setPrint, 
+  totalProductPrice, 
+  values, 
+  code, 
+  data, 
+  setDelivery, 
+  delivery, 
+  handleChange
+}) => {
   return (
     <div>
       <AwesomeModal

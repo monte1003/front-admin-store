@@ -24,16 +24,16 @@ query getAllPedidoStoreFinal($idStore: ID, $search: String, $min: Int, $max: Int
     pDatMod
     getAllPedidoStore{
         pdpId
-      	pId
-      	idStore
-      	ShoppingCard
+        pId
+        idStore
+        ShoppingCard
         pCodeRef
         pPStateP
         payMethodPState
         pPRecoger
         pDatCre
         pDatMod
-      	getAllShoppingCard {
+        getAllShoppingCard {
           ShoppingCard
           comments
           cantProducts

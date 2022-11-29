@@ -1,11 +1,10 @@
-import React from 'react'
-import { InputHook } from '../Input'
-import { numberFormat } from 'utils'
-import { CardInput, Footer, FormProducts } from '../styled'
-import { RippleButton } from 'components/Ripple'
-import NewSelect from 'components/NewSelectHooks/NewSelect'
 import { Checkbox } from 'components/Checkbox'
 import InputHooks from 'components/InputHooks/InputHooks'
+import NewSelect from 'components/NewSelectHooks/NewSelect'
+import { RippleButton } from 'components/Ripple'
+import { numberFormat } from 'utils'
+import { InputHook } from '../Input'
+import { CardInput, Footer, FormProducts } from '../styled'
 
 const FormProduct = ({ handleRegister, names, handleChange, values, setName, dataCategoriesProducts, handleCheckEnvioGratis, check, image, errors }) => {
   return (
@@ -79,11 +78,13 @@ const FormProduct = ({ handleRegister, names, handleChange, values, setName, dat
         <Footer>
           <RippleButton
             disabled={!image || !names}
-            padding='10px'  
+            padding='10px'
             type='submit'
             widthButton='100%'
-          >Subir</RippleButton>
-        </Footer> 
+          >
+            Subir
+          </RippleButton>
+        </Footer>
       </FormProducts>
     </div>
   )

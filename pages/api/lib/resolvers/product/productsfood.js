@@ -11,6 +11,7 @@ import ExtraProductModel from '../../models/product/productExtras'
 import productModelFood from '../../models/product/productFood'
 import trademarkModel from '../../models/product/trademark'
 import Store from '../../models/Store/Store'
+import tagsProduct from '../../models/Store/tagsProduct'
 import ThirdPartiesModel from '../../models/thirdParties/ThirdPartiesModel'
 import { deCode, getAttributes } from '../../utils/util'
 
@@ -135,7 +136,8 @@ export const productFoodsAll = async (root, args, context, info) => {
     })
     return data
   } catch (e) {
-    const error = new Error('Lo sentimos, ha ocurrido un error interno')
+    
+    const error = new Error(e || 'Lo sentimos, ha ocurrido un error interno')
     return error
   }
 }
@@ -224,6 +226,15 @@ export const productsLogis = async (root, args, context, info) => {
 export default {
   TYPES: {
     ProductFood: {
+      getOneTags: async (parent, _args, _context, info) => {
+        try {
+          const attributes = getAttributes(tagsProduct, info)
+          const data = await tagsProduct.findOne({ attributes, where: { pId: deCode(parent.pId) } })
+          return data
+        } catch (e) {
+          throw ApolloError('Lo sentimos, ha ocurrido un error interno')
+        }
+      },
       ExtProductFoodsAll: async (parent, _args, _context, info) => {
         try {
           const attributes = getAttributes(ExtraProductModel, info)

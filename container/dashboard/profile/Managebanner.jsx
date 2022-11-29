@@ -32,6 +32,7 @@ const Banner = ({ isMobile }) => {
   // STATES
   const [day, setDay] = useState()
   const [Open, setOpen] = useState('')
+  const [openNow, setOpenNow] = useState(false)
   // HOOKS
   const [data, { loading: loaStore }] = useStore()
   const {
@@ -78,6 +79,10 @@ const Banner = ({ isMobile }) => {
       return () => {return cancelAnimationFrame(functionRef.current)}
     }, [callback, delta, frameCount, iteration])
   }
+  const handleMessageHour = (message, open) => {
+    setOpen(message)
+    setOpenNow(open)
+  }
   const Counter = ({ numeral = 0 }) => {
     const [currentValue, setCurrentValue] = React.useState(0)
     const fxOperator = currentValue > numeral ? 'subtraction' : 'addition'
@@ -96,7 +101,6 @@ const Banner = ({ isMobile }) => {
       numeral,
       300
     )
-  
     return <div>{new Intl.NumberFormat().format(Math.round(currentValue))}</div>
   }
   const useAnimatedText = textMessage => {
@@ -164,21 +168,21 @@ const Banner = ({ isMobile }) => {
               let openTime = timeToInt(hours[0])
               let closeTime = timeToInt(hours[1])
               if (currentTime >= openTime && currentTime <= closeTime)
-                return setOpen('Abierto Ahora - Cierra a las: ' + hours[1])
+                return handleMessageHour('Abierto Ahora - Cierra a las: ' + hours[1], true)
               nextTime = true
             }
             else {
-              if (dayOfWeek === startDay) return setOpen('Cerrado ahora - Abre hoy: ' + days[dayName] + ' ' + handleHourPmAM(schHoSta))
+              if (dayOfWeek === startDay) return handleMessageHour('Cerrado ahora - Abre hoy: ' + days[dayName] + ' ' + handleHourPmAM(schHoSta), false)
               // eslint-disable-next-line
               const openNextDay = (dayOfWeek - startDay == 1 ? 'Mañana' : dayName)
               // eslint-disable-next-line
               const tow = `A las ${dateTow ? dateTow : null}`
-              return setOpen(`Cerrado hoy - Abre: ${openNextDay} ${tow}`)
+              return handleMessageHour(`Cerrado hoy - Abre: ${openNextDay} ${tow}`, false)
             }
           }
           dayOfWeek++
           if (dayOfWeek > 14 || !dateTow || !schHoSta || !schHoEnd)
-            return setOpen('Cerrado')
+            return handleMessageHour('Cerrado', false)
         }
       }
       set_opening(openings)
@@ -226,7 +230,7 @@ const Banner = ({ isMobile }) => {
         />
         {isLoading
           ? <Skeleton height={isMobile ? 118 : 250} />
-          : <MerchantBannerWrapperInfo Open={Open} bannerImage={(path || src) ? `url(${path || src})` : `url('/images/DEFAULTBANNER.png')`} >
+          : <MerchantBannerWrapperInfo Open={openNow} bannerImage={(path || src) ? `url(${path || src})` : `url('/images/DEFAULTBANNER.png')`} >
             <span>
               <svg
                 height={53}

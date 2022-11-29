@@ -46,6 +46,7 @@ type ProductFood {
     color: Color
     getStore: Store
     ExtProductFoodsAll: [ExtProductFood]
+    getOneTags: TagsProduct
 }
 # Inputs
 input ICategories {

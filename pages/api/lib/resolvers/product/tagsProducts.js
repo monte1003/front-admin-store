@@ -1,11 +1,12 @@
 /* eslint-disable no-undef */
+import { ApolloError } from 'apollo-server-micro'
+import { Op } from 'sequelize'
 import productModel from '../../models/product/food'
 import Store from '../../models/Store/Store'
-import { deCode, getAttributes } from '../../utils/util'
-import { Op } from 'sequelize'
 import tagsProduct from '../../models/Store/tagsProduct'
+import { deCode, getAttributes } from '../../utils/util'
 
-export const registerTag = async (_, { input }, ctx) => {
+export const registerTag = async (parent, { input }, ctx) => {
   const {
     idStore,
     nameTag,
@@ -25,6 +26,17 @@ export const registerTag = async (_, { input }, ctx) => {
     throw new Error(error)
   }
 }
+
+export const getOneTags = async (parent, { idStore }, _context, info) => {
+  try {
+    const attributes = getAttributes(tagsProduct, info)
+    const data = await tagsProduct.findOne({ attributes, where: { idStore: deCode(parent.idStore ?? idStore) } })
+    return data
+  } catch (e) {
+    throw ApolloError('Lo sentimos, ha ocurrido un error interno')
+  }
+}
+
 export const getStore = async (root, args, context, info) => {
   const { id } = args || {}
   const attributes = getAttributes(Store, info)

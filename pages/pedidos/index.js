@@ -1,14 +1,11 @@
 import { withIronSessionSsr } from 'iron-session/next'
-
 import PedidosStore from 'container/PedidosStore'
 import { cookie, defaultReturnObject } from 'utils'
 import React from 'react'
 
 export default function PedidosStoreView () {
   return (
-    <React.Fragment>
-      <PedidosStore />
-    </React.Fragment>
+    <PedidosStore />
   )
 }
 

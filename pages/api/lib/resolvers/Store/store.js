@@ -9,11 +9,13 @@ import ShoppingCard from '../../models/Store/ShoppingCard'
 import RatingStore from '../../models/Store/ratingStore'
 import SubProducts from '../../models/Store/shoppingCardSubProduct'
 import Store from '../../models/Store/Store'
-import { deCode, getAttributes } from '../../utils/util'
+import { deCode, getAttributes, enCode } from '../../utils/util'
 import ratingStoreStart from '../../models/Store/ratingStoreStart'
 import ScheduleStore from '../../models/Store/scheduleStore'
 import { Op } from 'sequelize'
 import StatusPedidosModel from '../../models/Store/statusPedidoFinal'
+import pedidosModel from '../../models/Store/pedidos'
+import { createOnePedidoStore } from './pedidos'
 
 // eslint-disable-next-line
 export const newRegisterStore = async (_, { input }, ctx) => {
@@ -91,28 +93,68 @@ export const deleteOneItem = async (root, args, context, _info) => {
   }
 }
 // eslint-disable-next-line
-const registerSalesStore = async (root, { input, totalProductsPrice, pickUp, id, idStore, change, pCodeRef, payMethodPState, valueDelivery }, context, _info) => {
+const registerSalesStore = async (root,
+  {
+    input,
+    totalProductsPrice,
+    pickUp,
+    id,
+    idStore,
+    change,
+    pCodeRef,
+    payMethodPState,
+    valueDelivery
+  },
+  context, _info) => {
   try {
+    if (!id) {
+      return {
+        Response: {
+          success: false,
+          message: 'Elije un cliente, No se pudo realizar la venta'
+        }
+      }
+    }
+    if (!input || input?.length === 0) {
+      return {
+        Response: {
+          success: true,
+          message: 'No se ha podido realizar la venta, no hay productos en el carrito'
+        }
+      }
+    }
     for (const element of input) {
-      const { id, pId, cantProducts } = element
-      await ShoppingCard.create({
+      const { pId, cantProducts } = element
+      const resShoppingCard = await ShoppingCard.create({
         pId: deCode(pId),
         id: deCode(id),
         comments: '',
-        cState: 0,
-        cantProducts: cantProducts,
+        cState: 1,
+        cantProducts,
         idStore: deCode(context.restaurant)
       })
+      await createOnePedidoStore(null, {
+        input: {
+          generateSales: true,
+          id: id,
+          idStore: context.restaurant.replace(/["']/g, ""),
+          ShoppingCard: resShoppingCard.ShoppingCard,
+          change,
+          pickUp,
+          pCodeRef,
+          payMethodPState,
+          pPRecoger: null
+        }
+      })
     }
-    // status sales success
     await StatusPedidosModel.create({
       id: deCode(id),
       locationUser: null,
       idStore: idStore ? deCode(idStore) : deCode(context.restaurant),
       pSState: 4,
       pCodeRef: pCodeRef,
-      valueDelivery: valueDelivery,
       change: change,
+      valueDelivery: valueDelivery,
       payMethodPState: payMethodPState,
       pickUp,
       totalProductsPrice
@@ -124,8 +166,13 @@ const registerSalesStore = async (root, { input, totalProductsPrice, pickUp, id,
       }
     }
   } catch (e) {
-    const error = new Error('Lo sentimos, ha ocurrido un error interno')
-    return error
+    console.log({EEEEEEEEEEEEEE:e})
+    return {
+      Response: {
+        success: false,
+        message: 'Lo sentimos, ha ocurrido un error interno'
+      }
+    }
   }
 }
 export const registerShoppingCard = async (root, input, context) => {
@@ -266,7 +313,6 @@ export const updateFavorites = async (_root, { input }, context) => {
 export const getFavorite = async (_root, args, context, info) => {
   try {
     // eslint-disable-next-line
-    const attributes = getAttributes(FavoritesModel, info)
     const data = await FavoritesModel.findAll({
       attributes: ['id', 'fState', 'fIStoreId', 'idStore', 'updateAt', 'createAt'],
       where: { id: deCode(context.User.id), fState: 1 }

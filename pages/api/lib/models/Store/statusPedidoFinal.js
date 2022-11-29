@@ -1,10 +1,10 @@
-import { INTEGER, TINYINT, STRING, DATE, literal } from 'sequelize'
+import { DATE, INTEGER, literal, STRING, TINYINT } from 'sequelize'
 import connect from '../../db'
-const sequelize = connect()
 import { enCode } from '../../utils/util'
 import Users from '../Users'
 import Store from './Store'
-
+const sequelize = connect()
+sequelize.sync()
 
 const StatusPedidosModel = sequelize.define('statuspedidos', {
   stPId: {
@@ -15,14 +15,7 @@ const StatusPedidosModel = sequelize.define('statuspedidos', {
   },
   id: {
     type: INTEGER,
-    allowNull: false,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-    references: {
-      model: Users,
-      key: 'id'
-    },
-    get(x) { return enCode(this.getDataValue(x)) }
+    allowNull: true
   },
   idStore: {
     type: INTEGER,

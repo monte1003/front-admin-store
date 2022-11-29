@@ -139,6 +139,9 @@ const GenerateSales = () => {
                   <Skeleton height={400} numberObject={50} />
                 ) : (
                   productsFood?.map((producto) => {
+                    const tag = {
+                      tag: producto?.getOneTags?.nameTag
+                    }
                     return (
                       <CardProducts
                         {...producto}
@@ -158,6 +161,7 @@ const GenerateSales = () => {
                         }}
                         pName={producto.pName}
                         render={<IconSales size='20px' />}
+                        tag={producto?.getOneTags && tag}
                       />
                     )
                   })

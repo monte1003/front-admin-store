@@ -3,10 +3,10 @@ import connect from '../../db'
 const sequelize = connect()
 import { enCode } from '../../utils/util'
 import Users from '../Users'
-import ShoppingCard from './ShoppingCard'
 import Store from './Store'
+import ShoppingCard from './ShoppingCard'
 
-
+sequelize.sync()
 const pedidosModel = sequelize.define('storepedidos', {
   pdpId: {
     type: INTEGER,

@@ -13,6 +13,7 @@ export default function connect () {
         process.env.PASSDB, // clave de base de datos, process.env.PASSDB
         {
           host: process.env.HOSTDB, //process.env.HOSTDB
+          logging: false,
           // port: process.env.MYSQLPORT || 6695,
           dialect: process.env.DIALECTDB //process.env.DIALECTDB
         }
