@@ -5,7 +5,7 @@ import Text from 'components/common/Atoms/Text'
 import { Context } from 'context/Context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useMobile } from 'npm-pkg-hook'
+import { useMobile, useTotalSales } from 'npm-pkg-hook'
 import React, {
   useCallback,
   useContext,
@@ -119,23 +119,19 @@ export const MemoHeader = () => {
   //       }
   //     }, false)
   //   }
-   
   //   /********************************************
   //  ** ADD CURRENT WINDOW TO main_windows LIST **
   //  *********************************************/
   //   add_to_main_windows_list(current_window_id)
   //   //update active_window to current window
   //   localStorage.active_window = current_window_id
-   
   //   /**************************************************************************
   //  ** REMOVE CURRENT WINDOWS FROM THE main_windows LIST ON CLOSE OR REFRESH **
   //  ***************************************************************************/
   //   window.addEventListener('beforeunload', function ()
   //   {
   //     remove_from_main_windows_list(current_window_id)
-      
   //   })
-   
   //   /*****************************
   //  ** ADD TO main_windows LIST **
   //  ******************************/
@@ -143,18 +139,14 @@ export const MemoHeader = () => {
   //   {
   //     let temp_main_windows_list = get_main_windows_list()
   //     let index = temp_main_windows_list.indexOf(window_id)
-       
   //     if (index < 0)
   //     {
   //       //this windows is not in the list currently
   //       temp_main_windows_list.push(window_id)
   //     }
-       
   //     localStorage.main_windows = temp_main_windows_list.join(',')
-       
   //     return temp_main_windows_list
   //   }
-   
   //   /**************************
   //  ** GET main_windows LIST **
   //  ***************************/
@@ -165,10 +157,8 @@ export const MemoHeader = () => {
   //     {
   //       temp_main_windows_list = (localStorage.main_windows).split(',')
   //     }
-       
   //     return temp_main_windows_list
   //   }
-   
   //   /**********************************************
   //  ** REMOVE WINDOWS FROM THE main_windows LIST **
   //  ***********************************************/
@@ -179,7 +169,6 @@ export const MemoHeader = () => {
   //     {
   //       temp_main_windows_list = (localStorage.main_windows).split(',')
   //     }
-       
   //     let index = temp_main_windows_list.indexOf(window_id)
   //     if (index > -1) {
   //       temp_main_windows_list.splice(index, 1)
@@ -314,6 +303,7 @@ export const MemoHeader = () => {
   const { isMobile } = useMobile()
   const [timer, setTimer] = useState(0)
   const [isOn, setIsOn] = useState(false)
+  const [count, { loading: loadingCount }] = useTotalSales()
   useEffect(() => {
     let interval
     if (process.env.NODE_ENV !== 'production' && isOn) {
@@ -393,7 +383,7 @@ export const MemoHeader = () => {
           <IconSales size={30} />
           <div className='info-sales'>
             <span>Crear una venta</span>
-            <span>Total de ventas hoy {10}</span>
+            {loadingCount ? <span>Cargando...</span> : <span>Total de ventas hoy  {count}</span>}
           </div>
         </HeaderWrapperButton>
       </CtnItemOps>

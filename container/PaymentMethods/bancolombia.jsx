@@ -1,4 +1,3 @@
-// import Text from 'components/common/Text'
 import Text from 'components/common/Atoms/Text'
 import InputHooks from 'components/InputHooks/InputHooks'
 import { FlipCard } from 'components/PaymentCard/cards'
@@ -55,7 +54,6 @@ export const Bancolombia = ({ NAME_CARD, handleFocus, flipped, cardNum, numOnCar
               <CreditCard backChild={true}>
                 <Line />
                 {NAME_CARD}
-                
                 {values.ccv}
               </CreditCard>
             }

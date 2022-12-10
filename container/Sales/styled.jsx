@@ -164,18 +164,31 @@ export const Content = styled.div`
     flex-direction: column;
 `
 export const Ticket = styled.div`
-        width: 155px;
-        max-width: 155px;
-        /* overflow: hidden; */
+h5 {
+    font-size: 1.5em;
+    font-family: PFont-Bold;
+    text-align: center;
+}
+.title {
+}
+        .ticket-image {
+            width: 100%;
+            border: 1px solid #00000069;
+            overflow: hidden;
+            margin: 0 0 30px 0;
+        }
+        /* width: 100%;
+        max-width: 100%; */
+        width: 555px;
+        max-width: 555px;
         position: relative;
         display: flex;
         place-items: center;
         place-content: center;
         margin: auto;
         font-family: PFont-Light;
-        min-width: 155px;
+        min-width: 555px;
         margin-bottom: 300px;
- 
    td,
 th,
 tr,
@@ -211,15 +224,15 @@ th.precio {
 }
 
 .ticket {
-    width: 155px;
-    max-width: 155px;
+    width: 100%;
+    max-width: 100%;
 }
 
 img{ 
-        width: 155px;
-        max-width: 155px;
+        width: 100%;
+        max-width: 100%;
         object-fit: cover;
-        min-width: 155px;
+        min-width: 100%;
         width: 100%;
     }
 `

@@ -1,20 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { AwesomeModal } from 'components/AwesomeModal'
-import { numberFormat } from '../../../utils'
+import { numberFormat } from 'utils'
 import { Input } from '../styled'
 import { Prints } from '../Printsale'
 
-export const ModalSales = ({ 
-  handleSubmit, 
-  print, 
-  setPrint, 
-  totalProductPrice, 
-  values, 
-  code, 
-  data, 
-  setDelivery, 
-  delivery, 
+export const ModalSales = ({
+  handleSubmit,
+  print,
+  setPrint,
+  totalProductPrice,
+  dataClientes,
+  values,
+  code,
+  data,
+  setDelivery,
+  delivery,
   handleChange
 }) => {
   return (
@@ -27,19 +28,20 @@ export const ModalSales = ({
         confirm='Guardar y salir'
         footer={true}
         header={true}
-        height='90vh'
+        height='100%'
         onConfirm={() => { return handleSubmit() }}
         onHide={() => { return setPrint(!print) }}
-        padding='25px'
         show={print}
-        size='medium'
+        size='large'
         zIndex='999999'
       >
         <Prints
           change={values.change}
           code={code}
           data={data?.PRODUCT || []}
+          dataClientes={dataClientes}
           total={`$ ${numberFormat(totalProductPrice)}`}
+          values={values}
         />
       </AwesomeModal>
       <AwesomeModal

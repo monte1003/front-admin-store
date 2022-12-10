@@ -16,8 +16,7 @@ import {
 const Index = () => {
   const [handleChange, handleSubmitMain, setDataValue, { dataForm, errorForm }] = useFormTools()
   const router = useRouter()
-  const handleRedirect = e => {
-    e.stopPropagation()
+  const handleRedirect = () => {
     router.push('/entrar')
 
   }
@@ -111,7 +110,7 @@ export const Home = () => {
           onClick={() => { return }}
           widthButton='100%'
         >
-          Login
+          Loginsdfsd
         </RippleButton>
         {/* <RippleButton widthButton='100%' margin='20px auto' onClick={() => console.log()}>Login</RippleButton> */}
       </Form>

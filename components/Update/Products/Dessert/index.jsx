@@ -54,7 +54,6 @@ const Dessert = () => {
       setList((oldList) => {
         let newList = JSON.parse(JSON.stringify(oldList))
         newList[params.groupIndex].items.splice(params.itemIndex, 0, newList[currentItem.groupIndex].items.splice(currentItem.itemIndex, 1)[0])
-        // console.log(newList)
         dragItem.current = params
         return newList
       })

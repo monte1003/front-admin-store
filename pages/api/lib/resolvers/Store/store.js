@@ -16,6 +16,7 @@ import { Op } from 'sequelize'
 import StatusPedidosModel from '../../models/Store/statusPedidoFinal'
 import pedidosModel from '../../models/Store/pedidos'
 import { createOnePedidoStore } from './pedidos'
+import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 
 // eslint-disable-next-line
 export const newRegisterStore = async (_, { input }, ctx) => {
@@ -166,13 +167,39 @@ const registerSalesStore = async (root,
       }
     }
   } catch (e) {
-    console.log({EEEEEEEEEEEEEE:e})
     return {
       Response: {
         success: false,
         message: 'Lo sentimos, ha ocurrido un error interno'
       }
     }
+  }
+}
+export const getTodaySales = async (_, args, ctx, info) => {
+  try {
+    const START = new Date()
+    START.setHours(0, 0, 0, 0)
+    const NOW = new Date()
+    const data = await StatusOrderModel.findAll({
+      attributes: ['pSState', 'idStore', 'pDatCre'],
+      where: {
+        [Op.or]: [
+          {
+            // ID STORE
+            pSState: 4,
+            idStore: deCode(ctx.restaurant),
+            pDatCre: {
+              [Op.between]: [START.toISOString(), NOW.toISOString()]
+            }
+          }
+        ]
+      },
+      order: [['pDatCre', 'DESC']]
+
+    })
+    return data?.length || 0
+  } catch (error) {
+    return error
   }
 }
 export const registerShoppingCard = async (root, input, context) => {
@@ -621,6 +648,7 @@ export default {
     getAllRatingStar,
     getOneRating,
     getAllMatchesStore,
+    getTodaySales,
     getOneFavorite,
     getAllRating,
     // getAllStoreAdmin,

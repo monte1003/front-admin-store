@@ -1,7 +1,12 @@
-import { DATE, INTEGER, literal, STRING, TINYINT } from 'sequelize'
+import {
+  DATE,
+  INTEGER,
+  literal,
+  STRING,
+  TINYINT
+} from 'sequelize'
 import connect from '../../db'
 import { enCode } from '../../utils/util'
-import Users from '../Users'
 import Store from './Store'
 const sequelize = connect()
 sequelize.sync()

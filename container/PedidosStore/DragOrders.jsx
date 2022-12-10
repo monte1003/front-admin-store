@@ -160,7 +160,6 @@ const DragOrders = ({
   const [dataModal, setDataModal] = useState({})
   const handleGetOneOrder = (item) => {
     const { pCodeRef } = item || {}
-    console.log("🚀 ~ file: DragOrders.jsx ~ line 162 ~ handleGetOneOrder ~ item", item)
     setDataModal(item)
     setOpenModalDetails(!openModalDetails)
   }

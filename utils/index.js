@@ -382,14 +382,14 @@ export const filterKeyObjectOLD = (data, filters) => {
  */
 export const validationSubmitHooks = elements => {
   let errorForm = {}
-  for (let i = 0; i < elements.length; i++) {
-    if (elements[i].name) {
-      if (elements[i].type === 'text' || elements[i].type === 'password' || elements[i].type === 'email' || elements[i].type === 'number' || elements[i].type === 'hidden') {
-        if (elements[i].dataset.required === 'true') {
-          if (!elements[i].value) errorForm = { ...errorForm, [elements[i].name]: !elements[i].value }
-          else errorForm = { ...errorForm, [elements[i].name]: !elements[i].value }
+  for (const element of elements) {
+    if (element.name) {
+      if (element.type === 'text' || element.type === 'password' || element.type === 'email' || element.type === 'number' || element.type === 'hidden') {
+        if (element.dataset.required === 'true') {
+          if (!element.value) errorForm = { ...errorForm, [element.name]: !element.value }
+          else errorForm = { ...errorForm, [element.name]: !element.value }
         } else {
-          errorForm = { ...errorForm, [elements[i].name]: false }
+          errorForm = { ...errorForm, [element.name]: false }
         }
       }
     }

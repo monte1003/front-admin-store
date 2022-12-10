@@ -130,6 +130,9 @@ export const getAllPedidoStore = async (_, args, ctx, info) => {
 // store
 export const getAllPedidoStoreFinal = async (_, args, ctx, info) => {
   const { idStore, statusOrder } = args || {}
+  const START = new Date()
+  START.setHours(0, 0, 0, 0)
+  const NOW = new Date()
   try {
     const attributes = getAttributes(StatusOrderModel, info)
     const data = await StatusOrderModel.findAll({
@@ -139,7 +142,10 @@ export const getAllPedidoStoreFinal = async (_, args, ctx, info) => {
           {
             // ID STORE
             pSState: statusOrder,
-            idStore: idStore ? deCode(idStore) : deCode(ctx.restaurant)
+            idStore: idStore ? deCode(idStore) : deCode(ctx.restaurant),
+            pDatCre: {
+              [Op.between]: [START.toISOString(), NOW.toISOString()]
+            }
           }
         ]
       },

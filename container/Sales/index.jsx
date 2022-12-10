@@ -6,9 +6,12 @@ import { RippleButton } from 'components/Ripple'
 import { Skeleton } from 'components/Skeleton'
 import { GET_ULTIMATE_CATEGORY_PRODUCTS } from 'container/dashboard/queries'
 import { GET_MIN_PEDIDO } from 'container/dashboard/queriesStore'
+import { useRouter } from 'next/router'
 import { useGetClients, useSales } from 'npm-pkg-hook'
+import { Text } from 'pkg-components'
 import { IconSales } from 'public/icons'
 import { useContext } from 'react'
+import { AwesomeModal } from '~/components/AwesomeModal'
 import { Context } from '~/context/Context'
 import { BoxProductSales } from './BoxProductSales'
 import { FormFilterSales } from './formFilterSales'
@@ -25,6 +28,8 @@ import { SubItems } from './SubItems'
 const GenerateSales = () => {
   // STATES
   const { sendNotification, setAlertBox } = useContext(Context)
+  const router = useRouter()
+
   const {
     data,
     dataExtra,
@@ -54,11 +59,15 @@ const GenerateSales = () => {
     setPrint,
     showMore,
     totalProductPrice,
+    setOpenCurrentSale,
     values,
-    valuesDates
+    valuesDates,
+    openCurrentSale,
+    code
   } = useSales({
     disabled: false,
     sendNotification,
+    router,
     setAlertBox
   })
   const [dataClientes, { loading: loadingClients }] = useGetClients()
@@ -122,11 +131,47 @@ const GenerateSales = () => {
     values,
     handleChange,
     setDelivery,
+    dataClientes,
     setPrint,
     handleSubmit
   }
+    console.log("🚀 ~ file: index.jsx:137 ~ GenerateSales ~ values", values)
   return (
     <Wrapper>
+      {openCurrentSale &&
+            <AwesomeModal
+              btnConfirm={false}
+              footer={false}
+              header={false}
+              onCancel={() => { return setOpenCurrentSale(false) }}
+              onHide={() => { return setOpenCurrentSale(false) }}
+              padding='20px'
+              show={openCurrentSale}
+              size='small'
+              zIndex='9999'
+            >
+              <div>
+                <Text
+                  color='#717171'
+                  fontSize='22px'
+                  margin='10px 0'
+                >
+                  Tu pedido se ha generado
+                </Text>
+                <Text
+                  color='#717171'
+                  fontSize='20px'
+                  fontWeight='300'
+                  margin='10px 0'
+                >
+                  {code}
+                </Text>
+                <RippleButton>
+                    Mirar pedido
+                </RippleButton>
+              </div>
+            </AwesomeModal>
+      }
       <ModalSales {...restPropsSalesModal} />
       <Box>
         <div className='parent'>

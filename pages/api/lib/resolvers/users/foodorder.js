@@ -26,7 +26,13 @@ export const getAllPedidoStoreFinal = async (_, args, ctx, info) => {
 }
 
 export const getAllSalesStore = async (_, args, ctx, info) => {
-  const { idStore, min, max, fromDate, toDate } = args || {}
+  const {
+    idStore,
+    min,
+    max, 
+    fromDate, 
+    toDate
+  } = args || {}
   try {
     const attributes = getAttributes(StatusPedidosModel, info)
     const data = await StatusPedidosModel.findAll({

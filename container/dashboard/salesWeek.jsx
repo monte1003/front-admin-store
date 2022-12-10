@@ -1,6 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
 import { useLazyQuery } from '@apollo/client'
 import { MainCard } from 'components/common/Reusable/ShadowCard'
 import { Skeleton } from 'components/Skeleton'
@@ -69,7 +66,12 @@ export const SalesWeek = () => {
   )
 }
 
-export const CardStatistic = ({ day, sales, OrderConcludes, noOrder }) => {
+export const CardStatistic = ({
+  day,
+  sales,
+  OrderConcludes,
+  noOrder
+}) => {
   return (
     <WrapperBox>
       <h2>{day || null}</h2>
@@ -77,7 +79,9 @@ export const CardStatistic = ({ day, sales, OrderConcludes, noOrder }) => {
         color='#3f3e3e'
         margin='10px 0'
         size='1.2em'
-      >Ventas</Text>
+      >
+        Ventas
+      </Text>
       <Text color='#3f3e3e' size='2em' >{sales || 0}</Text>
       <Orders>
         <Flex>

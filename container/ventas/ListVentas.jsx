@@ -206,7 +206,6 @@ export const ChatStatistic = () => {
   // Construcción del nuevo array:
   const { data, loading } = useQuery(GET_ALL_SALES)
   // const array = filterKeyObject(data?.getAllSalesStore, ['__typename'])
-  // console.log(array)
   let result = []
   data?.getAllSalesStore?.length > 0 && data?.getAllSalesStore.reduce(function (res, value) {
     // Creamos la posición del array para cada mes
