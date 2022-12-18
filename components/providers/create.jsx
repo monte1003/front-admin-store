@@ -22,9 +22,6 @@ export const ProvidersCreate = ({ show, setShow }) => {
   {return handleSubmit({
     event: e,
     action: () => {
-      // if (!TotalDeuda, !PrMail) {
-      //     setForcedError({ ...errorForm, prName: true, PrNit: true, PrMail: true })
-      // }
       const { TotalDeuda, PrMail } = dataForm
       return registerProviders({
         variables: {

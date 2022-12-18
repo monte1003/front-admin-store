@@ -125,11 +125,11 @@ const registerSalesStore = async (root,
       }
     }
     for (const element of input) {
-      const { pId, cantProducts } = element
+      const { pId, cantProducts, comments } = element
       const resShoppingCard = await ShoppingCard.create({
         pId: deCode(pId),
         id: deCode(id),
-        comments: '',
+        comments: comments ?? '',
         cState: 1,
         cantProducts,
         idStore: deCode(context.restaurant)

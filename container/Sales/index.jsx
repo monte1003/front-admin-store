@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client'
-import { CardProducts } from 'components/CartProduct'
 import { useCheckboxState } from 'components/hooks/useCheckbox'
 import { LoadingBabel } from 'components/Loading/LoadingBabel'
 import { RippleButton } from 'components/Ripple'
@@ -8,9 +7,10 @@ import { GET_ULTIMATE_CATEGORY_PRODUCTS } from 'container/dashboard/queries'
 import { GET_MIN_PEDIDO } from 'container/dashboard/queriesStore'
 import { useRouter } from 'next/router'
 import { useGetClients, useSales } from 'npm-pkg-hook'
-import { Text } from 'pkg-components'
+import { Text, CardProductSimple } from 'pkg-components'
 import { IconSales } from 'public/icons'
 import { useContext } from 'react'
+import InputHooks from '~/components/InputHooks/InputHooks'
 import { AwesomeModal } from '~/components/AwesomeModal'
 import { Context } from '~/context/Context'
 import { BoxProductSales } from './BoxProductSales'
@@ -48,7 +48,10 @@ const GenerateSales = () => {
     loading,
     max,
     modalItem,
+    oneProductToComment,
+    openCommentModal,
     onChangeInput,
+    handleRemoveValue,
     print,
     product,
     productsFood,
@@ -58,6 +61,7 @@ const GenerateSales = () => {
     setShowMore,
     setPrint,
     showMore,
+    handleComment,
     totalProductPrice,
     setOpenCurrentSale,
     values,
@@ -104,9 +108,11 @@ const GenerateSales = () => {
     dataOptional,
     dataProduct
   }
+
   const restPropsProductSales = {
     ...modalItems,
     totalProductPrice,
+    handleComment: handleComment,
     handleProduct,
     data,
     dispatch,
@@ -135,9 +141,63 @@ const GenerateSales = () => {
     setPrint,
     handleSubmit
   }
-    console.log("🚀 ~ file: index.jsx:137 ~ GenerateSales ~ values", values)
+  const existComment = oneProductToComment?.comment?.length > 0
   return (
     <Wrapper>
+      {openCommentModal &&
+      <AwesomeModal
+        btnConfirm={false}
+        footer={false}
+        header={true}
+        onCancel={() => { return handleComment() }}
+        onHide={() => { return handleComment() }}
+        padding='20px'
+        show={openCommentModal}
+        size='400px'
+        title='Dejar un comentario'
+        zIndex='9999'
+      >
+        <CardProductSimple
+          {...oneProductToComment}
+          ProDescription={oneProductToComment.ProDescription}
+          ProDescuento={oneProductToComment.ProDescuento}
+          ProImage={oneProductToComment.ProImage}
+          ProPrice={oneProductToComment.ProPrice}
+          ProQuantity={oneProductToComment.ProQuantity}
+          ValueDelivery={oneProductToComment.ValueDelivery}
+          comment={false}
+          edit={false}
+          pName={oneProductToComment.pName}
+          render={null}
+        />
+        <textarea
+          className='input-textarea'
+          name='comment'
+          onChange={(e) => {return handleChange(e)}}
+          placeholder='deja tu comentario'
+          required
+          value={values?.comment}
+        />
+        <RippleButton
+          onClick={() => {
+            return dispatch({
+              type: 'PUT_COMMENT',
+              payload: oneProductToComment.pId
+            })
+          }}
+        >
+          {!existComment ? 'Dejar comentario' : 'Actualizar'}
+        </RippleButton>
+
+        {existComment && <RippleButton
+          onClick={() => {
+            return handleRemoveValue({ name: 'comment', pId: oneProductToComment?.pId })
+          }}
+        >
+          Eliminar
+        </RippleButton>}
+      </AwesomeModal>
+      }
       {openCurrentSale &&
             <AwesomeModal
               btnConfirm={false}
@@ -188,7 +248,7 @@ const GenerateSales = () => {
                       tag: producto?.getOneTags?.nameTag
                     }
                     return (
-                      <CardProducts
+                      <CardProductSimple
                         {...producto}
                         ProDescription={producto.ProDescription}
                         ProDescuento={producto.ProDescuento}
@@ -196,6 +256,7 @@ const GenerateSales = () => {
                         ProPrice={producto.ProPrice}
                         ProQuantity={producto.ProQuantity}
                         ValueDelivery={producto.ValueDelivery}
+                        comment={false}
                         edit={false}
                         key={producto.pId}
                         onClick={() => {

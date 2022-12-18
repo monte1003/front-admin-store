@@ -19,7 +19,7 @@ import { updateCache } from 'utils'
 import { ModalDetailOrder } from 'pkg-components'
 import { useMutation } from '@apollo/client'
 import { CHANGE_STATE_STORE_PEDIDO, GET_ALL_PEDIDOS } from './queries'
-import { useStore } from 'npm-pkg-hook';
+import { useStore, numberFormat,useFormatDate } from 'npm-pkg-hook'
 
 const DragOrders = ({
   dataReadyOrder,
@@ -171,10 +171,12 @@ const DragOrders = ({
   const propsModal = {
     openAction,
     dataModal,
+    totalProductsPrice: numberFormat(Math.abs(dataModal?.totalProductsPrice)),
     dataStore,
+    pDatCre: useFormatDate({date: dataModal?.pDatCre}),
     loading: loading,
     handleOpenActions,
-    onPress: handleGetOneOrder,
+    onPress: handleGetOneOrder
   }
   return (
     <>
@@ -199,13 +201,13 @@ const DragOrders = ({
                 key={grp.title}
                 margin='0 15px 0 0 '
                 maxWidth='260px'
-                // onDragEnter={
-                //   dragging && !grp.items.length
-                //     ? (e) => {
-                //       handleDragEnter(e, grpIdx, 0)
-                //     }
-                //     : undefined
-                // }
+                onDragEnter={
+                  dragging && !grp.items.length
+                    ? (e) => {
+                      handleDragEnter(e, grpIdx, 0)
+                    }
+                    : undefined
+                }
                 transition='1s ease'
                 width='260px'
               >
@@ -259,8 +261,8 @@ const DragOrders = ({
                       key={item?.pCodeRef}
                       margin='auto'
                       onClick={() => { return handleGetOneOrder(item) }}
-                      // onDragEnter={dragging ? (e) => { return handleDragEnter(e, grpIdx, itemIdx, item) } : undefined}
-                      // onDragStart={(e) => { return handleDragStart(e, grpIdx, itemIdx, item) }}
+                      onDragEnter={dragging ? (e) => { return handleDragEnter(e, grpIdx, itemIdx, item) } : undefined}
+                      onDragStart={(e) => { return handleDragStart(e, grpIdx, itemIdx, item) }}
                       padding='10px'
                       position='relative'
                       width='96%'

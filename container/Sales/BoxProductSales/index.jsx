@@ -9,7 +9,7 @@ import {
 } from '../styled'
 import { Checkbox } from 'components/Checkbox'
 import { Range } from 'components/InputRange'
-import { CardProducts } from 'components/CartProduct'
+import { CardProductSimple } from 'pkg-components'
 import { IconEdit, IconPay } from 'public/icons'
 import { PColor, APColor } from 'public/colors'
 import { Skeleton } from 'components/Skeleton'
@@ -33,7 +33,8 @@ export const BoxProductSales = ({
   values,
   handleProduct,
   dataClientes,
-  callback = () => { return }
+  callback = () => { return },
+  handleComment = () => { return }
 }) => {
   const selectProduct = (product) => {
     if (!product) return
@@ -57,7 +58,6 @@ export const BoxProductSales = ({
           />
           <InputHooks
             name='change'
-            numeric={true}
             onChange={handleChange}
             required
             title='cambio'
@@ -66,7 +66,6 @@ export const BoxProductSales = ({
           />
           <InputHooks
             name='valueDelivery'
-            numeric={true}
             onChange={handleChange}
             required
             title='Domicilio'
@@ -130,17 +129,20 @@ export const BoxProductSales = ({
         <ContainerGrid>
           {data?.PRODUCT?.length > 0 ? finalFilter.map((producto, idx) => {
             return (
-              <CardProducts
+              <CardProductSimple
                 ProDescription={producto.ProDescription}
                 ProDescuento={producto.ProDescuento}
                 ProImage={producto.ProImage}
                 ProPrice={producto.ProPrice}
                 ProQuantity={producto.ProQuantity}
                 ValueDelivery={producto.ValueDelivery}
+                asComment={producto?.comment?.length > 0 ?? false}
+                buttonComment={true}
                 del={true}
                 dispatch={dispatch}
                 edit={false}
                 free={producto.free}
+                handleComment={() => {return handleComment(producto)}}
                 handleDecrement={() => { return dispatch({ type: 'REMOVE_PRODUCT', payload: producto }) }}
                 handleDelete={() => { return dispatch({ type: 'REMOVE_PRODUCT_TO_CART', payload: producto }) }}
                 handleFree={true}

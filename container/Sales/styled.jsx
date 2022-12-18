@@ -47,7 +47,7 @@ export const Warper = styled.div`
     display: flex;
 `
 export const CtnSwiper = styled.div`
-    height: min-content;    
+    height: min-content;
     background-color: ${BGColor};
     box-shadow: inset 0 -1px 0 #dcdcdc;
 
@@ -62,6 +62,12 @@ export const Box = styled.div`
 export const Wrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
+    .input-textarea {
+        width: 100%;
+        height: 200px;
+        outline: none;
+        min-height: 200px;
+    }
     .parent {
         width: 100%;
         max-width: 100%;

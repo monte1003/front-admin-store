@@ -1,9 +1,37 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, css } from 'styled-components'
 import { BGColor, PColor } from '../colors'
+export const scrollStyle = css`
+    scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0);
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
 
+&::-webkit-scrollbar:vertical {
+    width:10px;
+}
+
+&::-webkit-scrollbar-button:increment,&::-webkit-scrollbar-button {
+    display: none;
+} 
+
+&::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+&::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+    &::-webkit-scrollbar-track {
+    border-radius: 10px;  
+}
+
+`
 export const GlobalStyle = createGlobalStyle`
     * {
-        box-sizing: border-box;   
+        box-sizing: border-box;
         scroll-behavior: smooth;
     }
 

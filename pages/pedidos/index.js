@@ -5,7 +5,9 @@ import React from 'react'
 
 export default function PedidosStoreView () {
   return (
-    <PedidosStore />
+    <>
+      <PedidosStore />
+    </>
   )
 }
 

@@ -39,6 +39,7 @@ export const ListPedidos = ({
   const [modal, setModal] = useState(false)
   const [dataModal, setDataModal] = useState(null)
   const handleOpenModal = elem => {
+    console.log("🚀 ~ file: ListPedidos.jsx:42 ~ handleOpenModal ~ elem", elem)
     setModal(!modal)
     setDataModal(elem)
   }

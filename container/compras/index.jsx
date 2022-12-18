@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
 import { AwesomeModal } from 'components/AwesomeModal'
 import { useFormTools } from 'npm-pkg-hook'
 import { useSetState } from 'components/hooks/useState'
@@ -9,11 +7,14 @@ import { RippleButton } from 'components/Ripple'
 import { Table } from 'components/Table'
 import { Section } from 'components/Table/styled'
 import { useQuery, useMutation } from '@apollo/client'
-
 import moment from 'moment'
 import React from 'react'
 import { CREATE_SHOPPING, GET_ALL_SHOPPING } from './queries'
-import { Button, Item, Container } from './styled'
+import {
+  Button,
+  Item,
+  Container
+} from './styled'
 import { numberFormat, updateCache } from 'utils'
 
 export const ShoppingC = () => {
@@ -34,7 +35,7 @@ export const ShoppingC = () => {
             shoPrice: parseFloat(dataForm.shoPrice),
             shoComments: dataForm.shoComments
           }
-        }, update: (cache, { data: { getAllShopping } }) => {return updateCache({
+        }, update: (cache, { data: { getAllShopping } }) => { return updateCache({
           cache,
           query: GET_ALL_SHOPPING,
           nameFun: 'getAllShopping',
