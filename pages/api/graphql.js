@@ -34,7 +34,7 @@ const corsMultipleAllowOrigin = (options = {}) => {
     }
   }
 }
-const cors = corsMultipleAllowOrigin({ origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:4000', 'http://localhost:3003'] })
+const cors = corsMultipleAllowOrigin({ origin: ['http://localhost:3001', 'http://localhost:3000', 'http://localhost:4000', 'http://localhost:3003'] })
 let serverCleanup = null
 
 const apolloServer = new ApolloServer({
@@ -83,7 +83,6 @@ const apolloServer = new ApolloServer({
     // eslint-disable-next-line
     const { error } = await getUserFromToken(token)
     // console.log(error, 'HOLA MUNDO PAPUUUUUUUUUU')
-    // console.log(req, 'func')
     // if (error === true) return req.session.destroy()
 
     const excluded = ['/login', '/forgotpassword', '/register', '/teams/invite/[id]', '/teams/manage/[id]']
@@ -111,7 +110,13 @@ const apolloServer = new ApolloServer({
     }
   }
 })
-const startServer = apolloServer.start()
+const startServer = apolloServer.start(
+  {
+    cors: {
+      credentials: true, origin: ['http://localhost:3001']
+    }
+  }
+)
 
 export default cors(async (req, res) => {
   // res.setHeader('Access-Control-Allow-Credentials', 'true')
@@ -132,7 +137,13 @@ export default cors(async (req, res) => {
     return false
   }
   await startServer
-  const handler = (apolloServer.createHandler({ path: '/api/graphql' }))
+  const handler = (apolloServer.createHandler({
+    cors: {
+      methods: ['GET', 'POST'],
+      origin: 'http://localhost:3001'
+    },
+    path: '/api/graphql'
+  }))
   return handler(req, res)
 })
 export const config = {

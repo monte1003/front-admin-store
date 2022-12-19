@@ -19,7 +19,8 @@ import { updateCache } from 'utils'
 import { ModalDetailOrder } from 'pkg-components'
 import { useMutation } from '@apollo/client'
 import { CHANGE_STATE_STORE_PEDIDO, GET_ALL_PEDIDOS } from './queries'
-import { useStore, numberFormat,useFormatDate } from 'npm-pkg-hook'
+import { useGetSale, useStore, numberFormat,useFormatDate } from 'npm-pkg-hook'
+import { useRouter } from 'next/router'
 
 const DragOrders = ({
   dataReadyOrder,
@@ -53,7 +54,43 @@ const DragOrders = ({
     }
   ]
   const [list, setList] = useState(data)
+  const [saleKey, setSaleKey] = useState([])
+  const [saleGroup, setGroup] = useState()
   // QUERIES
+  const { getOnePedidoStore,
+    data: sale,
+    loading: saleLoading
+  } = useGetSale()
+  useEffect(() => {
+    const { getAllPedidoStore } = sale || {}
+    const result = getAllPedidoStore?.length > 0 && getAllPedidoStore?.reduce(function (r, a) {
+      r[a.getAllShoppingCard?.pId] = r[a.getAllShoppingCard?.pId] || []
+      r[a.getAllShoppingCard?.pId].push(a)
+      return r
+    }, Object.create(null))
+    window.Array.prototype.groupByToMap = function groupByToMap (keySelector) {
+      const map = new Map()
+      this.forEach(item => {
+        const key = keySelector(item)
+        const collection = map.get(key)
+        if (!collection) {
+          map.set(key, [item])
+        } else {
+          collection.push(item)
+        }
+      })
+      return map
+    }
+    const groupByCategory = getAllPedidoStore?.groupByToMap(product => {
+      return product.getAllShoppingCard?.pId
+    });
+    console.log({groupByCategory});
+    setGroup(result)
+    if (sale && !saleLoading) {
+      const groupByQuantity = Object.keys(result)
+      setSaleKey(groupByQuantity)
+    }
+  }, [sale, saleLoading])
   const [changePPStatePPedido] = useMutation(CHANGE_STATE_STORE_PEDIDO, {
     onCompleted: (res) => {
       setAlertBox({ message: res.changePPStatePPedido.message })
@@ -155,12 +192,30 @@ const DragOrders = ({
       })}
     })
   }
+  const router = useRouter()
+  const { query } = router
+  const { saleId } = query || {}
   const [openModalDetails, setOpenModalDetails] = useState(false)
   const [openAction, setOpenAction] = useState(false)
   const [dataModal, setDataModal] = useState({})
   const handleGetOneOrder = (item) => {
     const { pCodeRef } = item || {}
-    setDataModal(item)
+    getOnePedidoStore({
+      variables: {
+        pCodeRef: pCodeRef ?? null
+      }
+    })
+    setDataModal(sale)
+    router.push(
+      {
+        query: {
+          ...router.query,
+          saleId: pCodeRef
+        }
+      },
+      undefined,
+      { shallow: true }
+    )
     setOpenModalDetails(!openModalDetails)
   }
   const [dataStore, { loading }] = useStore()
@@ -168,16 +223,50 @@ const DragOrders = ({
   const handleOpenActions = () => {
     setOpenAction(!openAction)
   }
+
+  const handleCloseModal = () => {
+    setOpenModalDetails(false)
+  }
+  const HandleChangeState = (stateNumber, pCodeRef) => {
+    changePPStatePPedido({
+      variables: {
+        pPStateP: stateNumber,
+        pCodeRef: pCodeRef
+      }, update: (cache, { data: { getAllPedidoStoreFinal } }) => {return updateCache({
+        cache,
+        query: GET_ALL_PEDIDOS,
+        nameFun: 'getAllPedidoStoreFinal',
+        dataNew: getAllPedidoStoreFinal
+      })}
+
+    })
+  }
   const propsModal = {
     openAction,
     dataModal,
+    saleKey,
+    saleGroup,
     totalProductsPrice: numberFormat(Math.abs(dataModal?.totalProductsPrice)),
     dataStore,
     pDatCre: useFormatDate({date: dataModal?.pDatCre}),
-    loading: loading,
+    loading: loading || saleLoading,
     handleOpenActions,
+    HandleChangeState,
+    onClose: () => {return handleCloseModal()},
     onPress: handleGetOneOrder
   }
+
+  useEffect(() => {
+    if (saleId) {
+      setOpenModalDetails(true)
+      getOnePedidoStore({
+        variables: {
+          pCodeRef: saleId ?? null
+        }
+      })
+      setDataModal(sale)
+    }
+  }, [saleId, sale])
   return (
     <>
       {openModalDetails &&

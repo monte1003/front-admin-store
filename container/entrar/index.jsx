@@ -125,6 +125,10 @@ export const Login = () => {
       setAlertBox({ message: 'Lo sentimos ha ocurrido un error', color: 'error' })
     })
   }
+  useEffect(() => {
+    // Prefetch the dashboard page
+    router.prefetch('/dashboard')
+  }, [])
   return (
     <Portal selector={'portal'}>
       <Content>

@@ -119,7 +119,7 @@ const registerSalesStore = async (root,
     if (!input || input?.length === 0) {
       return {
         Response: {
-          success: true,
+          success: false,
           message: 'No se ha podido realizar la venta, no hay productos en el carrito'
         }
       }

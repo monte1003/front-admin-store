@@ -10,7 +10,6 @@ import { useGetClients, useSales } from 'npm-pkg-hook'
 import { Text, CardProductSimple } from 'pkg-components'
 import { IconSales } from 'public/icons'
 import { useContext } from 'react'
-import InputHooks from '~/components/InputHooks/InputHooks'
 import { AwesomeModal } from '~/components/AwesomeModal'
 import { Context } from '~/context/Context'
 import { BoxProductSales } from './BoxProductSales'
@@ -27,7 +26,11 @@ import { SubItems } from './SubItems'
 
 const GenerateSales = () => {
   // STATES
-  const { sendNotification, setAlertBox } = useContext(Context)
+  const {
+    sendNotification,
+    setSalesOpen,
+    setAlertBox
+  } = useContext(Context)
   const router = useRouter()
 
   const {
@@ -142,6 +145,13 @@ const GenerateSales = () => {
     handleSubmit
   }
   const existComment = oneProductToComment?.comment?.length > 0
+  const handleCloseModal = () => {
+    router.push({
+      pathname: '/pedidos',
+      query: { saleId: code }
+    })
+    setSalesOpen(false)
+  }
   return (
     <Wrapper>
       {openCommentModal &&
@@ -226,7 +236,7 @@ const GenerateSales = () => {
                 >
                   {code}
                 </Text>
-                <RippleButton>
+                <RippleButton onClick={() => { return handleCloseModal() }}>
                     Mirar pedido
                 </RippleButton>
               </div>

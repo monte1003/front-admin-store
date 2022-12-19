@@ -180,7 +180,9 @@ const getOnePedidoStore = async (_, { pCodeRef }, ctx, info) => {
     const attributes = getAttributes(StatusOrderModel, info)
     const data = await StatusOrderModel.findOne({
       attributes,
-      where: { pCodeRef: pCodeRef }
+      where: {
+        pCodeRef: pCodeRef
+      }
     })
     return data
   } catch {
