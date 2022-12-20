@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import dynamic from 'next/dynamic'
 import React, {
   useCallback,
   useContext,
@@ -16,7 +17,6 @@ import {
   SEGColor
 } from 'public/colors'
 import { updateCache } from 'utils'
-import { ModalDetailOrder } from 'pkg-components'
 import { useMutation } from '@apollo/client'
 import { CHANGE_STATE_STORE_PEDIDO, GET_ALL_PEDIDOS } from './queries'
 import { useGetSale, useStore, numberFormat,useFormatDate } from 'npm-pkg-hook'
@@ -30,6 +30,9 @@ const DragOrders = ({
   data: dataInitial
 }) => {
   // STATES
+  const ModalDetailOrder = dynamic(() =>
+  {return import('pkg-components').then((mod) => {return mod.ModalDetailOrder})}
+  )
   const { setAlertBox } = useContext(Context)
   const data = [
     {
@@ -83,8 +86,8 @@ const DragOrders = ({
     }
     const groupByCategory = getAllPedidoStore?.groupByToMap(product => {
       return product.getAllShoppingCard?.pId
-    });
-    console.log({groupByCategory});
+    })
+    console.log(groupByCategory && Object.entries(groupByCategory))
     setGroup(result)
     if (sale && !saleLoading) {
       const groupByQuantity = Object.keys(result)

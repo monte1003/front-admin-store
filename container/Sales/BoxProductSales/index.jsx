@@ -128,6 +128,7 @@ export const BoxProductSales = ({
         </Warper>
         <ContainerGrid>
           {data?.PRODUCT?.length > 0 ? finalFilter.map((producto, idx) => {
+            const activeComment = producto?.comment?.length > 0 ?? false
             return (
               <CardProductSimple
                 ProDescription={producto.ProDescription}
@@ -136,7 +137,10 @@ export const BoxProductSales = ({
                 ProPrice={producto.ProPrice}
                 ProQuantity={producto.ProQuantity}
                 ValueDelivery={producto.ValueDelivery}
-                asComment={producto?.comment?.length > 0 ?? false}
+                activeComment={activeComment}
+                asComment={activeComment}
+                asComment={activeComment}
+                buttonComment={true}
                 buttonComment={true}
                 del={true}
                 dispatch={dispatch}
