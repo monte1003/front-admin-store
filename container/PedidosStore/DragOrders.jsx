@@ -60,7 +60,8 @@ const DragOrders = ({
   const [saleKey, setSaleKey] = useState([])
   const [saleGroup, setGroup] = useState()
   // QUERIES
-  const { getOnePedidoStore,
+  const {
+    getOnePedidoStore,
     data: sale,
     loading: saleLoading
   } = useGetSale()

@@ -53,6 +53,74 @@ export const getAllSalesStore = async (_, args, ctx, info) => {
     return error
   }
 }
+export const getAllSalesStoreTotal = async (_, args, ctx) => {
+  const {
+    idStore,
+    fromDate,
+    toDate
+  } = args || {}
+  try {
+    const data = await StatusPedidosModel.findAll({
+      attributes:['totalProductsPrice'],
+      where: {
+        [Op.or]: [
+          {
+            pSState: 4,
+            ...((fromDate && toDate) ? { pDatCre: { [Op.between]: [fromDate, `${toDate} 23:59:59`] } } : {}),
+            // ID STORE
+            channel: 1,
+            idStore: idStore ? deCode(idStore) : deCode(ctx.restaurant)
+          }
+        ]
+      }
+    })
+
+    const dataDelivery = await StatusPedidosModel.findAll({
+      attributes:['totalProductsPrice'],
+      where: {
+        [Op.or]: [
+          {
+            pSState: 4,
+            ...((fromDate && toDate) ? { pDatCre: { [Op.between]: [fromDate, `${toDate} 23:59:59`] } } : {}),
+            // ID STORE
+            channel: 0,
+            idStore: idStore ? deCode(idStore) : deCode(ctx.restaurant)
+          }
+        ]
+      }
+    })
+    const dataTotal = await StatusPedidosModel.findAll({
+      attributes:['totalProductsPrice'],
+      where: {
+        [Op.or]: [
+          {
+            pSState: 4,
+            ...((fromDate && toDate) ? { pDatCre: { [Op.between]: [fromDate, `${toDate} 23:59:59`] } } : {}),
+            // ID STORE
+            idStore: idStore ? deCode(idStore) : deCode(ctx.restaurant)
+          }
+        ]
+      }
+    })
+    if (data) {
+      const TOTAL = dataTotal.reduce((a, b) => {return a + b.totalProductsPrice}, 0)
+      const totalRestaurant = data.reduce((a, b) => {return a + b.totalProductsPrice}, 0)
+      const totalDelivery = dataDelivery.reduce((a, b) => {return a + b.totalProductsPrice}, 0)
+      return {
+        restaurant: totalRestaurant ?? 0,
+        delivery: totalDelivery ?? 0,
+        TOTAL: TOTAL
+      }
+    }
+    return {
+      restaurant: 0,
+      delivery: 0
+    }
+  } catch (error) {
+    return error
+  }
+}
+
 export const getAllSalesStoreStatistic = async (_, args, ctx, info) => {
   const { idStore, min, max, fromDate, toDate } = args || {}
   try {
@@ -101,6 +169,7 @@ export default {
   },
   QUERIES: {
     getAllSalesStore,
+    getAllSalesStoreTotal,
     getAllSalesStoreStatistic,
     getOneSalesStore
 

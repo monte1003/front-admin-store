@@ -15,7 +15,6 @@ import { PColor, APColor } from 'public/colors'
 import { Skeleton } from 'components/Skeleton'
 import FooterCalcules from '../FooterCalcules'
 import NewSelect from 'components/NewSelectHooks/NewSelect'
-import InputHooks from 'components/InputHooks/InputHooks'
 import { Flex } from 'container/dashboard/styled'
 import { numberFormat } from '../../../utils'
 
@@ -41,6 +40,9 @@ export const BoxProductSales = ({
     handleProduct(product)
     setModalItem(!modalItem)
   }
+  const format = (value = '') => {
+    return numberFormat(value.replace(/[^0-9.]/g, '')?.replace(/^0[^.]/, '0'))
+  }
 
   return (
     <Box width='40%'>
@@ -56,21 +58,21 @@ export const BoxProductSales = ({
             title='Mis clientes'
             value={values?.cliId}
           />
-          <InputHooks
+          <input
+            className='optional_input'
             name='change'
             onChange={handleChange}
-            required
+            placeholder='Cambio'
             title='cambio'
-            value={numberFormat(values?.change)}
-            width={'50%'}
+            value={format(values?.change)}
           />
-          <InputHooks
+          <input
+            className='optional_input'
             name='valueDelivery'
             onChange={handleChange}
-            required
+            placeholder='Domicilio'
             title='Domicilio'
-            value={numberFormat(values?.valueDelivery)}
-            width={'50%'}
+            value={format(values?.valueDelivery)}
           />
           <Flex style={{ marginBottom: '40px' }}>
             <Flex>
@@ -139,8 +141,6 @@ export const BoxProductSales = ({
                 ValueDelivery={producto.ValueDelivery}
                 activeComment={activeComment}
                 asComment={activeComment}
-                asComment={activeComment}
-                buttonComment={true}
                 buttonComment={true}
                 del={true}
                 dispatch={dispatch}

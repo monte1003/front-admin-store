@@ -149,21 +149,18 @@ export const getCatProductsWithProduct = async (root, args, context, info) => {
       ProDescuento: { [Op.in]: desc.map(x => { return x }) }
     }
   }
-  //validad que  venga una categoría para hacer el filtro por categorías
+  // validad que  venga una categoría para hacer el filtro por categorías
   if (categories?.length) {
     whereSearch = {
       ...whereSearch,
       caId: { [Op.in]: categories.map(x => { return deCode(x) }) }
     }
   }
-  const attributes = getAttributes(catProducts, info)
-  const data = await catProducts.findAll({
-    attributes,
+  const { count, rows } = await catProducts.findAndCountAll({
     include: [
       {
         attributes: ['pId', 'carProId'],
         model: productModelFood
-        // required: true,
       }
     ],
     where: {
@@ -178,9 +175,12 @@ export const getCatProductsWithProduct = async (root, args, context, info) => {
           pState: { [Op.gt]: 0 }
         }
       ]
-    }, limit: [min || 0, max || 5], order: [['pName', 'DESC']]
+    }, limit: [min || 0, max || 5], order: [['pDatCre', 'ASC']]
   })
-  return data
+  return {
+    totalCount: count,
+    catProductsWithProduct: rows
+  }
 }
 export const getCatProductsWithProductClient = async (root, args, context, info) => {
   const { min, max, idStore } = args
@@ -205,7 +205,7 @@ export const getCatProductsWithProductClient = async (root, args, context, info)
           pState: { [Op.gt]: 0 }
         }
       ]
-    }, limit: [min || 0, max || 2], order: [['pName', 'DESC']]
+    }, limit: [min || 0, max || 2], order: [['pDatCre', 'ASC']]
   })
   return data
 }

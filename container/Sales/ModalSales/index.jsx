@@ -6,17 +6,17 @@ import { Input } from '../styled'
 import { Prints } from '../Printsale'
 
 export const ModalSales = ({
-  handleSubmit,
   print,
   setPrint,
   totalProductPrice,
-  dataClientes,
-  values,
+  dataClientes = {},
+  values = {},
   code,
   data,
-  setDelivery,
   delivery,
-  handleChange
+  setDelivery = () => { return },
+  handleChange = () => { return },
+  handleSubmit = () => { return }
 }) => {
   return (
     <div>

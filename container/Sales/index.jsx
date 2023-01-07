@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client'
 import { useCheckboxState } from 'components/hooks/useCheckbox'
-import { LoadingBabel } from 'components/Loading/LoadingBabel'
 import { RippleButton } from 'components/Ripple'
 import { Skeleton } from 'components/Skeleton'
 import { GET_ULTIMATE_CATEGORY_PRODUCTS } from 'container/dashboard/queries'
@@ -11,6 +10,7 @@ import { Text, CardProductSimple } from 'pkg-components'
 import { IconSales } from 'public/icons'
 import { useContext } from 'react'
 import { AwesomeModal } from '~/components/AwesomeModal'
+import { Loading } from '../../components/Loading'
 import { Context } from '~/context/Context'
 import { BoxProductSales } from './BoxProductSales'
 import { FormFilterSales } from './formFilterSales'
@@ -42,6 +42,7 @@ const GenerateSales = () => {
     dispatch,
     fetchMore,
     finalFilter,
+    loadingRegisterSale,
     handleChange,
     handleChangeFilter,
     handleChangeFilterProduct,
@@ -154,6 +155,7 @@ const GenerateSales = () => {
   }
   return (
     <Wrapper>
+      {loadingRegisterSale || loading && <Loading />}
       {openCommentModal &&
       <AwesomeModal
         btnConfirm={false}
@@ -276,37 +278,38 @@ const GenerateSales = () => {
                           })
                         }}
                         pName={producto.pName}
-                        render={<IconSales size='20px' />}
+                        render={<IconSales color='red' size='20px' />}
                         tag={producto?.getOneTags && tag}
                       />
                     )
                   })
                 )}
               </ContainerGrid>
+              <RippleButton
+                className='ripple-button__load'
+                margin='0px auto'
+                onClick={() => {
+                  setShowMore((s) => {
+                    return s + 5
+                  })
+                  fetchMore({
+                    variables: { max: showMore, min: 0 },
+                    updateQuery: (prevResult, { fetchMoreResult }) => {
+                      if (!fetchMoreResult) return prevResult
+                      return {
+                        productFoodsAll: [...fetchMoreResult.productFoodsAll]
+                      }
+                    }
+                  })
+                }}
+                widthButton='100%'
+              >
+                CARGAR MÁS
+              </RippleButton>
             </ScrollbarProduct>
 
           </div >
         </div>
-        <RippleButton
-          margin='0px auto'
-          onClick={() => {
-            setShowMore((s) => {
-              return s + 5
-            })
-            fetchMore({
-              variables: { max: showMore, min: 0 },
-              updateQuery: (prevResult, { fetchMoreResult }) => {
-                if (!fetchMoreResult) return prevResult
-                return {
-                  productFoodsAll: [...fetchMoreResult.productFoodsAll]
-                }
-              }
-            })
-          }}
-          widthButton='100%'
-        >
-          {loading ? <LoadingBabel /> : 'CARGAR MÁS'}
-        </RippleButton>
       </Box>
       <BoxProductSales {...restPropsProductSales} />
       <SubItems {...modalItems} />

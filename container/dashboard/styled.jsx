@@ -228,6 +228,7 @@ export const DisRestaurant = styled.div`
 `
 export const Wrapper = styled.div`
     width: 100%;
+    /* overflow: hidden; */
     max-width: 1366px;
     /* animation: 2s linear 0s infinite normal none ${BG_ANIMATION_};
     background: linear-gradient(90deg, rgb(255, 254, 254) 0%, rgb(194, 190, 190) 20%, rgba(255, 255, 255, 0.904) 50%, rgba(255, 255, 255, 0.219) 80%, rgba(250, 250, 250, 0.911) 100%) 0% 0% / 200% 200%; */

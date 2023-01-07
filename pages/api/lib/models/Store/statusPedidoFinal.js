@@ -9,6 +9,7 @@ import connect from '../../db'
 import { enCode } from '../../utils/util'
 import Store from './Store'
 const sequelize = connect()
+
 sequelize.sync()
 
 const StatusPedidosModel = sequelize.define('statuspedidos', {
@@ -20,7 +21,9 @@ const StatusPedidosModel = sequelize.define('statuspedidos', {
   },
   id: {
     type: INTEGER,
-    allowNull: true
+    allowNull: true,
+    get(x) { return enCode(this.getDataValue(x)) }
+
   },
   idStore: {
     type: INTEGER,
@@ -64,6 +67,10 @@ const StatusPedidosModel = sequelize.define('statuspedidos', {
   },
   pickUp: {
     type: TINYINT,
+    defaultValue: 0
+  },
+  channel: {
+    type: TINYINT, // store or client-store
     defaultValue: 0
   },
   pPDate: {

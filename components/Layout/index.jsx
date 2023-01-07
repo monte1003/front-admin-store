@@ -16,6 +16,7 @@ import { AlertBox } from '../AlertBox'
 import Aside from './Aside'
 import { Footer } from './footer'
 import { Header } from './header'
+// import { createClient } from 'graphql-ws'
 
 export const MemoLayout = ({
   children,
@@ -23,6 +24,41 @@ export const MemoLayout = ({
   settings
 }) => {
   const location = useRouter()
+  // const client = createClient({
+  //   url: 'ws://localhost:4000/graphql'
+  // })
+  // console.log(client)
+
+  // useEffect(() => {
+  //   // subscription
+  //   (async () => {
+  //     const onNext = (e) => {
+  //       console.log({e})
+  //       /* handle incoming values */
+  //     }
+
+  //     let unsubscribe = (e) => {
+  //       console.log(e)
+  //       /* complete the subscription */
+  //     }
+
+  //     await new Promise((resolve, reject) => {
+  //       unsubscribe = client.subscribe(
+  //         {
+  //           query: 'subscription { newStoreOrder }'
+  //         },
+  //         {
+  //           next: onNext,
+  //           error: reject,
+  //           complete: resolve
+  //         }
+  //       )
+  //     })
+
+  //     // expect(onNext).toBeCalledTimes(5); // we say "Hi" in 5 languages
+  //   })() 
+  // }, [client])
+    
   const {
     error,
     setAlertBox,
@@ -67,6 +103,7 @@ export const MemoLayout = ({
     `
   const { data: dataWS } = useSubscription(NEW_NOTIFICATION, {
     onSubscriptionData: ({ subscriptionData }) => {
+      console.log(subscriptionData)
       setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
       sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
     }

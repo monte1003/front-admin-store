@@ -22,18 +22,27 @@ export const ScrollbarProduct = styled.div`
     overflow: hidden auto;
     height: 100%;
     border-left: 1px solid #e9ecef;
-    margin: ${({ margin }) => { return margin || '100px 0' }};
+    margin: ${({ margin }) => { return margin || '0' }};
+    .ripple-button__load {
+        position: fixed;
+        height: auto;
+        height: 50px;
+        left: -1px;
+        bottom: -1PX;
+        width: 300px;
+        border-radius: 5px;
+    }
     h2 {
-    text-rendering: optimizeLegibility;
-    font-family: PFont-Light;
-    display: inline;
-    color: #3e3e3e;
-    margin: 0 0 2px;
-    font-weight: 400;
-    font-size: 1.9em;
-    text-align: center;
-    display: flex;
-    justify-content: center;
+        text-rendering: optimizeLegibility;
+        font-family: PFont-Light;
+        display: inline;
+        color: #3e3e3e;
+        margin: 0 0 2px;
+        font-weight: 400;
+        font-size: 1.9em;
+        text-align: center;
+        display: flex;
+        justify-content: center;
     }
 `
 export const FlipTop = styled.div`
@@ -45,11 +54,18 @@ export const FlipTop = styled.div`
 export const Warper = styled.div`
     flex-wrap: wrap;
     display: flex;
+    .optional_input {
+        width: 50%;
+        padding: 10px;
+        margin: 5px 0px;
+    }
 `
 export const CtnSwiper = styled.div`
     height: min-content;
     background-color: ${BGColor};
     box-shadow: inset 0 -1px 0 #dcdcdc;
+    margin: 0 0 50px 0;
+    padding: 15px 0 ;
 
 `
 export const Box = styled.div`
@@ -71,15 +87,11 @@ export const Wrapper = styled.div`
     .parent {
         width: 100%;
         max-width: 100%;
-        height: 100vh;
         overflow: hidden;
-        resize: horizontal ;
-        border-radius: 8px;
     }
     .child {
     height: 100%;
     border-radius: 3px;
-    width: clamp(100px, 100%, 100vw);
 }
 `
 export const ContainerGrid = styled.div`
@@ -103,44 +115,20 @@ export const ContainerGrid = styled.div`
 
 `
 export const CateItem = styled.div`
-    line-height: 1.15;
-    font-family: 'PFont-Regular';
-    box-sizing: border-box;
-    text-align: center;
-    column-gap: 12px;
-    align-items: center;
-    position: relative;
-    list-style: none;
-    cursor: pointer;
-    box-sizing: border-box;
-    font-weight: lighter;
-    color: ${DarkSilver};
-    word-break: break-word;
-    margin-bottom: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    padding: 8px 12px;
-    border-radius: 200px;
-    transition: background-color .3s ease-in-out;
     background-color: ${SECBGColor};
-    text-rendering: optimizeLegibility;
-    cursor: pointer;
+    border-radius: 200px;
     color: ${DarkSilver};
-    word-break: break-word;
-    font-size: .875rem;
-    line-height: 1.25rem;
-    overflow: hidden;
-    place-content: space-around;
-    align-items: center;
-    min-width: 100px;
-    max-width: 250px;
-    min-height: 50px;
-    max-height: 50px;
-    user-select: none;
+    cursor: pointer;
     display: flex;
-    place-content: space-between;
+    overflow: hidden;
+    padding: 0 5px;
+    place-content: center;
+    place-items: center;
+    .name-categorie {
+        font-family: 'PFont-Light';
+        overflow: hidden;
+        white-space: nowrap;
+    }
     .icon {
         min-width: 20%;
         max-width: 20%;

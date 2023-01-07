@@ -7,7 +7,7 @@ const VentasStores = () => {
   return (
     <div>
       <Container>
-        <LocationName />
+        {/* <LocationName /> */}
         <ListVentas />
       </Container>
     </div>

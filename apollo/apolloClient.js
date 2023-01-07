@@ -31,9 +31,9 @@ const errorHandler = onError(({ graphQLErrors }) => {
     graphQLErrors?.length && graphQLErrors.forEach(err => {
       const { code } = err.extensions
       if (code === 'UNAUTHENTICATED' || code === 'FORBIDDEN') console.log('')
-      else if (code === 403) {
-        console.log('')
-      }
+      // else if (code === 403) {
+      //   console.log('')
+      // }
     })
   }
 })
@@ -44,7 +44,7 @@ const authLink = async () => {
     const restaurant = window.localStorage.getItem('restaurant')
     return {
       authorization: token && `Bearer ${token}`,
-      restaurant: restaurant ?? restaurant,
+      restaurant: 'MjcyMDg4ODE0ODUxNTE2NDUw',
       deviceid: ''
     }
   }
@@ -60,20 +60,26 @@ const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
   options: {
     reconnect: true,
     lazy: true,
-    timeout: 30000,
-    connectionParams: async () => {
-      const headers = await authLink()
-      return {
-        headers:
-        {
-          ...headers
-        }
+    inactivityTimeout: 1000,
+    // timeout: 30000,
+    wsOptionArguments: {
+      headers: {
+        authorization: `Bearer ${window.localStorage.getItem('session')}`,
+        restaurant: `MjcyMDg4ODE0ODUxNTE2NDUw`
+
       }
     },
-    connectionCallback: (error, result) => {
-      // eslint-disable-next-line no-console
-      console.log(error, result)
-    }
+    connectionParams: {
+      credentials: 'include',
+      headers: {
+        authorization: `Bearer ${window.localStorage.getItem('session')}`,
+        restaurant: `MjcyMDg4ODE0ODUxNTE2NDUw`
+      }
+    },
+    // connectionCallback: (error, result) => {
+    //   // eslint-disable-next-line no-console
+    //   console.log(error, result)
+    // }
   }
 }) : null
 function createApolloClient() {
@@ -102,7 +108,7 @@ function createApolloClient() {
     operation.setContext({
       headers: {
         ...headers,
-        authorization: service === 'admin-server' || service === 'subscriptions' ? `Bearer ${token}` : `${restaurant}`,
+        authorization: service === 'admin-server' || service === 'subscriptions' ? `Bearer MjcyMDg4ODE0ODUxNTE2NDUw` : `MjcyMDg4ODE0ODUxNTE2NDUw`,
         client: 'front-admin'
       }
     })

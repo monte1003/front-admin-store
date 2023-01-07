@@ -13,6 +13,8 @@ import productModelFood from '../product/productFood'
 import Users from '../Users'
 import Store from './Store'
 
+sequelize.sync()
+
 const ShoppingCard = sequelize.define('shoppingcards', {
   ShoppingCard: {
     type: INTEGER,
@@ -23,12 +25,11 @@ const ShoppingCard = sequelize.define('shoppingcards', {
   id: {
     type: INTEGER,
     allowNull: true,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-    references: {
-      model: Users,
-      key: 'id'
-    },
+    get(x) { return enCode(this.getDataValue(x)) }
+  },
+  idUser: {
+    type: INTEGER,
+    allowNull: true,
     get(x) { return enCode(this.getDataValue(x)) }
   },
   pId: {

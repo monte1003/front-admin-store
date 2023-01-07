@@ -16,6 +16,7 @@ export const createOnePedidoStore = async (_, { input }) => {
     payMethodPState,
     pPRecoger
   } = input || {}
+  console.log({here: ShoppingCard})
   try {
     await pedidosModel.create({
       ...input,
@@ -32,6 +33,7 @@ export const createOnePedidoStore = async (_, { input }) => {
       message: ''
     }
   } catch (error) {
+    console.log(error)
     return { success: false, message: 'Se ha producido un error' || error }
   }
 }
@@ -85,7 +87,8 @@ const createMultipleOrderStore = async (_, { input }, ctx) => {
     })
     for (const element of setInput) {
       const { ShoppingCard, idStore } = element
-      await deleteOneItem(null, { ShoppingCard, cState: 1 })
+      // PENDIENTE EN DESCOMENTAR !!
+      // await deleteOneItem(null, { ShoppingCard, cState: 1 })
       await createOnePedidoStore(null, {
         input: {
           id: ctx.User.id,

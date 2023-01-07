@@ -2,7 +2,12 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
 
-const SkeletonComponent = ({ height, width='100%', margin, numberObject }) => {
+const SkeletonComponent = ({
+  height,
+  width='100%',
+  margin,
+  numberObject
+}) => {
   return (
     <React.Fragment>
       {Array.from(Array(numberObject || 1).keys()).map(value => {

@@ -1,12 +1,11 @@
-import { useFormTools } from 'components/BaseForm'
 import InputHooks from 'components/InputHooks/InputHooks'
+import styled from 'styled-components'
 import { RippleButton } from 'components/Ripple'
 import { Table } from 'components/Table'
 import { Section } from 'components/Table/styled'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { BGColor, PLColor, SFColor } from 'public/colors'
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import { numberFormat } from '../../utils'
 import { GET_ALL_SALES, GET_ONE_SALES } from './queries'
 import moment from 'moment'
@@ -16,19 +15,26 @@ import { Skeleton } from 'components/Skeleton'
 import { MainCard } from 'components/common/Reusable/ShadowCard'
 import Column from 'components/common/Atoms/Column'
 import Button from 'components/common/Atoms/Button'
-moment.locale('es')
+import { useReport, useFormTools } from 'npm-pkg-hook'
+// import { Carrusel3D } from 'pkg-components'
+
 export const ListVentas = () => {
   let total = 0
   let suma = 0
+
+  const [more, setMore] = useState(5)
+  const { data, fetchMore, loading, totalSales, delivery, restaurant } = useReport({
+    more
+  })
   const [handleChange, { dataForm, errorForm }] = useFormTools()
+
   const [valuesDates, setValuesDates] = useState({ fromDate: moment().format('YYYY-MM-DD'), toDate: moment().format('YYYY-MM-DD') })
   const onChangeInput = (e) => { return setValuesDates({ ...valuesDates, [e.target.name]: e.target.value }) }
-  const [more, setMore] = useState(100)
-  const [getAllSalesStore, { data, fetchMore, loading }] = useLazyQuery(GET_ALL_SALES)
+  // const [getAllSalesStore, { data, fetchMore, loading }] = useLazyQuery(GET_ALL_SALES)
   const [getOneSalesStore, { data: dataOneSales }] = useLazyQuery(GET_ONE_SALES)
   const [totalProductPrice, setTotalProductPrice] = useState(0)
   useEffect(() => {
-    getAllSalesStore({ variables: { min: 0 } })
+    // getAllSalesStore({ variables: { min: 0 } })
     data?.getAllSalesStore.forEach((a) => {
       const { totalProductsPrice } = a || {}
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,15 +47,98 @@ export const ListVentas = () => {
     getOneSalesStore({ variables: { pCodeRef: pCodeRef } })
     setOpen(!open)
   }
-  const getFromDataToData = async () => { return getAllSalesStore({ variables: { fromDate: valuesDates?.fromDate, toDate: valuesDates?.toDate } }) }
+  // const getFromDataToData = async () => { return getAllSalesStore({ variables: { fromDate: valuesDates?.fromDate, toDate: valuesDates?.toDate } }) }
+  const [active, setActive] = useState(2)
+
+  const cardList = [
+    {
+      key: '1',
+      title: 'B Oven',
+      range: '136.00 - 140.00',
+      sv: '137.00',
+      avgTemp: '138.85',
+      avgAcc: '0.81'
+    },
+    {
+      key: '1',
+      title: 'C Oven',
+      range: '136.00 - 140.00',
+      sv: '137.00',
+      avgTemp: '138.85',
+      avgAcc: '0.81'
+    },
+    {
+      key: '1',
+      title: 'D Oven',
+      range: '136.00 - 140.00',
+      sv: '137.00',
+      avgTemp: '138.85',
+      avgAcc: '0.81'
+    },
+    {
+      key: '1',
+      title: 'Z1 Main Oven',
+      range: '136.00 - 140.00',
+      sv: '137.00',
+      avgTemp: '138.85',
+      avgAcc: '0.81'
+    },
+    {
+      key: '1',
+      title: 'Z2 Main Oven',
+      range: '136.00 - 140.00',
+      sv: '137.00',
+      avgTemp: '138.85',
+      avgAcc: '0.81'
+    },
+    {
+      key: '1',
+      title: 'Z3 Main Oven',
+      range: '136.00 - 140.00',
+      sv: '137.00',
+      avgTemp: '138.85',
+      avgAcc: '0.81'
+    },
+    {
+      key: '1',
+      title: 'Z4 Main Oven',
+      range: '136.00 - 140.00',
+      sv: '137.00',
+      avgTemp: '138.85',
+      avgAcc: '0.81'
+    },
+    {
+      key: '1',
+      title: 'Z5 Main Oven',
+      range: '136.00 - 140.00',
+      sv: '137.00',
+      avgTemp: '138.85',
+      avgAcc: '0.81'
+    }
+  ]
   return (
     <div>
+      {/* <Carrusel3D
+        active={active}
+        moveLeft={() => {return setActive((i) => {return i - 1})}}
+        moveRight={() => {return setActive((i) => {return i + 1})}}
+      >
+        {cardList.map((item) => {return (
+          <div key={item.key}>
+            <div align='center' variant='h6'>
+              <div disableTypography={true} title={item.title} >
+                Hola
+              </div>
+            </div>
+          </div>
+        )})}
+      </Carrusel3D> */}
       <GetOneSales
         data={dataOneSales?.getOneSalesStore || []}
         open={open}
         setOpen={setOpen}
       />
-      <Card>
+      {/* <Card>
         <form>
           <InputHooks
             name='fromDate'
@@ -99,8 +188,8 @@ export const ListVentas = () => {
           >Consultar</RippleButton>
           <RippleButton margin='30px' padding='10px'>Consultar y exportar</RippleButton>
         </form>
-      </Card>
-      <ChatStatistic />
+      </Card> */}
+      {/* <ChatStatistic /> */}
       <Table
         data={data?.getAllSalesStore || []}
         labelBtn='Product'
@@ -176,25 +265,25 @@ export const ListVentas = () => {
         <div className='wrapper-card-info'>
           <div className='item'>
             <span>Total de ventas realizadas </span>
-            <h3>$ {numberFormat(totalProductPrice)}</h3>
+            <h3>$ {numberFormat(totalSales)}</h3>
             <Button>Ver mas information</Button>
           </div>
           <div className='wrapper-acquisition__card'>
             <div>
               <span>Por Delivery </span>
-              <h3>$ {numberFormat(300000)}</h3>
+              <h3>$ {numberFormat(delivery)}</h3>
 
             </div>
             <div>
               <span>Por Restaurante </span>
-              <h3>$ {numberFormat(300000)}</h3>
+              <h3>$ {numberFormat(restaurant)}</h3>
             </div>
           </div>
 
         </div>
         <div className='wrapper-card-info'>
           <span>Total de ventas realizadas </span>
-          <h3>$ {numberFormat(totalProductPrice)}</h3>
+          <h3>$ {numberFormat(totalSales)}</h3>
           <Button>Ver mas information</Button>
         </div>
       </CardInfo>
@@ -283,8 +372,8 @@ export const ChatStatistic = () => {
 const Action = styled.div`
     display: flex;
     justify-content: space-between;
-    
-    `
+`
+
 const CardInfo = styled.div`
     display: grid;
     grid-template-columns: 50% repeat(auto-fill, 50%);
@@ -321,13 +410,13 @@ const CardInfo = styled.div`
 `
 const ContainChart = styled.div`
     display: grid;
-    grid-template-columns: repeat( auto-fit,minmax(250px, 1fr) );
-    width: 90%;
-    position: relative;
     grid-gap: 19px 12px;
-    width: 100%;
-    padding: 10px;
+    grid-template-columns: repeat( auto-fit,minmax(250px, 1fr) );
     margin: 10px 0;
+    padding: 10px;
+    position: relative;
+    width: 100%;
+    width: 90%;
 `
 const Card = styled.div`
     display: flex;

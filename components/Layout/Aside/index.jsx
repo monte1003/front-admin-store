@@ -10,6 +10,7 @@ import { useMobile, useStore } from 'npm-pkg-hook'
 import PropTypes from 'prop-types'
 import React, {
   useCallback,
+  useEffect,
   useContext,
   useState
 } from 'react'
@@ -80,28 +81,46 @@ const MemoAside = () => {
     idStore,
     uState
   } = dataStore || {}
-  const GET_STATE_ORDER = gql`
-      subscription {
-        numberIncremented
-      }
-  `
-  // const { data: dataWS } = useSubscription(GET_STATE_ORDER, {
-  //   context: { clientName: 'admin-server' },
-  //   onSubscriptionData: (data) => {
-  //     console.log(data?.subscriptionData?.data?.numberIncremented)
+  // const GET_STATE_ORDER = gql`
+  //     subscription {
+  //       numberIncremented
+  //     }
+  // `
+  // // const { data: dataWS } = useSubscription(GET_STATE_ORDER, {
+  // //   context: { clientName: 'admin-server' },
+  // //   onSubscriptionData: (data) => {
+  // //     console.log(data?.subscriptionData?.data?.numberIncremented)
+  // //   }
+  // // })
+
+  // const NEW_NOTIFICATION = gql`
+  // subscription {
+  // newNotification
+  // }
+  // `
+  // const { data: lol } = useSubscription(NEW_NOTIFICATION, {
+  //   onSubscriptionData: ({ subscriptionData }) => {
+  //     console.log(subscriptionData)
   //   }
   // })
+  const [messageOtherTap, setmessageOtherTap] = useState('Esta abierto en otra ventana')
 
-  const NEW_NOTIFICATION = gql`
-  subscription {
-  newNotification
-  }
-  `
-  const { data: lol } = useSubscription(NEW_NOTIFICATION, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      console.log(subscriptionData)
-    }
-  })
+  // useEffect(() => {
+  //   (() => {
+  //     const handleVisibilityChange = () => {
+  //       if (document.visibilityState === 'visible') {
+  //         setmessageOtherTap('Esta abierto en otra ventana')
+  //       } else {
+  //         setmessageOtherTap('Esta abierto en otra ventana')
+  //       }
+  //     }
+  //     document.addEventListener('visibilitychange', handleVisibilityChange, false)
+  //     return () => {
+  //       document.removeEventListener('visibilitychange', handleVisibilityChange, false)
+  //     }
+  //   })()
+  // }, [window])
+  //   console.log(messageOtherTap)
   return (
     <>
       {isMobile &&

@@ -19,6 +19,7 @@ export const Prints = ({
   values
 }) => {
   const [dataStore] = useStore()
+  const [client, setClient] = useState({})
   const {
     storeName,
     Image: src,
@@ -27,14 +28,19 @@ export const Prints = ({
     addressStore,
     uPhoNum
   } = dataStore || {}
-  const {yearMonthDay, hourMinutes12, longDayName} = useFormatDate({})
-  const [client, setClient] = useState({})
+  const {
+    yearMonthDay, 
+    hourMinutes12, 
+    longDayName
+  } = useFormatDate({})
   useEffect(() => {
     (() => {
-      const client = dataClientes.find((client) => {
-        return client && client.cliId === values.cliId
-      })
-      setClient(client)
+      if (dataClientes?.length > 0) {
+        const client = dataClientes?.find((client) => {
+          return client && client?.cliId === values?.cliId
+        })
+        setClient(client)
+      }
     })()
   }, [dataClientes, values.cliId])
   const {

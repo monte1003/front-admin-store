@@ -6,6 +6,7 @@ type StorePedidos {
   idStore: ID
   pId: ID
   ppState: Int
+  channel: Int
   pCodeRef: String
   pPDate: DateTime
   pSState: Int # 5 estados - confirmado - proceso - salida - cancelado  
@@ -63,10 +64,15 @@ input InputSaleStore {
   change: Int
   pickUp: Int
   pCodeRef: String
-  pPStateP: Int # 5 estados - confirmado - proceso - preparacion - salida - cancelado  
+  pPStateP: Int # 5 estados - confirmado - proceso - preparacion - salida - cancelado
   payMethodPState: Int
   pPRecoger: Int
   totalProductsPrice: Int
+}
+type TypeInputSalesChannel {
+    restaurant: Int,
+    delivery: Int,
+    TOTAL: Int,
 }
 type Query {
 """Response for find one Store"""
@@ -74,6 +80,7 @@ type Query {
   getAllPedidoStore(StoreName: String, idStore: ID): [StorePedidos]
   getAllPedidoStoreFinal(idStore: ID, cId: ID dId: ID ctId: ID search: String min: Int fromDate: DateTime toDate: DateTime max: Int, statusOrder: Int): [StorePedidos]
   getAllSalesStore(idStore: ID, pId: ID cId: ID dId: ID ctId: ID search: String min: Int fromDate: DateTime toDate: DateTime max: Int): [StorePedidos]
+  getAllSalesStoreTotal(idStore: ID, pId: ID cId: ID dId: ID ctId: ID search: String min: Int fromDate: DateTime toDate: DateTime max: Int, channel: Int): TypeInputSalesChannel
   getAllSalesStoreStatistic(idStore: ID, pId: ID cId: ID dId: ID ctId: ID search: String min: Int fromDate: DateTime toDate: DateTime max: Int): [StorePedidos]
   getAllPedidoUserFinal(id: ID): [StorePedidos]
   getOneSalesStore(pCodeRef: String): StorePedidos

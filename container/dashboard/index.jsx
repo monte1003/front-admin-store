@@ -11,6 +11,7 @@ import { OurFood } from './OurFood'
 import { SalesWeek } from './salesWeek'
 import { SalesWeekShortDays } from './salesWeekShortDays'
 import { ContentGrid, Wrapper } from './styled'
+import { Marquee } from 'pkg-components'
 
 const Dashboard = ({ ...props }) => {
   // eslint-disable-next-line
@@ -18,7 +19,21 @@ const Dashboard = ({ ...props }) => {
 
   return (<>
     <Wrapper>
-      <Main {...props} />
+      <Marquee
+        direction
+        gradient={false}
+        pauseOnClick={true}
+        pauseOnHover
+        play={false}
+        // loop
+        // gradientColor={[]}
+        // gradientWidth={200}
+        // speed={100}
+        // onFinish={() => { }}
+        // onCycleComplete={() => { }}
+      >
+        <Main {...props} />
+      </Marquee>
       <ChatStatistic />
       <SalesWeekShortDays />
       <SalesWeek />

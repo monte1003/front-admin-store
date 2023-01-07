@@ -9,12 +9,11 @@ import ShoppingCard from '../../models/Store/ShoppingCard'
 import RatingStore from '../../models/Store/ratingStore'
 import SubProducts from '../../models/Store/shoppingCardSubProduct'
 import Store from '../../models/Store/Store'
-import { deCode, getAttributes, enCode } from '../../utils/util'
+import { deCode, getAttributes } from '../../utils/util'
 import ratingStoreStart from '../../models/Store/ratingStoreStart'
 import ScheduleStore from '../../models/Store/scheduleStore'
 import { Op } from 'sequelize'
 import StatusPedidosModel from '../../models/Store/statusPedidoFinal'
-import pedidosModel from '../../models/Store/pedidos'
 import { createOnePedidoStore } from './pedidos'
 import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 
@@ -130,15 +129,16 @@ const registerSalesStore = async (root,
         pId: deCode(pId),
         id: deCode(id),
         comments: comments ?? '',
-        cState: 1,
+        cState: 0,
         cantProducts,
         idStore: deCode(context.restaurant)
       })
+      // console.log(resShoppingCard.ShoppingCard)
       await createOnePedidoStore(null, {
         input: {
           generateSales: true,
           id: id,
-          idStore: context.restaurant.replace(/["']/g, ""),
+          idStore: context?.restaurant?.replace(/["']/g, ""),
           ShoppingCard: resShoppingCard.ShoppingCard,
           change,
           pickUp,
@@ -155,6 +155,7 @@ const registerSalesStore = async (root,
       pSState: 4,
       pCodeRef: pCodeRef,
       change: change,
+      channel: 1,
       valueDelivery: valueDelivery,
       payMethodPState: payMethodPState,
       pickUp,
@@ -205,18 +206,24 @@ export const getTodaySales = async (_, args, ctx, info) => {
 export const registerShoppingCard = async (root, input, context) => {
   const { idSubArray } = input || {}
   const { id } = context.User
-  const { cantProducts, pId, comments, idStore } = input.input || {}
+  const {
+    cantProducts,
+    pId,
+    comments,
+    idStore
+  } = input.input || {}
   const { setID } = idSubArray || {}
   try {
     const data = await ShoppingCard.create({
-      pId: deCode(pId),
-      id: deCode(id),
-      comments,
       cantProducts,
-      idStore: deCode(idStore)
+      comments,
+      id: deCode(id),
+      idStore: deCode(idStore),
+      idUser: deCode(id),
+      pId: deCode(pId)
     })
-    for (let i = 0; i < setID.length; i++) {
-      const { _id } = setID[i]
+    for (const element of setID) {
+      const { _id } = element
       await updateExtraProduct({ input: { _id, id, pId } })
     }
     return data
@@ -236,7 +243,7 @@ export const getAllShoppingCard = async (_root, { input }, context, info) => {
         [Op.or]: [
           {
             // state
-            ...((context.User) ? { id: deCode(context.User.id) } : {}),
+            ...((context.User) ? { idUser: deCode(context.User.id) } : {}),
             // id: deCode(context.User.id),
             cState: { [Op.gt]: 0 }
           }

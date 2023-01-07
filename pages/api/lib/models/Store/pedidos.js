@@ -7,6 +7,7 @@ import Store from './Store'
 import ShoppingCard from './ShoppingCard'
 
 sequelize.sync()
+
 const pedidosModel = sequelize.define('storepedidos', {
   pdpId: {
     type: INTEGER,
@@ -16,14 +17,7 @@ const pedidosModel = sequelize.define('storepedidos', {
   },
   id: {
     type: INTEGER,
-    allowNull: false,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-    references: {
-      model: Users,
-      key: 'id'
-    },
-    get(x) { return enCode(this.getDataValue(x)) }
+    allowNull: true
   },
   ShoppingCard: {
     type: INTEGER,

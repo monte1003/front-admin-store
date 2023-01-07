@@ -71,14 +71,14 @@ export default function Auth({ children }) {
   }, [data, called, client, location])
 
   useEffect(() => {
-    const res = dataLogged?.isLogged
-    if (res?.message) {
-      // isLoggedVar({ ...isLoggedVar(), message: undefined })
-      if (res.code >= 500) console.log(res.message)
-      else if (res.code >= 400 && res.code !== 403) console.log(res.message)
-      else if (res.code >= 300 || res.code === 403) console.log(res.message)
-      else if (res.code >= 200) console.log(res.message)
-    }
+    // const res = dataLogged?.isLogged
+    // if (res?.message) {
+    //   // isLoggedVar({ ...isLoggedVar(), message: undefined })
+    //   // if (res.code >= 500) console.log(res.message)
+    //   // else if (res.code >= 400 && res.code !== 403) console.log(res.message)
+    //   // else if (res.code >= 300 || res.code === 403) console.log(res.message)
+    //   // else if (res.code >= 200) console.log(res.message)
+    // }
   }, [dataLogged?.isLogged])
   return (
     <Fragment>
