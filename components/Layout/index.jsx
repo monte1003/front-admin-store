@@ -73,11 +73,13 @@ export const MemoLayout = ({
   const { data: dataWS } = useSubscription(NEW_NOTIFICATION, {
     // eslint-disable-next-line
     onSubscriptionData: ({ subscriptionData }) => {
+      // eslint-disable-next-line
       console.log(subscriptionData)
       setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
       sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
     }
   })
+  // eslint-disable-next-line
   console.log(dataWS)
   // eslint-disable-next-line
   // useEffect(() => {
