@@ -3,3 +3,4 @@
 
 # Run test
 npm test
+npm run lint:fix -f
