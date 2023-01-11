@@ -9,32 +9,42 @@ import React, { useEffect, useState } from 'react'
 import { numberFormat } from '../../utils'
 import { GET_ALL_SALES, GET_ONE_SALES } from './queries'
 import moment from 'moment'
-import { GetOneSales } from './getOneSales'
 import { BarChat } from 'components/Chart'
 import { Skeleton } from 'components/Skeleton'
 import { MainCard } from 'components/common/Reusable/ShadowCard'
 import Column from 'components/common/Atoms/Column'
 import Button from 'components/common/Atoms/Button'
-import { useReport, useFormTools } from 'npm-pkg-hook'
-// import { Carrusel3D } from 'pkg-components'
+import {
+  useReport,
+  useStore,
+  useFormTools,
+  useGetSale,
+  useFormatDate
+} from 'npm-pkg-hook'
+import { ContainerQuery } from './styled'
+import { ContentQueryCard } from './ContentQueryCard'
+import { Loading } from '~/components/Loading'
+import { ModalDetailOrder } from 'pkg-components'
 
+// https://codesandbox.io/s/custom-graph-bar-forked-1v6jk9?file=/src/components/graph/graph.tsx
 export const ListVentas = () => {
   let total = 0
   let suma = 0
-
-  const [more, setMore] = useState(5)
-  const { data, fetchMore, loading, totalSales, delivery, restaurant } = useReport({
-    more
-  })
-  const [handleChange, { dataForm, errorForm }] = useFormTools()
-
-  const [valuesDates, setValuesDates] = useState({ fromDate: moment().format('YYYY-MM-DD'), toDate: moment().format('YYYY-MM-DD') })
-  const onChangeInput = (e) => { return setValuesDates({ ...valuesDates, [e.target.name]: e.target.value }) }
-  // const [getAllSalesStore, { data, fetchMore, loading }] = useLazyQuery(GET_ALL_SALES)
-  const [getOneSalesStore, { data: dataOneSales }] = useLazyQuery(GET_ONE_SALES)
+  let dt = new Date()
+  const [more, setMore] = useState(50)
   const [totalProductPrice, setTotalProductPrice] = useState(0)
+  const [open, setOpen] = useState(false)
+  const toDay = useFormatDate({}).yearMonthDay
+  const [valuesDates, setValuesDates] = useState({ fromDate: toDay, toDate: toDay })
+  const [active, setActive] = useState(2)
+  const [handleChange, { dataForm, errorForm }] = useFormTools()
+  const [dataModal, setDataModal] = useState({})
+
+  //  HANDLESS
+  const onChangeInput = (e) => { return setValuesDates({ ...valuesDates, [e.target.name]: e.target.value }) }
+  const [getOneSalesStore, { data: dataOneSales }] = useLazyQuery(GET_ONE_SALES)
+
   useEffect(() => {
-    // getAllSalesStore({ variables: { min: 0 } })
     data?.getAllSalesStore.forEach((a) => {
       const { totalProductsPrice } = a || {}
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,103 +52,101 @@ export const ListVentas = () => {
       setTotalProductPrice(suma)
     })
   }, [totalProductPrice, suma, total, data])
-  const [open, setOpen] = useState(false)
+  const {
+    getOnePedidoStore,
+    data: sale
+
+  } = useGetSale()
   const HandleGetOne = (pCodeRef) => {
-    getOneSalesStore({ variables: { pCodeRef: pCodeRef } })
+    console.log(pCodeRef)
+    getOnePedidoStore({
+      variables: {
+        pCodeRef: pCodeRef ?? ''
+      }
+    })
+    setDataModal(sale)
     setOpen(!open)
   }
-  // const getFromDataToData = async () => { return getAllSalesStore({ variables: { fromDate: valuesDates?.fromDate, toDate: valuesDates?.toDate } }) }
-  const [active, setActive] = useState(2)
 
-  const cardList = [
-    {
-      key: '1',
-      title: 'B Oven',
-      range: '136.00 - 140.00',
-      sv: '137.00',
-      avgTemp: '138.85',
-      avgAcc: '0.81'
-    },
-    {
-      key: '1',
-      title: 'C Oven',
-      range: '136.00 - 140.00',
-      sv: '137.00',
-      avgTemp: '138.85',
-      avgAcc: '0.81'
-    },
-    {
-      key: '1',
-      title: 'D Oven',
-      range: '136.00 - 140.00',
-      sv: '137.00',
-      avgTemp: '138.85',
-      avgAcc: '0.81'
-    },
-    {
-      key: '1',
-      title: 'Z1 Main Oven',
-      range: '136.00 - 140.00',
-      sv: '137.00',
-      avgTemp: '138.85',
-      avgAcc: '0.81'
-    },
-    {
-      key: '1',
-      title: 'Z2 Main Oven',
-      range: '136.00 - 140.00',
-      sv: '137.00',
-      avgTemp: '138.85',
-      avgAcc: '0.81'
-    },
-    {
-      key: '1',
-      title: 'Z3 Main Oven',
-      range: '136.00 - 140.00',
-      sv: '137.00',
-      avgTemp: '138.85',
-      avgAcc: '0.81'
-    },
-    {
-      key: '1',
-      title: 'Z4 Main Oven',
-      range: '136.00 - 140.00',
-      sv: '137.00',
-      avgTemp: '138.85',
-      avgAcc: '0.81'
-    },
-    {
-      key: '1',
-      title: 'Z5 Main Oven',
-      range: '136.00 - 140.00',
-      sv: '137.00',
-      avgTemp: '138.85',
-      avgAcc: '0.81'
-    }
-  ]
+  const {
+    data,
+    fetchMore,
+    loading,
+    totalSales,
+    delivery,
+    restaurant
+  } = useReport({
+    more
+  })
+
+  const getFromDataToData = async () => {
+    const { fromDate, toDate } = valuesDates
+    fetchMore({
+      variables: {
+        max: more,
+        min: 0,
+        fromDate: fromDate,
+        toDate: toDate
+      },
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prevResult
+        return {
+          getAllSalesStore: [...fetchMoreResult.getAllSalesStore]
+
+        }
+      }
+    })
+  }
+  const [dataStore] = useStore()
+
+  const dataReportToday = useReport({
+    fromDate: useFormatDate({})?.yearMonthDay,
+    toDate: useFormatDate({})?.yearMonthDay
+  })
+  const dataReportYesterday = useReport({
+    fromDate:  useFormatDate({ date: dt.setDate(dt.getDate() - 2)})?.yearMonthDay,
+    toDate: useFormatDate({})?.yearMonthDay
+  })
+  const three = new Date()
+  const dataReportThreeDaysAgo = useReport({
+    fromDate: useFormatDate({ date: three.setDate(three.getDate() - 3)})?.yearMonthDay,
+    toDate: useFormatDate({})?.yearMonthDay
+  })
+
+  const propsToday = {
+    day: 'hoy',
+    ...dataReportToday
+  }
+  const propsYesterday = {
+    day: 'Ayer',
+    ...dataReportYesterday
+  }
+
+  const propsThreeDaysAgo = {
+    day: 'hace 3 días',
+    ...dataReportThreeDaysAgo
+  }
+  const propsModal = {
+    // openAction,
+    dataModal,
+    totalProductsPrice: numberFormat(Math.abs(dataModal?.totalProductsPrice)),
+    dataStore,
+    pDatCre: useFormatDate({date: dataModal?.pDatCre}),
+    loading: false,
+    edit: false,
+    onClose: () => {return setOpen(!open)},
+
+  }
   return (
     <div>
-      {/* <Carrusel3D
-        active={active}
-        moveLeft={() => {return setActive((i) => {return i - 1})}}
-        moveRight={() => {return setActive((i) => {return i + 1})}}
-      >
-        {cardList.map((item) => {return (
-          <div key={item.key}>
-            <div align='center' variant='h6'>
-              <div disableTypography={true} title={item.title} >
-                Hola
-              </div>
-            </div>
-          </div>
-        )})}
-      </Carrusel3D> */}
-      <GetOneSales
+      {loading && <Loading />}
+      {/* <GetOneSales
         data={dataOneSales?.getOneSalesStore || []}
         open={open}
         setOpen={setOpen}
-      />
-      {/* <Card>
+      /> */}
+      {open && <ModalDetailOrder {...propsModal} />}
+      <Card>
         <form>
           <InputHooks
             name='fromDate'
@@ -163,7 +171,7 @@ export const ListVentas = () => {
             name='ProPrice'
             onChange={handleChange}
             required
-            title='Numero'
+            title='Numero de venta'
             value={dataForm?.ProPrice}
             width='30%'
           />
@@ -173,7 +181,7 @@ export const ListVentas = () => {
             numeric
             onChange={handleChange}
             required
-            title='Nombre'
+            title='Precio'
             value={dataForm?.ProPrice}
             width='30%'
           />
@@ -182,19 +190,27 @@ export const ListVentas = () => {
           </Button>
           <RippleButton
             margin='30px'
-            onClick={() => { return getFromDataToData() }}
+            onClick={() => {
+              getFromDataToData()
+            }}
             padding='10px'
             type='button'
-          >Consultar</RippleButton>
-          <RippleButton margin='30px' padding='10px'>Consultar y exportar</RippleButton>
+          >
+            Consultar
+          </RippleButton>
         </form>
-      </Card> */}
-      {/* <ChatStatistic /> */}
+      </Card>
+      <ContainerQuery>
+        <ContentQueryCard {...propsToday} />
+        <ContentQueryCard {...propsYesterday} />
+        <ContentQueryCard {...propsThreeDaysAgo} />
+      </ContainerQuery>
       <Table
         data={data?.getAllSalesStore || []}
         labelBtn='Product'
         renderBody={(dataB, titles) => {
           return dataB?.map((x, i) => {
+            const pCodeRef = x.pCodeRef
             return <Section
               columnWidth={titles}
               key={i}
@@ -208,7 +224,7 @@ export const ListVentas = () => {
                 <span> Restaurante</span>
               </Item>
               <Item>
-                <span> {x.pCodeRef}</span>
+                <span> {pCodeRef}</span>
               </Item>
               <Item>
                 <span> {moment(x.pDatCre).format('DD-MM-YYYY')} - {moment(x.pDatCre).format('HH:mm A')}</span>
@@ -224,7 +240,7 @@ export const ListVentas = () => {
               </Item>
 
               <Item>
-                <Button onClick={() => { return HandleGetOne(x.pCodeRef) }}>
+                <Button onClick={() => { return HandleGetOne(pCodeRef) }}>
                   Ver detalles
                 </Button>
               </Item>
@@ -238,7 +254,7 @@ export const ListVentas = () => {
           { name: 'Date', justify: 'flex-center', width: '1fr' },
           { name: 'Canal', justify: 'flex-center', width: '1fr' },
           { name: 'Método de pago', justify: 'flex-center', width: '1fr' },
-          { name: 'Numero de Entrega', justify: 'flex-center', width: '1fr' },
+          { name: 'Valor de venta', justify: 'flex-center', width: '1fr' },
           { name: '', justify: 'flex-center', width: '1fr' }
         ]}
       />
@@ -253,7 +269,6 @@ export const ListVentas = () => {
                 if (!fetchMoreResult) return prevResult
                 return {
                   getAllSalesStore: [...fetchMoreResult.getAllSalesStore]
-
                 }
               }
             })

@@ -132,6 +132,50 @@ export const Card = styled.div`
     }
 `
 
+export const ContainerQuery = styled.div`
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: -3px 5px 11px 2px #dcdcdca1;
+  gap: 15px;
+  `
+export const ContentQuery = styled.div`
+  height: 200px;
+  .container-card {
+    background-color: ${BGColor};
+    cursor: pointer;
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 90%;
+    border-bottom: 5px solid ${PColor};
+  }
+  .card {
+    width: 50%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: PFont-Light;
+    color: #272323;
+  }
+  .card-content__price {
+    display: flex;
+  }
+  .card-title, .card-price {
+    font-size: 16px;
+  }
+  .card-title span {
+    font-size: 20px;
+    font-weight: 700;
+  }
+`
 export const GarnishChoicesHeader = styled.div`
     padding: 12px 20px 10px;
     display: flex;

@@ -1,8 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import {
-  gql, useApolloClient,
-  useSubscription
-} from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { Context } from 'context/Context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -10,7 +7,6 @@ import { useMobile, useStore } from 'npm-pkg-hook'
 import PropTypes from 'prop-types'
 import React, {
   useCallback,
-  useEffect,
   useContext,
   useState
 } from 'react'
@@ -103,7 +99,7 @@ const MemoAside = () => {
   //     console.log(subscriptionData)
   //   }
   // })
-  const [messageOtherTap, setmessageOtherTap] = useState('Esta abierto en otra ventana')
+  // const [messageOtherTap, setmessageOtherTap] = useState('Esta abierto en otra ventana')
 
   // useEffect(() => {
   //   (() => {

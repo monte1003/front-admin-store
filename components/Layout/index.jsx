@@ -4,7 +4,6 @@ import { BtnClose } from 'components/AwesomeModal/styled'
 import { usePosition } from 'components/hooks/usePosition'
 import { ScheduleTimings } from 'container/dashboard/ScheduleTimings'
 import { LateralModal } from 'container/dashboard/styled'
-import GenerateSales from 'container/Sales'
 import { useRouter } from 'next/router'
 import { Toast } from 'pkg-components'
 import PropTypes from 'prop-types'
@@ -13,10 +12,10 @@ import React, { useContext, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { Context } from '../../context/Context'
 import { AlertBox } from '../AlertBox'
-import Aside from './Aside'
 import { Footer } from './footer'
 import { Header } from './header'
-// import { createClient } from 'graphql-ws'
+import dynamic from 'next/dynamic'
+import Aside from './Aside'
 
 export const MemoLayout = ({
   children,
@@ -24,41 +23,11 @@ export const MemoLayout = ({
   settings
 }) => {
   const location = useRouter()
-  // const client = createClient({
-  //   url: 'ws://localhost:4000/graphql'
-  // })
-  // console.log(client)
+  // lazy import next
+  const GenerateSales = dynamic(() => {return import('container/Sales')}, {
+    loading: () => {return 'Loading...'}
+  })
 
-  // useEffect(() => {
-  //   // subscription
-  //   (async () => {
-  //     const onNext = (e) => {
-  //       console.log({e})
-  //       /* handle incoming values */
-  //     }
-
-  //     let unsubscribe = (e) => {
-  //       console.log(e)
-  //       /* complete the subscription */
-  //     }
-
-  //     await new Promise((resolve, reject) => {
-  //       unsubscribe = client.subscribe(
-  //         {
-  //           query: 'subscription { newStoreOrder }'
-  //         },
-  //         {
-  //           next: onNext,
-  //           error: reject,
-  //           complete: resolve
-  //         }
-  //       )
-  //     })
-
-  //     // expect(onNext).toBeCalledTimes(5); // we say "Hi" in 5 languages
-  //   })() 
-  // }, [client])
-    
   const {
     error,
     setAlertBox,
@@ -102,12 +71,15 @@ export const MemoLayout = ({
 }
     `
   const { data: dataWS } = useSubscription(NEW_NOTIFICATION, {
+    // eslint-disable-next-line
     onSubscriptionData: ({ subscriptionData }) => {
       console.log(subscriptionData)
       setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
       sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
     }
   })
+  console.log(dataWS)
+  // eslint-disable-next-line
   // useEffect(() => {
   //   if (dataWS) {
   //     setAlertBox({ message: dataWS?.newNotification, duration: 30000 })
@@ -122,7 +94,7 @@ export const MemoLayout = ({
         <Header />
         <Aside />
         <div style={{ gridArea: 'main', overflowY: 'auto' }}>
-          <button onClick={() => {return sendNotification({ title: Math.floor(Math.random() * 101 + 1), description: 'Esta es la descr' })}}>WOW</button>
+          {/* <button onClick={() => {return sendNotification({ title: Math.floor(Math.random() * 101 + 1), description: 'Esta es la descr' })}}>WOW</button> */}
           {children}
           <AwesomeModal
             backdrop='static'
@@ -137,12 +109,11 @@ export const MemoLayout = ({
             padding={0}
             question={true}
             show={salesOpen}
-            // show={true}
             size='large'
             title='Crea una venta'
             zIndex='9999'
           >
-            {salesOpen && <GenerateSales />}
+            <GenerateSales />
           </AwesomeModal>
           <Toast
             autoDelete={true}

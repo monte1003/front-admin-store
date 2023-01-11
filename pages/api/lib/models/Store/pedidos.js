@@ -2,7 +2,6 @@ import { INTEGER, TINYINT, STRING, DATE, literal } from 'sequelize'
 import connect from '../../db'
 const sequelize = connect()
 import { enCode } from '../../utils/util'
-import Users from '../Users'
 import Store from './Store'
 import ShoppingCard from './ShoppingCard'
 

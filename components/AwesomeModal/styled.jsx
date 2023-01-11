@@ -2,7 +2,7 @@
 import styled, { css, keyframes } from 'styled-components'
 import { BGColor, SECColor, SEGColor } from '../../public/colors'
 import { MODAL_SIZES } from './constanst'
-import { scrollStyle } from './../../public/styles/GlobalStyle';
+import { scrollStyle } from './../../public/styles/GlobalStyle'
 
 const fadeIn = keyframes`
     from {
@@ -228,7 +228,7 @@ export const BtnConfirm = styled.button`
     flex-direction: row;
     padding: ${({ padding }) => { return padding || '5px' }};
     cursor: pointer;
-    border: ${({ border }) => { return border ? `${`1px solid ${SEGColor}`}` : 'none' }};
+    border: ${({ border }) => { return border ? `1px solid ${SEGColor}` : 'none' }};
     border-radius: 30px;
     font-size: 12px;
     display: flex;
@@ -245,7 +245,7 @@ export const BtnCancel = styled.button`
     flex-direction: row;
     padding: ${({ padding }) => { return padding || '5px' }};
     cursor: pointer;
-    border: ${({ border }) => { return border ? `${`1px solid ${SEGColor}`}` : 'none' }};
+    border: ${({ border }) => { return border ? `1px solid ${SEGColor}` : 'none' }};
     border-radius: 30px;
     font-size: 11px;
     display: flex;

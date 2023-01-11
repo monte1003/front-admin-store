@@ -11,7 +11,7 @@ import { OurFood } from './OurFood'
 import { SalesWeek } from './salesWeek'
 import { SalesWeekShortDays } from './salesWeekShortDays'
 import { ContentGrid, Wrapper } from './styled'
-import { Marquee } from 'pkg-components'
+// import { Marquee } from 'pkg-components'
 
 const Dashboard = ({ ...props }) => {
   // eslint-disable-next-line
@@ -19,7 +19,7 @@ const Dashboard = ({ ...props }) => {
 
   return (<>
     <Wrapper>
-      <Marquee
+      <div
         direction
         gradient={false}
         pauseOnClick={true}
@@ -33,7 +33,7 @@ const Dashboard = ({ ...props }) => {
         // onCycleComplete={() => { }}
       >
         <Main {...props} />
-      </Marquee>
+      </div>
       <ChatStatistic />
       <SalesWeekShortDays />
       <SalesWeek />

@@ -1,4 +1,4 @@
-import { 
+import {
   INTEGER,
   UUID,
   UUIDV4,
@@ -10,7 +10,6 @@ import connect from '../../db'
 const sequelize = connect()
 import { enCode } from '../../utils/util'
 import productModelFood from '../product/productFood'
-import Users from '../Users'
 import Store from './Store'
 
 sequelize.sync()

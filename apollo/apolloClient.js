@@ -18,6 +18,10 @@ export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 // https://stackoverflow.com/questions/57229164/how-to-get-the-uri-in-callback-of-onerror-from-apollo-link-error
 // https://stackoverflow.com/questions/53062839/handling-errors-for-apollo-client-when-using-apollolink-split
 let apolloClient
+// import { WebSocketLink } from "@apollo/client/link/ws";
+import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { createClient } from 'graphql-ws'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 
 export const getDeviceId = async () => {
   const fp = await FingerprintJS.load()
@@ -44,7 +48,7 @@ const authLink = async () => {
     const restaurant = window.localStorage.getItem('restaurant')
     return {
       authorization: token && `Bearer ${token}`,
-      restaurant: 'MjcyMDg4ODE0ODUxNTE2NDUw',
+      restaurant: restaurant ?? restaurant,
       deviceid: ''
     }
   }
@@ -108,7 +112,8 @@ function createApolloClient() {
     operation.setContext({
       headers: {
         ...headers,
-        authorization: service === 'admin-server' || service === 'subscriptions' ? `Bearer MjcyMDg4ODE0ODUxNTE2NDUw` : `MjcyMDg4ODE0ODUxNTE2NDUw`,
+        authorization: service === 'admin-server' || service === 'subscriptions' ? `Bearer ${token}` : `${restaurant}`,
+        // restaurant: `${restaurant}`,
         client: 'front-admin'
       }
     })

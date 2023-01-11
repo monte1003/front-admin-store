@@ -166,7 +166,7 @@ export const LoyaltyC = () => {
           { name: 'Date', justify: 'flex-center', width: '1fr' },
           { name: 'Canal', justify: 'flex-center', width: '1fr' },
           { name: 'Método de pago', justify: 'flex-center', width: '1fr' },
-          { name: 'Numero de Entrega', justify: 'flex-center', width: '1fr' },
+          { name: 'Numero de Entrega papa', justify: 'flex-center', width: '1fr' },
           { name: '', justify: 'flex-center', width: '1fr' }
         ]}
       />

@@ -105,7 +105,7 @@ const registerSalesStore = async (root,
     payMethodPState,
     valueDelivery
   },
-  context, _info) => {
+  context) => {
   try {
     if (!id) {
       return {
@@ -138,7 +138,8 @@ const registerSalesStore = async (root,
         input: {
           generateSales: true,
           id: id,
-          idStore: context?.restaurant?.replace(/["']/g, ""),
+          // eslint-disabled-next-line
+          idStore: context?.restaurant?.replace(/["']/g, ''),
           ShoppingCard: resShoppingCard.ShoppingCard,
           change,
           pickUp,
@@ -176,7 +177,7 @@ const registerSalesStore = async (root,
     }
   }
 }
-export const getTodaySales = async (_, args, ctx, info) => {
+export const getTodaySales = async (_, args, ctx) => {
   try {
     const START = new Date()
     START.setHours(0, 0, 0, 0)
@@ -344,7 +345,7 @@ export const updateFavorites = async (_root, { input }, context) => {
     return error
   }
 }
-export const getFavorite = async (_root, args, context, info) => {
+export const getFavorite = async (_root, args, context) => {
   try {
     // eslint-disable-next-line
     const data = await FavoritesModel.findAll({

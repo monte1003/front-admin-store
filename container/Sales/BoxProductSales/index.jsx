@@ -153,7 +153,7 @@ export const BoxProductSales = ({
                 handleFreeProducts={() => { return dispatch({ type: 'TOGGLE_FREE_PRODUCT', payload: producto }) }}
                 handleIncrement={() => { return dispatch({ id: producto.pId, type: 'INCREMENT' }) }}
                 index={idx}
-                key={producto.pId}
+                key={producto.pId || idx}
                 onClick={() => { return selectProduct(producto)}}
                 pId={producto.pId}
                 pName={producto.pName}

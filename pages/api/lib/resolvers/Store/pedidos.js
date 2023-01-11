@@ -5,7 +5,6 @@ import ShoppingCard from '../../models/Store/ShoppingCard'
 import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 import Users from '../../models/Users'
 import { deCode, getAttributes } from '../../utils/util'
-import { deleteOneItem } from './store'
 
 export const createOnePedidoStore = async (_, { input }) => {
   const {
@@ -16,7 +15,6 @@ export const createOnePedidoStore = async (_, { input }) => {
     payMethodPState,
     pPRecoger
   } = input || {}
-  console.log({here: ShoppingCard})
   try {
     await pedidosModel.create({
       ...input,
@@ -33,7 +31,6 @@ export const createOnePedidoStore = async (_, { input }) => {
       message: ''
     }
   } catch (error) {
-    console.log(error)
     return { success: false, message: 'Se ha producido un error' || error }
   }
 }

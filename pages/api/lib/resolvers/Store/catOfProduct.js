@@ -121,7 +121,7 @@ export const deleteCatFinalOfProducts = async (_, { idPc }) => {
 
   }
 }
-export const getCatProductsWithProduct = async (root, args, context, info) => {
+export const getCatProductsWithProduct = async (root, args, context) => {
   const { search, min, max, gender, desc, categories } = args
   linkBelongsTo(catProducts, productModelFood, 'pId', 'carProId')
   let whereSearch = {}

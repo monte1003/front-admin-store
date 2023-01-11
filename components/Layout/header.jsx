@@ -14,12 +14,11 @@ import {
   PColor,
   SECBGColor
 } from '../../public/colors'
-import { useApolloClient } from '@apollo/client';
-import { useRouter } from 'next/router';
-import { useCallback, useContext, useState } from 'react';
-import { Context } from '~/context/Context';
-import useScrollHook, { useScrollColor } from '../hooks/useScroll';
-import { useEffect } from 'react';
+import { useApolloClient } from '@apollo/client'
+import { useRouter } from 'next/router'
+import { useCallback, useContext, useState } from 'react'
+import { Context } from '~/context/Context'
+import useScrollHook, { useScrollColor } from '../hooks/useScroll'
 
 
 // export const MemoHeader = () => {
@@ -497,7 +496,7 @@ export const Header = () => {
         header={false}
         height={'200px'}
         onCancel={() => { return false }}
-        onHide={() => { return  }}
+        onHide={() => { return }}
         padding={'30px'}
         show={false}
         size='20%'

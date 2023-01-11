@@ -179,6 +179,7 @@ const GenerateSales = () => {
           ValueDelivery={oneProductToComment.ValueDelivery}
           comment={false}
           edit={false}
+          key={oneProductToComment.pId}
           pName={oneProductToComment.pName}
           render={null}
         />

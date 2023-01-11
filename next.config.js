@@ -28,7 +28,7 @@ module.exports = async (phase) => {
   const env = {
     NAMEDB: (() => {
       if (isDev) return 'app'
-      if (isProd) return 'railway'
+      if (isProd) return 'app'
     })(),
     USERDB: (() => {
       if (isDev) return 'root'
@@ -36,11 +36,11 @@ module.exports = async (phase) => {
     })(),
     PASSDB: (() => {
       if (isDev) return ''
-      if (isProd) return '8jpgm70bhVjWIxEFbsrt'
+      if (isProd) return ''
     })(),
     HOSTDB: (() => {
       if (isDev) return 'localhost'
-      if (isProd) return 'containers-us-west-65.railway.app'
+      if (isProd) return 'localhost'
     })(),
     DIALECTDB: 'mysql',
     LOCAL_SALES_STORE: 'app.cart.sales',

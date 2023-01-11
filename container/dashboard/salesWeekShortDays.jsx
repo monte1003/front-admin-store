@@ -17,6 +17,7 @@ export const SalesWeekShortDays = () => {
   const { data: dataSales } = useQuery(GET_ALL_SALES, {
     variables: { fromDate: moment(dt.setDate(dt.getDate() - 7)).format('YYYY-MM-DD'), toDate: moment().format('YYYY-MM-DD') }
   })
+  console.log(dataSales)
   const [getAllVisitorStore, { data: VISITOR }] = useLazyQuery(GET_ALL_VISITOR_STORE)
 
   const [totalProductPrice, setTotalProductPrice] = useState(0)
