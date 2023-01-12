@@ -14,13 +14,16 @@ export const FormProducts = styled.form`
 `
 
 export const Container = styled.div`
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(auto-fill,minmax(400px, 30%));
     grid-gap: 20px;
     place-content: center;
-    place-items: stretch;
-    /* grid-template-columns: 25% 25% 50%; */
 
+    place-items: stretch; */
+    /* grid-template-columns: 25% 25% 50%; */
+    padding: 20px;
+    height: 100%;
+    width: 100%;
 
 `
 export const Card = styled.div` 

@@ -1,6 +1,7 @@
 import { CardProducts } from 'components/CartProduct'
-import { Button, Tag } from 'pkg-components'
+import { Button, Tag, Text } from 'pkg-components'
 import PropTypes from 'prop-types'
+import { useState } from 'react'
 import {
   IconDelete,
   IconDollar,
@@ -18,6 +19,7 @@ import { useSetState } from '../../hooks/useState'
 import { Skeleton } from '../../Skeleton/SkeletonCard'
 import FormProduct from './Form'
 import { ListProducts } from './ListProducts'
+
 import {
   ActionName,
   ButtonCard,
@@ -28,9 +30,9 @@ import {
   ContentInfo,
   Grid,
   Img,
-  Text,
   Title
 } from './styled'
+import { Steps, Tabs } from './styles'
 
 export const FoodComponent = ({
   alt,
@@ -64,6 +66,8 @@ export const FoodComponent = ({
   ...props
 }) => {
   const OPEN_MODAL_ORGANICE = useSetState(0)
+  const [active, setActive] = useState(0)
+
   const { dataTags, handleAddTag, tags } = tagsProps
   const propsForm = {
     handleRegister,
@@ -95,15 +99,66 @@ export const FoodComponent = ({
     handleDelete,
     ...props
   }
-
   return (<>
     <Container>
+      <Steps>
+        <Tabs active={active === 0}>
+          <Text
+            as='h2'
+            fontFamily='PFont-Light'
+            fontSize='16px'
+            fontWeight='200'
+          >
+            Detalles
+          </Text>
+        </Tabs>
+         <Tabs active={active === 1}>
+          <Text
+            as='h2'
+            fontFamily='PFont-Light'
+            fontSize='16px'
+            fontWeight='200'
+          >
+          Precio
+          </Text>
+        </Tabs>
+         <Tabs active={active === 2}>
+          <Text
+            as='h2'
+            fontFamily='PFont-Light'
+            fontSize='16px'
+            fontWeight='200'
+          >
+        Complementos
+          </Text>
+        </Tabs>
+         <Tabs active={active === 3}>
+          <Text
+            as='h2'
+            fontFamily='PFont-Light'
+            fontSize='16px'
+            fontWeight='200'
+          >
+        Clasificacion
+          </Text>
+        </Tabs>
+         <Tabs active={active === 4}>
+          <Text
+            as='h2'
+            fontFamily='PFont-Light'
+            fontSize='16px'
+            fontWeight='200'
+          >
+        Disponibilidad
+          </Text>
+        </Tabs>
+      </Steps>
       {/* FORM */}
-      <Card>
+      {/* <Card>
         <FormProduct {...propsForm} />
-      </Card>
+      </Card> */}
       {/* PREVIEW CARD PRODUCT */}
-      <Card>
+      {/* <Card>
         <CardProducts
           ProDescription={values?.ProDescription}
           ProDescuento={values?.ProDescuento}
@@ -134,12 +189,11 @@ export const FoodComponent = ({
             </Button>
           )
         })}
-      </Card>
-
+      </Card> */}
     </Container>
     {/* <Dessert /> */}
-    <ListProducts {...propsListProducts} />
-    {false && <AwesomeModal
+    {/* <ListProducts {...propsListProducts} /> */}
+    {/* {false && <AwesomeModal
       backdrop='static'
       borderRadius='10px'
       btnCancel={true}
@@ -190,7 +244,7 @@ export const FoodComponent = ({
       </Grid>
 
     </AwesomeModal >
-    }
+    } */}
   </>
   )
 }
