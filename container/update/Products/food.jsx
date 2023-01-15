@@ -45,7 +45,6 @@ export const Food = () => {
     max: showMore,
     min: 0
   })
-  console.log(productsFood)
   // ------------ HANDLES ------------
   const handleChange = (e, error) => {
     setValues({ ...values, [e.target.name]: e.target.value })
@@ -97,7 +96,6 @@ export const Food = () => {
     handleAddTag,
     tags
   } = useTagsProducts()
-  console.log('🚀 ~ file: food.jsx ~ line 100 ~ Food ~ tags', tags)
   // eslint-disable-next-line
   const handleRegister = async e => {
     e.preventDefault()

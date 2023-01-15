@@ -1,24 +1,24 @@
+/* eslint-disable @next/next/no-img-element */
 import { CardProducts } from 'components/CartProduct'
-import { Button, Tag, Text } from 'pkg-components'
+import Cropper from 'react-cropper'
+
+import {
+  Button,
+  Tag,
+  Text
+} from 'pkg-components'
 import PropTypes from 'prop-types'
-import { useState } from 'react'
 import {
-  IconDelete,
-  IconDollar,
-  IconEdit,
-  IconLove
-} from 'public/icons'
-import {
-  PColor,
-  PVColor,
-  TFSColor
-} from '../../../public/colors'
-import { numberFormat } from '../../../utils'
+  useState,
+  useRef,
+  useContext
+} from 'react'
+
+import { BColor } from '../../../public/colors'
 import { AwesomeModal } from '../../AwesomeModal'
 import { useSetState } from '../../hooks/useState'
 import { Skeleton } from '../../Skeleton/SkeletonCard'
 import FormProduct from './Form'
-import { ListProducts } from './ListProducts'
 
 import {
   ActionName,
@@ -26,16 +26,22 @@ import {
   Card,
   CardProduct,
   Container,
+  ContainerEditImage,
   ContentImg,
   ContentInfo,
   Grid,
   Img,
   Title
 } from './styled'
-import { Steps, Tabs } from './styles'
+import { ActionStep, Steps, Tabs } from './styles'
+import { Context } from '../../../context/Context'
+import { ImageItem } from './ImageItem'
+import Dessert from './Dessert'
+import Row from '~/components/common/Atoms/Row'
+import { getFileSizeByUnit } from '~/utils'
 
 export const FoodComponent = ({
-  alt,
+  // alt,
   check,
   data,
   dataCategoriesProducts,
@@ -60,15 +66,15 @@ export const FoodComponent = ({
   setName,
   setShowMore,
   showMore,
-  src,
+  // src,
   state: grid,
   values,
   ...props
 }) => {
   const OPEN_MODAL_ORGANICE = useSetState(0)
   const [active, setActive] = useState(0)
-
-  const { dataTags, handleAddTag, tags } = tagsProps
+  const { sendNotification } = useContext(Context)
+  const { dataTags, handleAddTag, tags: lol } = tagsProps
   const propsForm = {
     handleRegister,
     setName,
@@ -99,7 +105,296 @@ export const FoodComponent = ({
     handleDelete,
     ...props
   }
+  const [openEditImage, setopenEditImage] = useState(false)
+  const handleOpenEditImage = () => {
+    setopenEditImage(!openEditImage)
+  }
+  const [tags, setTags] = useState([])
+  const [errors, setErrors] = useState({})
+  // eslint-disable-next-line
+  const changeHandler = (name, value) => {
+    if (name === 'tags') {
+      setTags(value)
+      if (value.length > 0 && errors.tags) {
+        setErrors(prev => {
+          const prevErrors = { ...prev }
+          delete prevErrors.tags
+          return prevErrors
+        })
+      }
+    }
+  }
+  const [existImage, setExistImage] = useState(false)
+  const [isImgloading, setLoading] = useState(false)
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(0)
+  const imageRef = useRef(null)
+  const onCropChange = (crop) => {
+    setCrop(crop)
+  } 
+
+  const onZoomChange = (zoom) => {
+    setZoom(zoom)
+  }
+
+  const onCropComplete = (crop, pixelCrop) => {
+    const canvas = document.createElement('canvas')
+    const img = imageRef.current
+
+    canvas.width = pixelCrop.width
+    canvas.height = pixelCrop.height
+
+    const ctx = canvas.getContext('2d')
+    ctx.drawImage(
+      img,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0, 0,
+      pixelCrop.width,
+      pixelCrop.height)
+    // ctx.drawImage(
+    //   img,
+    //   pixelCrop.x,
+    //   pixelCrop.y,
+    //   pixelCrop.width,
+    //   pixelCrop.height,
+    //   0,
+    //   0,
+    //   canvas.width,
+    //   canvas.height
+    // )
+    const croppedUrl = canvas.toDataURL()
+    // console.log(croppedUrl)
+    // You can use the croppedUrl for whatever you want
+    // for example, you can set it as the src of an img element
+    // or send it to a server
+    //Convert the dataURL to a blob
+    fetch(croppedUrl)
+      .then(response => {return response.blob()})
+      .then(blob => {
+        setLoading(true)
+        //Create a new File
+        const file = new File([blob], 'cropped_image.jpg', { type: blob.type })
+        setPreviewImg(
+          file
+            ? {
+              src: URL.createObjectURL(file),
+              alt: ''
+            }
+            : initialState
+        )
+        //You can use the file object to send it to a server or to download it
+        sendNotification({ title: 'Exito', description: 'Imagen editada' })
+        setLoading(false)
+        setExistImage(true)
+        handleOpenEditImage()
+      })
+      .catch(() => {
+        sendNotification({ title: 'Error', description: 'Ha ocurrido un error!' })
+      })
+    //You can use the file object to send it to a server or to download it
+  }
+  function getPixelCrop(image, crop, zoom) {
+    const imgWidth = image.naturalWidth
+    const imgHeight = image.naturalHeight
+
+    const scaledWidth = imgWidth * zoom
+    const scaledHeight = imgHeight * zoom
+
+    const x = (imgWidth * crop.x) / 100
+    const y = (imgHeight * crop.y) / 100
+
+    return {
+      x: x,
+      y: y,
+      width: scaledWidth,
+      height: scaledHeight
+    }
+  }
+  const handleEditImage = () => {
+    handleOpenEditImage()
+  }
+  const initialState = { alt: '/images/DEFAULTBANNER.png', src: '/images/DEFAULTBANNER.png' }
+  const [{ alt, src }, setPreviewImg] = useState(initialState)
+
+  const handleUpdateBanner = async event => {
+    const { files } = event.target
+    const [size, { unit }] = await getFileSizeByUnit(files[0], 'MB')
+    console.log({size, unit})
+    setPreviewImg(
+      files.length
+        ? {
+          src: URL.createObjectURL(files[0]),
+          alt: files[0].name
+        }
+        : initialState
+    )
+
+  }
+  const [Dimage, setImage] = useState('')
+  const [cropData, setCropData] = useState('#')
+  const [cropper, setCropper] = useState()
+  const onChange = (e) => {
+    e.preventDefault()
+    let files
+    if (e.dataTransfer) {
+      files = e.dataTransfer.files
+    } else if (e.target) {
+      files = e.target.files
+    }
+    const reader = new FileReader()
+    reader.onload = () => {
+      setImage(reader.result)
+    }
+    reader.readAsDataURL(files[0])
+  }
+
+  const getCropData = () => {
+    if (typeof cropper !== 'undefined') {
+      setCropData(cropper.getCroppedCanvas().toDataURL())
+    }
+  }
   return (<>
+    <AwesomeModal
+      borderRadius='10px'
+      btnCancel={true}
+      btnConfirm={false}
+      footer={false}
+      header={true}
+      height='50vh'
+      onCancel={() => { return handleOpenEditImage() }}
+      onHide={() => { return handleOpenEditImage() }}
+      padding='25px'
+      show={openEditImage}
+      size='medium'
+      zIndex='90'
+    >
+      <div>
+        <div style={{ width: '100%' }}>
+          <input onChange={onChange} type='file' />
+          <button>Use default img</button>
+          <br />
+          <br />
+          <Cropper
+            autoCropArea={1}
+            background={false}
+            checkOrientation={false}
+            guides={true}
+            initialAspectRatio={1}
+            minCropBoxHeight={10}
+            minCropBoxWidth={10}
+            onInitialized={(instance) => {
+              setCropper(instance)
+            }}
+            preview='.img-preview'
+            responsive={true}
+            src={Dimage}
+            style={{ height: 400, width: '100%' }} // https://github.com/fengyuanchen/cropperjs/issues/671
+            viewMode={1}
+            zoomTo={0.5}
+          />
+        </div>
+        <div>
+          <div className='box' style={{ width: '50%', float: 'right' }}>
+            <h1>Preview</h1>
+            <div
+              className='img-preview'
+              style={{ width: '100%', float: 'left', height: '300px' }}
+            />
+          </div>
+          <div
+            className='box'
+            style={{ width: '50%', float: 'right', height: '300px' }}
+          >
+            <h1>
+              <span>Crop</span>
+              <button onClick={getCropData} style={{ float: 'right' }}>
+              Crop Image
+              </button>
+            </h1>
+            <img
+              alt='cropped'
+              src={cropData}
+              style={{ width: '100%' }}
+            />
+          </div>
+        </div>
+        <br style={{ clear: 'both' }} />
+      </div>
+      <ContainerEditImage>
+        <input
+          accept='.jpg, .png'
+          id='iFile'
+          onChange={handleUpdateBanner}
+          ref={fileInputRef}
+          type='file'
+        />
+        <div className='crop-container'>
+          <div className='guides'>
+            <div>
+            </div>
+            <div>
+            </div>
+            <div>
+            </div>
+            <div>
+            </div>
+            <div>
+            </div>
+            <div>
+            </div>
+            <div>
+            </div>
+            <div>
+            </div>
+            <div>
+            </div>
+          </div>
+          <div
+            className='crop-overlay'
+            style={{
+              top: crop.y + '%',
+              left: crop.x + '%',
+              width: (100 / zoom) + '%',
+              height: (100 / zoom) + '%'
+            }}
+          >
+            <img
+              alt={alt}
+              ref={imageRef}
+              src={src}
+            />
+          </div>
+        </div>
+        <div className='controls'>
+          <Button
+            onClick={() => {
+              handleOpenEditImage()
+              onCropChange({ x: 0, y: 0 })
+            } }
+          >
+            Cancelar
+          </Button>
+          <input
+            max={3}
+            min={1}
+            onChange={e => {return onZoomChange(e.target.value)}}
+            step={0.1}
+            type='range'
+            value={zoom}
+          />
+          <Button
+            loading={loading || isImgloading}
+            onClick={() => {return onCropComplete(crop, getPixelCrop(imageRef.current, crop, zoom))}}
+            primary={true}
+          >
+            Guardar
+          </Button>
+        </div>
+      </ContainerEditImage>
+    </AwesomeModal>
     <Container>
       <Steps>
         <Tabs active={active === 0}>
@@ -112,139 +407,148 @@ export const FoodComponent = ({
             Detalles
           </Text>
         </Tabs>
-         <Tabs active={active === 1}>
+        <Tabs active={active === 1}>
           <Text
             as='h2'
             fontFamily='PFont-Light'
             fontSize='16px'
             fontWeight='200'
           >
-          Precio
+            Precio
           </Text>
         </Tabs>
-         <Tabs active={active === 2}>
+        <Tabs active={active === 2}>
           <Text
             as='h2'
             fontFamily='PFont-Light'
             fontSize='16px'
             fontWeight='200'
           >
-        Complementos
+            Complementos
           </Text>
         </Tabs>
-         <Tabs active={active === 3}>
+        <Tabs active={active === 3}>
           <Text
             as='h2'
             fontFamily='PFont-Light'
             fontSize='16px'
             fontWeight='200'
           >
-        Clasificacion
+            Clasificacion
           </Text>
         </Tabs>
-         <Tabs active={active === 4}>
+        <Tabs active={active === 4}>
           <Text
             as='h2'
             fontFamily='PFont-Light'
             fontSize='16px'
             fontWeight='200'
           >
-        Disponibilidad
+            Disponibilidad
           </Text>
         </Tabs>
       </Steps>
-      {/* FORM */}
-      {/* <Card>
-        <FormProduct {...propsForm} />
-      </Card> */}
-      {/* PREVIEW CARD PRODUCT */}
-      {/* <Card>
-        <CardProducts
-          ProDescription={values?.ProDescription}
-          ProDescuento={values?.ProDescuento}
-          ProPrice={values?.ProPrice}
-          ValueDelivery={values.ValueDelivery}
-          alt={alt}
-          fileInputRef={fileInputRef}
-          height={'500px'}
-          onFileInputChange={onFileInputChange}
-          onTargetClick={onTargetClick}
-          pName={names}
-          src={src}
-          tag={tags}
-        />
-      </Card>
-      <Card>
-        {dataTags.map((tag) => {
-          return(
-            <Button
-              border='none'
-              borderRadius='0'
-              key={tag.id}
-              onClick={() => { return handleAddTag(tag.id, tag.tag) }}
-              padding='0'
-              style={{ display: 'flex', flexWrap: 'wrap' }}
-            >
-              <Tag label={tag.tag} />
-            </Button>
-          )
-        })}
-      </Card> */}
+      <div className='container_step'>
+        {active === 0 &&
+          <>
+            <Card state={'50%'}>
+              <FormProduct {...propsForm} />
+            </Card>
+            <Card state={'50%'}>
+              {/* <ImageItem /> */}
+              <Text
+                color={BColor}
+                fontSize={'16px'}
+                margin='10px 0'
+              >
+                Selecciona una imagen para el producto
+              </Text>
+              <Text
+                as='p'
+                color={BColor}
+                fontSize={'12px'}
+                margin='10px 0'
+              >
+                Es recomendado que subas una imagen  para tu producto
+              </Text>
+              <ImageItem
+                alt={alt}
+                onClick={()=> { return handleEditImage() }}
+                showImge={existImage}
+                src={src}
+              />
+              <Row>
+                <Text fontSize='12px'>
+                  Formatos: &nbsp;
+                </Text>
+                <Text fontSize='16px'>
+                  JPGE, JPG, PNG
+                </Text>
+              </Row>
+              <Row>
+                <Text fontSize='12px'>
+                  Peso máximo: &nbsp;
+                </Text>
+                <Text fontSize='16px'>
+                  200 MB
+                </Text>
+              </Row>
+              {/* <TagsInput
+                defaultTags={tags}
+                error={errors.tags}
+                id='tags'
+                label='Tags'
+                // emailValidation={true}
+                name='tags'
+                onChange={changeHandler}
+                placeholder='Add tag'
+              /> */}
+              <CardProducts
+                ProDescription={values?.ProDescription}
+                ProDescuento={values?.ProDescuento}
+                ProPrice={values?.ProPrice}
+                ValueDelivery={values.ValueDelivery}
+                alt={alt}
+                fileInputRef={fileInputRef}
+                height={'500px'}
+                onFileInputChange={onFileInputChange}
+                onTargetClick={onTargetClick}
+                pName={names}
+                src={src}
+                tag={tags}
+              />
+            </Card>
+          </>
+        }
+        <Card>
+          {dataTags.map((tag) => {
+            return(
+              <Button
+                border='none'
+                borderRadius='0'
+                key={tag.id}
+                onClick={() => { return handleAddTag(tag.id, tag.tag) }}
+                padding='0'
+                style={{ display: 'flex', flexWrap: 'wrap' }}
+              >
+                <Tag label={tag.tag} />
+              </Button>
+            )
+          })}
+        </Card>
+      </div>
+      <ActionStep>
+        <Button >
+          Cancelar
+        </Button>
+        <Button primary>
+          Continuar
+        </Button>
+      </ActionStep>
     </Container>
+
     {/* <Dessert /> */}
     {/* <ListProducts {...propsListProducts} /> */}
-    {/* {false && <AwesomeModal
-      backdrop='static'
-      borderRadius='10px'
-      btnCancel={true}
-      btnConfirm={false}
-      footer={false}
-      header={true}
-      height='100vh'
-      onCancel={() => { return false }}
-      onHide={() => { OPEN_MODAL_ORGANICE.setState(!OPEN_MODAL_ORGANICE.state) }}
-      padding='25px'
-      show={OPEN_MODAL_ORGANICE.state}
-      size='90%'
-      zIndex='9999999'
-    >
-      <Grid
-        gridColGap='30px'
-        gridColumns={3}
-        gridRows={1}
-        gridRowsGap='20px'
-        height='100%'
-      >
-        <div>
-          Todos los productos
-          <ComponentCardProduct
-            ADD_PRODUCT={'ADD_PRODUCT'}
-            ADD_TO_EFFECTIVE={'ADD_TO_EFFECTIVE'}
-            REMOVE={'REMOVE_PRODUCT'}
-            data={data}
-            dispatch={dispatch}
-          />
-        </div>
-        <div>
-          Productos para recoger
-          <ComponentCardProduct
-            REMOVE={'REMOVE_PRODUCT'}
-            data={product_state?.PRODUCT_RECOGER}
-            dispatch={dispatch}
-          />
-        </div>
-        <div>
-          Pagos en efectivo
-          <ComponentCardProduct
-            REMOVE={'REMOVE_EFFECTIVE'}
-            data={product_state?.PRODUCT_EFFECTIVE}
-            dispatch={dispatch}
-          />
-        </div>
-      </Grid>
-
-    </AwesomeModal >
-    } */}
   </>
   )
 }
@@ -283,82 +587,6 @@ FoodComponent.propTypes = {
     ProPrice: PropTypes.any,
     ValueDelivery: PropTypes.any
   })
-}
-
-
-const ComponentCardProduct = ({ data, dispatch, ADD_TO_EFFECTIVE, REMOVE, ADD_PRODUCT }) => {
-  return <div>
-    {!data?.length ? 'No data' : data?.map((product, idx) => {
-      return (
-        <CardProduct grid={true} key={idx + 1} >
-          <ButtonCard
-            grid={true}
-            onClick={() => { return dispatch({ type: REMOVE, idx }) }}
-            top={'20px'}
-          >
-            <IconDelete color={PColor} size={20} />
-            <ActionName >
-              Eliminar
-            </ActionName>
-          </ButtonCard>
-          <ButtonCard
-            delay='.1s'
-            grid={true}
-            top={'80px'}
-          >
-            <IconEdit color={PColor} size={20} />
-            <ActionName>
-              Editar
-            </ActionName>
-          </ButtonCard>
-          <ButtonCard
-            delay='.1s'
-            grid={true}
-            onClick={() => { return dispatch({ type: ADD_PRODUCT, payload: product }) }}
-            top={'140px'}
-          >
-            <IconDollar color={TFSColor} size={30} />
-            <ActionName>
-              Agregar
-            </ActionName>
-          </ButtonCard>
-          {ADD_TO_EFFECTIVE && <ButtonCard
-            delay='.0s'
-            grid={true}
-            onClick={() => { return dispatch({ type: ADD_TO_EFFECTIVE, payload: product }) }}
-            top={'200px'}
-          >
-            <IconLove color={PVColor} size={20} />
-            <ActionName>
-              Agregar a pagos en efectivo
-            </ActionName>
-          </ButtonCard>}
-          <ContentImg grid={true}>
-            {!product.ProImage ? <i>No img</i> : <Img alt={product.ProImage} src={product.ProImage} />}
-          </ContentImg>
-          <ContentInfo>
-            {product.ProDescuento && <span discount={product.ProDescuento} > {numberFormat(product.ProDescuento)}</span>}
-            <Title>{product.pName}</Title>
-            <Text>{numberFormat(product.ProPrice)}</Text>
-            <ContentInfo>
-              {product.ProDelivery === 1 && <span>Gratis</span>}
-            </ContentInfo>
-          </ContentInfo>
-        </CardProduct>
-      )
-    })}
-  </div>
-}
-
-ComponentCardProduct.propTypes = {
-  ADD_PRODUCT: PropTypes.any,
-  ADD_TO_EFFECTIVE: PropTypes.any,
-  REMOVE: PropTypes.any,
-  data: PropTypes.shape({
-    length: PropTypes.any,
-    map: PropTypes.func
-  }),
-  dispatch: PropTypes.func
 }
 
 export const SkeletonP = () => {

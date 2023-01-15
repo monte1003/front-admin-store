@@ -3,6 +3,12 @@ import { BGColor, PColor } from '../colors'
 export const scrollStyle = css`
     scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0);
     scrollbar-width: thin;
+    .image-cropper {
+
+}
+
+
+
     &::-webkit-scrollbar {
     -webkit-appearance: none;
 }

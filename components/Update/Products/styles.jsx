@@ -7,6 +7,12 @@ export const Steps = styled.div`
     padding: 5px;
 `
 
+export const ActionStep = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+`
+
 export const Tabs = styled.div`
   position: relative;
 

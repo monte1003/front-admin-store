@@ -12,6 +12,8 @@ import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 import { useApollo } from '../apollo/apolloClient'
 import Auth from '../apollo/Auth'
+import 'cropperjs/dist/cropper.css'
+
 import { ProgressBar } from '../components/common/Nprogres'
 import { Layout as MainLayout } from '../components/Layout'
 import Context from '../context/Context'
