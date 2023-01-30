@@ -52,7 +52,7 @@ Chart.register(
   Tooltip
 )
 
-import { Line, Pie, Doughnut, Bar } from 'react-chartjs-2'
+import { Line, Pie, Doughnut, Bar, Scatter,  } from 'react-chartjs-2'
 
 const data = {
   labels: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio'],
@@ -101,7 +101,7 @@ const options = {
 
 }
 
-export const HorizontalBarChart = () => {return (
+export const HorizontalBarChart = ({ data, options }) => {return (
   <>
     <div className='header'>
       <div className='links'>
@@ -111,7 +111,7 @@ export const HorizontalBarChart = () => {return (
   </>
 )}
 
-export const Circle = () => {return (
+export const Circle = ({ data, options }) => {return (
   <>
     <div className='header'>
       <div className='links'>
@@ -120,21 +120,21 @@ export const Circle = () => {return (
     </div>
   </>
 )}
-export const DoughnutChar = () => {return (
+export const DoughnutChar = ({ data, options }) => {return (
   <>
     <div className='header'>
       <div className='links'>
       </div>
-      <Doughnut data={data} />
+      <Scatter data={data} options={options} />
     </div>
   </>
 )}
-export const BarChat = ({ data }) => {return (
+export const BarChat = ({ data, options }) => {return (
   <>
     <div className='header'>
       <div className='links'>
       </div>
-      <Bar data={data} />
+      <Bar data={data} options={options} />
     </div>
   </>
 )}

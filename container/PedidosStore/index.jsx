@@ -100,7 +100,7 @@ const PedidosStore = () => {
         </Row>
       </Column> */}
       </Container>
-<PedidosStoreOld />
+{/* <PedidosStoreOld /> */}
     </div>
   )
 }

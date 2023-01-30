@@ -74,6 +74,7 @@ export default function App({ Component, pageProps }) {
   //   }, 3000)
   // }, [])
   const [showChild, setShowChild] = useState(false)
+
   useEffect(() => {
     setShowChild(true)
   }, [showChild])

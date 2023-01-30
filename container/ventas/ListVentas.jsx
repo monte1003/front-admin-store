@@ -6,13 +6,12 @@ import { Section } from 'components/Table/styled'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { BGColor, PLColor, SFColor } from 'public/colors'
 import React, { useEffect, useState } from 'react'
-import { numberFormat } from '../../utils'
+import { numberFormat, SPANISH_MONTHS } from '../../utils'
 import { GET_ALL_SALES, GET_ONE_SALES } from './queries'
 import moment from 'moment'
-import { BarChat } from 'components/Chart'
+import { BarChat, DoughnutChar, HorizontalBarChart } from 'components/Chart'
 import { Skeleton } from 'components/Skeleton'
 import { MainCard } from 'components/common/Reusable/ShadowCard'
-import Column from 'components/common/Atoms/Column'
 import Button from 'components/common/Atoms/Button'
 import {
   useReport,
@@ -25,6 +24,7 @@ import { ContainerQuery } from './styled'
 import { ContentQueryCard } from './ContentQueryCard'
 import { Loading } from '~/components/Loading'
 import { ModalDetailOrder } from 'pkg-components'
+import { useMobile } from 'npm-pkg-hook'
 
 // https://codesandbox.io/s/custom-graph-bar-forked-1v6jk9?file=/src/components/graph/graph.tsx
 export const ListVentas = () => {
@@ -134,7 +134,7 @@ export const ListVentas = () => {
     pDatCre: useFormatDate({date: dataModal?.pDatCre}),
     loading: false,
     edit: false,
-    onClose: () => {return setOpen(!open)},
+    onClose: () => {return setOpen(!open)}
 
   }
   return (
@@ -317,7 +317,7 @@ export const ChatStatistic = () => {
     if (!res[mes]) {
       res[mes] = { Mes: mes }
       // Inicializamos a 0 el valor de cada key
-      Object.keys(value).forEach(function (key) {
+      Object.keys(value).forEach((key) => {
         if (key != 'pDatCre') {
           res[mes][key] = 0
         }
@@ -333,20 +333,29 @@ export const ChatStatistic = () => {
     })
     return res
   }, {})
+  let allMonths = Array.from({length: 12}, (_, i) => {return i})
+  let missingMonths = allMonths.filter(month => {return !result.some(data => {return data.Mes === month})})
+
+  for (const element of missingMonths) {
+    result.push({
+      'Mes': element,
+      'totalProductsPrice': 0
+    })
+  }
+
+  result.sort((a, b) => { return a.Mes - b.Mes})
+
+
   // Resultado:
   const dataChat = {
-    labels: result.map(x => { return x.Mes === 0 ? 'Enero' : x.Mes === 1 ? 'Febrero' : x.Mes === 2 ? 'Marzo' : x.Mes === 3 ? 'Abril' : x.Mes === 4 ? 'Mayo' : x.Mes === 5 ? 'Junio' : x.Mes === 6 ? 'Julio' : x.Mes === 7 ? 'Agosto' : x.Mes === 8 ? 'Septiembre' : x.Mes === 9 ? 'Octubre' : x.Mes === 10 ? 'Noviembre' : 'Diciembre' }),
-    // labels: moment()._locale._months,
-    // labels: obj.map(x => { return x.months }),
-    // labels: months({ count: DATA_COUNT }),
-
+    labels: result.map(data => {
+      return SPANISH_MONTHS[data.Mes]
+    }),
     datasets: [
       {
 
-        label: 'Ventas',
-        // data: obj.map(x => { return x.price }),
-        data: result.map(x => { return x.Mes === 0 ? x.totalProductsPrice : x.Mes === 1 ? x.totalProductsPrice : x.Mes === 2 ? x.totalProductsPrice : x.Mes === 3 ? x.totalProductsPrice : x.Mes === 4 ? x.totalProductsPrice : x.Mes === 5 ? x.totalProductsPrice : x.Mes === 6 ? x.totalProductsPrice : x.Mes === 7 ? x.totalProductsPrice : x.Mes === 8 ? x.totalProductsPrice : x.Mes === 9 ? x.totalProductsPrice : x.totalProductsPrice }),
-        // data: result.map(x => x.Mes === 0 ? x.totalProductsPrice : x.Mes === 1 ? x.totalProductsPrice : x.Mes === 2 ? x.totalProductsPrice : x.Mes === 3 ? x.totalProductsPrice : x.Mes === 4 ? x.totalProductsPrice : x.Mes === 5 ? x.totalProductsPrice : x.Mes === 6 ? x.totalProductsPrice : x.Mes === 7 ? x.totalProductsPrice : x.Mes === 8 ? x.totalProductsPrice : x.Mes === 9 ? x.totalProductsPrice: x.Mes === 10 ? x.totalProductsPrice : 'Diciembre'),
+        label: 'Ventas por meses del año',
+        data: result.map(data => { return data.totalProductsPrice }),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -367,19 +376,43 @@ export const ChatStatistic = () => {
       }
     ]
   }
+  const [chartType, setChartType] = useState('bar')
+  const options = {
+    legend: {
+      position: 'right',
+      labels: {
+        boxWidth: 10
+      }
+    },
+    scales: {
+      xAxes: [
+        {
+          ticks: { display: false }
+        }
+      ]
+    }
+  }
+  const { isMobile } = useMobile()
+
   return (
     <div>
-      {loading ? <Skeleton height={300} margin={'20px 0'} /> : <MainCard title={`Ventas por meses del año`} weight={'200'}>
-        <ContainChart>
-          <Column width='50%'>
-            <BarChat data={dataChat || []} />
-          </Column>
-          {/* <DoughnutChar data={dataChat || []} /> */}
-          {/* <Circle data={dataChat || []} /> */}
-          {/* <HorizontalBarChart data={dataChat || []} /> */}
-        </ContainChart>
-      </MainCard>}
-      {/* {loading ? <Skeleton height={300} margin={'10px 0'} /> :} */}
+      {loading ?
+        <Skeleton height={300} margin={'20px 0'} />
+        : !isMobile && <MainCard title={`Ventas por meses del año`} weight={'200'}>
+          <ContainerSelect>
+            <select onChange={e => {return setChartType(e.target.value)}} value={chartType}>
+              <option value='bar'>Gráfico de Barras</option>
+              <option value='line'>Gráfico de Líneas</option>
+            </select>
+          </ContainerSelect>
+          <ContainChart>
+            {chartType === 'bar' ? (
+              <BarChat data={dataChat || []} options={options} />
+            ) : (
+              <HorizontalBarChart data={dataChat || []} options={options} />
+            )}
+          </ContainChart>
+        </MainCard>}
     </div>
   )
 }
@@ -387,6 +420,27 @@ export const ChatStatistic = () => {
 const Action = styled.div`
     display: flex;
     justify-content: space-between;
+`
+const ContainerSelect = styled.div`
+  select {
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 10px;
+  width: 200px;
+}
+
+select:focus {
+  border-color: #333333;
+  outline: none;
+}
+
+option {
+  background-color: #f2f2f2;
+  padding: 10px;
+}
+
 `
 
 const CardInfo = styled.div`

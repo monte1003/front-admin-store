@@ -94,7 +94,7 @@ const DragOrders = ({
       const groupByQuantity = Object.keys(result)
       setSaleKey(groupByQuantity)
     }
-  }, [sale, saleLoading])
+  }, [])
   const [changePPStatePPedido] = useMutation(CHANGE_STATE_STORE_PEDIDO, {
     onCompleted: (res) => {
       setAlertBox({ message: res.changePPStatePPedido.message })

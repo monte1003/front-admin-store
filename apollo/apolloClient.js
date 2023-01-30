@@ -3,7 +3,8 @@
 import { useMemo } from 'react'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { onError } from '@apollo/client/link/error'
-import { ApolloClient, ApolloLink, split } from '@apollo/client'
+import { ApolloClient, ApolloLink, gql, split } from '@apollo/client'
+import { withFilter } from 'graphql-subscriptions'
 import { createUploadLink } from 'apollo-upload-client'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 import merge from 'deepmerge'
@@ -29,6 +30,7 @@ export const getDeviceId = async () => {
   const { visitorId } = result || {}
   return visitorId
 }
+
 // eslint-disable-next-line
 const errorHandler = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
@@ -60,11 +62,11 @@ const httpLink = createUploadLink({
 })
 // Create Second Link
 const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
-  uri: process.env.NODE_ENV === 'development' ? 'ws://localhost:4000/graphql' : 'ws://localhost:4000/graphql',
+  uri: 'ws://localhost:4000/graphql',
   options: {
     reconnect: true,
-    lazy: true,
-    inactivityTimeout: 1000,
+    // lazy: false,
+    // inactivityTimeout: 1000,
     // timeout: 30000,
     wsOptionArguments: {
       headers: {
@@ -74,7 +76,7 @@ const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
       }
     },
     connectionParams: {
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         authorization: `Bearer ${window.localStorage.getItem('session')}`,
         restaurant: `MjcyMDg4ODE0ODUxNTE2NDUw`
@@ -86,6 +88,84 @@ const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
     // }
   }
 }) : null
+const NEW_NOTIFICATION = gql`
+subscription {
+newStoreOrder{
+  pdpId
+  id
+  idStore
+  pId
+  ppState
+  pCodeRef
+  pPDate
+  pSState
+  pPStateP
+  payMethodPState
+  pPRecoger
+  totalProductsPrice
+  unidProducts
+  pDatCre
+  pDatMod
+}
+}
+`
+const filterData = (data) => {
+  const restaurant = window.localStorage.getItem('restaurant')
+  const ourStore = data?.data?.newStoreOrder?.idStore === restaurant
+  return !!(ourStore)
+}
+
+
+let isOurStore
+let unsubscribed = false
+let subscription = typeof window !== 'undefined' && wsLink.request({
+  query: NEW_NOTIFICATION
+}).subscribe({
+  next: (data) => {
+    const condition = filterData(data)
+    if(condition){
+      isOurStore = true
+    }else{
+      unsubscribed = true
+      isOurStore = false
+      subscription.unsubscribe()
+    }
+  },
+  error: (error) => {
+    console.log(error)
+  },
+  complete: () => {
+    console.log('Completed')
+  }
+})
+
+// somewhere else in your code
+if(!unsubscribed) {
+  subscription = typeof window !== 'undefined' && wsLink.request({
+    query: NEW_NOTIFICATION
+  }).subscribe({
+    next: (data) => {
+      const condition = filterData(data)
+      if(condition){
+        isOurStore = true
+      }else{
+        unsubscribed = true
+        isOurStore = false
+        subscription.unsubscribe()
+      }
+    },
+    error: (error) => {
+      console.log(error)
+    },
+    complete: () => {
+      console.log('Completed')
+    }
+  })
+}
+// return isOurStore ? link.request(operation) : false
+// console.log(wsLink)
+// const lol = wsLink.subscriptionClient.client.onopen()
+// console.log(lol)
 function createApolloClient() {
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors)
@@ -94,6 +174,7 @@ function createApolloClient() {
 
     if (networkError) console.log(`[Network error]: ${networkError}`)
   })
+
   const ssrMode = typeof window === 'undefined' // Disables forceFetch on the server (so queries are only run once)
   const getLink = async (operation) => {
     // await splitLink({ query: operation.query })
@@ -147,12 +228,10 @@ function createApolloClient() {
     ? split((operation) => {
       const definition = getMainDefinition(operation.query)
       return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
-    },
-    wsLink,
+    }, wsLink,
     ApolloLink.split(() => { return true }, operation => { return getLink(operation) },
       errorLink
-    )
-    )
+    ))
     : ApolloLink.split(() => { return true }, operation => { return getLink(operation) },
       errorLink
     )

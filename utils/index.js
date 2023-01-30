@@ -1184,6 +1184,21 @@ export const MONTHS = [
   'November',
   'December'
 ]
+export const SPANISH_MONTHS = {
+  0:'Enero',
+  1:'Febrero',
+  2:'Marzo',
+  3:'Abril',
+  4:'Mayo',
+  5:'Junio',
+  6:'Julio',
+  7:'Augosto',
+  8:'Septiembre',
+  9:'Octubre',
+  10:'Noviembre ',
+  11:'Diciembre'
+}
+
 
 export function months(config) {
   let cfg = config || {}
@@ -1194,7 +1209,7 @@ export function months(config) {
 
   for (i = 0; i < count; ++i) {
     value = MONTHS[Math.ceil(i) % MONTHS.length || 12]
-    values.push(value.substring(0, section))
+    values.push(value?.substring(0, section))
   }
 
   return values

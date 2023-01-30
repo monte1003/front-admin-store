@@ -18,6 +18,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.4",
     "@fingerprintjs/fingerprintjs": "3.3.3",
     "@graphql-tools/load-files": "6.5.3",
     "@graphql-tools/merge": "8.2.13",

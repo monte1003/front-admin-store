@@ -8,6 +8,17 @@ export const scrollStyle = css`
 }
 
 
+.chart {
+      width: 100px !important;
+      height: 300px !important;
+      display: flex !important;
+    }
+    
+    .bar {
+      width: 30%;
+      margin-right: 5%;
+      background-color: #4CAF50;
+    }
 
     &::-webkit-scrollbar {
     -webkit-appearance: none;

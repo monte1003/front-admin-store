@@ -1,4 +1,8 @@
-import { gql, useSubscription } from '@apollo/client'
+import {
+  gql,
+  useSubscription,
+  useApolloClient
+} from '@apollo/client'
 import { AwesomeModal } from 'components/AwesomeModal'
 import { BtnClose } from 'components/AwesomeModal/styled'
 import { usePosition } from 'components/hooks/usePosition'
@@ -8,15 +12,17 @@ import { useRouter } from 'next/router'
 import { Toast } from 'pkg-components'
 import PropTypes from 'prop-types'
 import { IconCancel } from 'public/icons'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Context } from '../../context/Context'
 import { AlertBox } from '../AlertBox'
 import { Footer } from './footer'
 import { Header } from './header'
+import { useConnection, useStore } from 'npm-pkg-hook'
 import dynamic from 'next/dynamic'
 import Aside from './Aside'
-
+import { GET_ALL_PEDIDOS } from 'container/PedidosStore/queries'
+import Head from 'next/head'
 export const MemoLayout = ({
   children,
   watch,
@@ -26,6 +32,7 @@ export const MemoLayout = ({
   // lazy import next
   const GenerateSales = dynamic(() => {return import('container/Sales')}, {
     loading: () => {return 'Loading...'}
+
   })
 
   const {
@@ -69,18 +76,82 @@ export const MemoLayout = ({
     pDatMod
   }
 }
-    `
-  const { data: dataWS } = useSubscription(NEW_NOTIFICATION, {
+  `
+  const [dataStore] = useStore()
+  const [newOrderModal, setNewOrderModal] = useState({
+    open: false,
+    order: []
+  })
+  const channel = new BroadcastChannel('app-channel')
+  const [isOpen, setIsOpen] = useState(false)
+  useEffect(() => {
+    channel.addEventListener('message', ({ data }) => {
+      if (data === 'app-open') {
+        setIsOpen(true)
+
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    channel.postMessage('app-open')
+  }, [])
+
+  useSubscription(NEW_NOTIFICATION, {
     // eslint-disable-next-line
-    onSubscriptionData: ({ subscriptionData }) => {
-      // eslint-disable-next-line
-      console.log(subscriptionData)
-      setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
-      sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
+    onError: (e) => {
+      return sendNotification({ title: 'Error en el pedido', description: 'Error' })
+    },
+
+    onData: ({ data, client }) => {
+      const ourStore = data?.data?.newStoreOrder?.idStore === dataStore?.idStore
+      console.log(client)
+      const subscription = client.link.request({
+        query: NEW_NOTIFICATION
+      }).subscribe({
+        next: (data) => {
+          if(ourStore){
+            console.log({data})
+            // isOurStore = true
+          } else{
+            subscription.unsubscribe()
+          }
+        },
+        error: (error) => {
+          console.log(error)
+        },
+        complete: () => {
+          console.log('Completed')
+        }
+      })
+      if (!ourStore) {
+        return subscription.unsubscribe()
+      }
+      if (ourStore) {
+        client.writeQuery({
+          query: GET_ALL_PEDIDOS,
+          data: {
+            // ...messageData?.getMessages,
+            getAllPedidoStoreFinal: [
+              // ...messageData?.getMessages,
+              // newMessage
+            ]
+          }
+        })
+        const oldOrder = [...newOrderModal.order, data?.data?.newStoreOrder]
+        setNewOrderModal({
+          ...newOrderModal,
+          open: true,
+          order: oldOrder
+        })
+        setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
+        sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
+      }
+
     }
   })
   // eslint-disable-next-line
-  console.log(dataWS)
+  
   // eslint-disable-next-line
   // useEffect(() => {
   //   if (dataWS) {
@@ -89,9 +160,34 @@ export const MemoLayout = ({
   // // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [dataWS])
 
+  const [connectionStatus, setConnectionStatus] = useState('initial')
+  const statusConnection = connectionStatus ? 'Conexión a internet restablecida.' : 'Conexión a internet perdida.'
+  useConnection({ setConnectionStatus })
+  useEffect(() => {
+    if (connectionStatus === 'initial') return
+    if (connectionStatus === true) {
+      setTimeout(() => {
+        setConnectionStatus('initial')
+      }, 3500)
+    }
+    sendNotification({ title: 'Wifi', description: statusConnection })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connectionStatus])
+  const handleFocus = () => {
+    channel.close()
+    setIsOpen(false)
+  }
+  // if (isOpen) return <div>
+  //   <button onClick={() => { return handleFocus() }}>Cerrar</button>
+  // </div>
+
   return (
     <>
+      <Head>
+        <title>{isOpen ? 'Cierra esta pestaña ' : ''}</title>
+      </Head>
       <AlertBox err={error} />
+
       <Main aside={!['/'].find(x => { return x === location.pathname })} >
         <Header />
         <Aside />

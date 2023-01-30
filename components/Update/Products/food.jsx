@@ -131,7 +131,7 @@ export const FoodComponent = ({
   const imageRef = useRef(null)
   const onCropChange = (crop) => {
     setCrop(crop)
-  } 
+  }
 
   const onZoomChange = (zoom) => {
     setZoom(zoom)
@@ -221,8 +221,6 @@ export const FoodComponent = ({
 
   const handleUpdateBanner = async event => {
     const { files } = event.target
-    const [size, { unit }] = await getFileSizeByUnit(files[0], 'MB')
-    console.log({size, unit})
     setPreviewImg(
       files.length
         ? {
@@ -254,8 +252,33 @@ export const FoodComponent = ({
   const getCropData = () => {
     if (typeof cropper !== 'undefined') {
       setCropData(cropper.getCroppedCanvas().toDataURL())
+      fetch(cropper)
+        .then(response => {return response.blob()})
+        .then(blob => {
+          console.log(blob)
+          setLoading(true)
+          //Create a new File
+          const file = new File([blob], 'cropped_image.jpg', { type: blob.type })
+          setPreviewImg(
+            file
+              ? {
+                src: URL.createObjectURL(file),
+                alt: ''
+              }
+              : initialState
+          )
+          //You can use the file object to send it to a server or to download it
+          sendNotification({ title: 'Exito', description: 'Imagen editada' })
+          setLoading(false)
+          setExistImage(true)
+          handleOpenEditImage()
+        })
+        .catch(() => {
+          sendNotification({ title: 'Error', description: 'Ha ocurrido un error!' })
+        })
     }
   }
+  console.log(cropData)
   return (<>
     <AwesomeModal
       borderRadius='10px'
@@ -299,10 +322,7 @@ export const FoodComponent = ({
         <div>
           <div className='box' style={{ width: '50%', float: 'right' }}>
             <h1>Preview</h1>
-            <div
-              className='img-preview'
-              style={{ width: '100%', float: 'left', height: '300px' }}
-            />
+            <div className='img-preview' style={{ width: '100%', float: 'left', height: '300px' }} />
           </div>
           <div
             className='box'
@@ -323,7 +343,7 @@ export const FoodComponent = ({
         </div>
         <br style={{ clear: 'both' }} />
       </div>
-      <ContainerEditImage>
+      {/* <ContainerEditImage>
         <input
           accept='.jpg, .png'
           id='iFile'
@@ -393,7 +413,7 @@ export const FoodComponent = ({
             Guardar
           </Button>
         </div>
-      </ContainerEditImage>
+      </ContainerEditImage> */}
     </AwesomeModal>
     <Container>
       <Steps>
@@ -455,7 +475,6 @@ export const FoodComponent = ({
               <FormProduct {...propsForm} />
             </Card>
             <Card state={'50%'}>
-              {/* <ImageItem /> */}
               <Text
                 color={BColor}
                 fontSize={'16px'}
