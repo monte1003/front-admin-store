@@ -3,13 +3,18 @@ import styled from 'styled-components'
 import { RippleButton } from 'components/Ripple'
 import { Table } from 'components/Table'
 import { Section } from 'components/Table/styled'
-import { useLazyQuery, useQuery } from '@apollo/client'
-import { BGColor, PLColor, SFColor } from 'public/colors'
+import { useLazyQuery } from '@apollo/client'
+import { 
+  BGColor, 
+  PLColor, 
+  SFColor, 
+  PColor
+} from 'public/colors'
 import React, { useEffect, useState } from 'react'
-import { numberFormat, SPANISH_MONTHS } from '../../utils'
-import { GET_ALL_SALES, GET_ONE_SALES } from './queries'
+import { numberFormat } from '../../utils'
+import { GET_ONE_SALES } from './queries'
 import moment from 'moment'
-import { BarChat, DoughnutChar, HorizontalBarChart } from 'components/Chart'
+import { BarChat, HorizontalBarChart } from 'components/Chart'
 import { Skeleton } from 'components/Skeleton'
 import { MainCard } from 'components/common/Reusable/ShadowCard'
 import Button from 'components/common/Atoms/Button'
@@ -24,7 +29,7 @@ import { ContainerQuery } from './styled'
 import { ContentQueryCard } from './ContentQueryCard'
 import { Loading } from '~/components/Loading'
 import { ModalDetailOrder } from 'pkg-components'
-import { useMobile } from 'npm-pkg-hook'
+import { useMobile, useChartData } from 'npm-pkg-hook'
 
 // https://codesandbox.io/s/custom-graph-bar-forked-1v6jk9?file=/src/components/graph/graph.tsx
 export const ListVentas = () => {
@@ -307,109 +312,64 @@ export const ListVentas = () => {
 }
 
 export const ChatStatistic = () => {
-  // Construcción del nuevo array:
-  const { data, loading } = useQuery(GET_ALL_SALES)
-  // const array = filterKeyObject(data?.getAllSalesStore, ['__typename'])
-  let result = []
-  data?.getAllSalesStore?.length > 0 && data?.getAllSalesStore.reduce(function (res, value) {
-    // Creamos la posición del array para cada mes
-    let mes = new Date(value.pDatCre).getMonth()
-    if (!res[mes]) {
-      res[mes] = { Mes: mes }
-      // Inicializamos a 0 el valor de cada key
-      Object.keys(value).forEach((key) => {
-        if (key != 'pDatCre') {
-          res[mes][key] = 0
-        }
-      })
-
-      result.push(res[mes])
-    }
-    // Sumamos el valor de cada clave dentro de un bucle
-    Object.keys(value).forEach(function (key) {
-      if (key != 'pDatCre') {
-        res[mes]['totalProductsPrice'] += value['totalProductsPrice']
-      }
-    })
-    return res
-  }, {})
-  let allMonths = Array.from({length: 12}, (_, i) => {return i})
-  let missingMonths = allMonths.filter(month => {return !result.some(data => {return data.Mes === month})})
-
-  for (const element of missingMonths) {
-    result.push({
-      'Mes': element,
-      'totalProductsPrice': 0
-    })
-  }
-
-  result.sort((a, b) => { return a.Mes - b.Mes})
-
-
-  // Resultado:
-  const dataChat = {
-    labels: result.map(data => {
-      return SPANISH_MONTHS[data.Mes]
-    }),
-    datasets: [
-      {
-
-        label: 'Ventas por meses del año',
-        data: result.map(data => { return data.totalProductsPrice }),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-      }
-    ]
-  }
-  const [chartType, setChartType] = useState('bar')
-  const options = {
-    legend: {
-      position: 'right',
-      labels: {
-        boxWidth: 10
-      }
-    },
-    scales: {
-      xAxes: [
-        {
-          ticks: { display: false }
-        }
-      ]
-    }
-  }
   const { isMobile } = useMobile()
-
+  const {
+    loading,
+    dataChart,
+    chartTypeYear,
+    labelTitle,
+    years,
+    options,
+    setChartType,
+    handleChangeYear,
+    asFilter,
+    cleanFilter,
+    chartType
+  } = useChartData({ })
+  const showFilter = years.length
   return (
-    <div>
+    <div style={{ margin: '50px 0 0 0' }}>
       {loading ?
         <Skeleton height={300} margin={'20px 0'} />
-        : !isMobile && <MainCard title={`Ventas por meses del año`} weight={'200'}>
+        : !isMobile && <MainCard title={labelTitle} weight={'200'}>
           <ContainerSelect>
             <select onChange={e => {return setChartType(e.target.value)}} value={chartType}>
               <option value='bar'>Gráfico de Barras</option>
               <option value='line'>Gráfico de Líneas</option>
             </select>
+            {showFilter &&
+            <select onChange={e => {return handleChangeYear(e.target.value)}} value={chartTypeYear}>
+              {years.map((year) => {
+                return <option
+                  defaultChecked={year == new Date().getFullYear()}
+                  defaultValue={year == new Date().getFullYear()}
+                  disabled={!year}
+                  key={year}
+                  name={year}
+                  value={year}
+                >
+                  {year}
+                </option>
+              })}
+            </select>}
+            {showFilter &&
+            <Button
+              backgroundColor={PColor}
+              color={BGColor}
+              disabled={!asFilter}
+              margin='0 0 0 10px'
+              onClick={() => { return cleanFilter()}}
+              padding='10px'
+            >
+              Limpiar
+            </Button>
+            }
           </ContainerSelect>
           <ContainChart>
             {chartType === 'bar' ? (
-              <BarChat data={dataChat || []} options={options} />
+              <BarChat data={dataChart || []} options={options} />
             ) : (
-              <HorizontalBarChart data={dataChat || []} options={options} />
+              <HorizontalBarChart data={dataChart || []} options={options} />
             )}
           </ContainChart>
         </MainCard>}

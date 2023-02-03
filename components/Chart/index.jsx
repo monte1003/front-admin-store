@@ -125,7 +125,7 @@ export const DoughnutChar = ({ data, options }) => {return (
     <div className='header'>
       <div className='links'>
       </div>
-      <Scatter data={data} options={options} />
+      <Doughnut data={data} options={options} />
     </div>
   </>
 )}
