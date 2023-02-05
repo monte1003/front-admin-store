@@ -3,26 +3,26 @@ import { Cropper } from 'react-cropper'
 import { AwesomeModal } from '~/components/AwesomeModal'
 
 export const ModalImage = ({
-    handleOpenEditImage,
-    openEditImage,
-    onChange
+  handleOpenEditImage,
+  openEditImage,
+  onChange
 }) => {
   return (
     <AwesomeModal
-    borderRadius='10px'
-    btnCancel={true}
-    btnConfirm={false}
-    footer={false}
-    header={true}
-    height='50vh'
-    onCancel={() => { return handleOpenEditImage() }}
-    onHide={() => { return handleOpenEditImage() }}
-    padding='25px'
-    show={openEditImage}
-    size='medium'
-    zIndex='90'
-  >
-     {/* <TagsInput
+      borderRadius='10px'
+      btnCancel={true}
+      btnConfirm={false}
+      footer={false}
+      header={true}
+      height='50vh'
+      onCancel={() => { return handleOpenEditImage() }}
+      onHide={() => { return handleOpenEditImage() }}
+      padding='25px'
+      show={openEditImage}
+      size='medium'
+      zIndex='90'
+    >
+      {/* <TagsInput
                 defaultTags={tags}
                 error={errors.tags}
                 id='tags'
@@ -32,56 +32,56 @@ export const ModalImage = ({
                 onChange={changeHandler}
                 placeholder='Add tag'
               /> */}
-    <div>
-      <div style={{ width: '100%' }}>
-        <input onChange={onChange} type='file' />
-        <button>Use default img</button>
-        <br />
-        <br />
-        <Cropper
-          autoCropArea={1}
-          background={false}
-          checkOrientation={false}
-          guides={true}
-          initialAspectRatio={1}
-          minCropBoxHeight={10}
-          minCropBoxWidth={10}
-          onInitialized={(instance) => {
-            setCropper(instance)
-          }}
-          preview='.img-preview'
-          responsive={true}
-          src={Dimage}
-          style={{ height: 400, width: '100%' }} // https://github.com/fengyuanchen/cropperjs/issues/671
-          viewMode={1}
-          zoomTo={0.5}
-        />
-      </div>
       <div>
-        <div className='box' style={{ width: '50%', float: 'right' }}>
-          <h1>Preview</h1>
-          <div className='img-preview' style={{ width: '100%', float: 'left', height: '300px' }} />
-        </div>
-        <div
-          className='box'
-          style={{ width: '50%', float: 'right', height: '300px' }}
-        >
-          <h1>
-            <span>Crop</span>
-            <button onClick={getCropData} style={{ float: 'right' }}>
-            Crop Image
-            </button>
-          </h1>
-          <img
-            alt='cropped'
-            src={cropData}
-            style={{ width: '100%' }}
+        <div style={{ width: '100%' }}>
+          <input onChange={onChange} type='file' />
+          <button>Use default img</button>
+          <br />
+          <br />
+          <Cropper
+            autoCropArea={1}
+            background={false}
+            checkOrientation={false}
+            guides={true}
+            initialAspectRatio={1}
+            minCropBoxHeight={10}
+            minCropBoxWidth={10}
+            onInitialized={(instance) => {
+              setCropper(instance)
+            }}
+            preview='.img-preview'
+            responsive={true}
+            src={Dimage}
+            style={{ height: 400, width: '100%' }} // https://github.com/fengyuanchen/cropperjs/issues/671
+            viewMode={1}
+            zoomTo={0.5}
           />
         </div>
+        <div>
+          <div className='box' style={{ width: '50%', float: 'right' }}>
+            <h1>Preview</h1>
+            <div className='img-preview' style={{ width: '100%', float: 'left', height: '300px' }} />
+          </div>
+          <div
+            className='box'
+            style={{ width: '50%', float: 'right', height: '300px' }}
+          >
+            <h1>
+              <span>Crop</span>
+              <button onClick={getCropData} style={{ float: 'right' }}>
+            Crop Image
+              </button>
+            </h1>
+            <img
+              alt='cropped'
+              src={cropData}
+              style={{ width: '100%' }}
+            />
+          </div>
+        </div>
+        <br style={{ clear: 'both' }} />
       </div>
-      <br style={{ clear: 'both' }} />
-    </div>
-    {/* <ContainerEditImage>
+      {/* <ContainerEditImage>
       <input
         accept='.jpg, .png'
         id='iFile'
@@ -152,6 +152,6 @@ export const ModalImage = ({
         </Button>
       </div>
     </ContainerEditImage> */}
-  </AwesomeModal>
+    </AwesomeModal>
   )
 }

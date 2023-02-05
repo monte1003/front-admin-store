@@ -23,7 +23,7 @@ import {
 } from '../../../public/icons'
 import ActiveLink from '../../common/Link'
 import { ButtonOption } from '../styled'
-import { Button } from 'pkg-components';
+import { Button } from 'pkg-components'
 import {
   AnchorRouter,
   ButtonGlobalCreate,

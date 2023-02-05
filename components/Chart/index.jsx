@@ -52,7 +52,7 @@ Chart.register(
   Tooltip
 )
 
-import { Line, Pie, Doughnut, Bar, Scatter,  } from 'react-chartjs-2'
+import { Line, Pie, Doughnut, Bar, Scatter } from 'react-chartjs-2'
 
 const data = {
   labels: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio'],
