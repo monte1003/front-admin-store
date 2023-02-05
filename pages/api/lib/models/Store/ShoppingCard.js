@@ -12,7 +12,7 @@ import { enCode } from '../../utils/util'
 import productModelFood from '../product/productFood'
 import Store from './Store'
 
-sequelize.sync()
+// sequelize.sync()
 
 const ShoppingCard = sequelize.define('shoppingcards', {
   ShoppingCard: {

@@ -7,6 +7,7 @@ export const InputHook = props => {
   const { name, value, onChange, label, error,
     required,
     numeric,
+    disabled,
     letters,
     range,
     email,
@@ -80,15 +81,18 @@ export const InputHook = props => {
   }
   return (
     <>
-      <BoxInput>
-        {!TypeTextarea ? <Input
-          name={name}
-          onChange={validations}
-          placeholder={placeholder}
-          type={type}
-          value={value}
-        /> :
-          <TextAreaInput
+      <BoxInput error={error}>
+        {!TypeTextarea ?
+          <Input
+            disabled={disabled}
+            error={error}
+            name={name}
+            onChange={validations}
+            placeholder={placeholder}
+            type={type}
+            value={value}
+          />
+          : <TextAreaInput
             name={name}
             onChange={validations}
             placeholder={placeholder}
@@ -96,7 +100,7 @@ export const InputHook = props => {
             value={value}
           />}
         <LabelInput >{label}</LabelInput>
-        {errors && <label>{message}</label>}
+        {errors && <label className='alert_error'>{message}</label>}
       </BoxInput>
     </>
   )

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import { useApolloClient } from '@apollo/client'
+import { gql, useApolloClient, useSubscription } from '@apollo/client'
 import { Context } from 'context/Context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -23,8 +23,8 @@ import {
 } from '../../../public/icons'
 import ActiveLink from '../../common/Link'
 import { ButtonOption } from '../styled'
+import { Button } from 'pkg-components';
 import {
-  Anchor,
   AnchorRouter,
   ButtonGlobalCreate,
   Card,
@@ -43,8 +43,7 @@ const MemoAside = () => {
   const location = useRouter()
   const pathname = location.pathname === '/dashboard/[...name]'
   const {
-    openSchedule,
-    setOpenSchedule,
+    setShowComponentModal,
     countPedido,
     setCollapsed,
     collapsed
@@ -77,46 +76,7 @@ const MemoAside = () => {
     idStore,
     uState
   } = dataStore || {}
-  // const GET_STATE_ORDER = gql`
-  //     subscription {
-  //       numberIncremented
-  //     }
-  // `
-  // // const { data: dataWS } = useSubscription(GET_STATE_ORDER, {
-  // //   context: { clientName: 'admin-server' },
-  // //   onSubscriptionData: (data) => {
-  // //     console.log(data?.subscriptionData?.data?.numberIncremented)
-  // //   }
-  // // })
 
-  // const NEW_NOTIFICATION = gql`
-  // subscription {
-  // newNotification
-  // }
-  // `
-  // const { data: lol } = useSubscription(NEW_NOTIFICATION, {
-  //   onSubscriptionData: ({ subscriptionData }) => {
-  //     console.log(subscriptionData)
-  //   }
-  // })
-  // const [messageOtherTap, setmessageOtherTap] = useState('Esta abierto en otra ventana')
-
-  // useEffect(() => {
-  //   (() => {
-  //     const handleVisibilityChange = () => {
-  //       if (document.visibilityState === 'visible') {
-  //         setmessageOtherTap('Esta abierto en otra ventana')
-  //       } else {
-  //         setmessageOtherTap('Esta abierto en otra ventana')
-  //       }
-  //     }
-  //     document.addEventListener('visibilitychange', handleVisibilityChange, false)
-  //     return () => {
-  //       document.removeEventListener('visibilitychange', handleVisibilityChange, false)
-  //     }
-  //   })()
-  // }, [window])
-  //   console.log(messageOtherTap)
   return (
     <>
       {isMobile &&
@@ -134,53 +94,15 @@ const MemoAside = () => {
             </ButtonGlobalCreate>
             <LeftNav show={show}>
               <Info>
-                <h2>Customers</h2>
-                <ActiveLink activeClassName='active' href='/sales-invoices'>
-                  <Anchor>Invoices</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/sales-invoices'>
-                  <Anchor>Sales Invoice</Anchor>
-                </ActiveLink>
-              </Info>
-              <Info>
-                <h2>Supplier</h2>
-                <ActiveLink activeClassName='active' href='/bills'>
-                  <Anchor>Bills</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/pay-bills'>
-                  <Anchor>Pay Bills</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/'>
-                  <Anchor>Purchase Orders</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/'>
-                  <Anchor>Expenses</Anchor>
-                </ActiveLink>
-              </Info>
-              <Info>
-                <h2>Employees</h2>
-                <ActiveLink activeClassName='active' href='/companies/dashboard'>
-                  <Anchor>Admin</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/'>
-                  <Anchor>Home</Anchor>
-                </ActiveLink>
-              </Info>
-              <Info>
                 <h2>Productos</h2>
-                <ActiveLink activeClassName='active' href='/proveedores/products'>
-                  <Anchor>Productos</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/dashboard'>
-                  <Anchor>Panel Restaurante</Anchor>
-                </ActiveLink>
+                <Button onClick={() => { return setShowComponentModal(3) }}>
+                  Productos
+                </Button>
               </Info>
             </LeftNav>
             {(loading) ? null : (!pathname && <Link href={`/dashboard/${storeName?.replace(/\s/g, '-').toLowerCase()}/${idStore}`}>
               <a>
                 <h1 className='title_store'>{storeName}</h1>
-                {/* {dataWS?.numberIncremented} */}
-
               </a>
             </Link>)}
             {pathname &&
@@ -207,7 +129,7 @@ const MemoAside = () => {
               <ActiveLink activeClassName='active' href='/horarios'>
                 <AnchorRouter><IconHorario size='15px' />Horarios</AnchorRouter>
               </ActiveLink>
-              <ContentAction onClick={() => { return setOpenSchedule(!openSchedule) }}>
+              <ContentAction onClick={() => { return setShowComponentModal(1) }}>
                 <IconHorario color={BGColor} size='15px' />
               </ContentAction>
             </DynamicNav>

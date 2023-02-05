@@ -27,8 +27,8 @@ import { StickyBoundaryCategories } from './StickyBoundaryCategories'
 const DashboardStore = () => {
   // STATES
   const [showDessert, setShowDessert] = useState(false)
-  const [show, setShow] = useState(null)
-  const handleClick = index => { return setShow(index === show ? false : index) }
+  const { setAlertBox, handleClick, show } = useContext(Context)
+
   const [searchFilter] = useState({
     gender: [],
     desc: [],
@@ -38,7 +38,6 @@ const DashboardStore = () => {
   const [moreCatProduct, setMoreCaProduct] = useState(2)
   const [modal, setModal] = useState(false)
   // HOOKS
-  const { setAlertBox } = useContext(Context)
   const { isMobile } = useMobile()
   const { handleDelete } = useDeleteProductsFood()
   const [handleGetOneProduct,
@@ -128,6 +127,7 @@ const DashboardStore = () => {
 
   const handleActionClick = (number, query, value = true) => {
     handleClick(number)
+    
     handleQuery(query, value)
   }
 
@@ -153,6 +153,7 @@ const DashboardStore = () => {
     onCancel: ()=> { return handleHidden(select[show]) },
     onHide: () => { return handleHidden(select[show]) }
   }
+  console.log(show)
   const productProps = {
     dataExtra: dataExtra,
     dataOptional: dataOptional,

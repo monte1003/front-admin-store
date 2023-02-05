@@ -4,7 +4,7 @@ import { Context } from '~/context/Context'
 import { WrapperOptions } from '../styledStore'
 
 export const ButtonsAction = ({ handle = () => { return } }) => {
-  const { openSchedule, setOpenSchedule } = useContext(Context)
+  const { setShowComponentModal } = useContext(Context)
   return (
     <WrapperOptions>
       <Button
@@ -25,7 +25,7 @@ export const ButtonsAction = ({ handle = () => { return } }) => {
         fontFamily= 'PFont-Light'
         fontWeight='300'
         label='Organizar agenda'
-        onClick={() => { return setOpenSchedule(!openSchedule) }}
+        onClick={() => { return setShowComponentModal(1) }}
         size='small'
       />
     </WrapperOptions>

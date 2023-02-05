@@ -102,7 +102,9 @@ export const Product = ({
               color={APColor}
               margin='12px 0'
               size='.875rem'
-            >$ {ProPrice}</Text>
+            >
+              $ {ProPrice}
+            </Text>
             <Text margin='12px 0 0 5px' size='14px'>$ {ProDescuento}</Text>
           </Flex>
           <DisRestaurant>

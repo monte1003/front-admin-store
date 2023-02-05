@@ -11,6 +11,10 @@ export const ActionStep = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    position: fixed;
+    left: -15px;
+    bottom: 15px;
+
 `
 
 export const Tabs = styled.div`

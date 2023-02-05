@@ -1,10 +1,37 @@
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import {
   BColor,
   BGColor,
   PColor,
   PLColor
 } from '../../../public/colors'
+
+export const AnimationRight = keyframes`
+0% {
+    transform: translateX(50vw);
+    opacity: 0;
+}
+100% {
+    transform: translateY(0);
+    opacity: 1;
+}
+`
+export const AnimationLeft = keyframes`
+0% {
+    transform: translateX(-50vw);
+    opacity: 0;
+}
+
+100% {
+    transform: translateY(0);
+    opacity: 1;
+}
+`
+export const ContainerAnimation = styled.div`
+${ props => {return props.active && css`animation: ${ AnimationRight } 200ms;`} }
+display: ${({ active }) => {return active ? 'flex' : 'none'}};
+height: 100%;
+`
 
 export const Button = styled.button` 
     position: absolute;
@@ -79,20 +106,19 @@ export const ContainerEditImage = styled.div`
 }
 `
 export const Container = styled.div`
-    /* display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(400px, 30%));
-    grid-gap: 20px;
-    place-content: center;
-
-    place-items: stretch; */
-    /* grid-template-columns: 25% 25% 50%; */
     height: 100%;
     width: 100%;
     .container_step {
-        display: flex;
         height: calc(90% - 20px);
         overflow: hidden auto;
         gap: 30px;
+    }
+    .container_availability {
+        margin: 20px;
+    }
+    .container_days {
+        background-color: #cccccc24;
+        display: flex;
     }
 
 `

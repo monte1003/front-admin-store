@@ -16,6 +16,18 @@ const Provider = ({ children }) => {
   // STATE
   const router = useRouter()
   const [error, setError] = useState({})
+  const [showModalComponent, setShowComponentModal] = useState(null)
+  const pathname = router.pathname === '/dashboard/[...name]'
+
+  const handleMenuLateral = index => {
+    if (pathname && index === 3) return setShowComponentModal(false) 
+    return setShowComponentModal(index === showModalComponent ? false : index) 
+  }
+
+  const [show, setShow] = useState(null)
+
+  const handleClick = index => { return setShow(index === show ? false : index) }
+
   // State to Session
   const [isCompany, setCompany] = useState({})
   // Effects para el Toast
@@ -108,7 +120,7 @@ const Provider = ({ children }) => {
     description,
     backgroundColor
   }) => {
-    if (messagesToast.length >= 5) {
+    if (messagesToast.length >= 10) {
       const deleteToast = (id) => {
         const listItemIndex = messagesToast.findIndex((e) => {return e.id === id})
         messagesToast.splice(listItemIndex, 1)
@@ -166,7 +178,6 @@ const Provider = ({ children }) => {
     }
   }
   const [state_product_card, dispatch] = useReducer(product, initialState)
-  const [openSchedule, setOpenSchedule] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [selectedStore, setSelectedStore] = useState(null)
   const setStoreChatActive = useCallback(sessionValue => {
@@ -187,10 +198,10 @@ const Provider = ({ children }) => {
         hidden,
         setSelectedStore,
         status,
-        setOpenSchedule,
+        setShowComponentModal: handleMenuLateral,
         setSalesOpen,
         salesOpen,
-        openSchedule,
+        showModalComponent,
         setHidden,
         selectedStore,
         setStoreChatActive,
@@ -209,10 +220,12 @@ const Provider = ({ children }) => {
         setIsSession,
         // State login
         authData,
+        show,
         setSessionActive,
         sendNotification,
         // UseCompany
         useCompany,
+        handleClick,
         company,
         // setAlertBox
         alert,
@@ -222,7 +235,35 @@ const Provider = ({ children }) => {
         setAlertBox: err => { return setError(err) }
       }
     },
-    [error, hidden, status, setSalesOpen,messagesToast, sendNotification, salesOpen, openSchedule, selectedStore, setStoreChatActive, DataCompany, setCompanyLink, countPedido, isCompany, handleMenu, menu, collapsed, isSession, authData, setSessionActive, useCompany, company, alert, state_product_card]
+    [
+      alert,
+      authData,
+      collapsed,
+      company,
+      countPedido,
+      DataCompany,
+      error,
+      hidden,
+      show,
+      isCompany,
+      isSession,
+      menu,
+      messagesToast,
+      salesOpen,
+      selectedStore,
+      showModalComponent,
+      state_product_card,
+      status,
+      handleMenu,
+      sendNotification,
+      setCompanyLink,
+      setSalesOpen,
+      setSessionActive,
+      setShowComponentModal,
+      handleClick,
+      setStoreChatActive,
+      useCompany
+    ]
   )
 
   return <Context.Provider value={value}>

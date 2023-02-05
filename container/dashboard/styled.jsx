@@ -1255,8 +1255,8 @@ export const LateralModal = styled.div`
     animation-fill-mode: both;
     border-left: 1px solid #d4d7dc;
     z-index: 1000;
-    ${({ openSchedule }) => {
-    return openSchedule
+    ${({ open }) => {
+    return open
       ? css`
                  animation-name: ${SideIn};
                  visibility: visible;

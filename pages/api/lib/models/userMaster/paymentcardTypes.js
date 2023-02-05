@@ -3,7 +3,7 @@ import connect from '../../db'
 const sequelize = connect()
 import { enCode } from '../../utils/util'
 
-sequelize.sync()
+// sequelize.sync()
 
 const PaymentCardType = sequelize.define('paymentcardType', {
   cardtypeId: {

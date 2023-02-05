@@ -1,8 +1,4 @@
-import {
-  gql,
-  useSubscription,
-  useApolloClient
-} from '@apollo/client'
+import { gql, useSubscription } from '@apollo/client'
 import { AwesomeModal } from 'components/AwesomeModal'
 import { BtnClose } from 'components/AwesomeModal/styled'
 import { usePosition } from 'components/hooks/usePosition'
@@ -12,37 +8,38 @@ import { useRouter } from 'next/router'
 import { Toast } from 'pkg-components'
 import PropTypes from 'prop-types'
 import { IconCancel } from 'public/icons'
-import React, { useContext, useEffect, useState } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import styled, { css } from 'styled-components'
 import { Context } from '../../context/Context'
 import { AlertBox } from '../AlertBox'
 import { Footer } from './footer'
 import { Header } from './header'
 import { useConnection, useStore } from 'npm-pkg-hook'
-import dynamic from 'next/dynamic'
 import Aside from './Aside'
 import { GET_ALL_PEDIDOS } from 'container/PedidosStore/queries'
 import Head from 'next/head'
+import { Food } from '~/container/update/Products/food'
+import GenerateSales from 'container/Sales'
+import { Overline } from '../common/Reusable'
 export const MemoLayout = ({
   children,
   watch,
   settings
 }) => {
   const location = useRouter()
-  // lazy import next
-  const GenerateSales = dynamic(() => {return import('container/Sales')}, {
-    loading: () => {return 'Loading...'}
-
-  })
 
   const {
     error,
     setAlertBox,
-    openSchedule,
-    setOpenSchedule,
     sendNotification,
     salesOpen,
     messagesToast,
+    showModalComponent,
+    setShowComponentModal,
     setSalesOpen
   } = useContext(Context)
   const { latitude, longitude } = usePosition(watch, settings)
@@ -150,15 +147,6 @@ export const MemoLayout = ({
 
     }
   })
-  // eslint-disable-next-line
-  
-  // eslint-disable-next-line
-  // useEffect(() => {
-  //   if (dataWS) {
-  //     setAlertBox({ message: dataWS?.newNotification, duration: 30000 })
-  //   }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [dataWS])
 
   const [connectionStatus, setConnectionStatus] = useState('initial')
   const statusConnection = connectionStatus ? 'Conexión a internet restablecida.' : 'Conexión a internet perdida.'
@@ -173,14 +161,17 @@ export const MemoLayout = ({
     sendNotification({ title: 'Wifi', description: statusConnection })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionStatus])
-  const handleFocus = () => {
-    channel.close()
-    setIsOpen(false)
-  }
-  // if (isOpen) return <div>
-  //   <button onClick={() => { return handleFocus() }}>Cerrar</button>
-  // </div>
 
+  const component = {
+    1:  <ScheduleTimings />,
+    2: <></>,
+    3: <Food />
+  }
+  const width = {
+    1: '380px',
+    2: '380px',
+    3: '75%'
+  }
   return (
     <>
       <Head>
@@ -222,9 +213,16 @@ export const MemoLayout = ({
         </div>
         <Footer />
         <div style={{ gridArea: 'right' }}>
-          <LateralModal openSchedule={openSchedule}>
-            <BtnClose onClick={() => { return setOpenSchedule(!openSchedule) }}><IconCancel size='20px' /></BtnClose>
-            {openSchedule && <ScheduleTimings />}
+          <Overline 
+            bgColor='#91919169'
+            onClick={() => { return setShowComponentModal(false) }} 
+            show={showModalComponent} 
+          />
+          <LateralModal open={showModalComponent} style={{ width: width[showModalComponent] }}>
+            <BtnClose onClick={() => { return setShowComponentModal(false) }}>
+              <IconCancel size='20px' />
+            </BtnClose>
+            {component[showModalComponent]}
           </LateralModal>
         </div>
         {/* <Messages /> */}
