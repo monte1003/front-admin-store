@@ -99,6 +99,7 @@ export const FoodComponent = ({
     errors,
     ...props
   }
+  // eslint-disable-next-line
   const propsListProducts = {
     onClickClear,
     data,

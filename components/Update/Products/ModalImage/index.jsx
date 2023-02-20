@@ -1,5 +1,5 @@
 import React from 'react'
-import { Cropper } from 'react-cropper'
+// import { Cropper } from 'react-cropper'
 import { AwesomeModal } from '~/components/AwesomeModal'
 
 export const ModalImage = ({
@@ -38,7 +38,7 @@ export const ModalImage = ({
           <button>Use default img</button>
           <br />
           <br />
-          <Cropper
+          {/* <Cropper
             autoCropArea={1}
             background={false}
             checkOrientation={false}
@@ -55,7 +55,7 @@ export const ModalImage = ({
             style={{ height: 400, width: '100%' }} // https://github.com/fengyuanchen/cropperjs/issues/671
             viewMode={1}
             zoomTo={0.5}
-          />
+          /> */}
         </div>
         <div>
           <div className='box' style={{ width: '50%', float: 'right' }}>
@@ -68,15 +68,15 @@ export const ModalImage = ({
           >
             <h1>
               <span>Crop</span>
-              <button onClick={getCropData} style={{ float: 'right' }}>
+              {/* <button onClick={getCropData} style={{ float: 'right' }}>
             Crop Image
-              </button>
+              </button> */}
             </h1>
-            <img
+            {/* <img
               alt='cropped'
               src={cropData}
               style={{ width: '100%' }}
-            />
+            /> */}
           </div>
         </div>
         <br style={{ clear: 'both' }} />

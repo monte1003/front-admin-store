@@ -1,4 +1,4 @@
-import { INTEGER, STRING, TEXT, TINYINT, literal } from 'sequelize'
+import { INTEGER, literal } from 'sequelize'
 import connect from '../../db'
 const sequelize = connect()
 import { enCode } from '../../utils/util'

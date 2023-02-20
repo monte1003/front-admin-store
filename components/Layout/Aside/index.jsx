@@ -64,7 +64,7 @@ const MemoAside = () => {
       .catch(() => {
         return sendNotification({ title: 'Se ha producido un error.', description: 'Error' })
       })
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client, location])
   const [dataStore, { loading }] = useStore()
   const {

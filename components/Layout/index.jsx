@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable consistent-return */
+/* eslint-disable no-console */
 import { gql, useSubscription } from '@apollo/client'
 import { AwesomeModal } from 'components/AwesomeModal'
 import { BtnClose } from 'components/AwesomeModal/styled'
