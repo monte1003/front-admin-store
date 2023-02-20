@@ -214,9 +214,9 @@ export const MemoLayout = ({
         <Footer />
         <div style={{ gridArea: 'right' }}>
           <Overline 
-            bgColor='#91919169'
-            onClick={() => { return setShowComponentModal(false) }} 
-            show={showModalComponent} 
+            bgColor='#00000012'
+            onClick={() => { return setShowComponentModal(false) }}
+            show={showModalComponent}
           />
           <LateralModal open={showModalComponent} style={{ width: width[showModalComponent] }}>
             <BtnClose onClick={() => { return setShowComponentModal(false) }}>

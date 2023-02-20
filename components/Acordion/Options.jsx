@@ -1,6 +1,10 @@
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { useEffect, useRef, useState } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import {
   MenuLeft,
   OptionMenu,

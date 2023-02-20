@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-expressions */
-import { gql, useApolloClient, useSubscription } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { Context } from 'context/Context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -45,6 +44,8 @@ const MemoAside = () => {
   const {
     setShowComponentModal,
     countPedido,
+    handleClick,
+    sendNotification,
     setCollapsed,
     collapsed
   } = useContext(Context)
@@ -61,12 +62,7 @@ const MemoAside = () => {
         }
       })
       .catch(() => {
-        // eslint-disable-next-line no-console
-        console.log({
-          message: 'Se ha producido un error.',
-          duration: 30000,
-          color: 'error'
-        })
+        return sendNotification({ title: 'Se ha producido un error.', description: 'Error' })
       })
 
   }, [client, location])
@@ -76,7 +72,11 @@ const MemoAside = () => {
     idStore,
     uState
   } = dataStore || {}
-
+  const handleOpenCreateProduct = () => {
+    setShowComponentModal(3)
+    handleClick(3)
+    setShow(!show)
+  }
   return (
     <>
       {isMobile &&
@@ -95,7 +95,7 @@ const MemoAside = () => {
             <LeftNav show={show}>
               <Info>
                 <h2>Productos</h2>
-                <Button onClick={() => { return setShowComponentModal(3) }}>
+                <Button onClick={() => { return handleOpenCreateProduct() }}>
                   Productos
                 </Button>
               </Info>

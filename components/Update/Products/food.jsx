@@ -22,6 +22,9 @@ import { BGColor, PColor, SECColor } from '@/public/colors'
 import { Checkbox } from '~/components/Checkbox'
 import styled, { css } from 'styled-components'
 import { onPulses } from '~/components/animations'
+import { useStore } from '~/hooks/useStore'
+import { AwesomeModal } from 'pkg-components'
+import Portal from '~/components/portal'
 
 export const FoodComponent = ({
   alt,
@@ -114,7 +117,8 @@ export const FoodComponent = ({
     handleDelete,
     ...props
   }
-  const [openModalDessets, setopenModalDessets] = useState(true)
+  const [openAlertClose, setOpenAlertClose] = useState(false)
+  const [openModalDessert, setOpenModalDessert] = useState(true)
   const [handleGetOneProduct,
     {
       dataExtra,
@@ -123,8 +127,16 @@ export const FoodComponent = ({
   ] = useGetOneProductsFood()
   const { food } = router.query || {}
 
-  const handlerSteps = () => {
-    if (!values.ProPrice?.length > 0) {
+  const handleOpenCloseAlert = () => {
+    setOpenAlertClose(!openAlertClose)
+  }
+  /**
+   * Description
+   * @returns {any}
+   *
+   * */
+  const handlerValidateFields = () => {
+    if (active === 0) {
       sendNotification({ description: 'Llena todos los campos', title: 'Error' })
       return setErrors({
         ...errors,
@@ -132,25 +144,108 @@ export const FoodComponent = ({
         carProId: values.carProId ? false : true
       })
     }
+    return setErrors({ ...errors })
+  }
 
+  const handlerCreateDessert = () => {
+    if (!pId || !food) {
+      setShowComponentModal(false)
+      handleClick(false)
+      return sendNotification({ description: 'Lo sentimos, no encontramos tu producto.', title: 'Error' })
+    }
     setActive((prev) => {return prev + 1 } )
-    if (active >= 4) {
-      return setShowComponentModal(false)
+    setOpenModalDessert(true)
+    return handleGetOneProduct({ pId: pId ?? food })
+  }
+  const handlerSteps = () => {
+    const { ProPrice, carProId } = values || {}
+    const asCompleteFields = ProPrice?.length > 0 && carProId?.length > 0
+    if (!asCompleteFields && active === 0) return handlerValidateFields()
+
+    if (asCompleteFields && active === 0) {
+      setActive((prev) => {return prev + 1 } )
+      return handleRegister()
     }
-    if (active === 0) {
-      handleRegister()
-    }
+
     if (active === 1) {
-      handleGetOneProduct({ pId: pId ?? food })
+      handlerCreateDessert()
+    }
+
+    if (active === 2) {
+      handlerCreateDessert()
+    }
+    if (active === 3) {
+      setShowComponentModal(false)
+      handleClick(false)
     }
     return null
   }
-
-  const { handleDaySelection, selectedDays, days } = useSaveAvailableProduct()
-  
+  const {
+    handleDaySelection,
+    registerAvailableProduct,
+    selectedDays,
+    loading: loaAvailable,
+    days
+  } = useSaveAvailableProduct()
+  const disabled = active === 3 ? check.noAvailability : false
+  const asSave = disabled && selectedDays.length > 0
+  const [dataStore] = useStore()
+  const { idStore } = dataStore || {}
+  const handleContinue = () => {
+    const input = selectedDays.map(day => {
+      return {
+        idStore: idStore,
+        pId: pId ?? food,
+        dayAvailable: day
+      }
+    })
+    return asSave ?
+      registerAvailableProduct({
+        variables: {
+          'input': input
+        }
+      }).then((response) => {
+        const { success } = response?.data?.registerAvailableProduct || {}
+        if (success) {
+          setShowComponentModal(false)
+          handleClick(false)
+          sendNotification({ description: 'Se han registrado todos los campos del producto', title: 'Success' })
+        }
+      }) :
+      handlerSteps()
+  }
   return (<>
     <Container>
-      {loading && <Loading />}
+      <Portal selector='portal'>
+        <AwesomeModal
+          backdrop='static'
+          btnCancel={true}
+          btnConfirm={true}
+          footer={true}
+          header={false}
+          height='20vh'
+          onCancel={() => { return false }}
+          onConfirm={() => { return cancelAll() }}
+          onHide={() => { return handleOpenCloseAlert() }}
+          padding='20px'
+          question={false}
+          show={openAlertClose}
+          size='small'
+          zIndex='99999'
+        >
+          <Text
+            color={PColor}
+            fontSize='20px'
+            margin='10px 0'
+          >
+                Es posible que el producto le falten otras cosas
+          </Text>
+          <Text color={SECColor} fontSize='16px'>
+            Puedes agregar mas items a tu producto.
+          </Text>
+        </AwesomeModal>
+      </Portal>
+      {loaAvailable && <Loading />}
       <HeaderSteps active={active} setActive={setActive} />
       <div className='container_step'>
         <ContainerAnimation active={active === 0}>
@@ -206,11 +301,10 @@ export const FoodComponent = ({
             <>
               <ExtrasProductsItems
                 dataExtra={dataExtra || []}
-                // dataOptional={dataOptional || []}
                 editing={true}
-                modal={openModalDessets}
+                modal={openModalDessert}
                 pId={pId}
-                setModal={() => { return setopenModalDessets(false) }}
+                setModal={() => { return setOpenModalDessert(false) }}
               />
             </>
           }
@@ -242,7 +336,7 @@ export const FoodComponent = ({
                   checked={check.noAvailability}
                   disabled={check.availability}
                   id='checkboxNoAvailability'
-                  label='Disponible en horarios espesificos'
+                  label='Disponible en horarios específicos'
                   name='noAvailability'
                   onChange={(e) =>{ return handleCheckFreeShipping(e, true) }}
                   value={check.noAvailability}
@@ -256,16 +350,15 @@ export const FoodComponent = ({
                   >
                     Dias de la semana
                   </Text>
-                  {new Date().getDay()}
                   <div className='container_days'>
                     {days.map((day) => {return (
-                      <CircleCompany
+                      <CircleDay
                         key={day.day}
                         onClick={() => {return handleDaySelection(day.day)}}
                         pulse={selectedDays.includes(day.day)}
                       >
                         {day.name}
-                      </CircleCompany>
+                      </CircleDay>
                     )})}
                   </div>
                 </>
@@ -279,11 +372,15 @@ export const FoodComponent = ({
         {(active !== 1 && active !== 0) && <Button onClick={() => { return setActive((prev) => { return active === 1 ? 1 : prev - 1 } )}}>
           Volver
         </Button>}
-        <Button onClick={cancelAll}>
-          Cancelar
+        <Button onClick={active === 1 ? handleOpenCloseAlert : cancelAll}>
+          {active === 1 ? 'Cerrar': 'Cancelar'}
         </Button>
-        <Button onClick={handlerSteps} primary>
-          Continuar
+        <Button
+          disabled={disabled && !selectedDays.length > 0}
+          onClick={handleContinue}
+          primary
+        >
+          {asSave ? 'Guardar' : 'Continuar'}
         </Button>
       </ActionStep>
     </Container>
@@ -295,7 +392,7 @@ export const FoodComponent = ({
 }
 
 
-const CircleCompany = styled.div`
+const CircleDay = styled.div`
   border: 2px solid #cccccc;
   border-radius: 50%;
   height: 50px;

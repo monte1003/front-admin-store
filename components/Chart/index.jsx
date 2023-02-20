@@ -52,9 +52,9 @@ Chart.register(
   Tooltip
 )
 
-import { Line, Pie, Doughnut, Bar, Scatter } from 'react-chartjs-2'
+import { Line, Pie, Doughnut, Bar } from 'react-chartjs-2'
 
-const data = {
+const dataTest = {
   labels: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio'],
   datasets: [
     {
@@ -81,7 +81,7 @@ const data = {
   ]
 }
 
-const options = {
+const optionsTest = {
   indexAxis: 'y',
   elements: {
     bar: {
@@ -106,7 +106,7 @@ export const HorizontalBarChart = ({ data, options }) => {return (
     <div className='header'>
       <div className='links'>
       </div>
-      <Line data={data} options={options} />
+      <Line data={data || dataTest} options={options || optionsTest} />
     </div>
   </>
 )}
@@ -116,7 +116,7 @@ export const Circle = ({ data, options }) => {return (
     <div className='header'>
       <div className='links'>
       </div>
-      <Pie data={data} options={options} />
+      <Pie data={data || dataTest} options={options || optionsTest} />
     </div>
   </>
 )}
@@ -125,7 +125,7 @@ export const DoughnutChar = ({ data, options }) => {return (
     <div className='header'>
       <div className='links'>
       </div>
-      <Doughnut data={data} options={options} />
+      <Doughnut data={data || dataTest} options={options || optionsTest} />
     </div>
   </>
 )}
@@ -134,7 +134,7 @@ export const BarChat = ({ data, options }) => {return (
     <div className='header'>
       <div className='links'>
       </div>
-      <Bar data={data} options={options} />
+      <Bar data={data || dataTest} options={options || optionsTest} />
     </div>
   </>
 )}
