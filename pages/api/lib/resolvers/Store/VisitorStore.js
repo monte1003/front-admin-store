@@ -17,7 +17,7 @@ export const setVisitorStore = async (_root, { input }) => {
     })
     return { success: true, message: '' }
   } catch (e) {
-    const error = new Error('Lo sentimos, ha ocurrido un error interno2')
+    const error = new Error('' || e.message)
     return error
   }
 }

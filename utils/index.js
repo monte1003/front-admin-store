@@ -382,14 +382,14 @@ export const filterKeyObjectOLD = (data, filters) => {
  */
 export const validationSubmitHooks = elements => {
   let errorForm = {}
-  for (let i = 0; i < elements.length; i++) {
-    if (elements[i].name) {
-      if (elements[i].type === 'text' || elements[i].type === 'password' || elements[i].type === 'email' || elements[i].type === 'number' || elements[i].type === 'hidden') {
-        if (elements[i].dataset.required === 'true') {
-          if (!elements[i].value) errorForm = { ...errorForm, [elements[i].name]: !elements[i].value }
-          else errorForm = { ...errorForm, [elements[i].name]: !elements[i].value }
+  for (const element of elements) {
+    if (element.name) {
+      if (element.type === 'text' || element.type === 'password' || element.type === 'email' || element.type === 'number' || element.type === 'hidden') {
+        if (element.dataset.required === 'true') {
+          if (!element.value) errorForm = { ...errorForm, [element.name]: !element.value }
+          else errorForm = { ...errorForm, [element.name]: !element.value }
         } else {
-          errorForm = { ...errorForm, [elements[i].name]: false }
+          errorForm = { ...errorForm, [element.name]: false }
         }
       }
     }
@@ -602,7 +602,7 @@ export const validationsOld = (e, typeNull, typeLetters, typeNumeric, typeRange,
     if (rangeLength(value, minRange, maxRange)) return validationsTF(parentNode, nextSibling, `El rango de caracteres es de ${minRange} a ${maxRange}.`, true)
   }
   if (typeLetters) {
-    if (onlyLetters(value)) return validationsTF(parentNode, nextSibling, 'Solo puede contener letras.', true)
+    if (onlyLetters(value)) return validationsTF(parentNode, nextSibling, 'Solo puede contener letras.', tru)
   }
   if (typeEmail) {
     if (isEmail(value)) return validationsTF(parentNode, nextSibling, 'No es un formato de email valido.', true)
@@ -1184,6 +1184,21 @@ export const MONTHS = [
   'November',
   'December'
 ]
+export const SPANISH_MONTHS = {
+  0:'Enero',
+  1:'Febrero',
+  2:'Marzo',
+  3:'Abril',
+  4:'Mayo',
+  5:'Junio',
+  6:'Julio',
+  7:'Augosto',
+  8:'Septiembre',
+  9:'Octubre',
+  10:'Noviembre ',
+  11:'Diciembre'
+}
+
 
 export function months(config) {
   let cfg = config || {}
@@ -1194,7 +1209,7 @@ export function months(config) {
 
   for (i = 0; i < count; ++i) {
     value = MONTHS[Math.ceil(i) % MONTHS.length || 12]
-    values.push(value.substring(0, section))
+    values.push(value?.substring(0, section))
   }
 
   return values

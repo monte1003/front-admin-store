@@ -9,7 +9,8 @@ import { SFVColor } from '../../public/colors'
 import { IconNoShow, IconShowEye } from '../../public/icons'
 import {
   isCC,
-  isEmail, isPassword,
+  isEmail,
+  isPassword,
   onlyLetters,
   passwordConfirm,
   rangeLength,

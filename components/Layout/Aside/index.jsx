@@ -1,15 +1,10 @@
-/* eslint-disable no-unused-expressions */
-import {
-  gql,
-  useApolloClient,
-  useSubscription
-} from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { Context } from 'context/Context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMobile, useStore } from 'npm-pkg-hook'
 import PropTypes from 'prop-types'
-import {
+import React, {
   useCallback,
   useContext,
   useState
@@ -27,8 +22,8 @@ import {
 } from '../../../public/icons'
 import ActiveLink from '../../common/Link'
 import { ButtonOption } from '../styled'
+import { Button } from 'pkg-components'
 import {
-  Anchor,
   AnchorRouter,
   ButtonGlobalCreate,
   Card,
@@ -41,15 +36,16 @@ import {
   Router
 } from './styled'
 
-const Aside = () => {
+const MemoAside = () => {
   const { isMobile } = useMobile()
   const { client } = useApolloClient()
   const location = useRouter()
   const pathname = location.pathname === '/dashboard/[...name]'
   const {
-    openSchedule,
-    setOpenSchedule,
+    setShowComponentModal,
     countPedido,
+    handleClick,
+    sendNotification,
     setCollapsed,
     collapsed
   } = useContext(Context)
@@ -66,14 +62,9 @@ const Aside = () => {
         }
       })
       .catch(() => {
-        // eslint-disable-next-line no-console
-        console.log({
-          message: 'Se ha producido un error.',
-          duration: 30000,
-          color: 'error'
-        })
+        return sendNotification({ title: 'Se ha producido un error.', description: 'Error' })
       })
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client, location])
   const [dataStore, { loading }] = useStore()
   const {
@@ -81,18 +72,11 @@ const Aside = () => {
     idStore,
     uState
   } = dataStore || {}
-  const GET_STATE_ORDER = gql`
-    subscription {
-      numberIncremented
-    }
-`
-  const { data: dataWS } = useSubscription(GET_STATE_ORDER, {
-    // context: { clientName: "admin-server" },
-    onSubscriptionData: () => {
-      // console.log(subscriptionData.data.numberIncremented)
-    }
-  })
-
+  const handleOpenCreateProduct = () => {
+    setShowComponentModal(3)
+    handleClick(3)
+    setShow(!show)
+  }
   return (
     <>
       {isMobile &&
@@ -110,53 +94,15 @@ const Aside = () => {
             </ButtonGlobalCreate>
             <LeftNav show={show}>
               <Info>
-                <h2>Customers</h2>
-                <ActiveLink activeClassName='active' href='/sales-invoices'>
-                  <Anchor>Invoices</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/sales-invoices'>
-                  <Anchor>Sales Invoice</Anchor>
-                </ActiveLink>
-              </Info>
-              <Info>
-                <h2>Supplier</h2>
-                <ActiveLink activeClassName='active' href='/bills'>
-                  <Anchor>Bills</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/pay-bills'>
-                  <Anchor>Pay Bills</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/'>
-                  <Anchor>Purchase Orders</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/'>
-                  <Anchor>Expenses</Anchor>
-                </ActiveLink>
-              </Info>
-              <Info>
-                <h2>Employees</h2>
-                <ActiveLink activeClassName='active' href='/companies/dashboard'>
-                  <Anchor>Admin</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/'>
-                  <Anchor>Home</Anchor>
-                </ActiveLink>
-              </Info>
-              <Info>
                 <h2>Productos</h2>
-                <ActiveLink activeClassName='active' href='/proveedores/products'>
-                  <Anchor>Productos</Anchor>
-                </ActiveLink>
-                <ActiveLink activeClassName='active' href='/dashboard'>
-                  <Anchor>Panel Restaurante</Anchor>
-                </ActiveLink>
+                <Button onClick={() => { return handleOpenCreateProduct() }}>
+                  Productos
+                </Button>
               </Info>
             </LeftNav>
             {(loading) ? null : (!pathname && <Link href={`/dashboard/${storeName?.replace(/\s/g, '-').toLowerCase()}/${idStore}`}>
               <a>
                 <h1 className='title_store'>{storeName}</h1>
-                {dataWS?.numberIncremented}
-
               </a>
             </Link>)}
             {pathname &&
@@ -183,7 +129,7 @@ const Aside = () => {
               <ActiveLink activeClassName='active' href='/horarios'>
                 <AnchorRouter><IconHorario size='15px' />Horarios</AnchorRouter>
               </ActiveLink>
-              <ContentAction onClick={() => { return setOpenSchedule(!openSchedule) }}>
+              <ContentAction onClick={() => { return setShowComponentModal(1) }}>
                 <IconHorario color={BGColor} size='15px' />
               </ContentAction>
             </DynamicNav>
@@ -253,9 +199,9 @@ const Aside = () => {
     </>
   )
 }
-export default Aside
+export default React.memo(MemoAside)
 
-Aside.propTypes = {
+MemoAside.propTypes = {
   handleClickMenu: PropTypes.func,
   closeSession: PropTypes.func,
   filter: PropTypes.func,

@@ -4,7 +4,7 @@ import connect from '../db'
 import { enCode } from '../utils/util'
 const sequelize = connect()
 
-sequelize.sync()
+// sequelize.sync()
 
 const Users = sequelize.define('users', {
   id: {

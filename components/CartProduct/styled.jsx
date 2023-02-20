@@ -223,7 +223,13 @@ export const Card = styled.div`
     box-shadow: 0 1px 4px rgba(0,0,0,.05);
     border-radius: 4px;
     padding: 0;
-    /* max-width: 222px; */
+    .tag {
+      position: absolute;
+      top: 35px;
+      right: 0;
+      display: flex;
+      justify-content: end;
+    }
     grid-template:
      "image" 157px 
      "info-price"  1fr

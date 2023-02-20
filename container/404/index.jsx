@@ -12,6 +12,7 @@ const NotFount = ({
   redirect = '/dashboard'
 }) => {
   const router = useRouter()
+
   return (
     <Portal selector='portal'>
       <Column

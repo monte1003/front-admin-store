@@ -1,8 +1,5 @@
-import { getCoordinates, useFakeSvgDrag } from 'hooks/useMouseposition'
 import { EmptyLayout } from 'pages/_app'
-import { BGColor } from 'public/colors'
 import { useRef, useState } from 'react'
-import styled from 'styled-components'
 const DragNDrop = () => {
   // https://codesandbox.io/s/k355wo7jk3?file=/index.js
   // https://codesandbox.io/s/react-drag-and-drop-hook-o67yn?file=/src/components/DragNDrop.tsx
@@ -72,13 +69,69 @@ const DragNDrop = () => {
     return 'box-items'
   }
   // menu
-  const openedSize = 150
-
-  const { coordinates, startDrag, drag, stopDrag } = useFakeSvgDrag()
-  const [position, setCoordPosition] = useState(false)
+  const styedOnDrag = {
+    transform: 'rotateZ(-2deg)',
+    zIndex: 1000,
+    opacity: 1,
+    transition: 'all 0.3s ease-in-out'
+  }
+  // eslint-disable-next-line
+  const useDropImage = (e) => {
+    const image = e.target.files[0]
+    const reader = new FileReader()
+    reader.readAsDataURL(image)
+    reader.onload = (e) => {
+      const image = new Image()
+      image.src = e.target.result
+      image.onload = () => {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        canvas.width = image.width
+        canvas.height = image.height
+        ctx.drawImage(image, 0, 0)
+      }
+    }
+  }
+  const onDragElastic = (e) => {
+    const aninateElastic = (e) => {
+      const { target } = e
+      const { x, y } = target.getBoundingClientRect()
+      const { clientX, clientY } = e
+      const dx = clientX - x
+      const dy = clientY - y
+      const scaleX = 1 + (1 - dx / target.offsetWidth) * 0.05
+      const scaleY = 1 + (1 - dy / target.offsetHeight) * 0.05
+      target.style.transform = `scale(${scaleX}, ${scaleY})`
+    }
+    const onDragEnd = (e) => {
+      const { target } = e
+      target.style.transform = ''
+      target.removeEventListener('mousemove', aninateElastic)
+      target.removeEventListener('mouseup', onDragEnd)
+    }
+    e.target.addEventListener('mousemove', aninateElastic)
+    e.target.addEventListener('mouseup', onDragEnd)
+    const elastictTranformY = (e) => {
+      const { target } = e
+      const { y } = target.getBoundingClientRect()
+      const { clientY } = e
+      const dy = clientY - y
+      const scaleY = 1 + (1 - dy / target.offsetHeight) * 0.05
+      target.style.transform = `scale(${scaleY})`
+    }
+    const onDragEndY = (e) => {
+      const { target } = e
+      target.style.transform = ''
+      target.removeEventListener('mousemove', elastictTranformY)
+      target.removeEventListener('mouseup', onDragEndY)
+    }
+    onDragEndY(e)
+  }
   return (
     <div className='box-container'>
-      <DraggableMenu
+      <button onMouseEnter={(e) => {return onDragElastic(e)}} style={{ height: '100vh', width: '100vw', backgroundColor: 'red' }}>
+      </button>
+      {/* <DraggableMenu
         height='400'
         onMouseDown={e => {
           startDrag(getCoordinates(e))
@@ -104,8 +157,9 @@ const DragNDrop = () => {
             ContainerSearch
           </li>
         </ContainerMenu>
-      </DraggableMenu>
-      <div className='box-container'>
+      </DraggableMenu> */}
+      {/* <input onChange={(e) => {return useDropImage(e)}} type='file' /> */}
+      <div className='box-container' >
         {list.map((grp, grpIdx) => {
           return (
             <div
@@ -124,14 +178,17 @@ const DragNDrop = () => {
                 return (
                   <div
                     className={dragging ? getStyles(grpIdx, itemIdx) : 'box-items'}
-                    draggable
+                    // draggable
                     key={item}
                     onDragEnter={
                       dragging
                         ? (e) => { return handleDragEnter(e, grpIdx, itemIdx) }
                         : undefined
                     }
+                    onDragLeave={() => {!dragging ? getStyles(grpIdx, itemIdx) : 'box-items'}}
+                    onDragOver={() => {!dragging ? getStyles(grpIdx, itemIdx) : 'box-items'}}
                     onDragStart={(e) => { return handleDragStart(e, grpIdx, itemIdx) }}
+                    style={dragging ? styedOnDrag : {} }
                   >
                     {item}
                   </div>
@@ -144,34 +201,6 @@ const DragNDrop = () => {
     </div>
   )
 }
-const DraggableMenu = styled.div`
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    background-color: red;
 
-`
-const ContainerMenu = styled.div`
-    position: absolute;
-    pointer-events: none;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    border: 1px solid blue;
-    color: ${BGColor};
-    transition: 250ms;
-    width: ${({ openedSize }) => { return openedSize && `${openedSize}px` }};
-    transform: ${({ openedSize, offset }) => {
-    if (offset < 20) {
-      return false
-    }
-    else if (offset > 20 && offset < 50) {
-      return (openedSize, offset) && `translateX(${offset - openedSize}px)`
-    }
-    return `translateX(${-openedSize}px)`
-  }};
-`
 export default DragNDrop
 DragNDrop.Layout = EmptyLayout

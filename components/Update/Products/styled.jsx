@@ -1,10 +1,37 @@
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import {
   BColor,
   BGColor,
   PColor,
   PLColor
 } from '../../../public/colors'
+
+export const AnimationRight = keyframes`
+0% {
+    transform: translateX(50vw);
+    opacity: 0;
+}
+100% {
+    transform: translateY(0);
+    opacity: 1;
+}
+`
+export const AnimationLeft = keyframes`
+0% {
+    transform: translateX(-50vw);
+    opacity: 0;
+}
+
+100% {
+    transform: translateY(0);
+    opacity: 1;
+}
+`
+export const ContainerAnimation = styled.div`
+${ props => {return props.active && css`animation: ${ AnimationRight } 200ms;`} }
+display: ${({ active }) => {return active ? 'flex' : 'none'}};
+height: 100%;
+`
 
 export const Button = styled.button` 
     position: absolute;
@@ -13,19 +40,91 @@ export const Button = styled.button`
 export const FormProducts = styled.form`
 `
 
-export const Container = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(400px, 30%));
-    grid-gap: 20px;
-    place-content: center;
-    place-items: stretch;
-    /* grid-template-columns: 25% 25% 50%; */
+export const ContainerEditImage = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  
+.crop-container {
+    border: 1px solid ${`${PLColor}29`};
+    height: 310px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
 
+.crop-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: ${`${PLColor}29`};
+}
+
+.crop-overlay {
+    position: absolute;
+    margin: auto;
+    right: 0;
+    bottom: 0;
+}
+
+.controls {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+.guides {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  height: 100%;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+}
+
+.guides::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0; 
+  border-right: 0.25px solid red;
+  border-bottom: 0.25px solid red;
+}
+
+.guides > div {
+  position: relative;
+  border-left: 0.1px solid ${`${PLColor}29`};
+  border-bottom: 0.1px solid ${`${PLColor}29`};
+}
+`
+export const Container = styled.div`
+    height: 100%;
+    width: 100%;
+    .container_step {
+        height: calc(90% - 20px);
+        overflow: hidden auto;
+        gap: 30px;
+    }
+    .container_availability {
+        margin: 20px;
+    }
+    .container_days {
+        background-color: #cccccc24;
+        display: flex;
+    }
 
 `
 export const Card = styled.div` 
     position: relative;
-    width: ${props => {return props.state ? '100%' : '70%'}};
+    width: ${props => {return props.state ? props.state : '100%'}};
     background-color: ${({ theme }) => {return theme.InvColor}};
 
 `

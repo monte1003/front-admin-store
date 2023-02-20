@@ -1,9 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
-import { MenuLeft, OptionMenu, Span, Row } from './Styled'
 import { useRouter } from 'next/router'
+import PropTypes from 'prop-types'
+import {
+  useEffect,
+  useRef,
+  useState
+} from 'react'
+import {
+  MenuLeft,
+  OptionMenu,
+  Row,
+  Span
+} from './Styled'
 
-const Options = ({ index, active, children, label, path, handleClick, icon }) => {
+const Options = ({
+  index,
+  active,
+  children,
+  label,
+  path,
+  handleClick,
+  icon
+}) => {
 
   const [height, setHeight] = useState(0)
   const [heightMenu, setHeightMenu] = useState(0)

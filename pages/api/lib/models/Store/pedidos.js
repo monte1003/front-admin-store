@@ -2,10 +2,10 @@ import { INTEGER, TINYINT, STRING, DATE, literal } from 'sequelize'
 import connect from '../../db'
 const sequelize = connect()
 import { enCode } from '../../utils/util'
-import Users from '../Users'
-import ShoppingCard from './ShoppingCard'
 import Store from './Store'
+import ShoppingCard from './ShoppingCard'
 
+sequelize.sync()
 
 const pedidosModel = sequelize.define('storepedidos', {
   pdpId: {
@@ -16,14 +16,7 @@ const pedidosModel = sequelize.define('storepedidos', {
   },
   id: {
     type: INTEGER,
-    allowNull: false,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-    references: {
-      model: Users,
-      key: 'id'
-    },
-    get(x) { return enCode(this.getDataValue(x)) }
+    allowNull: true
   },
   ShoppingCard: {
     type: INTEGER,

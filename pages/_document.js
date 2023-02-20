@@ -39,10 +39,10 @@ class MyDocument extends Document {
           />
           <meta charSet='utf-8' />
           {/* <title>Delivery</title> */}
-          <link
+          {/* <link
             href='https://fonts.googleapis.com/css2?family=Inter&display=optional'
             rel='stylesheet'
-          />
+          /> */}
           <link href='https://fonts.googleapis.com' rel='preconnect'></link>
           <link
             crossOrigin='anonymous'

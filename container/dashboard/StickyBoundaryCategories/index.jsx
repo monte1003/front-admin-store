@@ -6,7 +6,6 @@ import {
   StickyViewport
 } from '../stickyheader'
 import { CardProducts } from 'pkg-components'
-import { useOnScreen } from 'npm-pkg-hook'
 import {
   ContainerCarrusel,
   ContentSearch,
@@ -17,13 +16,13 @@ import Image from 'next/image'
 
 export const ProductCategories = ({
   data = [],
+  reference = null,
   handleGetOneProduct = () => { return },
   setAlertBox = () => { return }
 }) => {
   const containerStyle = {
     height: '100vh'
   }
-  const [setRef, isVisible] = useOnScreen()
   const router = useRouter()
   return (
     <StickyViewport as='main' style={containerStyle}>
@@ -54,17 +53,20 @@ export const ProductCategories = ({
                           src={food.ProImage}
                         />
                       }
-                      isVisible={isVisible}
+                      isVisible={true}
                       key={food.pId}
                       onClick={() => { return handleGetOneProduct(food) }}
                       redirect={() => { return router.push(`/update/products/editar/${food.pId}`) }}
                       setAlertBox={setAlertBox}
-                      setRef={setRef}
                     />
                   )
                 }) : <Skeleton height={200} numberObject={2} />}
               </ContainerCarrusel>
             </StickyBoundary>
+            {/* get last children */}
+            {(key === data.length - 1) &&
+              <div ref={reference} style={{ height: '100px', marginTop: '100px' }} />
+            }
           </div>
         )
       })}

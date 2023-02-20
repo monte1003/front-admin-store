@@ -55,6 +55,7 @@ input IShoppingCard {
 # Query
 type Query {
   getAllShoppingCard: [ShoppingCard]
+  getTodaySales: Int
 }
 # Mutations
 type Mutation {

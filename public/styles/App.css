@@ -1,8 +1,8 @@
 /* Inicio de Hoja de Normalización */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300&display=swap'); */
 /* Normalizes margin, padding */
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote
-    { margin : 0; padding : 0; width: 100%;      text-align: start; font-family: PFont-Regular;  }
+    { margin : 0; padding : 0; width: 100%;      text-align: start;  }
 
 /* Normalizes font-size for headers */
 h1,h2,h3,h4,h5,h6 { font-size : 100%; }
@@ -12,9 +12,8 @@ button{
   outline: none;
   border: none;
 }
-
-a{
-  text-decoration: none !important;
+a {
+  text-decoration: none;
 }
 
 /* Normalizes font-style and font-weight to normal */
@@ -39,7 +38,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif, 'PFont-Regular';
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -48,6 +47,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 
 @font-face {
   font-family: PFont-Bold;

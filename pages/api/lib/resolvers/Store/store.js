@@ -14,6 +14,8 @@ import ratingStoreStart from '../../models/Store/ratingStoreStart'
 import ScheduleStore from '../../models/Store/scheduleStore'
 import { Op } from 'sequelize'
 import StatusPedidosModel from '../../models/Store/statusPedidoFinal'
+import { createOnePedidoStore } from './pedidos'
+import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 
 // eslint-disable-next-line
 export const newRegisterStore = async (_, { input }, ctx) => {
@@ -91,28 +93,71 @@ export const deleteOneItem = async (root, args, context, _info) => {
   }
 }
 // eslint-disable-next-line
-const registerSalesStore = async (root, { input, totalProductsPrice, pickUp, id, idStore, change, pCodeRef, payMethodPState, valueDelivery }, context, _info) => {
+const registerSalesStore = async (root,
+  {
+    input,
+    totalProductsPrice,
+    pickUp,
+    id,
+    idStore,
+    change,
+    pCodeRef,
+    payMethodPState,
+    valueDelivery
+  },
+  context) => {
   try {
+    if (!id) {
+      return {
+        Response: {
+          success: false,
+          message: 'Elije un cliente, No se pudo realizar la venta'
+        }
+      }
+    }
+    if (!input || input?.length === 0) {
+      return {
+        Response: {
+          success: false,
+          message: 'No se ha podido realizar la venta, no hay productos en el carrito'
+        }
+      }
+    }
     for (const element of input) {
-      const { id, pId, cantProducts } = element
-      await ShoppingCard.create({
+      const { pId, cantProducts, comments } = element
+      const resShoppingCard = await ShoppingCard.create({
         pId: deCode(pId),
         id: deCode(id),
-        comments: '',
+        comments: comments ?? '',
         cState: 0,
-        cantProducts: cantProducts,
+        cantProducts,
         idStore: deCode(context.restaurant)
       })
+      // console.log(resShoppingCard.ShoppingCard)
+      await createOnePedidoStore(null, {
+        input: {
+          generateSales: true,
+          id: id,
+          // eslint-disabled-next-line
+          idStore: context?.restaurant?.replace(/["']/g, ''),
+          ShoppingCard: resShoppingCard.ShoppingCard,
+          change,
+          pickUp,
+          pCodeRef,
+          payMethodPState,
+          pPRecoger: null
+        }
+      })
     }
-    // status sales success
     await StatusPedidosModel.create({
       id: deCode(id),
       locationUser: null,
       idStore: idStore ? deCode(idStore) : deCode(context.restaurant),
       pSState: 4,
       pCodeRef: pCodeRef,
-      valueDelivery: valueDelivery,
       change: change,
+      channel: 1,
+      valueDelivery: valueDelivery,
       payMethodPState: payMethodPState,
       pickUp,
       totalProductsPrice
@@ -124,25 +169,62 @@ const registerSalesStore = async (root, { input, totalProductsPrice, pickUp, id,
       }
     }
   } catch (e) {
-    const error = new Error('Lo sentimos, ha ocurrido un error interno')
+    return {
+      Response: {
+        success: false,
+        message: 'Lo sentimos, ha ocurrido un error interno'
+      }
+    }
+  }
+}
+export const getTodaySales = async (_, args, ctx) => {
+  try {
+    const START = new Date()
+    START.setHours(0, 0, 0, 0)
+    const NOW = new Date()
+    const data = await StatusOrderModel.findAll({
+      attributes: ['pSState', 'idStore', 'pDatCre'],
+      where: {
+        [Op.or]: [
+          {
+            // ID STORE
+            pSState: 4,
+            idStore: deCode(ctx.restaurant),
+            pDatCre: {
+              [Op.between]: [START.toISOString(), NOW.toISOString()]
+            }
+          }
+        ]
+      },
+      order: [['pDatCre', 'DESC']]
+
+    })
+    return data?.length || 0
+  } catch (error) {
     return error
   }
 }
 export const registerShoppingCard = async (root, input, context) => {
   const { idSubArray } = input || {}
   const { id } = context.User
-  const { cantProducts, pId, comments, idStore } = input.input || {}
+  const {
+    cantProducts,
+    pId,
+    comments,
+    idStore
+  } = input.input || {}
   const { setID } = idSubArray || {}
   try {
     const data = await ShoppingCard.create({
-      pId: deCode(pId),
-      id: deCode(id),
-      comments,
       cantProducts,
-      idStore: deCode(idStore)
+      comments,
+      id: deCode(id),
+      idStore: deCode(idStore),
+      idUser: deCode(id),
+      pId: deCode(pId)
     })
-    for (let i = 0; i < setID.length; i++) {
-      const { _id } = setID[i]
+    for (const element of setID) {
+      const { _id } = element
       await updateExtraProduct({ input: { _id, id, pId } })
     }
     return data
@@ -162,7 +244,7 @@ export const getAllShoppingCard = async (_root, { input }, context, info) => {
         [Op.or]: [
           {
             // state
-            ...((context.User) ? { id: deCode(context.User.id) } : {}),
+            ...((context.User) ? { idUser: deCode(context.User.id) } : {}),
             // id: deCode(context.User.id),
             cState: { [Op.gt]: 0 }
           }
@@ -263,10 +345,9 @@ export const updateFavorites = async (_root, { input }, context) => {
     return error
   }
 }
-export const getFavorite = async (_root, args, context, info) => {
+export const getFavorite = async (_root, args, context) => {
   try {
     // eslint-disable-next-line
-    const attributes = getAttributes(FavoritesModel, info)
     const data = await FavoritesModel.findAll({
       attributes: ['id', 'fState', 'fIStoreId', 'idStore', 'updateAt', 'createAt'],
       where: { id: deCode(context.User.id), fState: 1 }
@@ -575,6 +656,7 @@ export default {
     getAllRatingStar,
     getOneRating,
     getAllMatchesStore,
+    getTodaySales,
     getOneFavorite,
     getAllRating,
     // getAllStoreAdmin,

@@ -85,7 +85,7 @@ const updateOrCreate = async (model, newItem, where) => {
 const getAttributes = (model, { fieldNodes }) => {
   // get the fields of the Model (columns of the table)
   const columns = new Set(Object.keys(model.rawAttributes))
-  const requested_attributes = fieldNodes[0].selectionSet.selections
+  const requested_attributes = fieldNodes[0].selectionSet?.selections
     .map(({ name: { value } }) => {return value})
   // filter the attributes against the columns
   return requested_attributes.filter(attribute => {return columns.has(attribute)})

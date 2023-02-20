@@ -57,7 +57,7 @@ input InputExtProductFoodOptional {
     required: Int
     numbersOptionalOnly: Int
 }
-# Inputs    
+# Inputs
 input InputExtProductFood {
     pId: ID!
     exPid: ID

@@ -9,13 +9,12 @@ import {
 } from '../styled'
 import { Checkbox } from 'components/Checkbox'
 import { Range } from 'components/InputRange'
-import { CardProducts } from 'components/CartProduct'
+import { CardProductSimple } from 'pkg-components'
 import { IconEdit, IconPay } from 'public/icons'
 import { PColor, APColor } from 'public/colors'
 import { Skeleton } from 'components/Skeleton'
 import FooterCalcules from '../FooterCalcules'
 import NewSelect from 'components/NewSelectHooks/NewSelect'
-import InputHooks from 'components/InputHooks/InputHooks'
 import { Flex } from 'container/dashboard/styled'
 import { numberFormat } from '../../../utils'
 
@@ -33,12 +32,16 @@ export const BoxProductSales = ({
   values,
   handleProduct,
   dataClientes,
-  callback = () => { return }
+  callback = () => { return },
+  handleComment = () => { return }
 }) => {
   const selectProduct = (product) => {
     if (!product) return
     handleProduct(product)
     setModalItem(!modalItem)
+  }
+  const format = (value = '') => {
+    return numberFormat(value.replace(/[^0-9.]/g, '')?.replace(/^0[^.]/, '0'))
   }
 
   return (
@@ -55,23 +58,21 @@ export const BoxProductSales = ({
             title='Mis clientes'
             value={values?.cliId}
           />
-          <InputHooks
+          <input
+            className='optional_input'
             name='change'
-            numeric={true}
             onChange={handleChange}
-            required
+            placeholder='Cambio'
             title='cambio'
-            value={numberFormat(values?.change)}
-            width={'50%'}
+            value={format(values?.change)}
           />
-          <InputHooks
+          <input
+            className='optional_input'
             name='valueDelivery'
-            numeric={true}
             onChange={handleChange}
-            required
+            placeholder='Domicilio'
             title='Domicilio'
-            value={numberFormat(values?.valueDelivery)}
-            width={'50%'}
+            value={format(values?.valueDelivery)}
           />
           <Flex style={{ marginBottom: '40px' }}>
             <Flex>
@@ -129,25 +130,30 @@ export const BoxProductSales = ({
         </Warper>
         <ContainerGrid>
           {data?.PRODUCT?.length > 0 ? finalFilter.map((producto, idx) => {
+            const activeComment = producto?.comment?.length > 0 ?? false
             return (
-              <CardProducts
+              <CardProductSimple
                 ProDescription={producto.ProDescription}
                 ProDescuento={producto.ProDescuento}
                 ProImage={producto.ProImage}
                 ProPrice={producto.ProPrice}
                 ProQuantity={producto.ProQuantity}
                 ValueDelivery={producto.ValueDelivery}
+                activeComment={activeComment}
+                asComment={activeComment}
+                buttonComment={true}
                 del={true}
                 dispatch={dispatch}
                 edit={false}
                 free={producto.free}
+                handleComment={() => {return handleComment(producto)}}
                 handleDecrement={() => { return dispatch({ type: 'REMOVE_PRODUCT', payload: producto }) }}
                 handleDelete={() => { return dispatch({ type: 'REMOVE_PRODUCT_TO_CART', payload: producto }) }}
                 handleFree={true}
                 handleFreeProducts={() => { return dispatch({ type: 'TOGGLE_FREE_PRODUCT', payload: producto }) }}
                 handleIncrement={() => { return dispatch({ id: producto.pId, type: 'INCREMENT' }) }}
                 index={idx}
-                key={producto.pId}
+                key={producto.pId || idx}
                 onClick={() => { return selectProduct(producto)}}
                 pId={producto.pId}
                 pName={producto.pName}

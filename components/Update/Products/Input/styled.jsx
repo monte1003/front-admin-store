@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { BGColor } from '../../../../public/colors'
 
 export const LabelInput = styled.span`
@@ -66,4 +66,15 @@ export const BoxInput = styled.div`
     position: relative;
     padding: ${ ({ padding }) => {return padding ? padding : '10px 5px'} };
     width: ${ ({ width }) => {return width ? width : '100%'} };
+ ${props => {
+    return props.error && css`
+        .alert_error {
+            position: absolute;
+            bottom: 4px;
+            left: 14px;
+            font-size: 13px;
+            color: #ff0000;
+        }
+    `}
+}
 `

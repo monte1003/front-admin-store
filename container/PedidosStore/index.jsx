@@ -3,10 +3,11 @@ import { LocationName } from 'components/hooks/useLocationName'
 import { Container } from './styled'
 import { useOrders } from 'hooks/useOrders'
 import DragOrders from './DragOrders'
+import PedidosStoreOld from './tempo'
 
 const PedidosStore = () => {
   // STATES
-  const ACEPTA_STATUS_ORDER = 1
+  const ACEPTA_STATUS_ORDER = 0
   const PROCESSING_STATUS_ORDER = 2
   const READY_STATUS_ORDER = 3
   const CONCLUDES_STATUS_ORDER = 4
@@ -28,6 +29,7 @@ const PedidosStore = () => {
   const [dataRechazados] = useOrders({
     statusOrder: RECHAZADOS_STATUS_ORDER
   })
+
   return (
     <div>
       <Container>
@@ -98,6 +100,7 @@ const PedidosStore = () => {
         </Row>
       </Column> */}
       </Container>
+{/* <PedidosStoreOld /> */}
     </div>
   )
 }

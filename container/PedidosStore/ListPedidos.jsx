@@ -195,7 +195,7 @@ export const CheckStatus = ({ setModal, modal, dataModal }) => {
                     <ContentInfo>
                       <HeadSticky>
                         <Text size='1.9em'>{p?.getAllShoppingCard?.productFood?.pName}</Text>
-                        <Text size='1.5em'>Cantidad: {p.getAllShoppingCard.cantProducts} </Text>
+                        <Text size='1.5em'>Cantidad: {p?.getAllShoppingCard?.cantProducts} </Text>
                       </HeadSticky>
                       <Text
                         color={GraniteGray}
@@ -232,7 +232,7 @@ export const CheckStatus = ({ setModal, modal, dataModal }) => {
                         <label className='dish-observation-form__label' tabIndex='0' >¿Algún comentario?</label>
                       </DisRestaurant>
                       <DisRestaurant>
-                        <Text size='1.4'>{p?.getAllShoppingCard.comments}</Text>
+                        <Text size='1.4'>{p?.getAllShoppingCard?.comments}</Text>
                       </DisRestaurant>
                       <GarnishChoicesHeader>
                         <div>

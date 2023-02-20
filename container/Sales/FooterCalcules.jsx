@@ -37,7 +37,9 @@ const FooterCalcules = ({
           background={PColor}
           color={BGColor}
           onClick={() => { return dispatch({ type: 'REMOVE_ALL_PRODUCTS' }) }}
-        >ELIMINAR</Button>
+        >
+          ELIMINAR
+        </Button>
         <FlipTop>
           <Button
             background={PColor}

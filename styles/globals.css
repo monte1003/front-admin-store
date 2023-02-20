@@ -134,7 +134,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300&display=swap');
 /* Normalizes margin, padding */
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, p, blockquote
-    { margin : 0; padding : 0; width: 100%;      text-align: start;  }
+    { margin : 0; padding : 0; width: 100%;  text-align: start;  }
 
 /* Normalizes font-size for headers */
 h1,h2,h3,h4,h5,h6 { font-size : 100%; }
@@ -182,19 +182,31 @@ code {
 
 @font-face {
   font-family: PFont-Bold;
-  src: url('../public/fonts/Poppins-Bold.ttf')
+  src: url('../public/fonts/Poppins-Bold.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
   font-family: PFont-Medium;
-  src: url('../public/fonts/Poppins-Medium.ttf')
+  src: url('../public/fonts/Poppins-Medium.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
   font-family: PFont-Regular;
-  src: url('../public/fonts/Poppins-Regular.ttf')
+  src: url('../public/fonts/Poppins-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
   font-family: PFont-Light;
-  src: url('../public/fonts/Poppins-Light.ttf')
+  src: url('../public/fonts/Poppins-Light.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 .text-blue {
   border-top: 1px solid #61d2b4;
@@ -254,6 +266,10 @@ code {
   height: 100%;
   /* grid-template-columns: repeat(auto-fill, 200px); */
   align-items: flex-start;
+  transition: 'all 0.3s ease-in-out';
+  margin-top: 5px !important;
+  box-shadow: 0px 10px 17px -10px rgba(0, 0, 0, 0.59);
+  
 }
 
 .box-group {
@@ -267,7 +283,9 @@ code {
   align-items: center;
   min-height: 150px;
   background-color: white;
-  /* border-radius: 0.5rem; */
+  cursor: all-scroll;
+  border-radius: 0.5rem;
+
 }
 .box-items:not(:last-of-type) {
   margin-bottom: 0.5rem;
@@ -275,6 +293,7 @@ code {
 .box-items * {
   margin: 0;
   font-size: 1.2rem;
+ 
 }
 
 .group-title {
@@ -287,5 +306,9 @@ code {
 .current {
   background-color: #282c34;
   color: #fff;
-  
+  transition: 'all 0.3s ease-in-out';
+  border-radius: 20px;
+  opacity: 1;
+  /* transform: rotateZ(-2deg); */
+  /* display: none; */
 }

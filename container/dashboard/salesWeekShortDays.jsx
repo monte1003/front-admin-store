@@ -97,6 +97,10 @@ export const SalesWeekShortDays = () => {
 }
 
 export const CardStatistic = ({ day, sales, OrderConcludes, noOrder }) => {
+  let num = 100
+  let rounded = Math.round(num * noOrder) + '%'
+  let roundedOrderConcludes = Math.round(num * OrderConcludes) + '%'
+
   return (
     <WrapperBox>
       <h2>{day || null}</h2>
@@ -109,11 +113,11 @@ export const CardStatistic = ({ day, sales, OrderConcludes, noOrder }) => {
       <Orders>
         <Flex>
           <Text size='.8em'>Pedidos concluidos</Text>
-          <Text align='end' size='1em'>{OrderConcludes}%</Text>
+          <Text align='end' size='1em'>{roundedOrderConcludes}</Text>
         </Flex>
         <Flex>
           <Text size='.8em'>Cancelados</Text>
-          <Text align='end' size='1em'>{noOrder}%</Text>
+          <Text align='end' size='1em'>{rounded}</Text>
         </Flex>
       </Orders>
     </WrapperBox>

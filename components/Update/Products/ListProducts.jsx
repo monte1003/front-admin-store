@@ -1,8 +1,8 @@
 import { CardProducts } from 'components/CartProduct'
 import { RippleButton } from 'components/Ripple'
 import { Skeleton } from 'components/Skeleton'
-import PropTypes from 'prop-types'
 import { Button } from 'pkg-components'
+import PropTypes from 'prop-types'
 import { InputHook } from './Input'
 import {
   ContainerCardProduct,
@@ -59,7 +59,7 @@ export const ListProducts = ({
         </ContainerFilter>}
         {filter &&
         <>
-          <Text size='30px'>Filtrar productos</Text>
+          <Text size='30px'>Filtrar productos </Text>
           <InputHook
             label='Busca tus productos'
             name='search'
@@ -74,17 +74,11 @@ export const ListProducts = ({
             {!isData ? <Skeleton height='400' numberObject={8} /> : data?.map(producto => {
               return (
                 <CardProducts
-                  ProDescription={producto.ProDescription}
-                  ProDescuento={producto.ProDescuento}
-                  ProImage={producto.ProImage}
-                  ProPrice={producto.ProPrice}
-                  ValueDelivery={producto.ValueDelivery}
+                  {...producto}
                   del={true}
                   edit={true}
                   handleDelete={() => {return handleDelete(producto)}}
                   key={producto.pId}
-                  pId={producto.pId}
-                  pName={producto.pName}
                 />
               )
             })}

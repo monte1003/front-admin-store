@@ -1,16 +1,23 @@
-import React from 'react'
-import { InputHook } from '../Input'
-import { numberFormat } from 'utils'
-import { CardInput, Footer, FormProducts } from '../styled'
-import { RippleButton } from 'components/Ripple'
-import NewSelect from 'components/NewSelectHooks/NewSelect'
 import { Checkbox } from 'components/Checkbox'
 import InputHooks from 'components/InputHooks/InputHooks'
+import NewSelect from 'components/NewSelectHooks/NewSelect'
+import { numberFormat } from 'utils'
+import { InputHook } from '../Input'
+import { CardInput, FormProducts } from '../styled'
 
-const FormProduct = ({ handleRegister, names, handleChange, values, setName, dataCategoriesProducts, handleCheckEnvioGratis, check, image, errors }) => {
+const FormProduct = ({
+  names,
+  handleChange,
+  values,
+  setName,
+  dataCategoriesProducts,
+  handleCheckFreeShipping,
+  check,
+  errors
+}) => {
   return (
     <div>
-      <FormProducts className='form-horizontal' onSubmit={handleRegister}>
+      <FormProducts className='form-horizontal'>
         <InputHook
           error={errors.names}
           label='Nombre del producto'
@@ -23,6 +30,7 @@ const FormProduct = ({ handleRegister, names, handleChange, values, setName, dat
           value={names}
         />
         <InputHook
+          error={errors.ProPrice}
           label='Precio de producto'
           name='ProPrice'
           onChange={handleChange}
@@ -31,6 +39,7 @@ const FormProduct = ({ handleRegister, names, handleChange, values, setName, dat
           value={numberFormat(values.ProPrice)}
         />
         <InputHook
+          disabled={check.desc}
           error={errors.ValueDelivery}
           label='Costo de envío'
           name='ValueDelivery'
@@ -66,24 +75,16 @@ const FormProduct = ({ handleRegister, names, handleChange, values, setName, dat
           title='Description'
           value={values.ProDescription}
         />
-        <CardInput onChange={handleCheckEnvioGratis}>
+        <CardInput onChange={handleCheckFreeShipping}>
           <Checkbox
-            checked={check}
+            checked={check?.desc}
             id='checkboxF'
             label='Envío gratis'
             name='desc'
-            onChange={handleCheckEnvioGratis}
-            value={check}
+            onChange={handleCheckFreeShipping}
+            value={check?.desc}
           />
         </CardInput>
-        <Footer>
-          <RippleButton
-            disabled={!image || !names}
-            padding='10px'  
-            type='submit'
-            widthButton='100%'
-          >Subir</RippleButton>
-        </Footer> 
       </FormProducts>
     </div>
   )

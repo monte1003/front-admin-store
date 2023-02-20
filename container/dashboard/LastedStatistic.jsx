@@ -54,6 +54,8 @@ export const LastedStatistic = () => {
       setTotalProductPrice(suma)
     })
   }, [data])
+  let num = 100
+  let rounded = Math.round(num * valueSales) + '%'
   return (
     <div>
       <MainCard title={`Últimos 90 Dias $ ${numberFormat(totalProductPrice || 0)}`}>
@@ -64,7 +66,7 @@ export const LastedStatistic = () => {
           </div>
           <div>
             <div>
-              <MediaValue>{valueSales}%</MediaValue>
+              <MediaValue>{rounded}</MediaValue>
             </div>
             <Text color='#3f3e3e' size='1.2em'>Pedidos entregados</Text>
           </div>

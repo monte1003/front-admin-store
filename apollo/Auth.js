@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   gql,
   useApolloClient,
@@ -17,7 +15,7 @@ export default function Auth({ children }) {
   // STATE
   const { client } = useApolloClient()
   const location = useRouter()
-  
+
   // QUERIES
   const [updateToken, { data, called }] = useMutation(UPDATE_TOKEN)
 
@@ -37,14 +35,14 @@ export default function Auth({ children }) {
     const fetchData = async () => {
       const { token, isSession } = await getSession()
       const { error } = await getUserFromToken(token)
-      if (isSession && error) {
+      if (!isSession && error) {
         await window
           .fetch(`${process.env.URL_BASE}api/auth/logout/`, {})
           .then(response => {
             if (response) {
               client?.clearStore()
               location.replace('/entrar')
-              // window.localStorage.clear()
+              window.localStorage.clear()
             }
           }).catch(() => {
             // eslint-disable-next-line no-console
@@ -63,7 +61,7 @@ export default function Auth({ children }) {
         localStorage.setItem('restaurant', res.restaurant)
         isLoggedVar({ state: true, expired: false })
       } else {
-        localStorage.clear()
+        // localStorage.clear()
         const restaurant = localStorage.getItem('restaurant')
         isLoggedVar({ state: false, expired: true, message: restaurant && 'La sesión ha expirado', code: 403 })
       }
@@ -73,11 +71,14 @@ export default function Auth({ children }) {
   useEffect(() => {
     const res = dataLogged?.isLogged
     if (res?.message) {
-      // isLoggedVar({ ...isLoggedVar(), message: undefined })
-      if (res.code >= 500) console.log(res.message)
-      else if (res.code >= 400 && res.code !== 403) console.log(res.message)
-      else if (res.code >= 300 || res.code === 403) console.log(res.message)
-      else if (res.code >= 200) console.log(res.message)
+      isLoggedVar({ ...isLoggedVar(), message: undefined })
+      if (res.code >= 500) {
+        console.log(res.message)
+        if (res.code >= 300 || res.code === 403) console.log(res.message)
+        if (res.code >= 400 && res.code !== 403) console.log(res.message)
+        if (res.code >= 200) console.log(res.message)
+      }
+
     }
   }, [dataLogged?.isLogged])
   return (

@@ -1,31 +1,30 @@
 import { CardProducts } from 'components/CartProduct'
-import PropTypes from 'prop-types'
-import {
-  IconDelete,
-  IconDollar,
-  IconEdit,
-  IconLove
-} from 'public/icons'
-import { PColor, PVColor, TFSColor } from '../../../public/colors'
-import { numberFormat } from '../../../utils'
-import { AwesomeModal } from '../../AwesomeModal'
+import { Button, Tag, Text } from 'pkg-components'
+import { useContext, useState } from 'react'
+import { OptionalExtraProducts } from '~/container/producto/extras'
+import { Context } from '~/context/Context'
 import { useSetState } from '../../hooks/useState'
 import { Skeleton } from '../../Skeleton/SkeletonCard'
 import FormProduct from './Form'
-import { ListProducts } from './ListProducts'
+import { HeaderSteps } from './Steps'
 import {
-  ActionName,
-  ButtonCard,
   Card,
   CardProduct,
   Container,
-  ContentImg,
-  ContentInfo,
-  Grid,
-  Img,
-  Text,
-  Title
+  ContainerAnimation
 } from './styled'
+import { ActionStep } from './styles'
+import { useGetOneProductsFood, useSaveAvailableProduct } from 'npm-pkg-hook'
+import { useRouter } from 'next/router'
+import { ExtrasProductsItems } from '~/container/producto/extras/ExtrasProductsItems'
+import { Loading } from '~/components/Loading'
+import { BGColor, PColor, SECColor } from '@/public/colors'
+import { Checkbox } from '~/components/Checkbox'
+import styled, { css } from 'styled-components'
+import { onPulses } from '~/components/animations'
+import { useStore } from '~/hooks/useStore'
+import { AwesomeModal } from 'pkg-components'
+import Portal from '~/components/portal'
 
 export const FoodComponent = ({
   alt,
@@ -33,227 +32,389 @@ export const FoodComponent = ({
   data,
   dataCategoriesProducts,
   dataFree,
-  dispatch,
   fetchMore,
   fileInputRef,
   handleChange,
   handleChangeFilter,
-  handleCheckEnvioGratis,
+  handleCheckFreeShipping,
   handleRegister,
   handleDelete,
+  tags,
   image,
   loading,
+  setErrors,
   names,
   onClickClear,
   onFileInputChange,
   onTargetClick,
-  product_state,
   search,
+  tagsProps,
+  setActive,
   setName,
   setShowMore,
   showMore,
+  active,
   src,
+  errors,
   state: grid,
+  pId,
   values,
   ...props
 }) => {
-  const OPEN_MODAL_ORGANICE = useSetState(0)
-  const propsForm = { handleRegister, setName, names, check, handleChange, values, dataCategoriesProducts, handleCheckEnvioGratis, image, ...props }
-  const propsListProducts = { onClickClear, data, OPEN_MODAL_ORGANICE, dataFree, filter: true, organice: true, handleChangeFilter, grid, search, showMore, fetchMore, loading, setShowMore, pState: 1, handleDelete, ...props }
+  const {
+    setShowComponentModal,
+    sendNotification,
+    handleClick
+  } = useContext(Context)
 
+  const OPEN_MODAL_ORGANICE = useSetState(0)
+  const { dataTags, handleAddTag } = tagsProps
+  const router = useRouter()
+  const cancelAll = () => {
+    setShowComponentModal(false)
+    handleClick(false)
+    if (router.query.food) {
+      router.push(
+        {
+          query: {
+            ...router.query,
+            food: ''
+          }
+        },
+        undefined,
+        { shallow: true }
+      )
+    }
+  }
+  const propsForm = {
+    handleRegister,
+    setName,
+    names,
+    check,
+    handleChange,
+    values,
+    dataCategoriesProducts,
+    handleCheckFreeShipping,
+    image,
+    errors,
+    ...props
+  }
+  // eslint-disable-next-line
+  const propsListProducts = {
+    onClickClear,
+    data,
+    OPEN_MODAL_ORGANICE,
+    dataFree,
+    filter: true,
+    organice: true,
+    handleChangeFilter,
+    grid,
+    search,
+    showMore,
+    fetchMore,
+    loading,
+    setShowMore,
+    pState: 1,
+    handleDelete,
+    ...props
+  }
+  const [openAlertClose, setOpenAlertClose] = useState(false)
+  const [openModalDessert, setOpenModalDessert] = useState(true)
+  const [handleGetOneProduct,
+    {
+      dataExtra,
+      dataOptional
+    }
+  ] = useGetOneProductsFood()
+  const { food } = router.query || {}
+
+  const handleOpenCloseAlert = () => {
+    setOpenAlertClose(!openAlertClose)
+  }
+  /**
+   * Description
+   * @returns {any}
+   *
+   * */
+  const handlerValidateFields = () => {
+    if (active === 0) {
+      sendNotification({ description: 'Llena todos los campos', title: 'Error' })
+      return setErrors({
+        ...errors,
+        ProPrice: true,
+        carProId: values.carProId ? false : true
+      })
+    }
+    return setErrors({ ...errors })
+  }
+
+  const handlerCreateDessert = () => {
+    if (!pId || !food) {
+      setShowComponentModal(false)
+      handleClick(false)
+      return sendNotification({ description: 'Lo sentimos, no encontramos tu producto.', title: 'Error' })
+    }
+    setActive((prev) => {return prev + 1 } )
+    setOpenModalDessert(true)
+    return handleGetOneProduct({ pId: pId ?? food })
+  }
+  const handlerSteps = () => {
+    const { ProPrice, carProId } = values || {}
+    const asCompleteFields = ProPrice?.length > 0 && carProId?.length > 0
+    if (!asCompleteFields && active === 0) return handlerValidateFields()
+
+    if (asCompleteFields && active === 0) {
+      setActive((prev) => {return prev + 1 } )
+      return handleRegister()
+    }
+
+    if (active === 1) {
+      handlerCreateDessert()
+    }
+
+    if (active === 2) {
+      handlerCreateDessert()
+    }
+    if (active === 3) {
+      setShowComponentModal(false)
+      handleClick(false)
+    }
+    return null
+  }
+  const {
+    handleDaySelection,
+    registerAvailableProduct,
+    selectedDays,
+    loading: loaAvailable,
+    days
+  } = useSaveAvailableProduct()
+  const disabled = active === 3 ? check.noAvailability : false
+  const asSave = disabled && selectedDays.length > 0
+  const [dataStore] = useStore()
+  const { idStore } = dataStore || {}
+  const handleContinue = () => {
+    const input = selectedDays.map(day => {
+      return {
+        idStore: idStore,
+        pId: pId ?? food,
+        dayAvailable: day
+      }
+    })
+    return asSave ?
+      registerAvailableProduct({
+        variables: {
+          'input': input
+        }
+      }).then((response) => {
+        const { success } = response?.data?.registerAvailableProduct || {}
+        if (success) {
+          setShowComponentModal(false)
+          handleClick(false)
+          sendNotification({ description: 'Se han registrado todos los campos del producto', title: 'Success' })
+        }
+      }) :
+      handlerSteps()
+  }
   return (<>
     <Container>
-      {/* FORM */}
-      <Card>
-        <FormProduct {...propsForm} />
-      </Card>
-      {/* PREVIEW CARD PRODUCT */}
-      <Card>
-        <CardProducts
-          ProDescription={values?.ProDescription}
-          ProDescuento={values?.ProDescuento}
-          ProPrice={values?.ProPrice}
-          ValueDelivery={values.ValueDelivery}
-          alt={alt}
-          fileInputRef={fileInputRef}
-          height={'500px'}
-          onFileInputChange={onFileInputChange}
-          onTargetClick={onTargetClick}
-          pName={names}
-          src={src}
-        />
-      </Card>
+      <Portal selector='portal'>
+        <AwesomeModal
+          backdrop='static'
+          btnCancel={true}
+          btnConfirm={true}
+          footer={true}
+          header={false}
+          height='20vh'
+          onCancel={() => { return false }}
+          onConfirm={() => { return cancelAll() }}
+          onHide={() => { return handleOpenCloseAlert() }}
+          padding='20px'
+          question={false}
+          show={openAlertClose}
+          size='small'
+          zIndex='99999'
+        >
+          <Text
+            color={PColor}
+            fontSize='20px'
+            margin='10px 0'
+          >
+                Es posible que el producto le falten otras cosas
+          </Text>
+          <Text color={SECColor} fontSize='16px'>
+            Puedes agregar mas items a tu producto.
+          </Text>
+        </AwesomeModal>
+      </Portal>
+      {loaAvailable && <Loading />}
+      <HeaderSteps active={active} setActive={setActive} />
+      <div className='container_step'>
+        <ContainerAnimation active={active === 0}>
+          {active === 0 &&
+          <>
+            <Card state={'50%'}>
+              <FormProduct {...propsForm} />
+            </Card>
+            <Card state={'50%'}>
+              <CardProducts
+                {...values}
+                alt={alt}
+                fileInputRef={fileInputRef}
+                height={'500px'}
+                onFileInputChange={onFileInputChange}
+                onTargetClick={onTargetClick}
+                pName={names}
+                src={src}
+                tag={tags}
+              />
+            </Card>
+            <Card>
+              {dataTags.map((tag) => {
+                return(
+                  <Button
+                    border='none'
+                    borderRadius='0'
+                    key={tag.id}
+                    onClick={() => { return handleAddTag(tag.id, tag.tag) }}
+                    padding='0'
+                    style={{ display: 'flex', flexWrap: 'wrap' }}
+                  >
+                    <Tag label={tag.tag} />
+                  </Button>
+                )
+              })}
+            </Card>
+          </>
+          }
+        </ContainerAnimation>
+        <ContainerAnimation active={active === 1}>
+          {active === 1 &&
+          <>
+            <OptionalExtraProducts
+              dataOptional={dataOptional || []}
+              pId={pId}
+            />
+          </>
+          }
+        </ContainerAnimation>
+        <ContainerAnimation active={active === 2}>
+          {active === 2 &&
+            <>
+              <ExtrasProductsItems
+                dataExtra={dataExtra || []}
+                editing={true}
+                modal={openModalDessert}
+                pId={pId}
+                setModal={() => { return setOpenModalDessert(false) }}
+              />
+            </>
+          }
+        </ContainerAnimation>
+        <ContainerAnimation active={active === 3}>
+          {active === 3 &&
+            <>
+              <div className='container_availability'>
+                <Text
+                  color={PColor}
+                  fontSize='20px'
+                  margin='10px 0'
+                >
+                Disponibilidad
+                </Text>
+                <Text color={SECColor} fontSize='16px'>
+                  Aquí Puedes definir en que momentos los clientes pueden comprar este producto.
+                </Text>
+                <Checkbox
+                  checked={check.availability}
+                  disabled={check.noAvailability}
+                  id='checkboxAvailability'
+                  label='Siempre disponible'
+                  name='availability'
+                  onChange={(e) =>{ return handleCheckFreeShipping(e, true) }}
+                  value={check.availability}
+                />
+                <Checkbox
+                  checked={check.noAvailability}
+                  disabled={check.availability}
+                  id='checkboxNoAvailability'
+                  label='Disponible en horarios específicos'
+                  name='noAvailability'
+                  onChange={(e) =>{ return handleCheckFreeShipping(e, true) }}
+                  value={check.noAvailability}
+                />
+                {check.noAvailability &&
+                <>
+                  <Text
+                    color={PColor}
+                    fontSize='20px'
+                    margin='10px 0'
+                  >
+                    Dias de la semana
+                  </Text>
+                  <div className='container_days'>
+                    {days.map((day) => {return (
+                      <CircleDay
+                        key={day.day}
+                        onClick={() => {return handleDaySelection(day.day)}}
+                        pulse={selectedDays.includes(day.day)}
+                      >
+                        {day.name}
+                      </CircleDay>
+                    )})}
+                  </div>
+                </>
+                }
+              </div>
+            </>
+          }
+        </ContainerAnimation>
+      </div>
+      <ActionStep>
+        {(active !== 1 && active !== 0) && <Button onClick={() => { return setActive((prev) => { return active === 1 ? 1 : prev - 1 } )}}>
+          Volver
+        </Button>}
+        <Button onClick={active === 1 ? handleOpenCloseAlert : cancelAll}>
+          {active === 1 ? 'Cerrar': 'Cancelar'}
+        </Button>
+        <Button
+          disabled={disabled && !selectedDays.length > 0}
+          onClick={handleContinue}
+          primary
+        >
+          {asSave ? 'Guardar' : 'Continuar'}
+        </Button>
+      </ActionStep>
     </Container>
-    {/* <Dessert /> */}
-    <ListProducts {...propsListProducts} />
-    {false && <AwesomeModal
-      backdrop='static'
-      borderRadius='10px'
-      btnCancel={true}
-      btnConfirm={false}
-      footer={false}
-      header={true}
-      height='100vh'
-      onCancel={() => { return false }}
-      onHide={() => { OPEN_MODAL_ORGANICE.setState(!OPEN_MODAL_ORGANICE.state) }}
-      padding='25px'
-      show={OPEN_MODAL_ORGANICE.state}
-      size='90%'
-      zIndex='9999999'
-    >
-      <Grid
-        gridColGap='30px'
-        gridColumns={3}
-        gridRows={1}
-        gridRowsGap='20px'
-        height='100%'
-      >
-        <div>
-          Todos los productos
-          <ComponentCardProduct
-            ADD_PRODUCT={'ADD_PRODUCT'}
-            ADD_TO_EFFECTIVE={'ADD_TO_EFFECTIVE'}
-            REMOVE={'REMOVE_PRODUCT'}
-            data={data}
-            dispatch={dispatch}
-          />
-        </div>
-        <div>
-          Productos para recoger
-          <ComponentCardProduct
-            REMOVE={'REMOVE_PRODUCT'}
-            data={product_state?.PRODUCT_RECOGER}
-            dispatch={dispatch}
-          />
-        </div>
-        <div>
-          Pagos en efectivo
-          <ComponentCardProduct
-            REMOVE={'REMOVE_EFFECTIVE'}
-            data={product_state?.PRODUCT_EFFECTIVE}
-            dispatch={dispatch}
-          />
-        </div>
-      </Grid>
 
-    </AwesomeModal >
-    }
+    {/* <Dessert />
+    <ListProducts {...propsListProducts} /> */}
   </>
   )
 }
 
-FoodComponent.propTypes = {
-  alt: PropTypes.any,
-  check: PropTypes.any,
-  data: PropTypes.any,
-  dataCategoriesProducts: PropTypes.any,
-  dataFree: PropTypes.any,
-  dispatch: PropTypes.any,
-  fetchMore: PropTypes.any,
-  fileInputRef: PropTypes.any,
-  handleChange: PropTypes.any,
-  handleChangeFilter: PropTypes.any,
-  handleCheckEnvioGratis: PropTypes.any,
-  handleRegister: PropTypes.any,
-  loading: PropTypes.any,
-  names: PropTypes.any,
-  onClickClear: PropTypes.any,
-  onFileInputChange: PropTypes.any,
-  onTargetClick: PropTypes.any,
-  product_state: PropTypes.shape({
-    PRODUCT_EFFECTIVE: PropTypes.any,
-    PRODUCT_RECOGER: PropTypes.any
-  }),
-  search: PropTypes.any,
-  setName: PropTypes.any,
-  setShowMore: PropTypes.any,
-  showMore: PropTypes.any,
-  src: PropTypes.any,
-  state: PropTypes.any,
-  values: PropTypes.shape({
-    ProDescription: PropTypes.any,
-    ProDescuento: PropTypes.any,
-    ProPrice: PropTypes.any,
-    ValueDelivery: PropTypes.any
-  })
-}
 
-
-const ComponentCardProduct = ({ data, dispatch, ADD_TO_EFFECTIVE, REMOVE, ADD_PRODUCT }) => {
-  return <div>
-    {!data?.length ? 'No data' : data?.map((product, idx) => {
-      return (
-        <CardProduct grid={true} key={idx + 1} >
-          <ButtonCard
-            grid={true}
-            onClick={() => { return dispatch({ type: REMOVE, idx }) }}
-            top={'20px'}
-          >
-            <IconDelete color={PColor} size={20} />
-            <ActionName >
-              Eliminar
-            </ActionName>
-          </ButtonCard>
-          <ButtonCard
-            delay='.1s'
-            grid={true}
-            top={'80px'}
-          >
-            <IconEdit color={PColor} size={20} />
-            <ActionName>
-              Editar
-            </ActionName>
-          </ButtonCard>
-          <ButtonCard
-            delay='.1s'
-            grid={true}
-            onClick={() => { return dispatch({ type: ADD_PRODUCT, payload: product }) }}
-            top={'140px'}
-          >
-            <IconDollar color={TFSColor} size={30} />
-            <ActionName>
-              Agregar
-            </ActionName>
-          </ButtonCard>
-          {ADD_TO_EFFECTIVE && <ButtonCard
-            delay='.0s'
-            grid={true}
-            onClick={() => { return dispatch({ type: ADD_TO_EFFECTIVE, payload: product }) }}
-            top={'200px'}
-          >
-            <IconLove color={PVColor} size={20} />
-            <ActionName>
-              Agregar a pagos en efectivo
-            </ActionName>
-          </ButtonCard>}
-          <ContentImg grid={true}>
-            {!product.ProImage ? <i>No img</i> : <Img alt={product.ProImage} src={product.ProImage} />}
-          </ContentImg>
-          <ContentInfo>
-            {product.ProDescuento && <span discount={product.ProDescuento} > {numberFormat(product.ProDescuento)}</span>}
-            <Title>{product.pName}</Title>
-            <Text>{numberFormat(product.ProPrice)}</Text>
-            <ContentInfo>
-              {product.ProDelivery === 1 && <span>Gratis</span>}
-            </ContentInfo>
-          </ContentInfo>
-        </CardProduct>
-      )
-    })}
-  </div>
-}
-
-ComponentCardProduct.propTypes = {
-  ADD_PRODUCT: PropTypes.any,
-  ADD_TO_EFFECTIVE: PropTypes.any,
-  REMOVE: PropTypes.any,
-  data: PropTypes.shape({
-    length: PropTypes.any,
-    map: PropTypes.func
-  }),
-  dispatch: PropTypes.func
-}
-
+const CircleDay = styled.div`
+  border: 2px solid #cccccc;
+  border-radius: 50%;
+  height: 50px;
+  cursor: pointer;
+  background-color: ${BGColor};
+  width: 50px;
+  min-height: 50px;
+  text-align: center;
+  display: grid;
+  place-content: center;
+  min-width: 50px;
+  ${props => {
+    return props.pulse
+      ? css`
+      animation: ${onPulses} 2s infinite;
+      background-color: ${`${PColor}`};
+      color: ${BGColor};
+  `
+      : css`
+  `}}
+`
 export const SkeletonP = () => {
   return <>
     <>

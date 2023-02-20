@@ -5,11 +5,13 @@ import {
   useMobile,
   useCatWithProduct,
   useGetOneProductsFood,
+  useIntersectionObserver,
   useDeleteProductsFood
 } from 'npm-pkg-hook'
 import {
   useContext,
   useEffect,
+  useRef,
   useState
 } from 'react'
 import { AwesomeModal } from '../../components/AwesomeModal'
@@ -25,18 +27,17 @@ import { StickyBoundaryCategories } from './StickyBoundaryCategories'
 const DashboardStore = () => {
   // STATES
   const [showDessert, setShowDessert] = useState(false)
-  const [show, setShow] = useState(null)
-  const handleClick = index => { return setShow(index === show ? false : index) }
+  const { setAlertBox, handleClick, show } = useContext(Context)
+
   const [searchFilter] = useState({
     gender: [],
     desc: [],
     speciality: []
   })
   const [search] = useState('')
-  const [getMoreCatProduct] = useState(2)
+  const [moreCatProduct, setMoreCaProduct] = useState(2)
   const [modal, setModal] = useState(false)
   // HOOKS
-  const { setAlertBox } = useContext(Context)
   const { isMobile } = useMobile()
   const { handleDelete } = useDeleteProductsFood()
   const [handleGetOneProduct,
@@ -48,9 +49,9 @@ const DashboardStore = () => {
   ] = useGetOneProductsFood()
   const router = useRouter()
   const [store] = useStore()
-  const [data] = useCatWithProduct({
+  const [data, { fetchMore, totalCount }] = useCatWithProduct({
     search,
-    max: getMoreCatProduct,
+    max: moreCatProduct,
     ...searchFilter
   })
 
@@ -70,8 +71,8 @@ const DashboardStore = () => {
   } = product || {}
   const { storeName } = getStore || {}
   const { storeName: nameStore } = store || {}
-  const { 
-    food, 
+  const {
+    food,
     categories,
     product: queryProductParams
   } = router.query || {}
@@ -126,6 +127,7 @@ const DashboardStore = () => {
 
   const handleActionClick = (number, query, value = true) => {
     handleClick(number)
+    
     handleQuery(query, value)
   }
 
@@ -151,6 +153,7 @@ const DashboardStore = () => {
     onCancel: ()=> { return handleHidden(select[show]) },
     onHide: () => { return handleHidden(select[show]) }
   }
+  console.log(show)
   const productProps = {
     dataExtra: dataExtra,
     dataOptional: dataOptional,
@@ -175,6 +178,38 @@ const DashboardStore = () => {
     2: <ManageCategories />,
     3: <Food />
   }
+  const ref = useRef(null)
+  const defaultObserverOptions = {
+    root: null,
+    threshold: 0.1,
+    rootMargin: '200px'
+  }
+  const { onScreen } = useIntersectionObserver({
+    el: ref,
+    active: true,
+    options: defaultObserverOptions,
+    disconnect: true,
+    onEnter: () => {
+      const long = totalCount
+      if (onScreen && (onScreen && moreCatProduct < long)) {
+        setMoreCaProduct(s => { return s + 1 })
+        fetchMore({
+          variables: { max: moreCatProduct, min: 0 },
+          updateQuery: (prevResult, { fetchMoreResult }) => {
+            const validateArray = Array.isArray(fetchMoreResult.getCatProductsWithProduct.catProductsWithProduct)
+            const totalCount = fetchMoreResult?.getCatProductsWithProduct?.totalCount
+            if (!fetchMoreResult && !validateArray) return prevResult
+            return {
+              getCatProductsWithProduct: {
+                getCatProductsWithProduct: [...fetchMoreResult.getCatProductsWithProduct.catProductsWithProduct],
+                totalCount: totalCount ?? 10
+              }
+            }
+          }
+        })
+      }
+    }
+  })
   return (<>
     <Wrapper>
       <Container>
@@ -183,6 +218,7 @@ const DashboardStore = () => {
         <StickyBoundaryCategories
           data={data}
           handleGetOneProduct={handleProduct}
+          reference={ref}
           setAlertBox={setAlertBox}
         />
       </Container>

@@ -24,16 +24,16 @@ query getAllSalesStoreStatistic($idStore: ID,$search: String, $min: Int, $max: I
     pDatMod
     getAllPedidoStore{
         pdpId
-      	pId
-      	idStore
-      	ShoppingCard
+        pId
+        idStore
+        ShoppingCard
         pCodeRef
         pPStateP
         payMethodPState
         pPRecoger
         pDatCre
         pDatMod
-      	getAllShoppingCard {
+        getAllShoppingCard {
           ShoppingCard
           comments
           cantProducts
@@ -75,16 +75,16 @@ query getOneSalesStore($pCodeRef: String) {
     pDatMod
     getAllPedidoStore{
         pdpId
-      	pId
-      	idStore
-      	ShoppingCard
+        pId
+        idStore
+        ShoppingCard
         pCodeRef
         pPStateP
         payMethodPState
         pPRecoger
         pDatCre
         pDatMod
-      	getAllShoppingCard {
+        getAllShoppingCard {
           ShoppingCard
           comments
           cantProducts

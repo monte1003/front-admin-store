@@ -1,11 +1,10 @@
+import { Op } from 'sequelize'
 import productModelFood from '../../models/product/productFood'
 import pedidosModel from '../../models/Store/pedidos'
 import ShoppingCard from '../../models/Store/ShoppingCard'
 import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 import Users from '../../models/Users'
 import { deCode, getAttributes } from '../../utils/util'
-import { deleteOneItem, getOneStore } from './store'
-import { Op } from 'sequelize'
 
 export const createOnePedidoStore = async (_, { input }) => {
   const {
@@ -22,7 +21,7 @@ export const createOnePedidoStore = async (_, { input }) => {
       pPStateP: 1,
       id: deCode(id),
       idStore: deCode(idStore),
-      ShoppingCard: deCode(ShoppingCard),
+      ShoppingCard:  deCode(ShoppingCard),
       pCodeRef,
       pPRecoger,
       payMethodPState
@@ -32,7 +31,7 @@ export const createOnePedidoStore = async (_, { input }) => {
       message: ''
     }
   } catch (error) {
-    return { success: false, message: error }
+    return { success: false, message: 'Se ha producido un error' || error }
   }
 }
 // eslint-disable-next-line
@@ -85,7 +84,8 @@ const createMultipleOrderStore = async (_, { input }, ctx) => {
     })
     for (const element of setInput) {
       const { ShoppingCard, idStore } = element
-      await deleteOneItem(null, { ShoppingCard, cState: 1 })
+      // PENDIENTE EN DESCOMENTAR !!
+      // await deleteOneItem(null, { ShoppingCard, cState: 1 })
       await createOnePedidoStore(null, {
         input: {
           id: ctx.User.id,
@@ -130,6 +130,9 @@ export const getAllPedidoStore = async (_, args, ctx, info) => {
 // store
 export const getAllPedidoStoreFinal = async (_, args, ctx, info) => {
   const { idStore, statusOrder } = args || {}
+  const START = new Date()
+  START.setHours(0, 0, 0, 0)
+  const NOW = new Date()
   try {
     const attributes = getAttributes(StatusOrderModel, info)
     const data = await StatusOrderModel.findAll({
@@ -139,7 +142,10 @@ export const getAllPedidoStoreFinal = async (_, args, ctx, info) => {
           {
             // ID STORE
             pSState: statusOrder,
-            idStore: idStore ? deCode(idStore) : deCode(ctx.restaurant)
+            idStore: idStore ? deCode(idStore) : deCode(ctx.restaurant),
+            pDatCre: {
+              [Op.between]: [START.toISOString(), NOW.toISOString()]
+            }
           }
         ]
       },
@@ -169,11 +175,25 @@ export const getAllPedidoUserFinal = async (_, args, ctx, info) => {
     return error
   }
 }
+const getOnePedidoStore = async (_, { pCodeRef }, ctx, info) => {
+  try {
+    const attributes = getAttributes(StatusOrderModel, info)
+    const data = await StatusOrderModel.findOne({
+      attributes,
+      where: {
+        pCodeRef: pCodeRef
+      }
+    })
+    return data
+  } catch {
+    return null
+  }
+}
 
 export default {
   TYPES: {
     StorePedidos: {
-      getOneStore,
+      // getOneStore,
       productFoodsOne: async (parent, _args, _context, info) => {
         try {
           const attributes = getAttributes(productModelFood, info)
@@ -227,6 +247,7 @@ export default {
   QUERIES: {
     getAllPedidoStore,
     getAllPedidoStoreFinal,
+    getOnePedidoStore,
     // User
     getAllPedidoUserFinal
   },

@@ -5,7 +5,9 @@ import { sendEmail } from '../lib/utils'
 import { getTokenState } from 'utils'
 import { deCode } from '../lib/utils/util'
 import { withIronSessionApiRoute } from 'iron-session/next'
+
 const MAX_AGE = 60 * 60 * 8
+
 /**
  * @description Función que guarda el device
  * @param {string} input Args

@@ -51,13 +51,20 @@ export const getOneClients = async (_root, { cliId }, context, info) => {
 
 }
 // idStore: ID, cId: ID dId: ID ctId: ID search: String min: Int fromDate: DateTime toDate: DateTime max: Int
-export const getAllClients = async (_root, { idStore, fromDate, toDate }, context, info) => {
+export const getAllClients = async (_root, { 
+  idStore,
+  fromDate,
+  toDate
+}, context, info) => {
   try {
     const attributes = getAttributes(clients, info)
     const data = await clients.findAll({
       attributes, where: {
         [Op.or]: [
           {
+            // exclude me
+            // cliId: { [Op.ne]: deCode(context.User.id) },
+            // idUser: { [Op.ne]: deCode(context.User.id) },
             ...((fromDate && toDate) ? { createAt: { [Op.between]: [fromDate, `${toDate} 23:59:59`] } } : {}),
             idStore: idStore ? deCode(idStore) : deCode(context.restaurant),
             clState: { [Op.gt]: 0 }

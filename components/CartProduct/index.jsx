@@ -1,9 +1,16 @@
-import PropTypes from 'prop-types'
 import { RippleButton } from 'components/Ripple'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { Tag } from 'pkg-components'
+import PropTypes from 'prop-types'
 import { BGColor, PColor } from 'public/colors'
-import { IconDelete, IconEdit, IconPlus } from 'public/icons'
+import {
+  IconDelete,
+  IconEdit,
+  IconPlus
+} from 'public/icons'
+import React, { useState } from 'react'
+import { numberFormat } from '../../utils'
 import {
   ActionName,
   Button,
@@ -16,10 +23,7 @@ import {
   WrapperButton,
   WrapperCard
 } from './styled'
-import { useState } from 'react'
-import { numberFormat } from '../../utils'
-
-export const CardProducts = ({
+export const MemoCardProducts = ({
   del,
   edit,
   fileInputRef,
@@ -40,6 +44,7 @@ export const CardProducts = ({
   render = null,
   src,
   sum,
+  tag,
   ValueDelivery,
   widthButton,
   dispatch = () => { return },
@@ -216,16 +221,22 @@ export const CardProducts = ({
               className='store_image'
               layout='fill'
               objectFit='cover'
-              src={ProImage || src || '/images/DEFAULTBANNER.png'}
+              src={ProImage ?? src ?? '/images/DEFAULTBANNER.png'}
             />
           </div>
+          {tag &&
+            <div className='tag'>
+              <Tag label={tag?.tag} />
+            </div>
+          }
         </Card>
       </WrapperCard >
     </>
   )
 }
+export const CardProducts = React.memo(MemoCardProducts)
 
-CardProducts.propTypes = {
+MemoCardProducts.propTypes = {
   ProDescription: PropTypes.any,
   ProDescuento: PropTypes.number || PropTypes.string,
   ProImage: PropTypes.string,

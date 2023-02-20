@@ -32,14 +32,14 @@ export const Checkbox = ({
     }
     onChange(event, id)
   }
-  const disabledStyles = { color: 'red', width: 'min-content' }
+  const disabledStyles = { color: '#CCC' }
 
   return (
     <Span
       className={className || ''}
       id={id}
-      {...restProps}
       style={disabled ? disabledStyles : {}}
+      {...restProps}
     >
       <CheckboxAtom
         checked={checked}

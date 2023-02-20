@@ -11,5 +11,4 @@ export const Overline = styled.div`
     ${props => {return props.show ? css`display: block` : css`display: none;`}};
     @media only screen and (min-width: 960px){
     }
-  
 `

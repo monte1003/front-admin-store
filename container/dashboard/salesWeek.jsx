@@ -1,16 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
+import { GET_ALL_SALES_STATISTICS } from 'container/ventas/queries'
+import { MainCard } from 'components/common/Reusable/ShadowCard'
+import { Skeleton } from 'components/Skeleton'
+import { useLazyQuery } from '@apollo/client'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
-import { useLazyQuery } from '@apollo/client'
 import styled, { css } from 'styled-components'
 import { Flex } from './styled'
-import moment from 'moment'
-import { MainCard } from 'components/common/Reusable/ShadowCard'
-import { GET_ALL_SALES_STATISTICS } from 'container/ventas/queries'
 import { numberFormat } from '../../utils'
-import { Skeleton } from 'components/Skeleton'
 
 export const SalesWeek = () => {
   const [getAllSalesStoreStatistic, { data, loading }] = useLazyQuery(GET_ALL_SALES_STATISTICS)
@@ -23,8 +20,8 @@ export const SalesWeek = () => {
     getAllSalesStoreStatistic({ variables: { min: 0, fromDate: moment(dt.setDate(dt.getDate() - 30)).format('YYYY-MM-DD'), toDate: moment().format('YYYY-MM-DD') } })
     data?.getAllSalesStoreStatistic?.forEach((a) => {
       const { totalProductsPrice } = a || {}
-      suma += totalProductsPrice
-      setTotalProductPrice(suma)
+      const sumaFinal = suma += totalProductsPrice
+      setTotalProductPrice(sumaFinal)
     })
     if (!loading && data) {
       const GROUP_BY_DAYS = data?.getAllSalesStoreStatistic?.map((elem) => { return elem })?.sort((a, b) => { return moment(a.pDatCre).day() - b }).reduce(function (r, a) {
@@ -41,7 +38,7 @@ export const SalesWeek = () => {
     <React.Fragment>
       {loading ? <Skeleton height={300} margin={'20px 0'} /> :
         <MainCard title={`Últimos 30 Dias $ ${numberFormat(totalProductPrice || 0)}`} weight={'200'}>
-          <Text color='#3f3e3e' size='.8em' >{`Media de ventas en los últimos 30 Dias $ ${numberFormat(totalProductPrice || 0)}`}</Text>
+          <Text color='#3f3e3e' size='.8em' >{`Media de ventas en los últimos  30 Dias $ ${numberFormat(totalProductPrice || 0)}`}</Text>
           <Container>
             {key?.map((day, i) => {
               let suma = 0
@@ -70,6 +67,10 @@ export const SalesWeek = () => {
 }
 
 export const CardStatistic = ({ day, sales, OrderConcludes, noOrder }) => {
+  let num = 100
+  let rounded = Math.round(num * noOrder) + '%'
+  let roundedOrderConcludes = Math.round(num * OrderConcludes) + '%'
+
   return (
     <WrapperBox>
       <h2>{day || null}</h2>
@@ -77,19 +78,22 @@ export const CardStatistic = ({ day, sales, OrderConcludes, noOrder }) => {
         color='#3f3e3e'
         margin='10px 0'
         size='1.2em'
-      >Ventas</Text>
+      >
+        Ventas
+      </Text>
       <Text color='#3f3e3e' size='2em' >{sales || 0}</Text>
       <Orders>
         <Flex>
           <Text size='.8em'>Pedidos concluidos</Text>
-          <Text align='end' size='1em'>{OrderConcludes}%</Text>
+          <Text align='end' size='1em'>{roundedOrderConcludes}</Text>
         </Flex>
         <Flex>
           <Text size='.8em'>Cancelados</Text>
-          <Text align='end' size='1em'>{noOrder}%</Text>
+          <Text align='end' size='1em'>{rounded}</Text>
         </Flex>
       </Orders>
     </WrapperBox>
+
   )
 }
 

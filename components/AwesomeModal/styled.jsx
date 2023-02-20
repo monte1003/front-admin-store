@@ -2,6 +2,7 @@
 import styled, { css, keyframes } from 'styled-components'
 import { BGColor, SECColor, SEGColor } from '../../public/colors'
 import { MODAL_SIZES } from './constanst'
+import { scrollStyle } from './../../public/styles/GlobalStyle'
 
 const fadeIn = keyframes`
     from {
@@ -176,32 +177,7 @@ export const ModalBody = styled.div`
     min-height: ${({ height }) => { return height || 'auto' }};
     padding: ${({ padding }) => { return padding || '0' }};
     background-color: ${BGColor};
-    scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0);
-    scrollbar-width: thin;
-    &::-webkit-scrollbar {
-    -webkit-appearance: none;
-}
-
-&::-webkit-scrollbar:vertical {
-    width:10px;
-}
-
-&::-webkit-scrollbar-button:increment,&::-webkit-scrollbar-button {
-    display: none;
-} 
-
-&::-webkit-scrollbar:horizontal {
-    height: 10px;
-}
-
-&::-webkit-scrollbar-thumb {
-    background-color: #797979;
-    border-radius: 20px;
-    border: 2px solid #f1f2f3;
-}
-    &::-webkit-scrollbar-track {
-    border-radius: 10px;  
-}
+    ${scrollStyle};
 .modal-wrapper {
     width: 300px;
     min-width: 300px;
@@ -252,7 +228,7 @@ export const BtnConfirm = styled.button`
     flex-direction: row;
     padding: ${({ padding }) => { return padding || '5px' }};
     cursor: pointer;
-    border: ${({ border }) => { return border ? `${`1px solid ${SEGColor}`}` : 'none' }};
+    border: ${({ border }) => { return border ? `1px solid ${SEGColor}` : 'none' }};
     border-radius: 30px;
     font-size: 12px;
     display: flex;
@@ -269,7 +245,7 @@ export const BtnCancel = styled.button`
     flex-direction: row;
     padding: ${({ padding }) => { return padding || '5px' }};
     cursor: pointer;
-    border: ${({ border }) => { return border ? `${`1px solid ${SEGColor}`}` : 'none' }};
+    border: ${({ border }) => { return border ? `1px solid ${SEGColor}` : 'none' }};
     border-radius: 30px;
     font-size: 11px;
     display: flex;

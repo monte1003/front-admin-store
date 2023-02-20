@@ -1,38 +1,38 @@
-import { PColor } from 'public/colors'
+import { Skeleton } from 'components/Skeleton/index'
 import Image from 'next/image'
 import {
-  useEffect,
-  useState,
-  memo
-} from 'react'
-import {
-  ActionName,
-  ButtonCard,
-  InputFile,
-  Section,
-  MerchantBannerWrapperInfo,
-  MerchantInfo,
-  MerchantInfoTitle
-} from '../styledStore'
+  useBanner, 
+  useImageStore,
+  useSchedule,
+  useSchedules,
+  useStore,
+  useFormatDate
+} from 'npm-pkg-hook'
+import { PColor } from 'public/colors'
 import {
   IconDelete,
   IconEdit,
   IconPromo
 } from 'public/icons'
-import moment from 'moment'
-import { Skeleton } from 'components/Skeleton/index'
+import React, {
+  memo, 
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import {
-  useStore,
-  useSchedule,
-  useBanner,
-  useSchedules,
-  useImageStore
-} from 'npm-pkg-hook'
+  ActionName,
+  ButtonCard,
+  InputFile, MerchantBannerWrapperInfo,
+  MerchantInfo,
+  MerchantInfoTitle, Section
+} from '../styledStore'
 
 const Banner = ({ isMobile }) => {
   // STATES
   const [day, setDay] = useState()
-  const [Open, setOpen] = useState(false)
+  const [Open, setOpen] = useState('')
+  const [openNow, setOpenNow] = useState(false)
   // HOOKS
   const [data, { loading: loaStore }] = useStore()
   const {
@@ -49,73 +49,170 @@ const Banner = ({ isMobile }) => {
   } = useImageStore(data?.idStore)
   const [banner, { loading: loadBanner }] = useBanner()
   const [dataSchedule, { loading }] = useSchedule({ day: day })
-  const [dataScheduleTow] = useSchedule({ day: day + 1 })
+  const [dataScheduleTow] = useSchedule({ day: day >= 6 ? 0 : day })
   const [dataSchedules, { loading: lsc }] = useSchedules({ schDay: 1 })
   const { path, bnImageFileName } = banner || {}
   const { schHoSta, schHoEnd } = dataSchedule || {}
   const { schHoSta: dateTow } = dataScheduleTow || {}
-  const [endDate, setEndDate] = useState(false)
-  useEffect(() => {
-    (() => {
-      const now = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-      const hourDate = new Date(`1/1/1999 ${now}`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-      let isClose = new Date('1/1/1999 ' + schHoEnd).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-      setEndDate(hourDate >= isClose)
-    })()
-  }, [schHoEnd, schHoSta, dataSchedules])
-
-  useEffect(() => {
-    (() => {
-      const newArray = dataSchedules?.map((date) => { return { open: date.schHoSta, close: date.schHoEnd } }) || []
-      function isOpen(hour) {
-        let opened = false
-        newArray.forEach(item => {
-          let open = new Date('1/1/1999 ' + item.open)
-          let close = new Date('1/1/1999 ' + item.close)
-          opened = opened || (hour >= open && close >= hour)
+  const { handleHourPmAM } = useFormatDate({ })
+  const fullText = 'Pene suela'
+  const useAnimationFrame = (callback, start, end, duration = 1000) => {
+    // Use useRef for mutable variables that we want to persist
+    // without triggering a re-render on their change
+    const functionRef = React.useRef()
+    const delta = Math.abs(start - end)
+    const frameCount = Math.ceil(60 * (duration / 1000))
+    const iteration = React.useRef(frameCount)
+    React.useEffect(() => {
+      const animate = (rafId) => {
+        if (iteration.current <= 0) {
+          cancelAnimationFrame(rafId)
+          iteration.current = frameCount
+        }
+  
+        callback(Math.max(delta / iteration.current, 1))
+        iteration.current--
+      }
+  
+      if (delta > 0) functionRef.current = requestAnimationFrame(animate)
+  
+      return () => {return cancelAnimationFrame(functionRef.current)}
+    }, [callback, delta, frameCount, iteration])
+  }
+  const handleMessageHour = (message, open) => {
+    setOpen(message)
+    setOpenNow(open)
+  }
+  const Counter = ({ numeral = 0 }) => {
+    const [currentValue, setCurrentValue] = React.useState(0)
+    const fxOperator = currentValue > numeral ? 'subtraction' : 'addition'
+  
+    useAnimationFrame(
+      (diffValue) => {
+        // Pass on a function to the setter of the state
+        // to make sure we always have the latest state
+        setCurrentValue((prevCount) =>
+        {return fxOperator === 'addition'
+          ? prevCount + diffValue
+          : prevCount - diffValue}
+        )
+      },
+      currentValue,
+      numeral,
+      300
+    )
+    return <div>{new Intl.NumberFormat().format(Math.round(currentValue))}</div>
+  }
+  const useAnimatedText = textMessage => {
+    const fullTextRef = useRef(textMessage)
+    const [text, setText] = useState('')
+    const [index, setIndex] = useState(0)
+    useEffect(() => {
+      if (index < fullText.length) {
+        window.requestAnimationFrame(() => {
+        // eslint-disable-next-line
+                setText(text => text + fullTextRef.current[index]);
+          setIndex(() => {return index + 1})
         })
-        return opened
       }
-      const now = moment().format('hh:mm')
-      const testHours = [
-        `${now}`,
-        `${now}`,
-        `${now}`,
-        `${now}`,
-        `${now}`,
-        `${now}`,
-        `${now}`
-      ]
-      testHours.forEach(hour => {
-        const hourDate = new Date(`1/1/1999 ${hour}`)
-        return (hour, isOpen(hourDate) ? 'ABIERTO' : 'CERRADO')
-      })
+    }, [index])
+    useEffect(() => {
+      if(fullText?.current) {
+        fullText.current = textMessage
+      }
+    }, [textMessage])
 
-
-      function dateObj(d) {
-        if (!d) return null
-        let parts = d.split(/:|\s/)
+    return text
+  }
+  useEffect(() => {
+    (() => {
+      // https://codereview.stackexchange.com/questions/268899/find-when-the-shop-will-next-open-or-close
+      const openings = {
+        'openingMon' : `${schHoSta} - ${schHoEnd} ; 02:00 - 20:00`,
+        'openingTue' : `${schHoSta} - ${schHoEnd}`,
+        'openingWed' : `${schHoSta} - ${schHoEnd}`,
+        'openingThu' : `${schHoSta} - ${schHoEnd}`,
+        'openingFri' : `${schHoSta} - ${schHoEnd}`,
+        // "openingSat" : "03:00 - 20:00 ; 02:00 - 20:00",
+        'openingSat' : `${schHoSta} - ${schHoEnd}`,
+        'openingSun' : `${schHoSta} - ${schHoEnd}`
+      }
+      let timeToInt = function(text) {
+        let hour = parseInt(text.substring(0, 2))
+        let minute = parseInt(text.substring(3))
+        return hour * 60 + minute
+      }
+      let set_opening = function (openings) {
         let date = new Date()
-        if (parts.pop().toLowerCase() == 'pm') parts[0] = (+parts[0]) + 12
-        date.setHours(+parts.shift())
-        date.setMinutes(+parts.shift())
-        return date
+        let currentTime = date.getHours() * 60 + date.getMinutes()
+        let startDay = date.getDay()
+        let dayOfWeek = startDay
+        let weekDayLookup = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        const days = {
+          Monday: 'Lunes',
+          Tuesday: 'Martes',
+          Wednesday: 'Miércoles',
+          Thursday: 'Jueves',
+          Friday: 'Viernes',
+          Saturday: 'Sabado',
+          Sunday: 'Domingo'
+        }
+        let nextTime = false
+        for (; ;) {
+          let dayName = weekDayLookup[dayOfWeek % 7]
+          let opening = openings && openings['opening' + dayName.substring(0, 3)]
+          let timeSpans = opening?.split(';').map(item => {return item.trim()})
+          for (let span of timeSpans) {
+            let hours = span.split('-').map(item => {return item.trim()})
+            if (nextTime == false) {
+              let openTime = timeToInt(hours[0])
+              let closeTime = timeToInt(hours[1])
+              if (currentTime >= openTime && currentTime <= closeTime)
+                return handleMessageHour('Abierto Ahora - Cierra a las: ' + hours[1], true)
+              nextTime = true
+            }
+            else {
+              if (dayOfWeek === startDay) return handleMessageHour('Cerrado ahora - Abre hoy: ' + days[dayName] + ' ' + handleHourPmAM(schHoSta), false)
+              // eslint-disable-next-line
+              const openNextDay = (dayOfWeek - startDay == 1 ? 'Mañana' : dayName)
+              // eslint-disable-next-line
+              const tow = `A las ${dateTow ? dateTow : null}`
+              return handleMessageHour(`Cerrado hoy - Abre: ${openNextDay} ${tow}`, false)
+            }
+          }
+          dayOfWeek++
+          if (dayOfWeek > 14 || !dateTow || !schHoSta || !schHoEnd)
+            return handleMessageHour('Cerrado', false)
+        }
       }
-      let now2 = new Date()
-      let startDate = dateObj(schHoSta)
-      let endDate = dateObj(schHoEnd)
-      let open = now2 < endDate && now2 > startDate ? true : false
-      setOpen(open)
+      set_opening(openings)
     })()
-  }, [dataSchedules, lsc, schHoEnd, schHoSta])
+  }, [dataSchedules, lsc, schHoEnd, schHoSta, dateTow, handleHourPmAM])
   useEffect(() => {
     const date = new Date()
     const currentDay = date.getDay()
     setDay(currentDay)
   }, [])
-  const isLoading = loadBanner || loaStore || loading
+  // const isLoading = loadBanner || loaStore || loading
+  const isLoading = false
+  const text = useAnimatedText(fullText)
+  const [digit, setDigit] = React.useState(1337)
+
   return (
     <div>
+      {/* <span>{text} </span>
+      <div>
+        <Counter numeral={digit} />
+        <input
+          onChange={({ target: { value } }) =>
+          {return setDigit(() => {
+            return value
+          })}
+          }
+          type='number'
+          value={digit}
+        />
+      </div> */}
       <Section>
         <InputFile
           accept='.jpg, .png'
@@ -133,7 +230,7 @@ const Banner = ({ isMobile }) => {
         />
         {isLoading
           ? <Skeleton height={isMobile ? 118 : 250} />
-          : <MerchantBannerWrapperInfo Open={Open} bannerImage={(path || src) ? `url(${path || src})` : `url('/images/DEFAULTBANNER.png')`} >
+          : <MerchantBannerWrapperInfo Open={openNow} bannerImage={(path || src) ? `url(${path || src})` : `url('/images/DEFAULTBANNER.png')`} >
             <span>
               <svg
                 height={53}
@@ -163,8 +260,7 @@ const Banner = ({ isMobile }) => {
               </svg>
             </span>
             <div className='merchant-banner__status-description' data-test-id='merchant-banner-status-description'>
-              <h2 className='merchant-banner__status-title'>{`Restaurante  ${Open ? 'Abierto' : 'Cerrado'}`}</h2>
-              {/* {!Open && <h3 className='merchant-banner__status-message'>{`Abre ${endDate && dateTow ? 'mañana' : '' } a las ${dateTow}`}</h3>} */}
+              <h2 className='merchant-banner__status-title'>{`Restaurante  ${Open}`}</h2>
             </div>
           </MerchantBannerWrapperInfo>}
         <ButtonCard onClick={() => { return path && bnImageFileName && HandleDeleteBanner() }}>
@@ -225,4 +321,6 @@ const Banner = ({ isMobile }) => {
     </div>
   )
 }
-export const ManageBanner = memo(Banner)
+export const ManageBanner = memo(Banner, (currentProps, nextProps) => {
+  return currentProps.isMobile === nextProps.isMobile
+})

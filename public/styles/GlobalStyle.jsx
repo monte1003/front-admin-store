@@ -1,9 +1,54 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, css } from 'styled-components'
 import { BGColor, PColor } from '../colors'
+export const scrollStyle = css`
+    scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0);
+    scrollbar-width: thin;
+    .image-cropper {
 
+}
+
+
+.chart {
+      width: 100px !important;
+      height: 300px !important;
+      display: flex !important;
+    }
+    
+    .bar {
+      width: 30%;
+      margin-right: 5%;
+      background-color: #4CAF50;
+    }
+
+    &::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+&::-webkit-scrollbar:vertical {
+    width:10px;
+}
+
+&::-webkit-scrollbar-button:increment,&::-webkit-scrollbar-button {
+    display: none;
+} 
+
+&::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+&::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+    &::-webkit-scrollbar-track {
+    border-radius: 10px;  
+}
+
+`
 export const GlobalStyle = createGlobalStyle`
     * {
-        box-sizing: border-box;   
+        box-sizing: border-box;
         scroll-behavior: smooth;
     }
 
@@ -79,7 +124,7 @@ input[type=time]::-webkit-clear-button {
 }
 
 /* Up/Down arrows for incrementing/decrementing the value */
-/* input[type=time]::-webkit-inner-spin-button {
+/* input[   ]::-webkit-inner-spin-button {
   display: none;
 } */
     body {

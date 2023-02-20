@@ -1,11 +1,24 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { CateItem, CtnSwiper } from '../styled'
 import { Checkbox } from 'components/Checkbox'
+import PropTypes from 'prop-types'
+import {
+  A11y,
+  Navigation,
+  Pagination,
+  Parallax,
+  Virtual
+} from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Virtual, Navigation, Pagination, A11y, Parallax } from 'swiper'
+import { CateItem, CtnSwiper } from '../styled'
 
-export const SwiperSliderCategory = ({ datCat, checkedItems, disabledItems, handleChangeCheck }) => {
+export const MemoSwiperSliderCategory = ({
+  datCat,
+  checkedItems,
+  disabledItems,
+  handleChangeCheck
+}) => {
+  if (!datCat?.catProductsAll) return <div></div>
+
   return (
     <div>
       <CtnSwiper>
@@ -29,8 +42,8 @@ export const SwiperSliderCategory = ({ datCat, checkedItems, disabledItems, hand
                     disabled={disabledItems.has(slideContent.carProId)}
                     id={slideContent.carProId}
                     onChange={handleChangeCheck}
-                  /> 
-                  <div>
+                  />
+                  <div className='name-categorie' htmlFor={`checkbox-${slideContent.carProId}`}>
                     {slideContent?.pName?.slice(0, 15)}
                   </div>
                 </CateItem>
@@ -42,7 +55,7 @@ export const SwiperSliderCategory = ({ datCat, checkedItems, disabledItems, hand
     </div>
   )
 }
-
+export const SwiperSliderCategory = React.memo(MemoSwiperSliderCategory)
 SwiperSliderCategory.propTypes = {
   checkedItems: PropTypes.shape({
     has: PropTypes.func
