@@ -9,7 +9,7 @@ const runtimeCaching = require('next-pwa/cache')
 const withPlugins = require('./scripts/next-compose-plugins/lib')
 const withTM = require('next-transpile-modules')(['pkg-components']) // pass the modules you would like to see transpiled
 
-const prod = process.env.NODE_ENV !== 'production'
+const prod = process.env.NODE_ENV === 'production'
 
 const withPWA = require('next-pwa')({
   dest: 'public',
