@@ -1,0 +1,8 @@
+{
+    "routes": [
+      {
+        "src": "/api/graphql",
+        "dest": "https://front-admin-store.vercel.app/api/graphql"
+      }
+    ]
+  }
