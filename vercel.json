@@ -5,8 +5,8 @@
             "dest": "/api/graphql"
         },
         {
-            "src": "/api/auth",
-            "dest": "/pages/api/auth.js"
+            "src": "/api/auth/(.*)",
+            "dest": "/pages/api/auth/$1"
         },
         {
             "src": "/api/*",
