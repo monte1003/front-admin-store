@@ -34,7 +34,7 @@ const corsMultipleAllowOrigin = (options = {}) => {
     }
   }
 }
-const cors = corsMultipleAllowOrigin({ origin: ['http://localhost:3001', 'http://localhost:3000', 'http://localhost:4000', 'http://localhost:3003'] })
+const cors = corsMultipleAllowOrigin({ origin: ['http://localhost:3001', 'http://localhost:3000', 'http://localhost:4000', 'http://localhost:3003', 'https://front-admin-store.vercel.app'] })
 let serverCleanup = null
 
 const apolloServer = new ApolloServer({
@@ -113,7 +113,8 @@ const apolloServer = new ApolloServer({
 const startServer = apolloServer.start(
   {
     cors: {
-      credentials: true, origin: ['http://localhost:3001']
+      credentials: true,
+      origin: ['http://localhost:3001', 'https://front-admin-store.vercel.app/']
     }
   }
 )
@@ -140,7 +141,7 @@ export default cors(async (req, res) => {
   const handler = (apolloServer.createHandler({
     cors: {
       methods: ['GET', 'POST'],
-      origin: 'http://localhost:3001'
+      origin: 'https://front-admin-store.vercel.app'
     },
     path: '/api/graphql'
   }))
