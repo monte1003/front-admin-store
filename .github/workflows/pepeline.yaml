@@ -22,3 +22,9 @@ jobs:
     - run: npm run check:eslint -f
     - name: Build
       run: npm run build -f
+    - name: Deploy to Vercel
+      uses: amondnet/vercel-action@v20
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-project-id: 'prj_uTc94XNPVyUlJky2VtqMdeNmRRm6'
+        vercel-org-id: 'prj_uTc94XNPVyUlJky2VtqMdeNmRRm6'
