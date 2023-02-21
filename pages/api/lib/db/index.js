@@ -18,7 +18,7 @@ export default function connect () {
           host: 'bsm58gjtynob5wvyvpo3-mysql.services.clever-cloud.com', //process.env.HOSTDB
           dialectOptions: {
             ssl: {
-              rejectUnauthorized: true
+              rejectUnauthorized: false
             }
           },
           // logging: false,
