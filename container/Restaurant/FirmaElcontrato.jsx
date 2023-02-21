@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ContractSignature = props => {
+const ContractSignature = () => {
   return (
     <div>
       
