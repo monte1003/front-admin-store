@@ -4,7 +4,7 @@ import connect from '../../db'
 const sequelize = connect()
 import Typefeature from './TypFeature'
 
-// 
+sequelize.sync()
 
 const Feature = sequelize.define('feature', {
   fId: {

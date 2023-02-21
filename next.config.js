@@ -27,20 +27,27 @@ module.exports = async (phase) => {
   const isStaging = phase === PHASE_PRODUCTION_BUILD && process.env.STAGING === '1'
   const env = {
     NAMEDB: (() => {
+      // if (isDev) return 'app'
       if (isDev) return 'app'
-      if (isProd) return 'admin-store'
+      if (isProd) return 'bsm58gjtynob5wvyvpo3'
     })(),
     USERDB: (() => {
+      // if (isDev) return 'root'
       if (isDev) return 'root'
-      if (isProd) return '2fwzwic1j607u5cun570'
+      if (isProd) return 'um6z9noxxvjg5b1v'
     })(),
     PASSDB: (() => {
-      if (isDev) return ''
+      // if (isDev) return ''
+      if (isDev) return 'pscale_pw_7hsC2FRUbdlsR3G2TkScCbH1CyNQ3iPxaUFmAONaKuS'
       if (isProd) return 'pscale_pw_7hsC2FRUbdlsR3G2TkScCbH1CyNQ3iPxaUFmAONaKuS'
     })(),
     HOSTDB: (() => {
       if (isDev) return 'localhost'
-      if (isProd) return 'us-east.connect.psdb.cloud'
+      if (isProd) return 'bsm58gjtynob5wvyvpo3-mysql.services.clever-cloud.com'
+    })(),
+    MYSQLPORT: (() => {
+      if (isDev) return 3306
+      if (isProd) return 3306
     })(),
     DIALECTDB: 'mysql',
     LOCAL_SALES_STORE: 'app.cart.sales',

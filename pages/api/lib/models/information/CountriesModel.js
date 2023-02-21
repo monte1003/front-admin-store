@@ -2,7 +2,7 @@ import { INTEGER, STRING, SMALLINT, literal } from 'sequelize'
 import connect from '../../db'
 const sequelize = connect()
 import { enCode } from '../../utils/util'
-
+sequelize.sync()
 const CountriesModel = sequelize.define('countries', {
   cId: {
     type: INTEGER,

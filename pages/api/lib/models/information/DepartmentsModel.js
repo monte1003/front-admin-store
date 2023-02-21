@@ -4,6 +4,9 @@ const sequelize = connect()
 import { enCode } from '../../utils/util'
 import CountriesModel from './CountriesModel'
 
+sequelize.sync()
+
+
 const DepartmentsModel = sequelize.define('departments', {
   dId: {
     type: INTEGER,
@@ -16,10 +19,10 @@ const DepartmentsModel = sequelize.define('departments', {
     allowNull: false,
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
-    references: {
-      model: CountriesModel,
-      key: 'cId'
-    },
+    // references: {
+    //   model: CountriesModel,
+    //   key: 'cId'
+    // },
     get(x) {return enCode(this.getDataValue(x))}
   },
   dName: {
