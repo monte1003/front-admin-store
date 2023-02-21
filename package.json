@@ -53,7 +53,6 @@
     "npm-pkg-hook": "latest",
     "pkg-components": "latest",
     "react": "18.2.0",
-    "react-canvas-draw": "1.2.1",
     "react-chartjs-2": "4.1.0",
     "react-cropper": "2.1.8",
     "react-dom": "18.2.0",
