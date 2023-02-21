@@ -62,6 +62,7 @@ export const getDevice = async ({ input }) => {
 
 // eslint-disable-next-line consistent-return
 export default withIronSessionApiRoute(
+  // eslint-disable-next-line consistent-return
   async function loginRoute(req, res) {
     // get user from database then:
     try {
