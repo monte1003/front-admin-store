@@ -1,10 +1,6 @@
 {
     "routes": [
         {
-            "src": "/api/graphql",
-            "dest": "/api/graphql"
-        },
-        {
             "src": "/api/auth/(.*)",
             "dest": "/pages/api/auth/$1"
         },
