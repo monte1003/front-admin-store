@@ -28,19 +28,19 @@ module.exports = async (phase) => {
   const env = {
     NAMEDB: (() => {
       if (isDev) return 'app'
-      if (isProd) return 'app'
+      if (isProd) return 'admin-store'
     })(),
     USERDB: (() => {
       if (isDev) return 'root'
-      if (isProd) return 'root'
+      if (isProd) return '2fwzwic1j607u5cun570'
     })(),
     PASSDB: (() => {
       if (isDev) return ''
-      if (isProd) return ''
+      if (isProd) return 'pscale_pw_7hsC2FRUbdlsR3G2TkScCbH1CyNQ3iPxaUFmAONaKuS'
     })(),
     HOSTDB: (() => {
       if (isDev) return 'localhost'
-      if (isProd) return 'localhost'
+      if (isProd) return 'us-east.connect.psdb.cloud'
     })(),
     DIALECTDB: 'mysql',
     LOCAL_SALES_STORE: 'app.cart.sales',
