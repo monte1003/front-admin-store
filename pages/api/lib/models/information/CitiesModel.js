@@ -5,7 +5,7 @@ import { enCode } from '../../utils/util'
 import DepartmentsModel from './DepartmentsModel'
 
 sequelize.sync()
-//
+
 
 const CitiesModel = sequelize.define('cities', {
   ctId: {
@@ -19,10 +19,10 @@ const CitiesModel = sequelize.define('cities', {
     allowNull: false,
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
-    // references: {
-    //   model: DepartmentsModel,
-    //   key: 'dId'
-    // },
+    references: {
+      model: DepartmentsModel,
+      key: 'dId'
+    },
     get(x) {return enCode(this.getDataValue(x))}
   },
   cName: {

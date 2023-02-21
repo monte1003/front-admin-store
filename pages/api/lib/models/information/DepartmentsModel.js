@@ -19,10 +19,10 @@ const DepartmentsModel = sequelize.define('departments', {
     allowNull: false,
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
-    // references: {
-    //   model: CountriesModel,
-    //   key: 'cId'
-    // },
+    references: {
+      model: CountriesModel,
+      key: 'cId'
+    },
     get(x) {return enCode(this.getDataValue(x))}
   },
   dName: {

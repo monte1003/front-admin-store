@@ -38,14 +38,14 @@ module.exports = async (phase) => {
     })(),
     PASSDB: (() => {
       // if (isDev) return ''
-      if (isDev) return 'pscale_pw_7hsC2FRUbdlsR3G2TkScCbH1CyNQ3iPxaUFmAONaKuS'
-      if (isProd) return 'pscale_pw_7hsC2FRUbdlsR3G2TkScCbH1CyNQ3iPxaUFmAONaKuS'
+      if (isDev) return ''
+      if (isProd) return 'qcV3ROSpVDim28bmmutN'
     })(),
-    HOSTDB: (() => {
+    HOST_DB: (() => {
       if (isDev) return 'localhost'
       if (isProd) return 'bsm58gjtynob5wvyvpo3-mysql.services.clever-cloud.com'
     })(),
-    MYSQLPORT: (() => {
+    MYSQL_PORT: (() => {
       if (isDev) return 3306
       if (isProd) return 3306
     })(),
