@@ -16,7 +16,9 @@ export default withIronSessionApiRoute(
           user: null
         })
       } else {
-        return res.status(200).json({})
+        return res.status(200).json({
+          hello: 'no session'
+        })
       }
     } catch (error) {
       return res.status(200).json({
