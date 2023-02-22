@@ -13,8 +13,8 @@ const prod = process.env.NODE_ENV === 'production'
 
 const withPWA = require('next-pwa')({
   dest: 'public',
-  register: true,
-  disable: prod ? false : true
+  register: true
+  // disable: prod ? false : true
 })
 
 module.exports = async (phase) => {
@@ -55,12 +55,14 @@ module.exports = async (phase) => {
     SESSION_KEY: '12ba105efUaGjihGrh0LfJHTGIBGu6jXa',
     URL_BASE: (() => {
       if (isDev) return 'http://localhost:3001/'
-      if (isProd) return 'https://front-admin-store.vercel.app/'
+      // if (isProd) return 'https://front-admin-store.vercel.app/'
+      if (isProd) return 'http://localhost:3000/'
       if (isStaging) return 'Title Stg'
     })(),
     MAIN_URL_BASE: (() => {
-      if (isDev) return 'http://localhost:3001/'
-      if (isProd) return 'https://front-admin-store.vercel.app/'
+      if (isDev) return 'http://localhost:3000/'
+      // if (isProd) return 'http://localhost:3001/'
+      // if (isProd) return 'https://front-admin-store.vercel.app/'
       if (isStaging) return 'Title Stg'
     })(),
     // URL_BASE_WS
