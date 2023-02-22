@@ -60,6 +60,32 @@ export const getDevice = async ({ input }) => {
   return { error, data }
 }
 
+//--- Tokens
+
+/**
+ * @description Función que genera el token
+ * @param {string} token Token JWT para el inicio de sesión y el id del usuario
+ * @returns {{ user: string, userProfile: object, error: boolean }} devolución del token y los datos
+ */
+export const getUserFromToken = async token => {
+  let user = null
+  let userProfile = null
+  let error = false
+  if (!token) return { error: false, message: '' }
+  const tokenState = getTokenState(token)
+  const { needRefresh, valid } = tokenState || {}
+  try {
+    if (needRefresh === true) return { error: true, user: user, userProfile: userProfile }
+    if (!valid) return { error: true, message: 'El token no es valido' }
+  } catch {
+    user = ''
+    userProfile = ''
+    error = false
+  }
+  return { user, userProfile, error }
+}
+
+
 // eslint-disable-next-line consistent-return
 export default withIronSessionApiRoute(
   // eslint-disable-next-line consistent-return
@@ -88,12 +114,26 @@ export default withIronSessionApiRoute(
           token
         }
         await req.session.save()
-        res.send({ ok: true, success, message: message, storeUserId, token })
+        // res.send({ ok: true, success, message: message, storeUserId, token })
+        return res.status(200).json({
+          response: 'ok',
+          ok: true,
+          success,
+          message: message,
+          storeUserId,
+          token
+        })
       }
     } catch (error) {
-      const { response: fetchResponse } = error
-      res.status(fetchResponse?.status || 500).json(error.data)
-      return error
+      // const { response: fetchResponse } = error
+      // res.status(fetchResponse?.status || 500).json(error.data)
+      // return error
+      return res.status(200).json({
+        response: 'ok',
+        ok: true,
+        success: false,
+        message: 'error'
+      })
     }
   },
   {
@@ -106,27 +146,3 @@ export default withIronSessionApiRoute(
     }
   }
 )
-//--- Tokens
-
-/**
- * @description Función que genera el token
- * @param {string} token Token JWT para el inicio de sesión y el id del usuario
- * @returns {{ user: string, userProfile: object, error: boolean }} devolución del token y los datos
- */
-export const getUserFromToken = async token => {
-  let user = null
-  let userProfile = null
-  let error = false
-  if (!token) return { error: false, message: '' }
-  const tokenState = getTokenState(token)
-  const { needRefresh, valid } = tokenState || {}
-  try {
-    if (needRefresh === true) return { error: true, user: user, userProfile: userProfile }
-    if (!valid) return { error: true, message: 'El token no es valido' }
-  } catch {
-    user = ''
-    userProfile = ''
-    error = false
-  }
-  return { user, userProfile, error }
-}
