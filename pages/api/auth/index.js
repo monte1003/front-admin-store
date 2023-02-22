@@ -89,7 +89,7 @@ export const getUserFromToken = async token => {
 // eslint-disable-next-line consistent-return
 export default withIronSessionApiRoute(
   // eslint-disable-next-line consistent-return
-  async function loginRoute(req, res) {
+  async (req, res) => {
     // get user from database then:
     try {
       const { name, username, lastName, email, password, deviceid } = req.body
@@ -124,6 +124,13 @@ export default withIronSessionApiRoute(
           token
         })
       }
+      return res.status(500).json({
+        response: 'ok',
+        ok: false,
+        success: false,
+        message: 'Error 500',
+        token
+      })
     } catch (error) {
       // const { response: fetchResponse } = error
       // res.status(fetchResponse?.status || 500).json(error.data)
