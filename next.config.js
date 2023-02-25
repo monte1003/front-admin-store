@@ -55,14 +55,14 @@ module.exports = async (phase) => {
     SESSION_KEY: '12ba105efUaGjihGrh0LfJHTGIBGu6jXa',
     URL_BASE: (() => {
       if (isDev) return 'http://localhost:3001/'
-      if (isProd) return 'https://front-admin-store.vercel.app/'
+      if (isProd) return 'http://167.172.249.87/'
       // if (isProd) return 'http://localhost:3000/'
       if (isStaging) return 'Title Stg'
     })(),
     MAIN_URL_BASE: (() => {
       if (isDev) return 'http://localhost:3000/'
       // if (isProd) return 'http://localhost:3001/'
-      if (isProd) return 'https://front-admin-store.vercel.app/'
+      if (isProd) return 'http://167.172.249.87/'
       if (isStaging) return 'Title Stg'
     })(),
     // URL_BASE_WS
