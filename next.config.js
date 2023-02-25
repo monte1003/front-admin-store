@@ -5,11 +5,10 @@ const {
   PHASE_DEVELOPMENT_SERVER,
   PHASE_PRODUCTION_BUILD
 } = require('next/constants')
-const runtimeCaching = require('next-pwa/cache')
 const withPlugins = require('./scripts/next-compose-plugins/lib')
 const withTM = require('next-transpile-modules')(['pkg-components']) // pass the modules you would like to see transpiled
 
-const prod = process.env.NODE_ENV === 'production'
+// const prod = process.env.NODE_ENV === 'production'
 
 const withPWA = require('next-pwa')({
   dest: 'public',
@@ -123,7 +122,6 @@ module.exports = async (phase) => {
     images,
     reactStrictMode: true,
     headers,
-    runtimeCaching,
     // rewrites,
     // redirects,
     // basePath,
@@ -142,5 +140,6 @@ module.exports = async (phase) => {
 
   const defaultConfig = nextConfig
 
-  return withPlugins( [withTM], [withPWA], nextConfig)(phase, { defaultConfig })
+  // return withPlugins( [withTM], [withPWA], nextConfig)(phase, { defaultConfig })
+  return withPlugins( [withTM], nextConfig)(phase, { defaultConfig })
 }
