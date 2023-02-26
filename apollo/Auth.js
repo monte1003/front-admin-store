@@ -73,9 +73,13 @@ export default function Auth({ children }) {
     if (res?.message) {
       isLoggedVar({ ...isLoggedVar(), message: undefined })
       if (res.code >= 500) {
+        // eslint-disable-next-line
         console.log(res.message)
+        // eslint-disable-next-line
         if (res.code >= 300 || res.code === 403) console.log(res.message)
+        // eslint-disable-next-line
         if (res.code >= 400 && res.code !== 403) console.log(res.message)
+        // eslint-disable-next-line
         if (res.code >= 200) console.log(res.message)
       }
 

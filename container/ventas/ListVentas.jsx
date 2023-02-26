@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import InputHooks from 'components/InputHooks/InputHooks'
 import styled from 'styled-components'
 import { RippleButton } from 'components/Ripple'
 import { Table } from 'components/Table'
 import { Section } from 'components/Table/styled'
 import { useLazyQuery } from '@apollo/client'
-import { 
-  BGColor, 
-  PLColor, 
-  SFColor, 
+import {
+  BGColor,
+  PLColor,
+  SFColor,
   PColor
 } from 'public/colors'
 import React, { useEffect, useState } from 'react'
@@ -41,7 +43,6 @@ export const ListVentas = () => {
   const [open, setOpen] = useState(false)
   const toDay = useFormatDate({}).yearMonthDay
   const [valuesDates, setValuesDates] = useState({ fromDate: toDay, toDate: toDay })
-  const [active, setActive] = useState(2)
   const [handleChange, { dataForm, errorForm }] = useFormTools()
   const [dataModal, setDataModal] = useState({})
 
@@ -63,7 +64,6 @@ export const ListVentas = () => {
 
   } = useGetSale()
   const HandleGetOne = (pCodeRef) => {
-    console.log(pCodeRef)
     getOnePedidoStore({
       variables: {
         pCodeRef: pCodeRef ?? ''

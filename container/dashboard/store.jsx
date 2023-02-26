@@ -153,7 +153,7 @@ const DashboardStore = () => {
     onCancel: ()=> { return handleHidden(select[show]) },
     onHide: () => { return handleHidden(select[show]) }
   }
-  console.log(show)
+
   const productProps = {
     dataExtra: dataExtra,
     dataOptional: dataOptional,

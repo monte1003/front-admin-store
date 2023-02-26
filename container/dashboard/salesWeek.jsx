@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { GET_ALL_SALES_STATISTICS } from 'container/ventas/queries'
 import { MainCard } from 'components/common/Reusable/ShadowCard'
 import { Skeleton } from 'components/Skeleton'

@@ -1,3 +1,7 @@
+
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Skeleton } from 'components/Skeleton/index'
 import Image from 'next/image'
 import {

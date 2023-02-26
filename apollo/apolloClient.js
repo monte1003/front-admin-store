@@ -20,8 +20,11 @@ export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 // https://stackoverflow.com/questions/53062839/handling-errors-for-apollo-client-when-using-apollolink-split
 let apolloClient
 // import { WebSocketLink } from "@apollo/client/link/ws";
+// eslint-disable-next-line
 import { SubscriptionClient } from 'subscriptions-transport-ws'
+// eslint-disable-next-line
 import { createClient } from 'graphql-ws'
+// eslint-disable-next-line
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 
 export const getDeviceId = async () => {
@@ -81,7 +84,7 @@ const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
         authorization: `Bearer ${window.localStorage.getItem('session')}`,
         restaurant: `MjcyMDg4ODE0ODUxNTE2NDUw`
       }
-    },
+    }
     // connectionCallback: (error, result) => {
     //   // eslint-disable-next-line no-console
     //   console.log(error, result)
@@ -115,7 +118,7 @@ const filterData = (data) => {
   return !!(ourStore)
 }
 
-
+// eslint-disable-next-line
 let isOurStore
 let unsubscribed = false
 let subscription = typeof window !== 'undefined' && wsLink.request({
@@ -166,6 +169,7 @@ if(!unsubscribed) {
 // console.log(wsLink)
 // const lol = wsLink.subscriptionClient.client.onopen()
 // console.log(lol)
+// eslint-disable-next-line
 function createApolloClient() {
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors)

@@ -85,10 +85,11 @@ const DragOrders = ({
       })
       return map
     }
+    // eslint-disable-next-line
     const groupByCategory = getAllPedidoStore?.groupByToMap(product => {
       return product.getAllShoppingCard?.pId
     })
-    console.log(groupByCategory && Object.entries(groupByCategory))
+    // console.log(groupByCategory && Object.entries(groupByCategory))
     setGroup(result)
     if (sale && !saleLoading) {
       const groupByQuantity = Object.keys(result)

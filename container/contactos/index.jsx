@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { AwesomeModal } from 'components/AwesomeModal'
 import { useFormTools } from 'npm-pkg-hook'
 import { useSetState } from 'components/hooks/useState'

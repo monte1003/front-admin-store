@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react'
 
 const ViewportContext = React.createContext(undefined)
@@ -16,7 +18,6 @@ export const Viewport = (
     scrollTop: 0,
     scrollBottom: 0
   })
-  console.log('viewport render')
 
   const [api] = React.useState({
     observe: (element, callback, data) => {
@@ -145,7 +146,7 @@ export const VirtualizedListPage = (props) => {
         !entry.isIntersecting &&
         entry.boundingClientRect.top > scrollBottom
       ) {
-        console.log('Virtualizing page', start, end)
+        // console.log('Virtualizing page', start, end)
         setIsVisible(false)
       }
     }
@@ -156,7 +157,7 @@ export const VirtualizedListPage = (props) => {
     ) {
       visibility.last = entry.isIntersecting
       if (!entry.isIntersecting && entry.boundingClientRect.bottom <= 0) {
-        console.log('Virtualizing page', start, end)
+        // console.log('Virtualizing page', start, end)
         setIsVisible(false)
       }
     }
@@ -217,7 +218,7 @@ export const VirtualizedList = (props) => {
     horizontal,
     ...rest
   } = props
-  console.log(defaultScrollIndex)
+  // console.log(defaultScrollIndex)
   const RootElement = (props.as || 'ul')
   const [sizeMap] = React.useState(new Map())
   const pageCount = Math.ceil(items.length / itemsPerPage)

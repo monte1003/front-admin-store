@@ -3,7 +3,6 @@ import { LocationName } from 'components/hooks/useLocationName'
 import { Container } from './styled'
 import { useOrders } from 'hooks/useOrders'
 import DragOrders from './DragOrders'
-import PedidosStoreOld from './tempo'
 
 const PedidosStore = () => {
   // STATES
@@ -100,7 +99,6 @@ const PedidosStore = () => {
         </Row>
       </Column> */}
       </Container>
-{/* <PedidosStoreOld /> */}
     </div>
   )
 }

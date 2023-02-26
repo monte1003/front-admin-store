@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import InputHooks from 'components/InputHooks/InputHooks'
 import { RippleButton } from 'components/Ripple'
 import Image from 'next/image'
@@ -54,7 +56,7 @@ const Index = () => {
           />
           <RippleButton
             margin='20px auto'
-            onClick={(e) => {return handleRedirect(e)}}
+            onClick={() => {return handleRedirect()}}
             widthButton='100%'
           >Login</RippleButton>
           {/* <RippleButton widthButton='100%' margin='20px auto' onClick={() => console.log()}>Login</RippleButton> */}

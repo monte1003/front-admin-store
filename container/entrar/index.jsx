@@ -1,6 +1,7 @@
-import React, { 
-  useContext, 
-  useEffect, 
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {
+  useContext,
+  useEffect,
   useState
 } from 'react'
 // import { GoogleLogin } from 'react-google-login'

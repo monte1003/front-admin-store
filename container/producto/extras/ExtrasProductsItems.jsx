@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { NorthTexasGreen } from '@/public/colors'
 import { useMutation } from '@apollo/client'
 import Column from 'components/common/Atoms/Column'
