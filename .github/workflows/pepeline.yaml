@@ -45,4 +45,4 @@ jobs:
         context: .
         file: ./docker/production/Dockerfile
         push: true
-        tags: username/nextjs-app:latest
+        tags: juvinaojesus/front-admin-store:latest
