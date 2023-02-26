@@ -602,7 +602,7 @@ export const validationsOld = (e, typeNull, typeLetters, typeNumeric, typeRange,
     if (rangeLength(value, minRange, maxRange)) return validationsTF(parentNode, nextSibling, `El rango de caracteres es de ${minRange} a ${maxRange}.`, true)
   }
   if (typeLetters) {
-    if (onlyLetters(value)) return validationsTF(parentNode, nextSibling, 'Solo puede contener letras.', tru)
+    if (onlyLetters(value)) return validationsTF(parentNode, nextSibling, 'Solo puede contener letras.', true)
   }
   if (typeEmail) {
     if (isEmail(value)) return validationsTF(parentNode, nextSibling, 'No es un formato de email valido.', true)
