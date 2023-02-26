@@ -153,6 +153,7 @@ if(!unsubscribed) {
         isOurStore = true
       }else{
         unsubscribed = true
+        // eslint-disable-next-line
         isOurStore = false
         subscription.unsubscribe()
       }

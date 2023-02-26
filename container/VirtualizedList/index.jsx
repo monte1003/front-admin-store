@@ -178,6 +178,7 @@ export const VirtualizedListPage = (props) => {
       observedElements.forEach(element => {return viewport.unobserve(element)})
       internalState.observedElements = []
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spacerRef.current, firstRef.current, lastRef.current])
 
   return isVisible ? (
