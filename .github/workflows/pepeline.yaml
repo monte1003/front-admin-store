@@ -45,7 +45,7 @@ jobs:
         context: .
         file: ./docker/production/Dockerfile
         push: true
-        tags: juvinaojesus/front-admin-store:latest
+        tags: username/nextjs-app:latest
 
     - name: Deploy with Docker Compose
       uses: docker/compose-action@v2
