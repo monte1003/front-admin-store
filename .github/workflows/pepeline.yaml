@@ -45,4 +45,4 @@ jobs:
         context: .
         file: ./docker/production/Dockerfile
         push: true
-        tags: juvinaojesus/front-admin-store:latest
+        tags: juvinaojesus/front-admin-store
