@@ -340,9 +340,10 @@ export const ChatStatistic = () => {
             {showFilter &&
             <select onChange={e => {return handleChangeYear(e.target.value)}} value={chartTypeYear}>
               {years.map((year) => {
+                const currentYear = year == new Date().getFullYear()
                 return <option
-                  defaultChecked={year == new Date().getFullYear()}
-                  defaultValue={year == new Date().getFullYear()}
+                  defaultChecked={currentYear}
+                  defaultValue={currentYear}
                   disabled={!year}
                   key={year}
                   name={year}

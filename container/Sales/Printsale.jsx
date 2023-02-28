@@ -12,8 +12,9 @@ import {
   Ticket
 } from './styled'
 import { useEffect, useState } from 'react'
+import { Invoice } from './Invoice'
 
-export const Prints = ({ 
+export const Prints = ({
   data,
   dataClientes = [],
   values
@@ -29,8 +30,8 @@ export const Prints = ({
     uPhoNum
   } = dataStore || {}
   const {
-    yearMonthDay, 
-    hourMinutes12, 
+    yearMonthDay,
+    hourMinutes12,
     longDayName
   } = useFormatDate({})
   useEffect(() => {
@@ -49,67 +50,71 @@ export const Prints = ({
     ClientAddress,
     clientNumber
   } = client || {}
+
   return (
     <Ticket>
-      <div className='ticket' id='ticket'>
-        <h5>{storeName ?? 'Nombre Empresa'}</h5>
-        <Text>NIT:</Text>
-        <Text>Direccion: {addressStore ?? ULocation}</Text>
-        <Text>Telf: {storePhone ?? uPhoNum} </Text>
-        <Text>Fecha: {yearMonthDay + ' ' +  hourMinutes12 + ' ' + longDayName} </Text>
-        <Text fontSize='20px' fontWeight='500'>Cliente</Text>
-        <Text>Nombre: {clientName}</Text>
-        <Text>Direccion: {ClientAddress}</Text>
-        <Text>Numero: {clientNumber}</Text>
-        <Text>CC: {ccClient}</Text>
-
-        <div className='ticket-image'>
-          <Image
-            alt={''}
-            blurDataURL='/images/DEFAULTBANNER.png'
-            className='store_image'
-            height={400}
-            objectFit='contain'
-            src={src ?? '/images/DEFAULTBANNER.png'}
-            width={400}
-          />
-        </div>
-        <Text className='centrado' fontWeight='800'>TICKET DE VENTA</Text>
-        <Item>
-          <span className='title'>REF</span>
-          <span className='title'>Cantidad</span>
-          <span className='title'>$ PRECIO</span>
-        </Item>
-        <Content>
-          {data.map((item, i) => {return (
-            <Item key={i + 1}>
-              <span>{item?.pName}</span>
-              <span>{item?.ProQuantity}</span>
-              <span>${numberFormat(item?.ProPrice)}</span>
+      <Invoice>
+        <div className='ticket' id='ticket'>
+          <h5>{storeName ?? 'Nombre Empresa'}</h5>
+          <Text>NIT:</Text>
+          <Text>Direccion: {addressStore ?? ULocation}</Text>
+          <Text>Telf: {storePhone ?? uPhoNum} </Text>
+          <Text>Fecha: {yearMonthDay + ' ' +  hourMinutes12 + ' ' + longDayName} </Text>
+          <Text fontSize='20px' fontWeight='500'>Cliente</Text>
+          <Text>Nombre: {clientName}</Text>
+          <Text>Direccion: {ClientAddress}</Text>
+          <Text>Numero: {clientNumber}</Text>
+          <Text>CC: {ccClient}</Text>
+          <div className='ticket-image'>
+            <Image
+              alt={''}
+              blurDataURL='/images/DEFAULTBANNER.png'
+              className='store_image'
+              height={400}
+              objectFit='contain'
+              src={src ? src : src ?? '/images/DEFAULTBANNER.png'}
+              width={400}
+            />
+          </div>
+          <Text className='centrado' fontWeight='800'>TICKET DE VENTA</Text>
+          <Item>
+            <span className='title'>REF</span>
+            <span className='title'>Cantidad</span>
+            <span className='title'>$ PRECIO</span>
+          </Item>
+          <Content>
+            {data.map((item, i) => {
+              const ProPrice = `${numberFormat(item?.ProPrice)}`
+              return (
+                <Item key={i}>
+                  <span>{item?.pName}</span>
+                  <span>{item?.ProQuantity}</span>
+                  <span>{ProPrice}</span>
+                </Item>
+              )})}
+          </Content>
+          {/* <Item>
+              <span>Pedido</span>
+              <span>{code}</span>
             </Item>
-          )})}
-        </Content>
-        {/* <Item>
-          <span>Pedido</span>
-          <span>{code}</span>
-        </Item>
-        <Item>
-          <Text>FECHA</Text>
-          <Text>{time}</Text>
-        </Item>
-        <Item>
-          <Text fontWeight='bold'>SUB TOTAL</Text>
-          <Text fontWeight='bold'>{(total)}</Text>
-        </Item>
-        <Item>
-          <Text fontWeight='bold'>CAMBIO</Text>
-          <Text fontWeight='bold'>{change}</Text>
-        </Item>
-        <Item>
-          <Text fontWeight='bold'>TOTAL</Text>
-          <Text fontWeight='bold'>{total}</Text>
-        </Item> */}
-      </div>
+            <Item>
+              <Text>FECHA</Text>
+              <Text>{time}</Text>
+            </Item>
+            <Item>
+              <Text fontWeight='bold'>SUB TOTAL</Text>
+              <Text fontWeight='bold'>{(total)}</Text>
+            </Item>
+            <Item>
+              <Text fontWeight='bold'>CAMBIO</Text>
+              <Text fontWeight='bold'>{change}</Text>
+            </Item>
+            <Item>
+              <Text fontWeight='bold'>TOTAL</Text>
+              <Text fontWeight='bold'>{total}</Text>
+            </Item> */}
+        </div>
+      </Invoice>
     </Ticket>
   )
 }
