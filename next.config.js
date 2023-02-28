@@ -140,6 +140,6 @@ module.exports = async (phase) => {
 
   const defaultConfig = nextConfig
 
-  // return withPlugins( [withTM], [withPWA], nextConfig)(phase, { defaultConfig })
-  return withPlugins( [withTM], nextConfig)(phase, { defaultConfig })
+  return withPlugins( [withTM], [withPWA], nextConfig)(phase, { defaultConfig })
+  // return withPlugins( [withTM], nextConfig)(phase, { defaultConfig })
 }
