@@ -20,6 +20,7 @@ import Context from '../context/Context'
 import { GlobalStyle } from '../public/styles/GlobalStyle'
 import '../public/styles/tokens.css'
 import '../styles/globals.css'
+
 export default function App({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps)
   const router = useRouter()
