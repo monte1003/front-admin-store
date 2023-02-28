@@ -44,8 +44,10 @@ export const Options = ({
     pushNotificationSupported,
     onClickAskUserPermission,
     error: errorPush,
+    // eslint-disable-next-line
     loading: loadingPush
   } = usePushNotifications()
+  // eslint-disable-next-line
   const Loading = ({ loading }) => {return (loading &&
     <Portal>
       <ContentNotification background='red'>
