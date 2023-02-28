@@ -115,8 +115,8 @@ export const Options = ({
               justifyContent='flex-start'
               margin='0 13px 0 15px'
             >
-              <Loading loading={loadingPush} />
-              {loadingPush && <div>Loading</div>}
+              {/* <Loading loading={loadingPush} /> */}
+              {/* {loadingPush && <div>Loading</div>} */}
               {(pushNotificationSupported && !isConsentGranted) && <Text
                 color={SECColor}
                 fontSize='.775rem'
