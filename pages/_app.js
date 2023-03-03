@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ApolloProvider } from '@apollo/client'
 import ErrorBoundary from 'components/Error'
 import Noscript from 'components/Noscript'
@@ -27,24 +29,24 @@ export default function App({ Component, pageProps }) {
   const [animating, setIsAnimating] = useState(false)
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => { return <MainLayout>{page}</MainLayout> })
-  useEffect(() => {
-    const handleStop = () => {
-      setIsAnimating(false)
-    }
-    router.events.on('routeChangeStart', () => {
-      setIsAnimating(true)
-    })
-    router.events.on('routeChangeComplete', handleStop)
-    router.events.on('routeChangeError', handleStop)
+  // useEffect(() => {
+  //   const handleStop = () => {
+  //     setIsAnimating(false)
+  //   }
+  //   router.events.on('routeChangeStart', () => {
+  //     setIsAnimating(true)
+  //   })
+  //   router.events.on('routeChangeComplete', handleStop)
+  //   router.events.on('routeChangeError', handleStop)
 
-    return () => {
-      router.events.off('routeChangeStart', () => {
-        setIsAnimating(true)
-      })
-      router.events.off('routeChangeComplete', handleStop)
-      router.events.off('routeChangeError', handleStop)
-    }
-  }, [router])
+  //   return () => {
+  //     router.events.off('routeChangeStart', () => {
+  //       setIsAnimating(true)
+  //     })
+  //     router.events.off('routeChangeComplete', handleStop)
+  //     router.events.off('routeChangeError', handleStop)
+  //   }
+  // }, [router])
   // const timerId = useRef()
   // eslint-disabled-next-line
   // const onClickLogout = useCallback(async () => {
@@ -74,18 +76,18 @@ export default function App({ Component, pageProps }) {
   //     // onClickLogout()
   //   }, 3000)
   // }, [])
-  const [showChild, setShowChild] = useState(false)
+  // const [showChild, setShowChild] = useState(false)
 
-  useEffect(() => {
-    setShowChild(true)
-  }, [showChild])
+  // useEffect(() => {
+  //   setShowChild(true)
+  // }, [showChild])
 
-  if (!showChild) {
-    return null
-  }
-  if (typeof window === 'undefined') {
-    return <div>Loading...</div>
-  }
+  // if (!showChild) {
+  //   return null
+  // }
+  // if (typeof window === 'undefined') {
+  //   return <div>Loading...</div>
+  // }
 
   return (
     <div onMouseMove={() => { return {} }}>

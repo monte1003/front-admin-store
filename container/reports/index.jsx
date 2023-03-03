@@ -10,14 +10,33 @@ import { OurFood } from 'container/dashboard/OurFood'
 import { SalesWeek } from 'container/dashboard/salesWeek'
 import { SalesWeekShortDays } from 'container/dashboard/salesWeekShortDays'
 import { ChatStatistic } from 'container/ventas/ListVentas'
-import React from 'react'
+import React, { useState } from 'react'
 import { Container } from './styled'
+import { InputFiles } from '~/components/InputFilesPrev'
+import InputRange from '~/components/InputRangebuena'
 
 export const ReportsC = () => {
   const OPEN_MODAL = useSetState()
   const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm }] = useFormTools()
+  const [files, setFiles] = useState([])
+  console.log(files)
+  const handleFileChange = async paramFiles => {
+    setFiles(paramFiles)
+  }
   return (
     <Container>
+      <InputRange
+        description='lol'
+        onChange={(n) => { return console.log(n) }}
+      />
+      <InputFiles
+        Disable={false}
+        MaximumSizeFiles={20971520}
+        ShowMessage={'25M'}
+        onChange={handleFileChange}
+        reset={false}
+      />
+      asdas
       <MainCard title={`Ventas por meses del año`} weight={'200'}>
         <ChatStatistic />
       </MainCard>

@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { gql, useSubscription } from '@apollo/client'
 import { AwesomeModal } from 'components/AwesomeModal'
 import { BtnClose } from 'components/AwesomeModal/styled'
@@ -47,15 +50,15 @@ export const MemoLayout = ({
   } = useContext(Context)
   const { latitude, longitude } = usePosition(watch, settings)
   const dataLocation = usePosition(watch, settings)
-  useEffect(() => {
-    setAlertBox({ message: '', color: 'success' })
-    if (latitude) {
-      window.localStorage.setItem('latitude', latitude)
-      window.localStorage.setItem('longitude', longitude)
-      window.localStorage.setItem('location', JSON.stringify(dataLocation))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   setAlertBox({ message: '', color: 'success' })
+  //   if (latitude) {
+  //     window.localStorage.setItem('latitude', latitude)
+  //     window.localStorage.setItem('longitude', longitude)
+  //     window.localStorage.setItem('location', JSON.stringify(dataLocation))
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
   const NEW_NOTIFICATION = gql`
   subscription {
   newStoreOrder{
@@ -82,88 +85,88 @@ export const MemoLayout = ({
     open: false,
     order: []
   })
-  const channel = new BroadcastChannel('app-channel')
+  // const channel = new BroadcastChannel('app-channel')
   const [isOpen, setIsOpen] = useState(false)
-  useEffect(() => {
-    channel.addEventListener('message', ({ data }) => {
-      if (data === 'app-open') {
-        setIsOpen(true)
+  // useEffect(() => {
+  //   channel.addEventListener('message', ({ data }) => {
+  //     if (data === 'app-open') {
+  //       setIsOpen(true)
 
-      }
-    })
-  }, [])
+  //     }
+  //   })
+  // }, [])
 
-  useEffect(() => {
-    channel.postMessage('app-open')
-  }, [])
+  // useEffect(() => {
+  //   channel.postMessage('app-open')
+  // }, [])
 
-  useSubscription(NEW_NOTIFICATION, {
-    // eslint-disable-next-line
-    onError: (e) => {
-      return sendNotification({ title: 'Error en el pedido', description: 'Error' })
-    },
+  // useSubscription(NEW_NOTIFICATION, {
+  //   // eslint-disable-next-line
+  //   onError: (e) => {
+  //     return sendNotification({ title: 'Error en el pedido', description: 'Error' })
+  //   },
 
-    onData: ({ data, client }) => {
-      const ourStore = data?.data?.newStoreOrder?.idStore === dataStore?.idStore
-      console.log(client)
-      const subscription = client.link.request({
-        query: NEW_NOTIFICATION
-      }).subscribe({
-        next: (data) => {
-          if(ourStore){
-            console.log({data})
-            // isOurStore = true
-          } else{
-            subscription.unsubscribe()
-          }
-        },
-        error: (error) => {
-          console.log(error)
-        },
-        complete: () => {
-          console.log('Completed')
-        }
-      })
-      if (!ourStore) {
-        return subscription.unsubscribe()
-      }
-      if (ourStore) {
-        client.writeQuery({
-          query: GET_ALL_PEDIDOS,
-          data: {
-            // ...messageData?.getMessages,
-            getAllPedidoStoreFinal: [
-              // ...messageData?.getMessages,
-              // newMessage
-            ]
-          }
-        })
-        const oldOrder = [...newOrderModal.order, data?.data?.newStoreOrder]
-        setNewOrderModal({
-          ...newOrderModal,
-          open: true,
-          order: oldOrder
-        })
-        setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
-        sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
-      }
+  //   onData: ({ data, client }) => {
+  //     const ourStore = data?.data?.newStoreOrder?.idStore === dataStore?.idStore
+  //     console.log(client)
+  //     const subscription = client.link.request({
+  //       query: NEW_NOTIFICATION
+  //     }).subscribe({
+  //       next: (data) => {
+  //         if(ourStore){
+  //           console.log({data})
+  //           // isOurStore = true
+  //         } else{
+  //           subscription.unsubscribe()
+  //         }
+  //       },
+  //       error: (error) => {
+  //         console.log(error)
+  //       },
+  //       complete: () => {
+  //         console.log('Completed')
+  //       }
+  //     })
+  //     if (!ourStore) {
+  //       return subscription.unsubscribe()
+  //     }
+  //     if (ourStore) {
+  //       client.writeQuery({
+  //         query: GET_ALL_PEDIDOS,
+  //         data: {
+  //           // ...messageData?.getMessages,
+  //           getAllPedidoStoreFinal: [
+  //             // ...messageData?.getMessages,
+  //             // newMessage
+  //           ]
+  //         }
+  //       })
+  //       const oldOrder = [...newOrderModal.order, data?.data?.newStoreOrder]
+  //       setNewOrderModal({
+  //         ...newOrderModal,
+  //         open: true,
+  //         order: oldOrder
+  //       })
+  //       setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
+  //       sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
+  //     }
 
-    }
-  })
+  //   }
+  // })
 
   const [connectionStatus, setConnectionStatus] = useState('initial')
   const statusConnection = connectionStatus ? 'Conexión a internet restablecida.' : 'Conexión a internet perdida.'
-  useConnection({ setConnectionStatus })
-  useEffect(() => {
-    if (connectionStatus === 'initial') return
-    if (connectionStatus === true) {
-      setTimeout(() => {
-        setConnectionStatus('initial')
-      }, 3500)
-    }
-    sendNotification({ title: 'Wifi', description: statusConnection })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connectionStatus])
+  // useConnection({ setConnectionStatus })
+  // useEffect(() => {
+  //   if (connectionStatus === 'initial') return
+  //   if (connectionStatus === true) {
+  //     setTimeout(() => {
+  //       setConnectionStatus('initial')
+  //     }, 3500)
+  //   }
+  //   sendNotification({ title: 'Wifi', description: statusConnection })
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [connectionStatus])
 
   const component = {
     1:  <ScheduleTimings />,

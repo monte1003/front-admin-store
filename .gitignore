@@ -46,12 +46,12 @@ yarn-error.log*
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
 
-# ./public/fallback-development.js
-# ./public/sw.js
-# ./public/sw.js.map
-# ./public/workbox-327c579b.js
-# ./public/workbox-327c579b.js.map
-# ./public/worker-development.js
+./public/fallback-development.js
+./public/sw.js
+./public/sw.js.map
+./public/workbox-327c579b.js
+./public/workbox-327c579b.js.map
+./public/worker-development.js
 
 
 package-lock.json

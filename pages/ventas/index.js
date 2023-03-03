@@ -1,3 +1,2 @@
-import VentasStores from 'container/ventas'
 
-export default function PedidosStoreView() { return (<VentasStores /> ) }
+export default function PedidosStoreView() { return (<div></div> ) }
