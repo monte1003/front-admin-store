@@ -23,6 +23,11 @@
     "react-hooks",
     "@typescript-eslint"
   ],
+  "ignorePatterns": [
+    "public/fallback-development.js",
+    "public/sw.js",
+    "public/worker-development.js"
+  ],
   "settings": {
     "react": {
       "version": "detect"

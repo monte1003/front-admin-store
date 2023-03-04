@@ -9,7 +9,11 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'eslint:recommended', 'next'
-
+  ],
+  'ignorePatterns': [
+    'public/fallback-development.js',
+    'public/sw.js',
+    'public/worker-development.js'
   ],
   'parser': '@typescript-eslint/parser',
   'parserOptions': {

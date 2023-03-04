@@ -1,23 +1,34 @@
-# Define la imagen base a utilizar
-FROM node:16.13.0-alpine3.14
-
-# Crea y establece el directorio de trabajo de la aplicación dentro del contenedor
+FROM node:lts-alpine as base
 WORKDIR /app
-
-# Copia los archivos de la aplicación (package.json y package-lock.json)
-COPY package*.json ./
-
-# Instala las dependencias de la aplicación
+COPY . .
+ARG NODE_ENV
+ENV APP_ENV=${NODE_ENV}
+COPY package.json ./
+RUN npm install -g npm
 RUN npm install -f
 
-# Copia los archivos de la aplicación al contenedor
-COPY . .
-
-# Compila la aplicación
+# Linux + Node + Source + Project dependencies + build assets
+FROM base AS build
+ARG NODE_ENV
+ENV APP_ENV=${NODE_ENV}
+ENV PORT=3000
+WORKDIR /build
+COPY --from=base /app ./
+RUN export NODE_OPTIONS=--openssl-legacy-provider
 RUN npm run build
 
-# Expone el puerto 3000 del contenedor
-EXPOSE 3000
+# We keep some artifacts from build
+FROM node:current-alpine AS production
+ENV PORT=3000
+WORKDIR /app
+COPY --from=build /app/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /build/package*.json ./
+COPY --from=build /build/.next ./.next
+COPY --from=build /build/public ./public
+COPY --from=build /build/.npmrc .npmrc
+RUN npm install -g npm
+RUN npm install next
+RUN rm -f .npmrc
 
-# Define el comando a ejecutar cuando se inicie el contenedor
-CMD ["npm", "start"]
+EXPOSE 3000
+CMD npm run start

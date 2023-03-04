@@ -19,7 +19,7 @@ export const ReportsC = () => {
   const OPEN_MODAL = useSetState()
   const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm }] = useFormTools()
   const [files, setFiles] = useState([])
-  console.log(files)
+
   const handleFileChange = async paramFiles => {
     setFiles(paramFiles)
   }
@@ -27,7 +27,7 @@ export const ReportsC = () => {
     <Container>
       <InputRange
         description='lol'
-        onChange={(n) => { return console.log(n) }}
+        onChange={() => { return }}
       />
       <InputFiles
         Disable={false}

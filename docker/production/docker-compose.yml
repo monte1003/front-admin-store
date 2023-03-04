@@ -8,3 +8,5 @@ services:
     image: with-docker-multi-env-production
     ports:
       - '3000:3000'
+    volumes:
+      - .:/app
