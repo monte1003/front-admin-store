@@ -21,7 +21,7 @@ RUN npm run build
 FROM node:current-alpine AS production
 ENV PORT=3000
 WORKDIR /app
-COPY --from=build /build/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /build/nginx/default.conf /etc/nginx/sites-available/default
 COPY --from=build /build/package*.json ./
 COPY --from=build /build/.next ./.next
 COPY --from=build /build/public ./public
