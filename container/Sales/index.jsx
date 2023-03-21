@@ -1,5 +1,9 @@
 import { useQuery } from '@apollo/client'
-import { useEffect, useRef, useState } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import { useCheckboxState } from 'components/hooks/useCheckbox'
 import { RippleButton } from 'components/Ripple'
 import { Skeleton } from 'components/Skeleton'
@@ -62,6 +66,7 @@ const GenerateSales = () => {
     modalItem,
     oneProductToComment,
     openCommentModal,
+    setArrayCategory,
     onChangeInput,
     handleRemoveValue,
     print,
@@ -80,6 +85,7 @@ const GenerateSales = () => {
     valuesDates,
     errorSale,
     openCurrentSale,
+    handleCleanFilter,
     code
   } = useSales({
     disabled: false,
@@ -90,19 +96,28 @@ const GenerateSales = () => {
   const [dataClientes, { loading: loadingClients }] = useGetClients()
   // QUERIES
   const { data: datCat } = useQuery(GET_ULTIMATE_CATEGORY_PRODUCTS)
-  const { checkedItems, disabledItems, handleChangeCheck } = useCheckboxState(datCat?.catProductsAll)
+  const {
+    checkedItems,
+    disabledItems,
+    setCheckedItems,
+    handleChangeCheck
+  } = useCheckboxState(datCat?.catProductsAll, [], [], setArrayCategory)
   const { data: dataMinPedido } = useQuery(GET_MIN_PEDIDO)
-
   const restPropsSliderCategory = {
     datCat,
     checkedItems,
     disabledItems,
     handleChangeCheck
   }
+  const clean = () => {
+    handleCleanFilter()
+    setCheckedItems(new Set())
+  }
   const restPropsFormFilter = {
     valuesDates,
     search,
     handleChangeFilter,
+    handleCleanFilter: clean,
     onChangeInput
   }
 

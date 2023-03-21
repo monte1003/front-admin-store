@@ -2,8 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Warper } from '../styled'
 import InputHooks from 'components/InputHooks/InputHooks'
+import { RippleButton } from '~/components/Ripple'
 
-export const FormFilterSales = ({ onChangeInput, valuesDates, handleChangeFilter, search }) => {
+export const FormFilterSales = ({
+  onChangeInput,
+  valuesDates,
+  search,
+  handleChangeFilter = () => { return },
+  handleCleanFilter = () => { return }
+}) => {
   return (
     <Warper>
       <InputHooks
@@ -24,6 +31,14 @@ export const FormFilterSales = ({ onChangeInput, valuesDates, handleChangeFilter
         value={valuesDates?.toDate}
         width='20%'
       />
+      <RippleButton
+        onClick={handleCleanFilter}
+        padding='0'
+        widthButton='20%'
+      >
+        Limpiar
+      </RippleButton>
+
       <InputHooks
         name='search'
         onChange={handleChangeFilter}

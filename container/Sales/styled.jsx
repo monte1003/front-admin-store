@@ -54,6 +54,11 @@ export const FlipTop = styled.div`
 export const Warper = styled.div`
     flex-wrap: wrap;
     display: flex;
+    .ripple-button  {
+        padding: 13px !important;
+        margin-top: 15px !important;
+        height: min-content;
+    }
     .optional_input {
         width: 50%;
         padding: 10px;

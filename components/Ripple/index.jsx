@@ -4,7 +4,16 @@ import styled, { css } from 'styled-components'
 import { BGColor, DarkSilver } from '../../public/colors'
 
 export const RippleButton = props => {
-  const { label, onClick, style, family, standard, active, type, widthButton } = props
+  const { 
+    label, 
+    onClick, 
+    style, 
+    family, 
+    standard, 
+    active, 
+    type, 
+    widthButton
+  } = props
   const button = useRef(null)
 
   useEffect(() => {
@@ -33,7 +42,7 @@ export const RippleButton = props => {
     <Button
       active={active}
       bgColor={ props.bgColor}
-      className='ripple-button'
+      className={`ripple-button`}
       color={ props.color }
       family={family}
       margin={ props.margin }

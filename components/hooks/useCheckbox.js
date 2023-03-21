@@ -15,14 +15,14 @@ import { useCallback, useState } from 'react'
  *  - clearAll (callback)
  */
 
-export const useCheckboxState = (elem, selectedIds = [], disabledIds = []) => {
+export const useCheckboxState = (elem, selectedIds = [], disabledIds = [], calBack = () => { return }) => {
   const numTotalItems = elem?.length
   const [checkedItems, setCheckedItems] = useState(new Set(selectedIds))
   const [disabledItems, setDisabledItems] = useState(new Set(disabledIds))
 
   const handleChangeCheck = useCallback((event, id) => {
     const target = event.target
-    setCheckedItems(prevState => { 
+    setCheckedItems(prevState => {
 
       const newState = new Set(prevState)
       if (target.checked) {
@@ -30,6 +30,7 @@ export const useCheckboxState = (elem, selectedIds = [], disabledIds = []) => {
       } else {
         newState.delete(id)
       }
+      calBack([...newState])
       return newState
     })
   }, [])
@@ -107,6 +108,7 @@ export const useCheckboxState = (elem, selectedIds = [], disabledIds = []) => {
     disabledItems,
     handleChangeCheck,
     toggleAll,
+    setCheckedItems,
     selectAll,
     clearAll,
     enableCheckboxes,

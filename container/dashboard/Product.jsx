@@ -134,7 +134,6 @@ export const Product = ({
           />
         </ContentInfo>
         <div>
-        asfsd
         </div>
 
       </CardProductsModal>

@@ -50,15 +50,15 @@ export const MemoLayout = ({
   } = useContext(Context)
   const { latitude, longitude } = usePosition(watch, settings)
   const dataLocation = usePosition(watch, settings)
-  // useEffect(() => {
-  //   setAlertBox({ message: '', color: 'success' })
-  //   if (latitude) {
-  //     window.localStorage.setItem('latitude', latitude)
-  //     window.localStorage.setItem('longitude', longitude)
-  //     window.localStorage.setItem('location', JSON.stringify(dataLocation))
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
+  useEffect(() => {
+    setAlertBox({ message: '', color: 'success' })
+    if (latitude) {
+      window.localStorage.setItem('latitude', latitude)
+      window.localStorage.setItem('longitude', longitude)
+      window.localStorage.setItem('location', JSON.stringify(dataLocation))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const NEW_NOTIFICATION = gql`
   subscription {
   newStoreOrder{
