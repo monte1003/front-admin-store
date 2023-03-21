@@ -151,6 +151,7 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
     background-color: #7777774e;
+    z-index: 99999999;
     .loader {
   width: 10px;
   height: 10px;
@@ -162,6 +163,8 @@ const Container = styled.div`
   box-shadow: -24px 0 #FFF, 24px 0 #FFF;
   box-sizing: border-box;
   animation: shadowPulse 2s linear infinite;
+  z-index: 99999999;
+
 }
 
 @keyframes shadowPulse {

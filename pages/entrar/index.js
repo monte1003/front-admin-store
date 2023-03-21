@@ -1,3 +1,4 @@
+import ErrorBoundary from '~/components/Error'
 import { Login } from '../../container/entrar'
 
 export default function LoginView() {
@@ -11,5 +12,13 @@ LoginView.getLayout = (page) => {
     <>
       {page}
     </>
+  )
+}
+
+LoginView.getErrorBoundary = (page) => {
+  return (
+    <ErrorBoundary customMessage={'Ocurrió un error en el inicio de session'}>
+      {page}
+    </ErrorBoundary>
   )
 }

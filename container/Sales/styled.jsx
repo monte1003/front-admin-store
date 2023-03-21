@@ -1,4 +1,4 @@
-import { BGColor, PColor, APColor, SECBGColor, DarkSilver } from 'public/colors'
+import { BGColor, PColor, APColor, SECBGColor, DarkSilver, SFVColor } from 'public/colors'
 import styled, { css } from 'styled-components'
 
 export const Input = styled.input`
@@ -145,90 +145,168 @@ export const Text = styled.span`
     font-weight: ${({ fontWeight }) => { return fontWeight ? fontWeight : '700' }};
 `
 export const Item = styled.div`
-    display: flex;
+    display: ${({ display }) => { return display || 'grid' }};
+    grid-template-columns: 25% repeat(auto-fill, 25%);
     place-content: space-between;
-    padding: 10px 0;
-    /* word-break: break-all; */
+    padding: 15px;
     place-items: center;
-    border-top: 1px solid #00000069;
+    border-top: 1px solid ${SFVColor};
+    span {
+        display: inline-block;
+    }
 `
 export const Content = styled.div`
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    `
+export const ContainerTicket = styled.div`
+        position: relative;
+    .wrapper-action__footer {
+        position: sticky;
+        top: 30px;
+        right: 0;
+        margin: 0 0 0 auto;
+        background: #fff;
+        border-radius: 60px;
+        width: min-content;
+        display: flex;
+        justify-content: space-between;
+        z-index: 9999;
+        & > button {
+            transition: all 0.3s ease;
+            &:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            }
+
+        }
+    }
 `
 export const Ticket = styled.div`
-h5 {
-    font-size: 1.5em;
-    font-family: PFont-Bold;
-    text-align: center;
-}
-.title {
-}
-        .ticket-image {
-            width: 100%;
-            border: 1px solid #00000069;
-            overflow: hidden;
-            margin: 0 0 30px 0;
-        }
-        /* width: 100%;
-        max-width: 100%; */
-        width: 555px;
-        max-width: 555px;
-        position: relative;
-        display: flex;
-        place-items: center;
-        place-content: center;
-        margin: auto;
-        font-family: PFont-Light;
-        min-width: 555px;
-        margin-bottom: 300px;
-   td,
-th,
-tr,
-table {
-    border-top: 1px solid black;
-    border-collapse: collapse;
-}
-
-td.producto,
-th.producto {
-    width: 75px;
-    max-width: 75px;
-}
-
-td.cantidad,
-th.cantidad {
-    width: 40px;
-    max-width: 40px;
-    word-break: break-all;
-}
-
-td.precio,
-th.precio {
-    width: 40px;
-    max-width: 40px;
-    word-break: break-all;
-}
-
-.centrado {
-    text-align: center;
-    border-bottom: 20px;
-    align-content: center;
-}
-
+    background-color:#ecebeb;
+    position: relative;
 .ticket {
-    width: 100%;
-    max-width: 100%;
+    transform: scale(0.8);
+    position: relative;
+    margin-bottom: 300px;
+    width: 120mm;
+    background-color: #FFF;
+    font-family: PFont-Regular;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 30px;
+}
+.ticket-info_client_restaurant {
+    padding: 15px;
+}
+.divider {
+    background-image:radial-gradient(circle at 0 50%,transparent 30px,#FFF 0,#fff 80%,transparent 0),radial-gradient(circle at 100% 50%,#ecebeb 30px,#fff 0,#ecebeb 80%,#ecebeb 0);
+    display: flex;
+    height: 100px;
+    position: relative;
+    & > div {
+        position: absolute;
+        border-top: 2px dashed #f2f2f2;
+        width: 87%;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        height: 1px;
+        left: 30px;
+    }
+}
+.wrapper__arrow_button {
+    height: 40px;
 }
 
-img{ 
-        width: 100%;
-        max-width: 100%;
-        object-fit: cover;
-        min-width: 100%;
-        width: 100%;
+.wrapper__sub-items {
+    display: flex;
+}
+    .sub-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.sub-item__values {
+    width: 50%;
+    
+    .item--values {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
     }
+}
+
+.arrow_button {
+    position: relative;
+    width: 20px;
+    margin: 0;
+  }
+
+  .arrow_button::after {
+    content: "";
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    margin-left: -10px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: #FFFFFF transparent transparent transparent;
+  }
+.ticket h5 {
+  font-size: 24px;
+  margin-bottom: 0.5rem;
+}
+
+.ticket p {
+  margin: 0;
+}
+
+.ticket-image {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.ticket-image img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  object-fit: cover;
+}
+
+.ticket-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 28px;
+  margin: 1rem 0;
+}
+
+.ticket-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.ticket-item .title {
+  font-weight: bold;
+}
+
+.ticket-item:last-of-type {
+  margin-top: 1rem;
+  border-top: 1px solid black;
+  padding-top: 0.5rem;
+}
+
+.ticket-item-total {
+  font-size: 20px;
+}
+
+.ticket-item-total .title {
+  font-size: 20px;
+}
+
 `
 export const Button = styled.button`
     background-color: transparent;
@@ -237,13 +315,12 @@ export const Button = styled.button`
         background-color: blue;
     }
     cursor: pointer;
-    color: ${({ color }) => {return color ? color : BGColor}};
+    color: ${({ color }) => { return color ? color : BGColor }};
     border: 1px solid transparent;
 
     ${({ active }) => {
-    return active && css`
+        return active && css`
         border: 1px solid ${APColor};
         border-radius: 10px;
-    `}}}
+    `}}
 `
-

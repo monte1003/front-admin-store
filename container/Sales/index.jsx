@@ -1,12 +1,17 @@
 import { useQuery } from '@apollo/client'
+import { useEffect, useRef, useState } from 'react'
 import { useCheckboxState } from 'components/hooks/useCheckbox'
 import { RippleButton } from 'components/Ripple'
 import { Skeleton } from 'components/Skeleton'
 import { GET_ULTIMATE_CATEGORY_PRODUCTS } from 'container/dashboard/queries'
 import { GET_MIN_PEDIDO } from 'container/dashboard/queriesStore'
 import { useRouter } from 'next/router'
-import { useGetClients, useSales } from 'npm-pkg-hook'
-import { Text, CardProductSimple } from 'pkg-components'
+import {
+  useGetClients,
+  useSales,
+  useReactToPrint
+} from 'npm-pkg-hook'
+import { CardProductSimple, numberFormat } from 'pkg-components'
 import { IconSales } from 'public/icons'
 import { useContext } from 'react'
 import { AwesomeModal } from '~/components/AwesomeModal'
@@ -23,6 +28,9 @@ import {
   Wrapper
 } from './styled'
 import { SubItems } from './SubItems'
+import { SuccessSaleModal } from './Success'
+import { generatePdfDocumentInvoice } from './PdfStatement'
+import ErrorBoundary from '~/components/Error'
 
 const GenerateSales = () => {
   // STATES
@@ -70,6 +78,7 @@ const GenerateSales = () => {
     setOpenCurrentSale,
     values,
     valuesDates,
+    errorSale,
     openCurrentSale,
     code
   } = useSales({
@@ -81,7 +90,7 @@ const GenerateSales = () => {
   const [dataClientes, { loading: loadingClients }] = useGetClients()
   // QUERIES
   const { data: datCat } = useQuery(GET_ULTIMATE_CATEGORY_PRODUCTS)
-  const { checkedItems, disabledItems, handleChangeCheck } = useCheckboxState( datCat?.catProductsAll)
+  const { checkedItems, disabledItems, handleChangeCheck } = useCheckboxState(datCat?.catProductsAll)
   const { data: dataMinPedido } = useQuery(GET_MIN_PEDIDO)
 
   const restPropsSliderCategory = {
@@ -113,6 +122,26 @@ const GenerateSales = () => {
     dataProduct
   }
 
+  const componentRef = useRef()
+  const [isPrinting, setIsPrinting] = useState(false)
+  const promiseResolveRef = useRef(null)
+
+  const handlePrint = useReactToPrint({
+    documentTitle: '',
+    pageStyle: `padding: 20px`,
+    content: () => {return componentRef.current},
+    onBeforeGetContent: () => {
+      return new Promise((resolve) => {
+        promiseResolveRef.current = resolve
+        setIsPrinting(true)
+      })
+    },
+    onAfterPrint: () => {
+    // Reset the Promise resolve so we can print again
+      promiseResolveRef.current = null
+      setIsPrinting(false)
+    }
+  })
   const restPropsProductSales = {
     ...modalItems,
     totalProductPrice,
@@ -122,6 +151,7 @@ const GenerateSales = () => {
     dispatch,
     dataMinPedido,
     max,
+    componentRef,
     inputValue,
     handleChangeFilterProduct,
     finalFilter,
@@ -132,8 +162,50 @@ const GenerateSales = () => {
     setPrint,
     handleChange
   }
+  const [client, setClient] = useState({})
+  useEffect(() => {
+    (() => {
+      if (dataClientes?.length > 0) {
+        const client = dataClientes?.find((client) => {
+          return client && client?.cliId === values?.cliId
+        })
+        setClient(client)
+      }
+    })()
+  }, [dataClientes, values.cliId])
+  const {
+    clientName,
+    ccClient,
+    ClientAddress,
+    clientNumber
+  } = client || {}
+
+  const dataToPrint = {
+    urlLogo :  '/images/DEFAULTBANNER.png',
+    addressStore: ClientAddress,
+    storePhone: 4353453,
+    date: '',
+    client: {
+      clientName,
+      clientNumber,
+      ccClient,
+      ...client
+    },
+    ref: code,
+    products: data?.PRODUCT || [],
+    total: numberFormat(totalProductPrice),
+    change: values.change,
+    NitStore: '',
+    storeName: ''
+  }
+  const handleDownLoad = () => {
+    if (dataToPrint) {
+      return generatePdfDocumentInvoice({data: dataToPrint, titleFile: ''})
+    }
+    return null
+  }
   const restPropsSalesModal = {
-    code: 1,
+    code,
     data,
     delivery,
     print,
@@ -141,9 +213,15 @@ const GenerateSales = () => {
     values,
     handleChange,
     setDelivery,
+    componentRef,
+    promiseResolveRef,
+    handlePrint,
+    isPrinting,
     dataClientes,
     setPrint,
-    handleSubmit
+    loading,
+    handleSubmit,
+    handleDownLoad
   }
   const existComment = oneProductToComment?.comment?.length > 0
   const handleCloseModal = () => {
@@ -153,9 +231,10 @@ const GenerateSales = () => {
     })
     setSalesOpen(false)
   }
+  if (errorSale) return <ErrorBoundary />
   return (
     <Wrapper>
-      {loadingRegisterSale || loading && <Loading />}
+      {loadingRegisterSale || loading || isPrinting && <Loading />}
       {openCommentModal &&
       <AwesomeModal
         btnConfirm={false}
@@ -211,39 +290,20 @@ const GenerateSales = () => {
         </RippleButton>}
       </AwesomeModal>
       }
-      {openCurrentSale &&
-            <AwesomeModal
-              btnConfirm={false}
-              footer={false}
-              header={false}
-              onCancel={() => { return setOpenCurrentSale(false) }}
-              onHide={() => { return setOpenCurrentSale(false) }}
-              padding='20px'
-              show={openCurrentSale}
-              size='small'
-              zIndex='9999'
-            >
-              <div>
-                <Text
-                  color='#717171'
-                  fontSize='22px'
-                  margin='10px 0'
-                >
-                  Tu pedido se ha generado
-                </Text>
-                <Text
-                  color='#717171'
-                  fontSize='20px'
-                  fontWeight='300'
-                  margin='10px 0'
-                >
-                  {code}
-                </Text>
-                <RippleButton onClick={() => { return handleCloseModal() }}>
-                    Mirar pedido
-                </RippleButton>
-              </div>
-            </AwesomeModal>
+      {openCurrentSale
+      &&
+      <>
+        <SuccessSaleModal
+          code={code}
+          handleCloseModal={handleCloseModal}
+          handleDownLoad={handleDownLoad}
+          handlePrint={() => { return handlePrint() }}
+          loading={isPrinting}
+          openCurrentSale={openCurrentSale}
+          products={data?.PRODUCT || []}
+          setOpenCurrentSale={setOpenCurrentSale}
+        />
+      </>
       }
       <ModalSales {...restPropsSalesModal} />
       <Box>

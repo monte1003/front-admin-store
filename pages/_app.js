@@ -7,7 +7,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
 import PropTypes from 'prop-types'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -28,66 +28,69 @@ export default function App({ Component, pageProps }) {
   const router = useRouter()
   const [animating, setIsAnimating] = useState(false)
   // Use the layout defined at the page level, if available
+
   const getLayout = Component.getLayout ?? ((page) => { return <MainLayout>{page}</MainLayout> })
-  // useEffect(() => {
-  //   const handleStop = () => {
-  //     setIsAnimating(false)
-  //   }
-  //   router.events.on('routeChangeStart', () => {
-  //     setIsAnimating(true)
-  //   })
-  //   router.events.on('routeChangeComplete', handleStop)
-  //   router.events.on('routeChangeError', handleStop)
+  const getErrorBoundary = Component.getErrorBoundary ?? ((page) => { return <ErrorBoundary>{page}</ErrorBoundary> })
 
-  //   return () => {
-  //     router.events.off('routeChangeStart', () => {
-  //       setIsAnimating(true)
-  //     })
-  //     router.events.off('routeChangeComplete', handleStop)
-  //     router.events.off('routeChangeError', handleStop)
-  //   }
-  // }, [router])
-  // const timerId = useRef()
+  useEffect(() => {
+    const handleStop = () => {
+      setIsAnimating(false)
+    }
+    router.events.on('routeChangeStart', () => {
+      setIsAnimating(true)
+    })
+    router.events.on('routeChangeComplete', handleStop)
+    router.events.on('routeChangeError', handleStop)
+
+    return () => {
+      router.events.off('routeChangeStart', () => {
+        setIsAnimating(true)
+      })
+      router.events.off('routeChangeComplete', handleStop)
+      router.events.off('routeChangeError', handleStop)
+    }
+  }, [router])
+  const timerId = useRef()
   // eslint-disabled-next-line
-  // const onClickLogout = useCallback(async () => {
-  //   await window
-  //     .fetch(`${process.env.URL_BASE}api/auth/logout/`, {})
-  //     .then(res => {
-  //       if (res) {
-  //         localStorage.removeItem('session')
-  //         localStorage.removeItem('usuario')
-  //         localStorage.removeItem('restaurant')
-  //         router.replace('/entrar')
-  //       }
-  //     })
-  //     .catch(() => {
-  //       return
-  //     })
-  // }, [router])
-  // const handleMouseMove = () => {
-  //   clearInterval(timerId.current)
-  //   timerId.current = setInterval(() => {
-  //     // onClickLogout()
-  //   }, 3000)
-  // }
-  // useEffect(() => {
-  //   clearInterval(timerId.current)
-  //   timerId.current = setInterval(() => {
-  //     // onClickLogout()
-  //   }, 3000)
-  // }, [])
-  // const [showChild, setShowChild] = useState(false)
+  const onClickLogout = useCallback(async () => {
+    await window
+      .fetch(`${process.env.URL_BASE}api/auth/logout/`, {})
+      .then(res => {
+        if (res) {
+          localStorage.removeItem('session')
+          localStorage.removeItem('usuario')
+          localStorage.removeItem('restaurant')
+          router.replace('/entrar')
+        }
+      })
+      .catch(() => {
+        return
+      })
+  }, [router])
+  const handleMouseMove = () => {
+    clearInterval(timerId.current)
+    timerId.current = setInterval(() => {
+      // onClickLogout()
+    }, 3000)
+  }
+  useEffect(() => {
+    clearInterval(timerId.current)
+    timerId.current = setInterval(() => {
+      // onClickLogout()
+    }, 3000)
+  }, [])
+  const [showChild, setShowChild] = useState(false)
 
-  // useEffect(() => {
-  //   setShowChild(true)
-  // }, [showChild])
+  useEffect(() => {
+    setShowChild(true)
+  }, [showChild])
 
-  // if (!showChild) {
-  //   return null
-  // }
-  // if (typeof window === 'undefined') {
-  //   return <div>Loading...</div>
-  // }
+  if (!showChild) {
+    return null
+  }
+  if (typeof window === 'undefined') {
+    return <div>Loading...</div>
+  }
 
   return (
     <div onMouseMove={() => { return {} }}>
@@ -128,9 +131,9 @@ export default function App({ Component, pageProps }) {
           </Noscript>
           {getLayout(
             <Auth>
-              <ErrorBoundary>
+              {getErrorBoundary(
                 <Component {...{ ...pageProps, isMobile: false }} />
-              </ErrorBoundary>
+              )}
             </Auth>
           )}
         </ApolloProvider >

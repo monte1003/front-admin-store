@@ -5,19 +5,31 @@ import {
 } from 'npm-pkg-hook'
 import { Text } from 'pkg-components'
 import Image from 'next/image'
-
 import {
+  ContainerTicket,
   Content,
   Item,
   Ticket
 } from './styled'
 import { useEffect, useState } from 'react'
-import { Invoice } from './Invoice'
+import { Loading } from '~/components/Loading'
+import { generatePdfDocumentInvoice } from './PdfStatement'
+import { RippleButton } from '~/components/Ripple'
+import { IconSales } from './../../public/icons/index'
+import { BGColor } from '@/public/colors'
+import { Ticket as TemplateTicket } from '../Sales/Ticket'
 
 export const Prints = ({
   data,
+  code,
+  change,
+  total,
+  isPrinting,
+  promiseResolveRef,
+  componentRef,
   dataClientes = [],
-  values
+  values,
+  handleSubmit = () => { return }
 }) => {
   const [dataStore] = useStore()
   const [client, setClient] = useState({})
@@ -25,15 +37,12 @@ export const Prints = ({
     storeName,
     Image: src,
     storePhone,
+    NitStore,
     ULocation,
     addressStore,
     uPhoNum
   } = dataStore || {}
-  const {
-    yearMonthDay,
-    hourMinutes12,
-    longDayName
-  } = useFormatDate({})
+  const { yearMonthDay, longDayName } = useFormatDate({})
   useEffect(() => {
     (() => {
       if (dataClientes?.length > 0) {
@@ -51,70 +60,157 @@ export const Prints = ({
     clientNumber
   } = client || {}
 
+
+  useEffect(() => {
+    if (isPrinting && promiseResolveRef.current) {
+    // Resolves the Promise, letting `react-to-print` know that the DOM updates are completed
+      promiseResolveRef.current()
+    }
+  }, [isPrinting])
+  const [date, setDate] = useState(new Date())
+  useEffect(() => {
+    const timer = setInterval(() => {return setDate(new Date())}, 1000)
+    return () => {return clearInterval(timer)}
+  }, [])
+  const localDate = date.toLocaleTimeString()
+  const customDate = `${yearMonthDay + ' - ' + localDate + ' - ' + longDayName}`
+
+  const dataToPrint = {
+    products: data,
+    urlLogo : src ? src : src ?? '/images/DEFAULTBANNER.png',
+    addressStore: addressStore ?? ULocation ?? ClientAddress,
+    storePhone: storePhone ?? uPhoNum,
+    date: customDate,
+    client: {
+      clientName,
+      clientNumber,
+      ccClient,
+      ...client
+    },
+    ref: code,
+    total,
+    change,
+    NitStore,
+    storeName,
+    ...dataStore
+  }
+  // handleDownLoad(generatePdfDocumentInvoice({data: dataToPrint, titleFile}))
+
   return (
-    <Ticket>
-      <Invoice>
-        <div className='ticket' id='ticket'>
-          <h5>{storeName ?? 'Nombre Empresa'}</h5>
-          <Text>NIT:</Text>
-          <Text>Direccion: {addressStore ?? ULocation}</Text>
-          <Text>Telf: {storePhone ?? uPhoNum} </Text>
-          <Text>Fecha: {yearMonthDay + ' ' +  hourMinutes12 + ' ' + longDayName} </Text>
-          <Text fontSize='20px' fontWeight='500'>Cliente</Text>
-          <Text>Nombre: {clientName}</Text>
-          <Text>Direccion: {ClientAddress}</Text>
-          <Text>Numero: {clientNumber}</Text>
-          <Text>CC: {ccClient}</Text>
+    <ContainerTicket>
+      <div className='wrapper-action__footer'>
+        <RippleButton
+          height='60px'
+          onClick={() => {return handleSubmit()}}
+          radius='100%'
+          widthButton='60px'
+        >
+          <IconSales color={BGColor} />
+        </RippleButton>
+      </div>
+      {isPrinting && <Loading />}
+      <TemplateTicket componentRef={componentRef} dataToPrint={dataToPrint} />
+      <Ticket >
+        <div
+          className='ticket'
+          id='ticket'
+        >
+          <div className='ticket-info_client_restaurant'>
+            <div className='wrapper__arrow_button' />
+            <h5>{storeName ?? 'Nombre Empresa'}</h5>
+            <Text>NIT:</Text>
+            <Text>Dirección: {addressStore ?? ULocation ?? ClientAddress}</Text>
+            <Text>Teléfono: {storePhone ?? uPhoNum} </Text>
+            <Text>Fecha: {customDate}</Text>
+            {clientName && <Text fontSize='20px' fontWeight='800'>Cliente</Text>}
+            {clientName && <Text>Nombre: {clientName}</Text>}
+            {clientNumber && <Text>Numero: {clientNumber}</Text>}
+            {ccClient && <Text>CC: {ccClient}</Text>}
+          </div>
+
           <div className='ticket-image'>
             <Image
               alt={''}
               blurDataURL='/images/DEFAULTBANNER.png'
               className='store_image'
-              height={400}
-              objectFit='contain'
+              height={200}
+              objectFit='scale-down'
               src={src ? src : src ?? '/images/DEFAULTBANNER.png'}
-              width={400}
+              width={200}
             />
           </div>
+          <div className='divider'>
+            <div></div>
+          </div>
           <Text className='centrado' fontWeight='800'>TICKET DE VENTA</Text>
-          <Item>
-            <span className='title'>REF</span>
-            <span className='title'>Cantidad</span>
-            <span className='title'>$ PRECIO</span>
-          </Item>
           <Content>
-            {data.map((item, i) => {
+            <Item>
+              <th>Descripción</th>
+              <th>Cantidad</th>
+              <th>Precio</th>
+              <th>Total</th>
+            </Item>
+            {data.map((item) => {
               const ProPrice = `${numberFormat(item?.ProPrice)}`
+              const unitPrice = `${numberFormat(item?.unitPrice)}`
               return (
-                <Item key={i}>
-                  <span>{item?.pName}</span>
-                  <span>{item?.ProQuantity}</span>
+                <Item key={item.pId}>
+                  <span>{item?.pName || ''}</span>
+                  <span>{item?.ProQuantity || 0}</span>
+                  <span>{unitPrice || 0}</span>
                   <span>{ProPrice}</span>
                 </Item>
               )})}
           </Content>
-          {/* <Item>
-              <span>Pedido</span>
-              <span>{code}</span>
-            </Item>
-            <Item>
-              <Text>FECHA</Text>
-              <Text>{time}</Text>
-            </Item>
-            <Item>
-              <Text fontWeight='bold'>SUB TOTAL</Text>
-              <Text fontWeight='bold'>{(total)}</Text>
-            </Item>
-            <Item>
-              <Text fontWeight='bold'>CAMBIO</Text>
-              <Text fontWeight='bold'>{change}</Text>
-            </Item>
-            <Item>
-              <Text fontWeight='bold'>TOTAL</Text>
-              <Text fontWeight='bold'>{total}</Text>
-            </Item> */}
+          {/* <span>Pedido</span>
+          <span>{code}</span>
+          <Item>
+            <Text>FECHA</Text>
+            <Text>{customDate}</Text>
+            <Text fontWeight='bold'>SUB TOTAL</Text>
+            <Text fontWeight='bold'>{(total)}</Text>
+          </Item>
+          */}
+          <div className='wrapper__sub-items'>
+            <div className='sub-items'>
+              <div className='sub-item__values'>
+              </div>
+              <div className='sub-item__values'>
+                {change &&
+               <div className='item--values'>
+                 <Text fontWeight='bold'>CAMBIO &nbsp;</Text>
+                 <Text fontWeight='bold'>$ {numberFormat(change)}</Text>
+               </div>
+                }
+                {total &&
+               <div className='item--values'>
+                 <Text fontWeight='bold'>TOTAL &nbsp;</Text>
+                 <Text fontWeight='bold'>{total}</Text>
+               </div>
+                }
+
+              </div>
+            </div>
+          </div>
+          <Text
+            align='center'
+            as='h3'
+            fontWeight='bold'
+            justifyContent='center'
+            margin='40px 0'
+          >
+            Gracias por su compra
+          </Text>
+
+          <div className='wrapper__arrow_button' style={{ display: 'flex' }}>
+            {Array(25).fill('').map((ele, i) => {
+              return (
+                <div className='arrow_button' key={i} />
+              )
+            })}
+          </div>
         </div>
-      </Invoice>
-    </Ticket>
+      </Ticket>
+    </ContainerTicket>
   )
 }

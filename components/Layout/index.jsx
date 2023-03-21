@@ -5,7 +5,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { gql, useSubscription } from '@apollo/client'
-import { AwesomeModal } from 'components/AwesomeModal'
+import { AwesomeModal } from 'pkg-components'
 import { BtnClose } from 'components/AwesomeModal/styled'
 import { usePosition } from 'components/hooks/usePosition'
 import { ScheduleTimings } from 'container/dashboard/ScheduleTimings'

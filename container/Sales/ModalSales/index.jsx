@@ -1,9 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { AwesomeModal } from 'components/AwesomeModal'
 import { numberFormat } from 'utils'
 import { Input } from '../styled'
 import { Prints } from '../Printsale'
+import { AwesomeModal } from 'pkg-components'
+import { BGColor } from '@/public/colors'
+import { IconSales } from 'public/icons'
+import { Loading } from '~/components/Loading'
 
 export const ModalSales = ({
   print,
@@ -14,36 +17,45 @@ export const ModalSales = ({
   code,
   data,
   delivery,
+  loading,
   setDelivery = () => { return },
   handleChange = () => { return },
-  handleSubmit = () => { return }
+  handleSubmit = () => { return },
+  ...rest
 }) => {
   return (
     <div>
+      {loading && <Loading />}
       <AwesomeModal
-        borderRadius='5px'
-        btnCancel={true}
+        backgroundColor='#ecebeb'
+        borderRadius='0'
         btnConfirm={true}
-        cancel='Guardar'
+        cancel='Cancelar'
         confirm='Guardar y salir'
-        footer={true}
+        footer
         header={true}
         height='100%'
+        hideOnConfirm={false}
+        iconConfirm={<IconSales color={BGColor} size={'20px'} />}
         onConfirm={() => { return handleSubmit() }}
         onHide={() => { return setPrint(!print) }}
+        padding='30px'
         show={print}
-        size='large'
+        size='100%'
         zIndex='999999'
       >
         <Prints
-          change={values.change}
+          change={values?.change}
           code={code}
           data={data?.PRODUCT || []}
           dataClientes={dataClientes}
+          handleSubmit={handleSubmit}
           total={`$ ${numberFormat(totalProductPrice)}`}
           values={values}
+          {...rest}
         />
       </AwesomeModal>
+
       <AwesomeModal
         borderRadius='5px'
         btnCancel={true}

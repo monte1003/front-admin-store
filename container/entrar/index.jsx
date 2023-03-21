@@ -26,11 +26,13 @@ import { getDeviceId } from 'apollo/apolloClient'
 import { Context } from 'context/Context'
 import Portal from 'components/portal'
 import { Facebook, IconGoogleFullColor } from '@/public/icons'
+import { LoadEllipsis } from './../../components/LoadingButton/index'
 
 export const Login = () => {
   const router = useRouter()
   const { setAlertBox } = useContext(Context)
   const [location, setLocation] = useState({})
+  const [loading, setLoading] = useState(false)
   const [locationFormat, setLocationFormat] = useState('')
   useEffect(() => {
     const data = window.localStorage.getItem('location')
@@ -65,6 +67,7 @@ export const Login = () => {
       deviceid: device,
       imageUrl: imageUrl
     }
+    setLoading(true)
     await fetchJson(`${process.env.URL_BASE}api/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -84,6 +87,8 @@ export const Login = () => {
       }
     }).catch(() => {
       setAlertBox({ message: 'Lo sentimos ha ocurrido un error', color: 'error' })
+    }).finally(() => {
+      setLoading(false)
     })
   }
 
@@ -105,6 +110,7 @@ export const Login = () => {
       deviceid: '',
       imageUrl: ''
     }
+    setLoading(true)
     await fetchJson(`${process.env.URL_BASE}api/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -124,10 +130,11 @@ export const Login = () => {
       }
     }).catch(() => {
       setAlertBox({ message: 'Lo sentimos ha ocurrido un error', color: 'error' })
+    }).finally(() => {
+      setLoading(false)
     })
   }
   useEffect(() => {
-    // Prefetch the dashboard page
     router.prefetch('/dashboard')
   }, [])
   return (
@@ -146,14 +153,21 @@ export const Login = () => {
             onClick={responseGoogle}
             size='14px'
             type='button'
-          ><Facebook color={BGColor} size='30px' /> Login <div style={{ width: 'min-content' }} />    </ButtonSubmit>
+          >
+            <Facebook color={BGColor} size='30px' />
+            Login
+            <div style={{ width: 'min-content' }} /> 
+          </ButtonSubmit>
           <ButtonSubmit
             color='2'
             colorFont={DarkSilver}
             height='40px'
             onClick={responseGoogleFalse}
             size='14px'
-          ><IconGoogleFullColor size='30px' /> Continue with Google false<div style={{ width: 'min-content' }} /> </ButtonSubmit>
+          >
+            <IconGoogleFullColor size='30px' />  {loading ? <LoadEllipsis /> : 'Continue with Google false'}
+            <div style={{ width: 'min-content' }} />
+          </ButtonSubmit>
           {/* <GoogleLogin
             autoLoad={false}
             clientId='58758655786-u323tp1dpi6broro865rrm488gh4mnpu.apps.googleusercontent.com'

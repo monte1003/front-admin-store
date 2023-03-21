@@ -17,7 +17,9 @@ export const Invoice = ({ children }) => {
       promiseResolveRef.current()
     }
   }, [isPrinting])
+
   const handlePrint = useReactToPrint({
+    
     content: () => {return componentRef.current},
     onBeforeGetContent: () => {
       return new Promise((resolve) => {
@@ -31,6 +33,7 @@ export const Invoice = ({ children }) => {
       setIsPrinting(false)
     }
   })
+
   return (
     <>
       {isPrinting && 'loading'}

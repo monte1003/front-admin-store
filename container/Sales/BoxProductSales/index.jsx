@@ -59,6 +59,7 @@ export const BoxProductSales = ({
             value={values?.cliId}
           />
           <input
+            autoComplete='off'
             className='optional_input'
             name='change'
             onChange={handleChange}
@@ -67,6 +68,7 @@ export const BoxProductSales = ({
             value={format(values?.change)}
           />
           <input
+            autoComplete='off'
             className='optional_input'
             name='valueDelivery'
             onChange={handleChange}
@@ -91,7 +93,7 @@ export const BoxProductSales = ({
                 onChange={() => { return dispatch({ type: 'SORT', payload: 'PRICE_LOW_TO_HIGH' }) }}
               />
             </Flex>
-            <Flex>
+            {/* <Flex>
               <Range
                 label='Precio'
                 max={max || 0}
@@ -106,7 +108,7 @@ export const BoxProductSales = ({
                 value={data.priceRange}
                 width='100%'
               />
-            </Flex>
+            </Flex> */}
 
             <Flex style={{ justifyContent: 'space-between' }}>
               <Button
