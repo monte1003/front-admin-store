@@ -8,7 +8,7 @@ import {
   Warper
 } from '../styled'
 import { Checkbox } from 'components/Checkbox'
-import { Range } from 'components/InputRange'
+// import { Range } from 'components/InputRange'
 import { CardProductSimple } from 'pkg-components'
 import { IconEdit, IconPay } from 'public/icons'
 import { PColor, APColor } from 'public/colors'
@@ -22,7 +22,7 @@ export const BoxProductSales = ({
   totalProductPrice,
   data,
   dispatch,
-  max,
+  // max,
   setPrint,
   finalFilter,
   print,

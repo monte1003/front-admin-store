@@ -106,7 +106,7 @@ export const InputFiles = ({ onChange, reset, Disable, MaximumSizeFiles, ShowMes
                     <IconDelete color={EColor} size='15px' />
                   </ButtonDelete>
                   {(x.ext === '.png' || x.ext === '.svg' || x.ext === '.jpg' || x.ext === '.jpeg')
-                    ? <Image src={x?.temPath} />
+                    ? <Image alt='' src={x?.temPath} />
                     : (x.ext === '.doc' || x.ext === '.docm' || x.ext === '.dotx' || x.ext === '.dotm')
                       ? <IconWord size='250px' />
                       : (x.ext === '.pdf')

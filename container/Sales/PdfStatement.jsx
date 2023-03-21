@@ -1,4 +1,12 @@
-import { Document, Page, Text, View, StyleSheet, pdf, Image } from '@react-pdf/renderer'
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  pdf,
+  Image
+} from '@react-pdf/renderer'
 import { saveAs } from 'file-saver'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -120,7 +128,11 @@ const InvoicePdfGenerate = ({ data }) => {
           <Text style={styles.subtitle}> Documento generado {date}</Text>
         </View>
         <View style={{ width: 250, height: 100, marginBottom: 8 }}>
-          <Image src={srcLogo ?? '/images/DEFAULTBANNER.png'} style={[styles.image, { width: '100%', height: '100%' }]} />
+          <Image
+            alt=''
+            src={srcLogo ?? '/images/DEFAULTBANNER.png'}
+            style={[styles.image, { width: '100%', height: '100%' }]}
+          />
         </View>
         <View style={styles.sectionHeader}>
           {clientName && <Text style={[styles.headerText, { fontSize: 12, fontWeight: 100, color: '#000' }]}>Nombre del cliente: {clientName} </Text>}
