@@ -13,7 +13,6 @@ import {
 } from './styled'
 import { useEffect, useState } from 'react'
 import { Loading } from '~/components/Loading'
-import { generatePdfDocumentInvoice } from './PdfStatement'
 import { RippleButton } from '~/components/Ripple'
 import { IconSales } from './../../public/icons/index'
 import { BGColor } from '@/public/colors'
@@ -66,6 +65,7 @@ export const Prints = ({
     // Resolves the Promise, letting `react-to-print` know that the DOM updates are completed
       promiseResolveRef.current()
     }
+    // eslint-disable-next-line
   }, [isPrinting])
   const [date, setDate] = useState(new Date())
   useEffect(() => {
