@@ -1,6 +1,6 @@
 import { EColor } from '@/public/colors'
 import { IconDelete } from '@/public/icons'
-import { QuantityButton } from '~/components/QuantityButton'
+import { QuantityButton } from 'pkg-components'
 import { RippleButton } from '~/components/Ripple'
 import { numberFormat } from '~/utils'
 import { CardsComponent } from './styled'
@@ -8,18 +8,20 @@ import { CardsComponent } from './styled'
 const Items = ({
   editing,
   handleDeleteAdditional,
-  dataExtra
+  dataExtra,
+  handleIncrementExtra = () => { return },
+  handleDecrementExtra = () => { return }
 }) => {
   return (
     <div>
       {dataExtra?.map((Adicionales, index) => {
-        const contentPrice = Adicionales.extraPrice > 0
+        const contentPrice = Adicionales.extraPrice === 0 && Adicionales.quantity == 0
         return (
-          <div key={index + 1}>
+          <div key={Adicionales.exPid}>
             <CardsComponent>
               <div>
                 <h3 className='title_card'>{Adicionales.extraName}</h3>
-                <h3 className={`price-${contentPrice ? 'value' : 'free'}`} > {contentPrice ? `$ ${numberFormat(Adicionales.extraPrice)}`: 'Gratis'}</h3>
+                <h3 className={`price-${!contentPrice ? 'value' : 'free'}`} > {!contentPrice ? `$ ${numberFormat((Adicionales?.newExtraPrice ?? Adicionales.extraPrice) || 0)}`: 'Gratis'}</h3>
               </div>
               <div style={{ display: 'flex', width: editing ? 'auto' : 'min-content' }}>
                 {editing &&
@@ -36,14 +38,13 @@ const Items = ({
                 {!editing &&
                 <QuantityButton
                   border='none'
-                  handleDecrement={() => {return}}
-                  handleIncrement={() => {return}}
-                  label={2}
+                  handleDecrement={() => {return handleDecrementExtra({ Adicionales, index }) }}
+                  handleIncrement={() => {return handleIncrementExtra({ Adicionales, index })}}
                   padding='5px'
-                  quantity={0}
-                  showNegativeButton={false}
+                  quantity={Adicionales.quantity || 0}
+                  showNegativeButton={!Adicionales.quantity}
                   style={{ display: 'flex', justifyContent: 'flex-end' }}
-                  validationZero={true}
+                  validationZero={false}
                   width='min-content'
                 />}
               </div>

@@ -7,6 +7,7 @@ type StorePedidos {
   pId: ID
   ppState: Int
   channel: Int
+  change: Int
   pCodeRef: String
   pPDate: DateTime
   pSState: Int # 5 estados - confirmado - proceso - salida - cancelado  

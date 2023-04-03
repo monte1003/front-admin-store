@@ -1,6 +1,4 @@
-/* eslint-disable consistent-return */
-import React, { useState } from 'react'
-import { useFormTools } from 'npm-pkg-hook'
+import React, { useState, useContext } from 'react'
 import { CREATE_CLIENTS, GET_ALL_CLIENTS } from './queries'
 import { useMutation } from '@apollo/client'
 import { updateCache } from '~/utils'
@@ -8,8 +6,11 @@ import InputHooks from '~/components/InputHooks/InputHooks'
 import { RippleButton } from '~/components/Ripple'
 import Column from '~/components/common/Atoms/Column'
 import { Checkbox } from '~/components/Checkbox'
+import { useFormTools, formatPhoneNumber } from 'npm-pkg-hook'
+import { Context } from '~/context/Context'
 
-export const FormClients = () => {
+export const FormClients = ({ setLoading, OPEN_MODAL }) => {
+  const { sendNotification } = useContext(Context)
   const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm, errorSubmit }] = useFormTools()
   const [createClients] = useMutation(CREATE_CLIENTS)
   const [setCheck, setChecker] = useState({
@@ -19,11 +20,14 @@ export const FormClients = () => {
     const { name, checked } = e.target
     setChecker({ ...setCheck, [name]: checked ? 1 : 0 })
   }
+
   const handleForm = (e) => {
-    return handleSubmit({
-      event: e,
-      action: () => {
-        if (!errorSubmit) {
+    setLoading(true)
+    if (!errorSubmit) {
+      return handleSubmit({
+        event: e,
+        action: () => {
+          if (errorSubmit) return sendNotification({ title: 'Completa los campos requeridos', description: 'Error' })
           return createClients({
             variables: {
               input: {
@@ -40,12 +44,20 @@ export const FormClients = () => {
               })
             }
           }).then(() => {
+            OPEN_MODAL.setState(!OPEN_MODAL.state)
             setDataValue({})
+            setLoading(false)
+          }).catch(() => {
+            OPEN_MODAL.setState(!OPEN_MODAL.state)
+            setDataValue({})
+            setLoading(false)
+            return sendNotification({ title: 'No se pudo crear el cliente, intenta nuevamente', description: 'Error' })
           })
-
         }
-      }
-    })
+      })
+
+    }
+    setLoading(false)
   }
   return (
     <>
@@ -73,12 +85,13 @@ export const FormClients = () => {
         as='form'
         display='flex'
         flexWrap='wrap'
-        onSubmit={(e) => { return handleForm(e) }}
+        onSubmit={handleForm}
       >
         <InputHooks
           error={errorForm?.clientName}
           name='clientName'
           onChange={handleChange}
+          onInvalid={() => { return }}
           required
           title='Nombre'
           value={dataForm?.clientName}
@@ -116,11 +129,11 @@ export const FormClients = () => {
         <InputHooks
           error={errorForm?.clientNumber}
           name='clientNumber'
-          numeric
           onChange={handleChange}
           required
           title='Numero de celular'
-          value={dataForm?.clientNumber}
+          type='tel'
+          value={formatPhoneNumber(dataForm?.clientNumber)}
           width={'50%'}
         />
         <RippleButton type='submit' widthButton='100% ' >Guardar</RippleButton>

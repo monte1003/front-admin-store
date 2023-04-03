@@ -48,14 +48,20 @@ const StatusPedidosModel = sequelize.define('statuspedidos', {
     type: STRING,
     allowNull: true
   },
+  tip: {
+    type: INTEGER,
+    allowNull: true,
+    defaultValue: 0
+  },
+  change: {
+    type: INTEGER,
+    allowNull: true,
+    defaultValue: 0
+  },
   pCodeRef: {
     type: STRING(100),
     unique: true,
     allowNull: false
-  },
-  change: {
-    type: INTEGER,
-    allowNull: true
   },
   totalProductsPrice: {
     type: INTEGER,

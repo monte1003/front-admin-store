@@ -1241,7 +1241,7 @@ export const CardDevice = styled.button`
 `
 export const LateralModal = styled.div`
     width: 380px;
-    height: calc(100vh - 80px);
+    height: ${({ height }) => {return height ? height : 'calc(100vh - 80px)'} };
     position: fixed;
     bottom: 0;
     z-index: 900;
@@ -1254,19 +1254,19 @@ export const LateralModal = styled.div`
     animation-duration: .3s;
     animation-fill-mode: both;
     border-left: 1px solid #d4d7dc;
-    z-index: 1000;
+    z-index: 99999999;
     ${({ open }) => {
     return open
       ? css`
-                 animation-name: ${SideIn};
-                 visibility: visible;
-                 opacity: 1;
-                 transform: translateY(0);
-                 `
+              animation-name: ${SideIn};
+              visibility: visible;
+              opacity: 1;
+              transform: translateY(0);
+          `
       : css`
             animation-name: ${SlideInLeft};
-            /* transform: translateY(0); */
-            /* visibility: hidden; */
+            transform: translateY(0);
+            visibility: hidden;
               `}}
 
 `

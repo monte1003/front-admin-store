@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
@@ -17,6 +17,8 @@ import FooterCalcules from '../FooterCalcules'
 import NewSelect from 'components/NewSelectHooks/NewSelect'
 import { Flex } from 'container/dashboard/styled'
 import { numberFormat } from '../../../utils'
+import { Context } from '~/context/Context'
+import { Draggable } from '~/hooks/useDrag'
 
 export const BoxProductSales = ({
   totalProductPrice,
@@ -35,6 +37,7 @@ export const BoxProductSales = ({
   callback = () => { return },
   handleComment = () => { return }
 }) => {
+  const { setShowComponentModal } = useContext(Context)
   const selectProduct = (product) => {
     if (!product) return
     handleProduct(product)
@@ -43,12 +46,17 @@ export const BoxProductSales = ({
   const format = (value = '') => {
     return numberFormat(value.replace(/[^0-9.]/g, '')?.replace(/^0[^.]/, '0'))
   }
+  const handleClickAction = () => {
+    return setShowComponentModal(2)
+  }
 
   return (
-    <Box width='40%'>
-      <ScrollbarProduct margin='0'>
+    <Box>
+      <ScrollbarProduct margin='0' style={{ height: 'calc(100vh - 100px)', padding: '10px' }}>
         <Warper>
           <NewSelect
+            action={true}
+            handleClickAction={() => { return handleClickAction() }}
             id='cliId'
             name='cliId'
             onChange={handleChange}
@@ -166,19 +174,19 @@ export const BoxProductSales = ({
             )
           }) : <Skeleton height={400} numberObject={50} />}
         </ContainerGrid>
+        {/* <Draggable minX={300} moveX={false}>
+          <div style={{ width: 100, height: 100, backgroundColor: 'grey', zIndex: 9999 }} />
+        </Draggable> */}
+        <FooterCalcules
+          callback={callback}
+          counter={Math.abs(data.counter)}
+          disabled={false}
+          dispatch={dispatch}
+          print={print}
+          setPrint={setPrint}
+          totalProductPrice={totalProductPrice}
+        />
       </ScrollbarProduct>
-      {/* <Draggable minX={300} moveX>
-        <div style={{ width: 100, height: 100, backgroundColor: 'grey' }} />
-      </Draggable> */}
-      <FooterCalcules
-        callback={callback}
-        counter={Math.abs(data.counter)}
-        disabled={false}
-        dispatch={dispatch}
-        print={print}
-        setPrint={setPrint}
-        totalProductPrice={totalProductPrice}
-      />
     </Box>
   )
 }

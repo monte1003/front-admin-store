@@ -1,7 +1,7 @@
 import { INTEGER, STRING, TINYINT, literal } from 'sequelize'
 import connect from '../../db'
 const sequelize = connect()
-import { enCode } from '../../utils/util'
+import { enCode, validationID } from '../../utils/util'
 import Store from '../Store/Store'
 import productModelFood from './productFood'
 import productsOptionalExtra from './productsOptionalExtra'
@@ -11,7 +11,8 @@ const productsSubOptionalExtra = sequelize.define('productssuboptionalextra', {
     type: INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    get(x) { return enCode(this.getDataValue(x)) }
+    get(x) { return enCode(this.getDataValue(x)) },
+    set(x) { this.setDataValue('opSubExPid', validationID(x, false)) }
   },
   pId: {
     type: INTEGER,
@@ -44,7 +45,9 @@ const productsSubOptionalExtra = sequelize.define('productssuboptionalextra', {
       model: productsOptionalExtra,
       key: 'opExPid'
     },
-    get(x) { return enCode(this.getDataValue(x)) }
+    get(x) { return enCode(this.getDataValue(x)) },
+    set(x) { this.setDataValue('opExPid', validationID(x, false)) }
+
   },
   OptionalSubProName: {
     type: STRING,

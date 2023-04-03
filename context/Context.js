@@ -20,8 +20,8 @@ const Provider = ({ children }) => {
   const pathname = router.pathname === '/dashboard/[...name]'
 
   const handleMenuLateral = index => {
-    if (pathname && index === 3) return setShowComponentModal(false) 
-    return setShowComponentModal(index === showModalComponent ? false : index) 
+    if (pathname && index === 3) return setShowComponentModal(false)
+    return setShowComponentModal(index === showModalComponent ? false : index)
   }
 
   const [show, setShow] = useState(null)

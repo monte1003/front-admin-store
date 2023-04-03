@@ -32,10 +32,21 @@ export const ExtrasProductsItems = ({
   editing = true,
   dataExtra,
   setModal,
-  modal
-}) => {
+  modal,
+  ...props
+} = {}) => {
   // eslint-disable-next-line
   const [handleChange, _handleSubmit, handleForcedData, { dataForm }] = useFormTools()
+  const {
+    handleAddOptional,
+    handleIncrementExtra,
+    handleDecrementExtra
+  } = props
+  const handlersPropsOptional = {
+    handleAddOptional,
+    handleIncrementExtra,
+    handleDecrementExtra
+  }
   const { setAlertBox } = useContext(Context)
   const OPEN_MODAL_CAT_EXTRA = useSetState(false)
   const INFO_EXTRA = useSetState({})
@@ -215,19 +226,21 @@ export const ExtrasProductsItems = ({
         <Items
           dataExtra={dataExtra}
           editing={editing}
+          handleDecrementExtra={handleDecrementExtra}
           handleDeleteAdditional={handleDeleteAdditional}
+          handleIncrementExtra={handleIncrementExtra}
         />
       </form>
       }
-
       <Optional
         dataOptional={dataOptional}
         editing={editing}
         handleDeleteItemSubOptional={handleDeleteItemSubOptional}
         handleFocusChange={handleFocusChange}
         handleLineChange={handleLineChange}
-        handleOpenExtra={handleOpenExtra}
+        handlersPropsOptional={handlersPropsOptional}
       />
+
       {editing &&
       <>
         <CreateExtra

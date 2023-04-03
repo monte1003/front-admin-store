@@ -20,19 +20,7 @@ const FooterCalcules = ({
 }) => {
   return (
     <ContentCalcules>
-      <Box display='flex' width='40%'>
-        <TextH2Main
-          color={BGColor}
-          size='15px'
-          text={`${counter}`}
-        />
-      </Box>
       <Box display='flex' width='100%'>
-        <TextH2Main
-          color={BGColor}
-          size='15px'
-          text={`$ ${numberFormat(totalProductPrice)}`}
-        />
         <Button
           background={PColor}
           color={BGColor}

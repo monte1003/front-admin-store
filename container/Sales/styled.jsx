@@ -9,19 +9,20 @@ export const Input = styled.input`
 `
 export const ContentCalcules = styled.div`
     position: fixed;
-    right: 16px;
+    right: 0;
+    width: max-content;
     bottom: -1px;
     padding: 15.8px;
     display: flex;
-    width: 39.5%;
     border-radius: 4px;
     justify-content: space-between;
     background-color: ${PColor};
 `
 export const ScrollbarProduct = styled.div`
     overflow: hidden auto;
-    height: 100%;
+
     border-left: 1px solid #e9ecef;
+    z-index: 9999999;
     margin: ${({ margin }) => { return margin || '0' }};
     .ripple-button__load {
         position: fixed;
@@ -62,7 +63,9 @@ export const Warper = styled.div`
     .optional_input {
         width: 50%;
         padding: 10px;
+        outline: none;
         margin: 5px 0px;
+        border: 1px solid #CCCCCC;
     }
 `
 export const CtnSwiper = styled.div`
@@ -74,7 +77,7 @@ export const CtnSwiper = styled.div`
 
 `
 export const Box = styled.div`
-    width: ${({ width }) => { return width || '60%' }};
+    width: ${({ width }) => { return width || '100%' }};
     place-content: center;
     place-items: center;
     display: ${({ display }) => { return display }};
@@ -324,7 +327,7 @@ export const Button = styled.button`
     border: 1px solid transparent;
 
     ${({ active }) => {
-        return active && css`
+    return active && css`
         border: 1px solid ${APColor};
         border-radius: 10px;
     `}}

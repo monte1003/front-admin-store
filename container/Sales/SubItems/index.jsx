@@ -9,6 +9,7 @@ import {
   Content,
   DishAction
 } from './styled'
+import { numberFormat } from 'utils'
 
 export const SubItems = ({
   dataExtra = [],
@@ -17,13 +18,17 @@ export const SubItems = ({
   product = {},
   setModalItem,
   handleDecrement,
-  handleIncrement
+  sumExtraProducts,
+  handleIncrement,
+  handleAddOptional = () => { return },
+  handleUpdateAllExtra = () => { return },
+  handleIncrementExtra = () => { return },
+  handleDecrementExtra = () => { return }
 }) => {
   const {
     pId,
     pName,
-    ProQuantity,
-    ProPrice
+    ProQuantity
   } = product || {}
 
   return (
@@ -53,6 +58,9 @@ export const SubItems = ({
             dataExtra={dataExtra || []}
             dataOptional={dataOptional || []}
             editing={false}
+            handleAddOptional={handleAddOptional}
+            handleDecrementExtra={handleDecrementExtra}
+            handleIncrementExtra={handleIncrementExtra}
             modal={false}
             pId={pId}
             setModal={() => { return }}
@@ -64,15 +72,15 @@ export const SubItems = ({
             <QuantityButton
               handleDecrement={handleDecrement}
               handleIncrement={handleIncrement}
-              label={ProQuantity}
               quantity={ProQuantity}
             />
             <RippleButton
               bgColor={`${PColor} !important`}
               margin='0 0 0 10px'
+              onClick={handleUpdateAllExtra}
               padding='10px'
             >
-          Agregar  &nbsp; ${ProPrice}
+          Agregar &nbsp;{sumExtraProducts  !== 0 && ( `${numberFormat(sumExtraProducts || null)}`)}
             </RippleButton>
           </div>
         </DishAction>

@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react'
 import {
   useStore,
   numberFormat,
@@ -11,7 +12,6 @@ import {
   Item,
   Ticket
 } from './styled'
-import { useEffect, useState } from 'react'
 import { Loading } from '~/components/Loading'
 import { RippleButton } from '~/components/Ripple'
 import { IconSales } from './../../public/icons/index'
@@ -68,12 +68,12 @@ export const Prints = ({
     // eslint-disable-next-line
   }, [isPrinting])
   const [date, setDate] = useState(new Date())
-  useEffect(() => {
-    const timer = setInterval(() => {return setDate(new Date())}, 1000)
-    return () => {return clearInterval(timer)}
-  }, [])
-  const localDate = date.toLocaleTimeString()
-  const customDate = `${yearMonthDay + ' - ' + localDate + ' - ' + longDayName}`
+  // useEffect(() => {
+  //   const timer = setInterval(() => {return setDate(new Date())}, 1000)
+  //   return () => {return clearInterval(timer)}
+  // }, [])
+  // const localDate = date.toLocaleTimeString()
+  const customDate = ``
 
   const dataToPrint = {
     products: data,
@@ -95,7 +95,7 @@ export const Prints = ({
     ...dataStore
   }
   // handleDownLoad(generatePdfDocumentInvoice({data: dataToPrint, titleFile}))
-
+  console.log(data)
   return (
     <ContainerTicket>
       <div className='wrapper-action__footer'>
@@ -121,7 +121,7 @@ export const Prints = ({
             <Text>NIT:</Text>
             <Text>Dirección: {addressStore ?? ULocation ?? ClientAddress}</Text>
             <Text>Teléfono: {storePhone ?? uPhoNum} </Text>
-            <Text>Fecha: {customDate}</Text>
+            {/* <Text>Fecha: {customDate}</Text> */}
             {clientName && <Text fontSize='20px' fontWeight='800'>Cliente</Text>}
             {clientName && <Text>Nombre: {clientName}</Text>}
             {clientNumber && <Text>Numero: {clientNumber}</Text>}
@@ -154,12 +154,43 @@ export const Prints = ({
               const ProPrice = `${numberFormat(item?.ProPrice)}`
               const unitPrice = `${numberFormat(item?.unitPrice)}`
               return (
-                <Item key={item.pId}>
-                  <span>{item?.pName || ''}</span>
-                  <span>{item?.ProQuantity || 0}</span>
-                  <span>{unitPrice || 0}</span>
-                  <span>{ProPrice}</span>
-                </Item>
+                <React.Fragment key={item.pId}>
+                  <Item >
+                    <span>{item?.pName || ''}</span>
+                    <span>{item?.ProQuantity || 0}</span>
+                    <span>{unitPrice || 0}</span>
+                    <span>{ProPrice}</span>
+                  </Item>
+                  {item?.dataExtra?.length > 0 && item?.dataExtra?.map((extra) => {
+                    return (
+                      <Item key={extra.exPid}>
+                        <span>{extra?.extraName || ''}</span>
+                        <span>{extra.quantity || 0}</span>
+                        <span>{extra?.extraPrice || 0}</span>
+                        <span>{extra.newExtraPrice}</span>
+                      </Item>
+                    )
+                  })}
+                  {item?.dataOptional?.length > 0 && item?.dataOptional?.map((extraOptional) => {
+                    return (
+                      <React.Fragment key={extraOptional.opExPid}>
+                        <Item>
+                          <span>{extraOptional?.OptionalProName || ''}</span>
+                        </Item>
+                        {extraOptional.ExtProductFoodsSubOptionalAll.map((extraOptional) => {
+                          return (
+                            <Item key={extraOptional.exPid}>
+                              <span>{extraOptional?.OptionalSubProName || ''}</span>
+                              <span>{1}</span>
+                              <span>gratis</span>
+                              <span>{0}</span>
+                            </Item>
+                          )
+                        })}
+                      </React.Fragment>
+                    )
+                  })}
+                </React.Fragment>
               )})}
           </Content>
           {/* <span>Pedido</span>

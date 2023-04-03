@@ -1,40 +1,59 @@
-import PropTypes from 'prop-types'
-
 import {
   useEffect,
   useRef,
   useState
 } from 'react'
+import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import {
   BGColor,
   PColor,
   PVColor,
   SFColor,
-  EColor
+  SECColor,
+  EColor,
+  SEGColor,
+  SFVColor,
+  PLColor,
+  BColor
 } from 'public/colors'
-import { IconArrowBottom, IconCancel as IconWarning } from '../../public/icons'
+import {
+  IconArrowBottom,
+  IconCancel as IconWarning,
+  IconFolder,
+  IconPlus
+} from '../../public/icons'
+import { Overline } from 'pkg-components'
 
 // eslint-disable-next-line
 export default function NewSelect({
   options,
+  beforeLabel,
+  noLabel,
   disabled,
   id,
   idD,
+  icon,
+  sideLabel,
   name,
   onChange,
+  action,
   optionName,
+  topTitle,
   value,
+  border,
   width,
   search,
   title,
   padding,
   margin,
+  heightBody,
   minWidth,
   error,
   required,
   accessor,
-  fullName
+  fullName,
+  handleClickAction = () => { return }
 }) {
   /** Hooks */
   const [select, setSelect] = useState(false)
@@ -100,104 +119,199 @@ export default function NewSelect({
   const val = options?.find(x => x[id] === value)
 
   return (
-    <BoxSelect
-      id={idD}
-      margin={margin}
-      padding={padding}
-      ref={v => { return !!v && changeRef(v) }}
-      width={width}
-    >
-      <FixedBox active={select} onClick={() => { return setSelect(false) }} />
-      <CustomButtonS
-        color={val ? SFColor : '#757575'}
-        disabled={disabled}
+    <div  style={{  position: 'relative' }}>
+      <LabelInput
         error={error}
-        height={!val ? '50px' : ''}
-        minWidth={minWidth}
-        onClick={handleClick}
-        type='button'
+        noLabel={noLabel}
+        topTitle={topTitle}
+        value={value}
       >
-        <SpanText>{renderVal(val)}</SpanText>
-        <IconSel>
-          <IconArrowBottom color={error ? BGColor : EColor} size={20} />
-        </IconSel>
-      </CustomButtonS>
-      <LabelInput error={error} value={value}>{title}</LabelInput>
-      {error && <Tooltip>Este campo no debe estar vacío</Tooltip>}
-      {/** Caja de items */}
-      {select &&
-        <BoxOptions
-          bottom={selectRef > bodyHeight}
-          fullName={fullName}
-          onBlur={handleBlur}
-          ref={v => { return setSelectBody(!!v && v.offsetHeight) }}
-          top={selectRef < bodyHeight}
+        {title}
+      </LabelInput>
+      <BoxSelect
+        id={idD}
+        margin={margin}
+        minWidth={minWidth}
+        padding={padding}
+        ref={v => {return !!v && changeRef(v)}}
+        width={width}
+      >
+        <Overline
+          bgColor={`${SECColor}56`}
+          onClick={() => {return setSelect(false)}}
+          show={select}
+        />
+        <MainButton
+          border={border}
+          color={val ? SFColor : '#757575'}
+          disabled={disabled}
+          error={error}
+          height={heightBody}
+          minWidth={minWidth}
+          onClick={handleClick}
+          type='button'
+          value={value}
         >
-          {search && <InputText
-            onChange={changeSearch}
-            placeholder='Buscar aquí...'
-            ref={inputSearch}
-            value={valueInput || ''}
-          />}
-          <div style={{ width: '100%' }} >
-            {newOption?.length ?
-              newOption.map(x => {
-                return <CustomButtonS
+          <SpanText noLabel={noLabel}>{renderVal(val)} {val && sideLabel}</SpanText>
+          {icon && <IconSel>
+            <IconArrowBottom color={error ? BGColor : SEGColor} size='15px' />
+          </IconSel>}
+        </MainButton>
+        {error && <Tooltip>This field must not be empty</Tooltip>}
+        <ContainerItems active={select} top={top} >
+          {search && <>
+            <InputText
+              onChange={changeSearch}
+              placeholder='Buscar'
+              ref={inputSearch}
+              value={valueInput || ''}
+            />
+          </>
+          }
+          {action &&
+          <ButtonAction onClick={() => { return handleClickAction()}} type='button'>
+            <IconPlus color={PColor} size='15px' /> &nbsp; {` Añadir nuevo `} 
+            <>
+              {!newOption.length && valueInput}
+            </>
+          </ButtonAction>}
+          <ContentBox search={search} style={{ zIndex: '9999999' }}>
+            <BoxOptions
+              autoHeight
+              autoHeightMax='200px'
+              autoHeightMin={0}
+              autoHideDuration={700}
+              autoHideTimeout={1500}
+              bottom={selectRef > bodyHeight}
+              fullName={fullName}
+              nodata={newOption.length > 0}
+              onBlur={handleBlur}
+              ref={v => {return setSelectBody(!!v && v.offsetHeight)}}
+              search={search}
+              style={{ width: '100%', overflowY: 'auto' }}
+              top={selectRef < bodyHeight}
+            >
+              {newOption.length
+                ? newOption.map(x => {return <CustomButtonS
                   key={x[id]}
-                  onClick={() => { return changeValue(x) }}
+                  onClick={() => {return changeValue(x)}}
                   option
-                  title={renderVal(x)}
                   type='button'
-                >{renderVal(x)}</CustomButtonS>
-              })
-              : <TextNotResult>No hay resultados...</TextNotResult>
-            }
-          </div>
-        </BoxOptions>}
-      <IconWarning
-        color={PColor}
-        size={20}
-        style={{ position: 'absolute', right: 5, bottom: '10px', opacity: 0, top: '30%', pointerEvents: 'none' }}
-      />
-      <input
-        data-required={required}
-        id={id}
-        name={name}
-        type='hidden'
-        value={value || ''}
-      />
-    </BoxSelect>
+                > {beforeLabel} {`${ renderVal(x) }`} {sideLabel}</CustomButtonS>})
+                : <TextNotResult><IconFolder size='40px' /> &nbsp; No results.</TextNotResult>
+              }
+            </BoxOptions>
+          </ContentBox>
+        </ContainerItems>
+        <input
+          data-required={required}
+          id={id}
+          name={name}
+          type='hidden'
+          value={value || ''}
+        />
+        <IconWarning
+          color={PColor}
+          size={20}
+          style={{ position: 'absolute', right: 5, bottom: 10, opacity: 0, pointerEvents: 'none' }}
+        />
+      </BoxSelect>
+    </div>
   )
 }
 
 const BoxSelect = styled.div`
+    display: flex;
     flex-direction: column;
-    min-width: ${({ minWidth }) => { return minWidth || 'auto' }};
-    width: ${({ width }) => { return width || '100%' }};
-    padding: ${({ padding }) => { return padding || '15px 5px' }};
-    border-radius: ${({ radius }) => { return radius || '8px' }};
-    ${({ padding }) => { return !!padding && css`padding: ${padding};` }}
+    place-content: center;
+    justify-content: center;
+    align-items: center;
+    min-width: ${ ({ minWidth }) => {return minWidth || 'auto'} };
+    width: ${ ({ width }) => {return width || '100%'} };
+    border-radius: ${ ({ radius }) => {return radius || '0px'} };
+    ${ ({ padding }) => {return !!padding && css`padding: ${ padding };`} }
     position: relative;
 `
-// Caja para ocultar al hacer click fuera del foco del select
-const FixedBox = styled.div`
-    display: ${props => { return props.active ? 'block' : 'none' }};
-    position: fixed;
+const ButtonAction = styled.button`
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    height: 40px;
+    white-space: nowrap;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-family: PFont-Light;
     width: 100%;
-    height: 100%;
-    z-index: 100;
-    top: 0;
-    left: 0;
-    z-index: ${({ active }) => { return active ? '9' : '-1' }};
-    background-color: transparent;
+    font-size: 16px;
+    line-height: 20px;
+    color: rgb(57, 58, 61);
+    background-color: rgb(212, 215, 220);
+    &:hover {
+      background-color: #fcebea;
+      color: ${ BColor };
+    }
+    &:hover > svg {
+      fill: ${ BGColor };
+    }
 `
-/** mensaje de alerta */
+const LabelInput = styled.label`
+    position: absolute;
+    transition: .2s ease;
+    text-align: left;
+    font-size: ${ ({ value }) => {return value ? '1rem' : '16px'} };
+    top: ${ ({ value, topTitle }) => {
+    const top = topTitle ? topTitle : '15px'
+    return value ? '-8px' : top
+  } };
+    left: ${ ({ value }) => {return value ? '-8px' : '10px'} };
+    color: ${ ({ value, error }) => {
+    const errorColor = error ? BGColor : SFVColor
+    return value ? SFColor : errorColor
+  } };
+    pointer-events: none;
+    white-space: nowrap;
+    width: min-content;
+    font-family: PFont-Light;
+    background-color: ${ ({ value }) => {return value ? BGColor : 'transparent'} };
+    padding-left: ${ ({ value }) => {return value ? '16px' : '0px'} };
+    @media only screen and (max-width: 960px) {
+    top: 12px;
+    }
+    ${ props => {return props.noLabel && css`
+    top: 13px;
+    font-size: 15px;
+    color: ${ BColor };
+    font-family: PFont-Regular;
+    background-color: transparent;
+    `} }
+    z-index: 9;
+    `
+const ContainerItems = styled.div`
+  position: absolute;
+  top: 98%;
+  z-index: 4;
+  left: 0;
+  transform-origin: 200% 50%;
+  transition: .2s ease;
+  z-index: 9999999 !important;
+  box-shadow: hsl(0,0%,80%);
+  transform-origin: top left;
+    ${ ({ active }) => {return active
+    ? css`
+        display: block;
+        `
+    : css`
+        display: none;
+          `} }
+`
 const Tooltip = styled.div`
     position: absolute;
     display: block;
     right: 5px;
     bottom: 100%;
-    background-color: ${PColor};
+    background-color: ${ PColor };
     padding: 0 10px;
     border-radius: 2px;
     z-index: 10;
@@ -212,104 +326,125 @@ const Tooltip = styled.div`
         pointer-events: none;
     }
     &::after {
-        border-top-color: ${PColor};
+        border-top-color: ${ PColor };
         border-width: 4px;
     }
     &::before {
-        border-top-color: ${PColor};
+        border-top-color: ${ PColor };
         border-width: 5px;
         margin-left: -1px;
     }
 `
-const LabelInput = styled.label`
-    position: absolute;
-    text-align: left;
-    font-size: ${({ value }) => { return value ? '17px' : '16px' }};
-    top: ${({ value }) => { return value ? '-5px' : '30px' }};
-    left: ${({ value }) => { return value ? '6px' : '40px' }};
-    color: ${({ value, error }) => {
-    const defaultValue = error ? BGColor : EColor
-    return value ? SFColor : defaultValue
-  }};
-    transition: .3s;
-    pointer-events: none;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width: min-content;
-    font-family: PFont-Light;
-    background-color: ${({ value }) => { return value && 'transparent' }};
-    padding-left: ${({ value }) => { return value ? '10px' : '0px' }};
-    `
+const IconSel = styled.div`
+  position: absolute;
+  right: 8px;
+  top: 30%;
+  width: min-content;
+  pointer-events: none;
+`
 // Select
+const MainButton = styled.button`
+    position: relative;
+    display: block;
+    background-color: ${ ({ bgColor, disabled, error }) => {
+    const bgColorDisabled = (error ? EColor : (bgColor || '#fff'))
+    return disabled ? 'rgba(239, 239, 239, 0.3)' : bgColorDisabled
+  } };
+    border: ${ ({ border }) => {return border || `1px solid ${ SFVColor }`} };
+    text-align: left;
+    height: ${ ({ height }) => {return height || '45px'} };
+    white-space: nowrap;
+    border-radius: 2px;
+    outline: none;
+    /* text-overflow: ellipsis;
+    overflow: hidden; */
+    font-family: PFont-Light;
+    color: ${ ({ color }) => {return color || SFColor} };
+    width: ${ ({ width }) => {return width || '100%'} };
+    &:hover {
+        background-color: ${ '#f4f4f4' };
+        color: ${ PColor };
+        cursor: ${ ({ disabled }) => {return disabled ? 'no-drop' : 'pointer'} };
+        ${ ({ hover }) => {return hover && css`color: ${ PVColor };`} }
+    }
+    &:hover > ${ IconSel }{
+        background-color: ${ '#f4f4f4' };
+        color: ${ PColor };
+        cursor: ${ ({ disabled }) => {return disabled ? 'no-drop' : 'pointer'} };
+        ${ ({ hover }) => {return hover && css`color: ${ PVColor };`} }
+    }
+    &:hover ~ ${ Tooltip } { display: block;  }
+    &:focus { border: 2px solid ${ PColor }; }
+    &:focus > svg { fill: ${ PLColor }; }
+`
 const CustomButtonS = styled.button`
     position: relative;
     display: block;
-    background-color: ${({
-    bgColor,
-    disabled,
-    error
-  }) => {
-    const defaultValueColor = error ? '#FBCACA' : bgColor
-    return disabled ? 'rgba(239, 239, 239, 0.3)' : defaultValueColor
-  }};
+    background-color: ${ ({ bgColor, disabled, error }) => {
+    const errorColor = (error ? EColor : (bgColor || '#fff'))
+    return disabled ? 'rgba(239, 239, 239, 0.3)' : errorColor
+  } };
     outline: 0;
-    border: ${({ option }) => { return option ? 'none' : `1px solid ${EColor}` }};
-    border-radius: 5px;
-    padding: 17px ;
+    border-bottom: ${ ({ border }) => {return border || `1px solid ${ SFVColor }`} };
     text-align: left;
+    height: ${ ({ height }) => {return height || '45px'} };
     white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    height: 100%;
+    border-radius: 2px;
+    /* text-overflow: ellipsis;
+    overflow: hidden; */
     font-family: PFont-Light;
-    font-size: ${({ size }) => { return size || '14px' }};
-    color: ${({ color }) => { return color || SFColor }};
-    width: ${({ width }) => { return width || '100%' }};
-    ${({ height }) => { return !!height && css`height: ${height};` }}
+    color: ${ ({ color }) => {return color || SFColor} };
+    width: ${ ({ width }) => {return width || '100%'} };
     &:hover {
-        background-color: ${BGColor};
-        cursor: ${({ disabled }) => { return disabled ? 'no-drop' : 'pointer' }};
-        ${({ hover }) => { return hover && css`color: ${PVColor};` }}
+        background-color: ${ '#f4f4f4' };
+        color: ${ PColor };
+        cursor: ${ ({ disabled }) => {return disabled ? 'no-drop' : 'pointer'} };
+        ${ ({ hover }) => {return hover && css`color: ${ PVColor };`} }
     }
-    &:hover ~ ${Tooltip} { display: block;  }
-    &:focus { border: 1px solid ${PColor}; }
+    &:hover ~ ${ Tooltip } { display: block;  }
+    &:focus { border: 1px solid ${ PColor }; }
 `
-const IconSel = styled.div`
-    position: absolute;
-    right: -5px;
-    top: 30%;
-    pointer-events: none;
-`
-const BoxOptions = styled.div`
-    position: absolute;
-    left: 0px;
-    bottom: ${({ bottom }) => { return bottom ? '100%' : '0' }};
-    top: ${({ top }) => { return top ? '80%' : '65px' }};
-    width: 100%;
-    min-width: ${props => { return props.fullName ? 'min-content' : 'auto' }};
-    background-color: ${BGColor};
-    z-index: 100;
 
+const BoxOptions = styled.div`
+    bottom: ${ ({ bottom }) => {return bottom || '0'} };
+    top: ${ ({ top, search }) => {return (top && search) ? '0%' : '0'} };
+    width: 100%;
+    min-width: ${ props => {return props.fullName ? 'min-content' : 'auto'} };
+    background-color: ${ BGColor };
+    border: 1px solid #cccccc50;
+    overflow-y: auto;
+    height: ${ ({ heightBox, search }) => {
+    return (heightBox && search) ? 'min-content' : 'auto'
+  } };
+    z-index: 9999999888;
+    max-height: 300px;
+`
+const ContentBox = styled.div`
+    bottom: ${ ({ search }) => {return (search) ? '-20px' : '0'} };
 `
 const SpanText = styled.label`
     font-size: 14px;
-    color: ${SFColor};
-    padding-left: 15px;
+    color: ${ SFColor };
+    ${ props => {return props.noLabel && css`
+    display: none;
+    `} }
 `
 const TextNotResult = styled.span`
-    font-size: 10px;
-    color: ${EColor};
-    padding: 0 10px;
+    font-size: 20px;
+    color: ${ SEGColor };
+    padding: 0 10px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
-// Input Text (buscador)
+// Input Text (search engine)
 export const InputText = styled.input`
     width: 100%;
     margin: 0;
-    padding: 1px 8px;
-    border: none;
-    border-bottom: 1px solid #cccccc42;
+    padding: 20px 8px;
     outline: none;
+    border: 1px solid #CCC;
+    font-size: 12px;
 `
 NewSelect.propTypes = {
   options: PropTypes.array,
@@ -318,7 +453,7 @@ NewSelect.propTypes = {
   idD: (PropTypes.string || PropTypes.number),
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string || PropTypes.number,
+  value: PropTypes.number || PropTypes.string,
   width: PropTypes.string,
   search: PropTypes.bool,
   title: PropTypes.string,
@@ -328,5 +463,6 @@ NewSelect.propTypes = {
   error: PropTypes.bool,
   required: PropTypes.bool,
   accessor: PropTypes.string,
+  border: PropTypes.string,
   fullName: PropTypes.bool
 }

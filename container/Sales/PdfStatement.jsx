@@ -4,8 +4,7 @@ import {
   Text,
   View,
   StyleSheet,
-  pdf,
-  Image
+  pdf
 } from '@react-pdf/renderer'
 import { saveAs } from 'file-saver'
 import React from 'react'
@@ -33,8 +32,8 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     flexDirection: 'column',
-    lineHeight: 4,
-    paddingVertical: 10
+    lineHeight: 1,
+    paddingVertical: 3
   },
   viewParagraph: {
     paddingTop: 15,
@@ -70,8 +69,6 @@ const styles = StyleSheet.create({
   headerText: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 1,
-    paddingVertical: 1,
     fontSize: 7
   },
   footer: {
@@ -108,7 +105,6 @@ const styles = StyleSheet.create({
 
 const InvoicePdfGenerate = ({ data }) => {
   const {
-    srcLogo,
     date,
     products,
     total,
@@ -116,7 +112,7 @@ const InvoicePdfGenerate = ({ data }) => {
     change,
     storePhone
   } = data || {}
-  const { 
+  const {
     ccClient,
     clientName,
     clientNumber
@@ -126,13 +122,6 @@ const InvoicePdfGenerate = ({ data }) => {
       <Page size='A4' style={styles.page}>
         <View style={styles.row}>
           <Text style={styles.subtitle}> Documento generado {date}</Text>
-        </View>
-        <View style={{ width: 250, height: 100, marginBottom: 8 }}>
-          <Image
-            alt=''
-            src={srcLogo ?? '/images/DEFAULTBANNER.png'}
-            style={[styles.image, { width: '100%', height: '100%' }]}
-          />
         </View>
         <View style={styles.sectionHeader}>
           {clientName && <Text style={[styles.headerText, { fontSize: 12, fontWeight: 100, color: '#000' }]}>Nombre del cliente: {clientName} </Text>}

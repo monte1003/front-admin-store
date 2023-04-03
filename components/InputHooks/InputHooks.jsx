@@ -17,6 +17,7 @@ import {
   valNit
 } from '../../utils'
 import { useKeyPress } from '../hooks/useKeypress'
+import { validatePhoneNumber } from 'npm-pkg-hook'
 import {
   BoxInput,
   InputV,
@@ -46,11 +47,10 @@ const InputHooks = ({
   margin,
   maxWidth = '',
   minWidth = '',
-  name,
-  nit,
-  numeric,
+  name = '',
+  nit = false,
+  numeric = false,
   onChange,
-  onFocus,
   padding = '',
   paddingInput = '',
   pass,
@@ -63,8 +63,10 @@ const InputHooks = ({
   title = '',
   type,
   TypeTextarea = '',
-  value,
+  value = '',
   width = '100%',
+  onFocus = () => { return },
+  onInvalid = () => { return },
   setDataValue = () => { return },
   onBlur = () => { return }
 
@@ -229,9 +231,12 @@ const InputHooks = ({
     if (Cc) {
       if (isCC(e.target.value)) { return errorFunc(e, true, 'El numero de documento no es correcto') } errorFunc(e, false, '')
     }
+    if (type == 'tel') {
+      if (validatePhoneNumber(e.target.value)) { return errorFunc(e, true, 'El numero de teléfono no es correcto') } errorFunc(e, false, '')
+    }
     // Valida que las contraseñas coincidan
     if (passConfirm?.validate) {
-      if (passwordConfirm(e.target.value, passConfirm?.passValue)) { return errorFunc(e, true, 'Las contraseñas no coinciden.') } errorFunc(e, false, '')
+      if (validatePhoneNumber(e.target.value, passConfirm?.passValue)) { return errorFunc(e, true, 'Las contraseñas no coinciden.') } errorFunc(e, false, '')
     }
   }
   const simpleVerifyEmail = (email) => {
@@ -284,15 +289,18 @@ const InputHooks = ({
             focus={onFocus}
             margin={margin}
             name={name}
+            numeric={numeric}
             onBlur={onBlur || handleBlur}
             onChange={(e) => { return validations(e) }}
             onFocus={handleFocus}
+            onInvalid={onInvalid}
             paddingInput={paddingInput}
             placeholder={placeholder}
             radius={radius}
             ref={email ? refInput : reference}
+            required={required}
             size={fontSize}
-            type={isPasswordShown ? 'text' : type}
+            type={isPasswordShown ? 'text' : numeric ? 'number' : type}
             value={value}
           />
           {(email && !!showSuggestions) && (
@@ -335,6 +343,7 @@ const InputHooks = ({
           maxWidth={maxWidth}
           minWidth={minWidth}
           name={name}
+          numeric={numeric}
           onBlur={onBlur}
           onChange={validations}
           padding={padding}
@@ -342,6 +351,7 @@ const InputHooks = ({
           placeholder={placeholder}
           radius={radius}
           ref={reference}
+          required={required}
           size={fontSize}
           value={value || ''}
           width={width}

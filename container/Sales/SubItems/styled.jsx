@@ -22,7 +22,7 @@ export const Container = styled.div`
     font-size: 16px;
     overflow-y: auto;
     height: 100%;
-    padding: 16px 20px;
+    padding: 16px 0px;
 
 `
 export const DishAction = styled.div`

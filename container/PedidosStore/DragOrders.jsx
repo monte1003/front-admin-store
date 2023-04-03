@@ -19,7 +19,12 @@ import {
 import { updateCache } from 'utils'
 import { useMutation } from '@apollo/client'
 import { CHANGE_STATE_STORE_PEDIDO, GET_ALL_PEDIDOS } from './queries'
-import { useGetSale, useStore, numberFormat,useFormatDate } from 'npm-pkg-hook'
+import {
+  useGetSale,
+  useStore,
+  numberFormat,
+  useFormatDate
+} from 'npm-pkg-hook'
 import { useRouter } from 'next/router'
 
 const DragOrders = ({
@@ -229,8 +234,21 @@ const DragOrders = ({
     setOpenAction(!openAction)
   }
 
+  const onClose = () => {
+    router.push(
+      {
+        query: {
+          ...router.query,
+          saleId: ''
+        }
+      },
+      undefined,
+      { shallow: true }
+    )
+  }
   const handleCloseModal = () => {
     setOpenModalDetails(false)
+    onClose()
   }
   const HandleChangeState = (stateNumber, pCodeRef) => {
     changePPStatePPedido({
@@ -262,6 +280,7 @@ const DragOrders = ({
   }
 
   useEffect(() => {
+    if (!saleId) return
     if (saleId) {
       setOpenModalDetails(true)
       getOnePedidoStore({
@@ -269,12 +288,14 @@ const DragOrders = ({
           pCodeRef: saleId ?? null
         }
       })
-      setDataModal(sale)
+      if (!saleLoading) {
+        setDataModal(sale)
+      }
     }
-  }, [saleId, sale])
+  }, [sale, saleId])
   return (
     <>
-      {openModalDetails &&
+      {(openModalDetails) &&
         <ModalDetailOrder {...propsModal} />
       }
       <Column

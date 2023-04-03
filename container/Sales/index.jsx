@@ -15,7 +15,11 @@ import {
   useSales,
   useReactToPrint
 } from 'npm-pkg-hook'
-import { CardProductSimple, numberFormat } from 'pkg-components'
+import {
+  CardProductSimple,
+  numberFormat,
+  ResisesColumns
+} from 'pkg-components'
 import { IconSales } from 'public/icons'
 import { useContext } from 'react'
 import { AwesomeModal } from '~/components/AwesomeModal'
@@ -35,6 +39,8 @@ import { SubItems } from './SubItems'
 import { SuccessSaleModal } from './Success'
 import { generatePdfDocumentInvoice } from './PdfStatement'
 import ErrorBoundary from '~/components/Error'
+import { useFormatDate } from './../../../pkg-hook/src/hooks/useFormatDate/index'
+import { useStore } from '~/hooks/useStore'
 
 const GenerateSales = () => {
   // STATES
@@ -44,6 +50,7 @@ const GenerateSales = () => {
     setAlertBox
   } = useContext(Context)
   const router = useRouter()
+  const [prod, setProd] = useState(null)
 
   const {
     data,
@@ -83,9 +90,14 @@ const GenerateSales = () => {
     setOpenCurrentSale,
     values,
     valuesDates,
+    handleUpdateAllExtra,
     errorSale,
     openCurrentSale,
     handleCleanFilter,
+    handleAddOptional,
+    handleIncrementExtra,
+    sumExtraProducts,
+    handleDecrementExtra,
     code
   } = useSales({
     disabled: false,
@@ -121,16 +133,37 @@ const GenerateSales = () => {
     onChangeInput
   }
 
-
+  const handleProductSelect = (prod) => {
+    setProd(null)
+    handleProduct(prod)
+  }
   const modalItems = {
     setModalItem,
-    product: product?.PRODUCT || {},
+    sumExtraProducts,
+    product: prod ?? (product?.PRODUCT),
     modalItem,
     handleDecrement: () => {
       dispatch({ type: 'REMOVE_PRODUCT', payload: product?.PRODUCT })
     },
     handleIncrement: () => {
-      return dispatch({ id: product?.PRODUCT.pId, type: 'INCREMENT' })
+      dispatch({ id: product?.PRODUCT.pId, type: 'INCREMENT' })
+      const item = data?.PRODUCT?.find((item) => { return item.pId === product?.PRODUCT.pId })
+      const OurProduct = productsFood.find((items) => {
+        return items?.pId === product?.PRODUCT?.pId
+      })
+      setProd({ ...item, ProQuantity: item.ProQuantity + 1, ProPrice: (item.ProQuantity + 1) * OurProduct?.ProPrice })
+    },
+    handleUpdateAllExtra: () => {
+      return handleUpdateAllExtra()
+    },
+    handleIncrementExtra: ({ Adicionales, index }) => {
+      return handleIncrementExtra({ Adicionales, index })
+    },
+    handleDecrementExtra: ({ Adicionales, index }) => {
+      return handleDecrementExtra({ Adicionales, index })
+    },
+    handleAddOptional: (extraOptionalProduct) => {
+      return handleAddOptional(extraOptionalProduct)
     },
     dataExtra,
     dataOptional,
@@ -161,7 +194,7 @@ const GenerateSales = () => {
     ...modalItems,
     totalProductPrice,
     handleComment: handleComment,
-    handleProduct,
+    handleProduct: handleProductSelect,
     data,
     dispatch,
     dataMinPedido,
@@ -194,12 +227,26 @@ const GenerateSales = () => {
     ClientAddress,
     clientNumber
   } = client || {}
-
+  const { yearMonthDay, longDayName } = useFormatDate({})
+  const [date, setDate] = useState(new Date())
+  // useEffect(() => {
+  //   const timer = setInterval(() => {return setDate(new Date())}, 1000)
+  //   return () => {return clearInterval(timer)}
+  // }, [])
+  const localDate = date.toLocaleTimeString()
+  const customDate = `${yearMonthDay + ' - ' + localDate + ' - ' + longDayName}`
+  const [dataStore] = useStore()
+  const {
+    storeName,
+    Image: src,
+    storePhone,
+    NitStore
+  } = dataStore || {}
   const dataToPrint = {
-    urlLogo :  '/images/DEFAULTBANNER.png',
+    srcLogo :  src ?? '/images/DEFAULTBANNER.png',
     addressStore: ClientAddress,
-    storePhone: 4353453,
-    date: '',
+    storePhone: storePhone,
+    date: customDate,
     client: {
       clientName,
       clientNumber,
@@ -210,8 +257,8 @@ const GenerateSales = () => {
     products: data?.PRODUCT || [],
     total: numberFormat(totalProductPrice),
     change: values.change,
-    NitStore: '',
-    storeName: ''
+    NitStore,
+    storeName
   }
   const handleDownLoad = () => {
     if (dataToPrint) {
@@ -245,6 +292,8 @@ const GenerateSales = () => {
       query: { saleId: code }
     })
     setSalesOpen(false)
+    setOpenCurrentSale(false)
+    setPrint(false)
   }
   if (errorSale) return <ErrorBoundary />
   return (
@@ -321,73 +370,75 @@ const GenerateSales = () => {
       </>
       }
       <ModalSales {...restPropsSalesModal} />
-      <Box>
-        <div className='parent'>
-          <div className='child'>
-            <SwiperSliderCategory {...restPropsSliderCategory} />
-            <FormFilterSales {...restPropsFormFilter} />
-            <ScrollbarProduct>
-              <ContainerGrid>
-                {loading || productsFood?.length <= 0 ? (
-                  <Skeleton height={400} numberObject={50} />
-                ) : (
-                  productsFood?.map((producto) => {
-                    const tag = {
-                      tag: producto?.getOneTags?.nameTag
+      <ResisesColumns
+        backgroundColor='transparent'
+        initialDividerPosition={{ __0: 80, __1: 20 }}
+        lastMinWidth={'auto'}
+        padding='0'
+      >
+        <Box>
+          <SwiperSliderCategory {...restPropsSliderCategory} />
+          <FormFilterSales {...restPropsFormFilter} />
+          <ScrollbarProduct style={{ height: 'calc(100vh - 400px)' }}>
+            <ContainerGrid>
+              {loading || productsFood?.length <= 0 ? (
+                <Skeleton height={400} numberObject={50} />
+              ) : (
+                productsFood?.map((producto) => {
+                  const tag = {
+                    tag: producto?.getOneTags?.nameTag
+                  }
+                  return (
+                    <CardProductSimple
+                      {...producto}
+                      ProDescription={producto.ProDescription}
+                      ProDescuento={producto.ProDescuento}
+                      ProImage={producto.ProImage}
+                      ProPrice={producto.ProPrice}
+                      ProQuantity={producto.ProQuantity}
+                      ValueDelivery={producto.ValueDelivery}
+                      comment={false}
+                      edit={false}
+                      key={producto.pId}
+                      onClick={() => {
+                        return dispatch({
+                          type: 'ADD_TO_CART',
+                          payload: producto
+                        })
+                      }}
+                      pName={producto.pName}
+                      render={<IconSales color='red' size='20px' />}
+                      tag={producto?.getOneTags && tag}
+                    />
+                  )
+                })
+              )}
+            </ContainerGrid>
+            <RippleButton
+              className='ripple-button__load'
+              margin='0px auto'
+              onClick={() => {
+                setShowMore((s) => {
+                  return s + 5
+                })
+                fetchMore({
+                  variables: { max: showMore, min: 0 },
+                  updateQuery: (prevResult, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) return prevResult
+                    return {
+                      productFoodsAll: [...fetchMoreResult.productFoodsAll]
                     }
-                    return (
-                      <CardProductSimple
-                        {...producto}
-                        ProDescription={producto.ProDescription}
-                        ProDescuento={producto.ProDescuento}
-                        ProImage={producto.ProImage}
-                        ProPrice={producto.ProPrice}
-                        ProQuantity={producto.ProQuantity}
-                        ValueDelivery={producto.ValueDelivery}
-                        comment={false}
-                        edit={false}
-                        key={producto.pId}
-                        onClick={() => {
-                          return dispatch({
-                            type: 'ADD_TO_CART',
-                            payload: producto
-                          })
-                        }}
-                        pName={producto.pName}
-                        render={<IconSales color='red' size='20px' />}
-                        tag={producto?.getOneTags && tag}
-                      />
-                    )
-                  })
-                )}
-              </ContainerGrid>
-              <RippleButton
-                className='ripple-button__load'
-                margin='0px auto'
-                onClick={() => {
-                  setShowMore((s) => {
-                    return s + 5
-                  })
-                  fetchMore({
-                    variables: { max: showMore, min: 0 },
-                    updateQuery: (prevResult, { fetchMoreResult }) => {
-                      if (!fetchMoreResult) return prevResult
-                      return {
-                        productFoodsAll: [...fetchMoreResult.productFoodsAll]
-                      }
-                    }
-                  })
-                }}
-                widthButton='100%'
-              >
-                CARGAR MÁS
-              </RippleButton>
-            </ScrollbarProduct>
-
-          </div >
-        </div>
-      </Box>
-      <BoxProductSales {...restPropsProductSales} />
+                  }
+                })
+              }}
+              widthButton='100%'
+            >
+            CARGAR MÁS
+            </RippleButton>
+          </ScrollbarProduct>
+        </Box>
+        <BoxProductSales {...restPropsProductSales} />
+      </ResisesColumns>
       <SubItems {...modalItems} />
     </Wrapper>
   )

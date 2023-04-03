@@ -73,6 +73,40 @@ export const Ticket = ({ componentRef, dataToPrint }) => {
                     <td colSpan='2' style={{ textAlign: 'right' }}>$ {unitPrice}</td>
                     <td style={{ textAlign: 'right' }}>$ {ProPrice}</td>
                   </tr>
+                  {product?.dataExtra?.length > 0 && product?.dataExtra?.map((extra) => {
+                    return (
+                      <React.Fragment key={extra.exPid}>
+                        <tr><td colSpan='5'>{extra?.extraName || ''}</td></tr>
+                        <tr style={{ padding: '10px 0' }}>
+                          <td></td>
+                          <td style={{ textAlign: 'center' }}>{extra.quantity || 0}</td>
+                          <td colSpan='2' style={{ textAlign: 'right' }}>$ {extra?.extraPrice || 0}</td>
+                          <td style={{ textAlign: 'right' }}>$ {extra.newExtraPrice}</td>
+                        </tr>
+                      </React.Fragment>
+                    )
+                  })}
+
+                  {product?.dataOptional?.length > 0 && product?.dataOptional?.map((extraOptional) => {
+                    return (
+                      <React.Fragment key={extraOptional.opExPid}>
+                        <tr><td colSpan='5' style={{ fontWeight: 'bold' }} >{extraOptional?.OptionalProName || ''}</td></tr>
+                        {extraOptional.ExtProductFoodsSubOptionalAll.map((extraOptional) => {
+                          return (
+                            <React.Fragment key={extraOptional.exPid}>
+                              <tr><td colSpan='5'>{extraOptional?.OptionalSubProName || '' || ''}</td></tr>
+                              <tr style={{ padding: '10px 0' }}>
+                                <td></td>
+                                <td style={{ textAlign: 'center' }}>{1}</td>
+                                <td colSpan='2' style={{ textAlign: 'right' }}>Gratis</td>
+                                <td style={{ textAlign: 'right' }}>$ {0}</td>
+                              </tr>
+                            </React.Fragment>
+                          )
+                        })}
+                      </React.Fragment>
+                    )
+                  })}
                 </React.Fragment>
               )
             })}

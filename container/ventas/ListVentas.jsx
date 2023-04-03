@@ -32,6 +32,7 @@ import { ContentQueryCard } from './ContentQueryCard'
 import { Loading } from '~/components/Loading'
 import { ModalDetailOrder } from 'pkg-components'
 import { useMobile, useChartData } from 'npm-pkg-hook'
+import { useRouter } from 'next/router'
 
 // https://codesandbox.io/s/custom-graph-bar-forked-1v6jk9?file=/src/components/graph/graph.tsx
 export const ListVentas = () => {
@@ -131,25 +132,35 @@ export const ListVentas = () => {
     day: 'hace 3 días',
     ...dataReportThreeDaysAgo
   }
+  const router = useRouter()
+
+  const onClose = () => {
+    setOpen(!open)
+    router.push(
+      {
+        query: {
+          ...router.query,
+          saleId: ''
+        }
+      },
+      undefined,
+      { shallow: true }
+    )
+  }
   const propsModal = {
     // openAction,
     dataModal,
     totalProductsPrice: numberFormat(Math.abs(dataModal?.totalProductsPrice)),
     dataStore,
-    pDatCre: useFormatDate({date: dataModal?.pDatCre}),
+    pDatCre: useFormatDate({ date: dataModal?.pDatCre }),
     loading: false,
     edit: false,
-    onClose: () => {return setOpen(!open)}
+    onClose: () => {return onClose()}
 
   }
   return (
     <div>
       {loading && <Loading />}
-      {/* <GetOneSales
-        data={dataOneSales?.getOneSalesStore || []}
-        open={open}
-        setOpen={setOpen}
-      /> */}
       {open && <ModalDetailOrder {...propsModal} />}
       <Card>
         <form>

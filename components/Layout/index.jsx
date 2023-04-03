@@ -31,6 +31,7 @@ import Head from 'next/head'
 import { Food } from '~/container/update/Products/food'
 import GenerateSales from 'container/Sales'
 import { Overline } from '../common/Reusable'
+import { Clients } from '~/container/clients'
 export const MemoLayout = ({
   children,
   watch,
@@ -85,106 +86,91 @@ export const MemoLayout = ({
     open: false,
     order: []
   })
-  // const channel = new BroadcastChannel('app-channel')
   const [isOpen, setIsOpen] = useState(false)
-  // useEffect(() => {
-  //   channel.addEventListener('message', ({ data }) => {
-  //     if (data === 'app-open') {
-  //       setIsOpen(true)
+  useSubscription(NEW_NOTIFICATION, {
+    onError: (e) => {
+      return sendNotification({ title: 'Error en el pedido', description: 'Error' })
+    },
+    onData: ({ data, client }) => {
+      const ourStore = data?.data?.newStoreOrder?.idStore === dataStore?.idStore
+      console.log(client)
+      const subscription = client.link.request({
+        query: NEW_NOTIFICATION
+      }).subscribe({
+        next: (data) => {
+          if(ourStore){
+            console.log({data})
+          } else{
+            subscription.unsubscribe()
+          }
+        },
+        error: (error) => {
+          console.log(error)
+        },
+        complete: () => {
+          console.log('Completed')
+        }
+      })
+      if (!ourStore) {
+        return subscription.unsubscribe()
+      }
+      if (ourStore) {
+        client.writeQuery({
+          query: GET_ALL_PEDIDOS,
+          data: {
+            // ...messageData?.getMessages,
+            getAllPedidoStoreFinal: [
+              // ...messageData?.getMessages,
+              // newMessage
+            ]
+          }
+        })
+        const oldOrder = [...newOrderModal.order, data?.data?.newStoreOrder]
+        setNewOrderModal({
+          ...newOrderModal,
+          open: true,
+          order: oldOrder
+        })
+        setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
+        sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
+      }
 
-  //     }
-  //   })
-  // }, [])
-
-  // useEffect(() => {
-  //   channel.postMessage('app-open')
-  // }, [])
-
-  // useSubscription(NEW_NOTIFICATION, {
-  //   // eslint-disable-next-line
-  //   onError: (e) => {
-  //     return sendNotification({ title: 'Error en el pedido', description: 'Error' })
-  //   },
-
-  //   onData: ({ data, client }) => {
-  //     const ourStore = data?.data?.newStoreOrder?.idStore === dataStore?.idStore
-  //     console.log(client)
-  //     const subscription = client.link.request({
-  //       query: NEW_NOTIFICATION
-  //     }).subscribe({
-  //       next: (data) => {
-  //         if(ourStore){
-  //           console.log({data})
-  //           // isOurStore = true
-  //         } else{
-  //           subscription.unsubscribe()
-  //         }
-  //       },
-  //       error: (error) => {
-  //         console.log(error)
-  //       },
-  //       complete: () => {
-  //         console.log('Completed')
-  //       }
-  //     })
-  //     if (!ourStore) {
-  //       return subscription.unsubscribe()
-  //     }
-  //     if (ourStore) {
-  //       client.writeQuery({
-  //         query: GET_ALL_PEDIDOS,
-  //         data: {
-  //           // ...messageData?.getMessages,
-  //           getAllPedidoStoreFinal: [
-  //             // ...messageData?.getMessages,
-  //             // newMessage
-  //           ]
-  //         }
-  //       })
-  //       const oldOrder = [...newOrderModal.order, data?.data?.newStoreOrder]
-  //       setNewOrderModal({
-  //         ...newOrderModal,
-  //         open: true,
-  //         order: oldOrder
-  //       })
-  //       setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
-  //       sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
-  //     }
-
-  //   }
-  // })
+    }
+  })
 
   const [connectionStatus, setConnectionStatus] = useState('initial')
   const statusConnection = connectionStatus ? 'Conexión a internet restablecida.' : 'Conexión a internet perdida.'
-  // useConnection({ setConnectionStatus })
-  // useEffect(() => {
-  //   if (connectionStatus === 'initial') return
-  //   if (connectionStatus === true) {
-  //     setTimeout(() => {
-  //       setConnectionStatus('initial')
-  //     }, 3500)
-  //   }
-  //   sendNotification({ title: 'Wifi', description: statusConnection })
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [connectionStatus])
+  useConnection({ setConnectionStatus })
+  useEffect(() => {
+    if (connectionStatus === 'initial') return
+    if (connectionStatus === true) {
+      setTimeout(() => {
+        setConnectionStatus('initial')
+      }, 3500)
+    }
+    sendNotification({ title: 'Wifi', description: statusConnection })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connectionStatus])
 
   const component = {
     1:  <ScheduleTimings />,
-    2: <></>,
+    2: <Clients />,
     3: <Food />
   }
   const width = {
     1: '380px',
-    2: '380px',
+    2: '725px',
     3: '75%'
+  }
+
+  const height = {
+    2: '100%'
   }
   return (
     <>
       <Head>
-        <title>{isOpen ? 'Cierra esta pestaña ' : ''}</title>
       </Head>
       <AlertBox err={error} />
-
       <Main aside={!['/'].find(x => { return x === location.pathname })} >
         <Header />
         <Aside />
@@ -196,6 +182,7 @@ export const MemoLayout = ({
             borderRadius='10px'
             btnCancel={true}
             btnConfirm={false}
+            customHeight='calc(100vh - 60px)'
             footer={false}
             header={true}
             height='100vh'
@@ -219,12 +206,17 @@ export const MemoLayout = ({
         </div>
         <Footer />
         <div style={{ gridArea: 'right' }}>
-          <Overline 
+          <Overline
             bgColor='#00000012'
             onClick={() => { return setShowComponentModal(false) }}
             show={showModalComponent}
+            zIndex='99990000'
           />
-          <LateralModal open={showModalComponent} style={{ width: width[showModalComponent] }}>
+          <LateralModal
+            height={height[showModalComponent]}
+            open={showModalComponent}
+            style={{ width: width[showModalComponent] }}
+          >
             <BtnClose onClick={() => { return setShowComponentModal(false) }}>
               <IconCancel size='20px' />
             </BtnClose>

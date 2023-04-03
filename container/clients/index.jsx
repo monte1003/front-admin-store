@@ -1,40 +1,28 @@
-import { AwesomeModal } from 'components/AwesomeModal'
-import { useFormTools } from 'components/BaseForm'
+import { AwesomeModal } from 'pkg-components'
 import { useSetState } from 'components/hooks/useState'
-import InputHooks from 'components/InputHooks/InputHooks'
 import { RippleButton } from 'components/Ripple'
-import React, { useState } from 'react'
 import {
   Button,
   Item,
-  Container,
-  GridStatistics
+  Container
 } from './styled'
 import { useQuery, useMutation } from '@apollo/client'
-import {
-  CREATE_CLIENTS,
-  DELETE_ONE_CLIENTS,
-  GET_ALL_CLIENTS
-} from './queries'
+import { DELETE_ONE_CLIENTS, GET_ALL_CLIENTS } from './queries'
 import { updateCache } from 'utils'
-import { IconDelete } from 'public/icons'
-import { PColor } from 'public/colors'
-import { UserVisit } from 'container/dashboard/LastedStatistic'
-import { MainCard } from 'components/common/Reusable/ShadowCard'
 import { FormClients } from './Form'
+import { Table } from '~/components/Table'
+import { useState } from 'react'
+import { Section } from '~/components/Table/styled'
+import { Loading } from '~/components/Loading'
 
 export const Clients = () => {
   const [deleteClient] = useMutation(DELETE_ONE_CLIENTS)
-  const [setCheck, setChecker] = useState({})
-  const handleCheck = (e) => {
-    const { name, checked } = e.target
-    setChecker({ ...setCheck, [name]: checked ? 1 : 0 })
-  }
-  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm }] = useFormTools()
+  const [loading, setLoading] = useState(false)
   const DeleteOneClient = ({ clState, cliId }) => {
+    setLoading(true)
     deleteClient({
       variables: {
-        clState: clState,
+        clState,
         cliId
       },
       update: (cache, { data: { getAllClients } }) => {
@@ -45,201 +33,86 @@ export const Clients = () => {
           dataNew: getAllClients
         })
       }
+    }).then(() => {
+      setLoading(false)
+    }).cath(() => {
+      setLoading(false)
     })
   }
   const OPEN_MODAL = useSetState()
-  const OPEN_MODAL_CLIENT = useSetState()
-  const [createClients] = useMutation(CREATE_CLIENTS)
   const { data: clients } = useQuery(GET_ALL_CLIENTS)
-  const handleForm = (e) => {
-    return handleSubmit({
-      event: e,
-      action: () => {
-        const { clientLastName, ccClient, clientName, clientNumber, ClientAddress } = dataForm
-        return createClients({
-          variables: {
-            input: {
-              clientNumber,
-              clientName,
-              gender: setCheck.gender,
-              ccClient,
-              ClientAddress,
-              clientLastName
-            }
-          },
-          update: (cache, { data: { getAllClients } }) => {
-            return updateCache({
-              cache,
-              query: GET_ALL_CLIENTS,
-              nameFun: 'getAllClients',
-              dataNew: getAllClients
-            })
-          }
-        }).then(() => {
-          OPEN_MODAL.setState(!OPEN_MODAL.state)
-          setDataValue({})
-        })
-      }
-    })
-  }
   return (
     <Container>
-      <RippleButton onClick={() => { return OPEN_MODAL.setState(!OPEN_MODAL.state) }}>Crear nuevo</RippleButton>
+      {loading && <Loading /> }
+      <div className='header-action'>
+        <RippleButton onClick={() => { return OPEN_MODAL.setState(!OPEN_MODAL.state) }}>Crear nuevo</RippleButton>
+      </div>
       <AwesomeModal
         borderRadius='10px'
         btnCancel={true}
         btnConfirm={false}
-        footer={false}
-        header={true}
-        onCancel={() => { return false }}
-        onHide={() => {
-          OPEN_MODAL_CLIENT.setState(!OPEN_MODAL_CLIENT.state)
-          setDataValue({})
-        }}
-        padding='25px'
-        show={OPEN_MODAL_CLIENT.state}
-        size='small'
-        title={`Cliente ${''}`}
-        zIndex='9999'
-      >
-        <form onSubmit={(e) => { return handleForm(e) }}>
-          <label>{setCheck.gender === 1 ? 'Femenino' : 'Masculino'}</label>
-          <div style={{ marginBottom: '20px' }}>
-            <input
-              name='gender'
-              onChange={(e) => { return handleCheck(e) }}
-              type='checkbox'
-              value={setCheck.gender}
-            />
-          </div>
-          <InputHooks
-            error={errorForm?.clientName}
-            name='clientName'
-            onChange={handleChange}
-            required
-            title='Nombre'
-            value={dataForm?.clientName}
-            width={'50%'}
-          />
-          <InputHooks
-            error={errorForm?.clientLastName}
-            name='clientLastName'
-            onChange={handleChange}
-            required
-            title='Apellido'
-            value={dataForm?.clientLastName}
-            width={'50%'}
-          />
-          <InputHooks
-            error={errorForm?.ClientAddress}
-            name='ClientAddress'
-            onChange={handleChange}
-            required
-            title='Dirección'
-            value={dataForm?.ClientAddress}
-            width={'50%'}
-          />
-          <InputHooks
-            error={errorForm?.ccClient}
-            name='ccClient'
-            numeric
-            onChange={handleChange}
-            required
-            title='# Identidad'
-            value={dataForm?.ccClient}
-            width={'50%'}
-
-          />
-          <InputHooks
-            error={errorForm?.clientNumber}
-            name='clientNumber'
-            numeric
-            onChange={handleChange}
-            required
-            title='Numero de celular'
-            value={dataForm?.clientNumber}
-            width={'50%'}
-          />
-          <RippleButton type='submit' widthButton='100% ' >Guardar</RippleButton>
-        </form>
-      </AwesomeModal>
-      <AwesomeModal
-        borderRadius='10px'
-        btnCancel={true}
-        btnConfirm={false}
+        customHeight='450px'
         footer={false}
         header={true}
         onCancel={() => { return false }}
         onHide={() => { OPEN_MODAL.setState(!OPEN_MODAL.state) }}
         padding='20px'
         show={OPEN_MODAL.state}
-        size='small'
+        size='medium'
         zIndex='9999'
       >
-        <FormClients />
+        <FormClients OPEN_MODAL={OPEN_MODAL} setLoading={setLoading} />
       </AwesomeModal>
-      <form>
-        <InputHooks
-          error={errorForm?.ProPrice}
-          name='ProPrice'
-          onChange={handleChange}
-          required
-          title='Numero'
-          value={dataForm?.ProPrice}
-          width='30%'
-        />
-        <InputHooks
-          error={errorForm?.ProPrice}
-          name='ProPrice'
-          numeric
-          onChange={handleChange}
-          required
-          title='Nombre'
-          value={dataForm?.ProPrice}
-          width='30%'
-        />
-        <Button type='submit'>
-          Mas opciones
-        </Button>
-        <RippleButton margin='30px' padding='10px'>Consultar</RippleButton>
-        <RippleButton margin='30px' padding='10px'>Consultar y exportar</RippleButton>
-      </form>
-      <MainCard title='Usuarios que han visitado tu tienda'>
-        <GridStatistics>
-          <div>
-            <h2>
-              <UserVisit days={90} />
-            </h2>
-            <p>Ultimos de 90 Dias</p>
-          </div>
-          <div>
-            <h2>
-              <UserVisit days={14} />
-            </h2>
-            <p>Ultimos de 14 Dias</p>
-          </div>
-          <div>
-            <h2>
-              <UserVisit days={7} />
-            </h2>
-            <p>Ultimos de 7 Dias</p>
-          </div>
-        </GridStatistics>
-      </MainCard>
-      <div>
-        {clients?.getAllClients?.length > 0 ? clients?.getAllClients?.map((client) => {
-          return (
-            <div key={client.cliId}>
-              <Item>{client.clientName}</Item>
-              <Item>{client.clientLastName}</Item>
+      <div className='container-list__clients'>
+        <Table
+          data={clients?.getAllClients?.length > 0 ? clients?.getAllClients : []}
+          labelBtn='Product'
+          renderBody={(dataB, titles) => {return dataB?.map((client, i) => {
+            const {
+              cliId,
+              clientName,
+              clState,
+              createAt,
+              clientLastName
+            } = client
+            const dateToFormat = new Date(createAt ?? Date.now())
+            const fullDate = dateToFormat.toLocaleDateString('ES', { year: 'numeric', month: '2-digit', day: '2-digit' })
+            return <Section
+              columnWidth={titles}
+              key={cliId}
+              odd
+              padding='10px 0'
+            >
               <Item>
-                <Button onClick={() => { return DeleteOneClient({ cliId: client.cliId, clState: client.clState }) }}>
-                  <IconDelete color={PColor} size='30px' />
+                <span> {i + 1}</span>
+              </Item>
+              <Item>
+                <span>{clientName}</span>
+              </Item>
+              <Item>
+                <span> {clientLastName}</span>
+              </Item>
+              <Item>
+                <span> 32432</span>
+              </Item>
+              <Item>
+                <span>{fullDate ?? ''}</span>
+              </Item>
+              <Item>
+                <Button onClick={() => {return DeleteOneClient({ cliId, clState })}}>
+                      Eliminar
                 </Button>
               </Item>
-            </div>
-          )
-        }) : <h2>No hay datos</h2>}
+            </Section>})}}
+          titles={[
+            { name: '#', justify: 'flex-start', width: '1fr' },
+            { name: 'Nombre', key: 'clientName', justify: 'flex-start', width: '1fr' },
+            { name: 'Apellido', key: 'clientLastName', justify: 'flex-start', width: '1fr' },
+            { name: 'Comentario', justify: 'flex-start', width: '1fr' },
+            { name: 'Date', justify: 'flex-start', width: '1fr' },
+            { name: '', justify: 'flex-start', width: '1fr' }
+          ]}
+        />
       </div>
     </Container>
   )
