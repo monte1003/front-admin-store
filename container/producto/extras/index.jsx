@@ -43,7 +43,12 @@ export const OptionalExtraProducts = ({ pId }) => {
   } = useDessert({ pId })
   return (
     <BodyDnd>
-      <ResisesColumns>
+      <ResisesColumns
+        backgroundColor='transparent'
+        initialDividerPosition={{ __0: 80, __1: 20 }}
+        lastMinWidth={'auto'}
+        padding='0'
+      >
         <div className='first-column'>
           {dataListIds && dataListIds?.map((listID, index) => {
             const list = data.lists[listID]
@@ -157,12 +162,11 @@ export const OptionalExtraProducts = ({ pId }) => {
               borderRadius='0'
               color={BGColor}
               fontWeight='300'
-              label='Add List'
               onClick={() => { return handleAddList({ title: title, numberLimit: numberLimit }) }}
               type='button'
               width='100%'
             >
-              Adicionar Categoría de sobremesa
+              añadir
             </Button>
           </GarnishChoicesHeader>
 

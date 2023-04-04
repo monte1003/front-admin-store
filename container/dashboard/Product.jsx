@@ -12,7 +12,7 @@ import {
   BColor,
   GraniteGray
 } from 'public/colors'
-import { AwesomeModal } from '~/components/AwesomeModal'
+import { AwesomeModal } from 'pkg-components'
 import Column from '~/components/common/Atoms/Column'
 import {
   CardProductsModal,
@@ -138,9 +138,9 @@ export const Product = ({
 
       </CardProductsModal>
       <AwesomeModal
+        customHeight='calc(100vh - 100px)'
         footer={false}
         header={true}
-        height='100vh'
         onHide={() => { return onHideDessert()}}
         show={showDessert}
         size='100vw'

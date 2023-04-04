@@ -95,7 +95,6 @@ export const Prints = ({
     ...dataStore
   }
   // handleDownLoad(generatePdfDocumentInvoice({data: dataToPrint, titleFile}))
-  console.log(data)
   return (
     <ContainerTicket>
       <div className='wrapper-action__footer'>
@@ -175,14 +174,14 @@ export const Prints = ({
                     return (
                       <React.Fragment key={extraOptional.opExPid}>
                         <Item>
-                          <span>{extraOptional?.OptionalProName || ''}</span>
+                          <span style={{ fontWeight: 'bold' }}>{extraOptional?.OptionalProName || ''}</span>
                         </Item>
                         {extraOptional.ExtProductFoodsSubOptionalAll.map((extraOptional) => {
                           return (
                             <Item key={extraOptional.exPid}>
                               <span>{extraOptional?.OptionalSubProName || ''}</span>
                               <span>{1}</span>
-                              <span>gratis</span>
+                              <span>Gratis</span>
                               <span>{0}</span>
                             </Item>
                           )

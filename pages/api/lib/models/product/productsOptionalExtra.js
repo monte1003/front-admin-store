@@ -42,7 +42,7 @@ const productsOptionalExtra = sequelize.define('productsoptionalextra', {
   },
   code: {
     type: STRING,
-    allowNull: false
+    allowNull: true
   },
   numbersOptionalOnly: {
     type: INTEGER(20),

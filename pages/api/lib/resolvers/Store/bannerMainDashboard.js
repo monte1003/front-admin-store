@@ -15,7 +15,7 @@ export const getPromoStoreAdmin = async (_, { min, max, search }, ctx, info) => 
           bPromoState: { [Op.gt]: 0 }
         }
       ]
-    }, 
+    },
     limit: [min || 0, max || 100],
     order: [['bPromoState', 'ASC']]
   })

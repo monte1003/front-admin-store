@@ -16,6 +16,9 @@ import { Op } from 'sequelize'
 import StatusPedidosModel from '../../models/Store/statusPedidoFinal'
 import { createOnePedidoStore } from './pedidos'
 import StatusOrderModel from '../../models/Store/statusPedidoFinal'
+import SaleDataExtra from './../../models/Store/sales/saleExtraProduct'
+import ExtProductFoodOptional from '../../models/Store/sales/saleExtProductFoodOptional'
+import ExtProductFoodSubOptional from '../../models/Store/sales/saleExtProductFoodSubOptional'
 
 // eslint-disable-next-line
 export const newRegisterStore = async (_, { input }, ctx) => {
@@ -107,6 +110,15 @@ const registerSalesStore = async (root,
   },
   context) => {
   try {
+
+    if (!context.restaurant || !context.User) {
+      return {
+        Response: {
+          success: false,
+          message: 'Error, session ha caducado'
+        }
+      }
+    }
     if (!id) {
       return {
         Response: {
@@ -123,8 +135,8 @@ const registerSalesStore = async (root,
         }
       }
     }
-    for (const element of input) {
-      const { pId, cantProducts, comments } = element
+    await Promise.all(input.map(async (element) => {
+      const { pId, cantProducts, comments, dataExtra, dataOptional } = element
       const resShoppingCard = await ShoppingCard.create({
         pId: deCode(pId),
         id: deCode(id),
@@ -133,12 +145,64 @@ const registerSalesStore = async (root,
         cantProducts,
         idStore: deCode(context.restaurant)
       })
-      // console.log(resShoppingCard.ShoppingCard)
+      if (dataExtra?.length > 0) {
+        await SaleDataExtra.bulkCreate(dataExtra.map(extra => {return {
+          shoppingCardId: deCode(resShoppingCard.ShoppingCard),
+          pId: extra.pId,
+          exPid: extra.exPid,
+          exState: extra.exState,
+          extraName: extra.extraName,
+          extraPrice: extra.extraPrice,
+          state: extra.state,
+          pDatCre: new Date(Date.now()),
+          pDatMod: new Date(Date.now()),
+          quantity: extra.quantity,
+          newExtraPrice: extra.newExtraPrice
+        }}))
+      }
+      await Promise.all(dataOptional.map(async (optional) => {
+        const {
+          opExPid,
+          OptionalProName,
+          state,
+          code,
+          numbersOptionalOnly,
+          pDatCre,
+          required,
+          pDatMod,
+          ExtProductFoodsSubOptionalAll
+        } = optional
+        await ExtProductFoodOptional.create({
+          pId: deCode(pId),
+          opExPid: deCode(opExPid),
+          OptionalProName,
+          state,
+          code,
+          numbersOptionalOnly,
+          pDatCre,
+          required,
+          pDatMod
+        })
+        if (ExtProductFoodsSubOptionalAll?.length > 0) {
+          await ExtProductFoodSubOptional.bulkCreate(ExtProductFoodsSubOptionalAll.map(subOptional => {return {
+            pId: deCode(pId),
+            opExPid: deCode(opExPid),
+            idStore: deCode(context.restaurant),
+            opSubExPid: deCode(subOptional.opSubExPid),
+            OptionalSubProName: subOptional.OptionalSubProName,
+            exCodeOptionExtra: subOptional.exCodeOptionExtra,
+            exCode: subOptional.exCode,
+            state: subOptional.state,
+            pDatCre: new Date(Date.now()),
+            pDatMod: new Date(Date.now()),
+            check: subOptional.check
+          }}))
+        }
+      }))
       await createOnePedidoStore(null, {
         input: {
           generateSales: true,
           id: id,
-          // eslint-disabled-next-line
           idStore: context?.restaurant?.replace(/["']/g, ''),
           ShoppingCard: resShoppingCard.ShoppingCard,
           change,
@@ -148,7 +212,7 @@ const registerSalesStore = async (root,
           pPRecoger: null
         }
       })
-    }
+    }))
     await StatusPedidosModel.create({
       id: deCode(id),
       locationUser: null,

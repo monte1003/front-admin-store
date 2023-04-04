@@ -30,9 +30,51 @@ type ResponseSalesStore {
 input IID_SUB {
   _id: ID
 }
+
 input IID_SUB_ITEMS {
   setID: [IID_SUB]
 }
+
+input ExtProductFoodInput {
+  pId: String
+  exPid: String
+  exState: Int
+  extraName: String
+  extraPrice: Float
+  state: Int
+  pDatCre: String
+  pDatMod: String
+  quantity: Int
+  newExtraPrice: Float
+}
+input ExtProductFoodSubOptionalInput {
+  pId: String
+  opExPid: String
+  idStore: String
+  opSubExPid: String
+  OptionalSubProName: String
+  exCodeOptionExtra: String
+  exCode: String
+  state: Int
+  pDatCre: String
+  pDatMod: String
+  check: Boolean
+}
+
+input ExtProductFoodOptionalInput {
+  pId: String
+  opExPid: String
+  OptionalProName: String
+  state: Int
+  code: String
+  numbersOptionalOnly: Int
+  pDatCre: String
+  required: Int
+  pDatMod: String
+  ExtProductFoodsSubOptionalAll: [ExtProductFoodSubOptionalInput]
+}
+
+
 input IShoppingCard {
     ShoppingCard: ID
     id: ID
@@ -49,7 +91,9 @@ input IShoppingCard {
     cState: Int
     cDatCre: DateTime
     cDatMod: DateTime
-    csDescription: String
+    csDescription: String,
+    dataExtra: [ExtProductFoodInput]
+    dataOptional: [ExtProductFoodOptionalInput]
 }
 
 # Query

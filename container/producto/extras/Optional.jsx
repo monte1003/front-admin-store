@@ -13,7 +13,7 @@ export const Optional = ({
   handlersPropsOptional = { }
 }) => {
   const { handleAddOptional } = handlersPropsOptional || {}
-  console.log(dataOptional)
+
   return (
     <div>
       {dataOptional?.length > 0 && dataOptional?.map((x, i) => {
