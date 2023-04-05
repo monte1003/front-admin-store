@@ -9,7 +9,7 @@ import styles from './styles.module.css'
 
 export const QuantityButton = ({
   quantity,
-  // label,
+  label = '',
   border,
   padding,
   handleDecrement,
@@ -49,7 +49,7 @@ export const QuantityButton = ({
               </svg>
             </span>
           </ButtonDecrement>
-          {/* <span className={styles['marmita-counter__value_label']}>{label}</span> */}
+          <span className={styles['marmita-counter__value_label']}>{label !== 0 && label}</span>
           <div className={styles['marmita-counter__value']}>
             {validateZero ? null : quantity }
           </div>

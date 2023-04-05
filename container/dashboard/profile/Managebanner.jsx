@@ -132,12 +132,11 @@ const Banner = ({ isMobile }) => {
     (() => {
       // https://codereview.stackexchange.com/questions/268899/find-when-the-shop-will-next-open-or-close
       const openings = {
-        'openingMon' : `${schHoSta} - ${schHoEnd} ; 02:00 - 20:00`,
+        'openingMon' : `${schHoSta} - ${schHoEnd}`,
         'openingTue' : `${schHoSta} - ${schHoEnd}`,
         'openingWed' : `${schHoSta} - ${schHoEnd}`,
         'openingThu' : `${schHoSta} - ${schHoEnd}`,
         'openingFri' : `${schHoSta} - ${schHoEnd}`,
-        // "openingSat" : "03:00 - 20:00 ; 02:00 - 20:00",
         'openingSat' : `${schHoSta} - ${schHoEnd}`,
         'openingSun' : `${schHoSta} - ${schHoEnd}`
       }

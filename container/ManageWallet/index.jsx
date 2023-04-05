@@ -228,14 +228,17 @@ export const ManageWallet = ({
             size='12px'
           ># {phoneWalletUser}</SubTitle>
         </CardContent>
-        {getAllWalletDebtProduct && <RippleButton
+        {getAllWalletDebtProduct &&
+        <RippleButton
           bgColor={'#f2f2f2'}
           color={BColor}
           onClick={() => {return OPEN_MODAL.setState(!OPEN_MODAL.state)}}
           padding='5px'
           type='button'
           widthButton='100%'
-        >{'agregar otro producto'}</RippleButton>}
+        >
+          agregar otro producto
+        </RippleButton>}
         <CtnList>
           {getAllWalletDebtProduct ? getAllWalletDebtProduct?.map(x => {return (
             <div className='items' key={x.debtWalletProductId}>

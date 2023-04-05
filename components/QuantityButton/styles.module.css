@@ -25,19 +25,19 @@
     position: relative;
 }
 .marmita-counter__value_label {
-    font-size: 10px;
-    animation-name: zoomOutUp;
-    animation-fill-mode: forwards;
-    animation-direction: alternate;
-    position: absolute;
-    top: 5px;
-    left: 0;
-    right: 0;
-    margin: auto;
-    justify-content: center;
     align-items: center;
+    animation-direction: alternate;
+    animation-fill-mode: forwards;
+    animation-name: zoomOutUp;
     display: flex;
+    font-size: 10px;
+    justify-content: center;
+    left: 0;
     margin: auto;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0px;
 }
 
 @keyframes zoomOutUp {

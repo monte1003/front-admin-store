@@ -78,6 +78,7 @@ const GenerateSales = () => {
     handleRemoveValue,
     print,
     product,
+    setProduct,
     productsFood,
     search,
     setDelivery,
@@ -98,6 +99,8 @@ const GenerateSales = () => {
     handleIncrementExtra,
     sumExtraProducts,
     handleDecrementExtra,
+    loadingExtraProduct,
+    disabledModalItems,
     code
   } = useSales({
     disabled: false,
@@ -139,19 +142,41 @@ const GenerateSales = () => {
   }
   const modalItems = {
     setModalItem,
+    loading: loadingExtraProduct,
+    disabled: disabledModalItems,
     sumExtraProducts,
     product: prod ?? (product?.PRODUCT),
     modalItem,
     handleDecrement: () => {
-      dispatch({ type: 'REMOVE_PRODUCT', payload: product?.PRODUCT })
+      const item = data?.PRODUCT?.find(item => {return item.pId === product?.PRODUCT.pId})
+      const OurProduct = productsFood.find(items => {return items?.pId === product?.PRODUCT?.pId})
+      setProd({
+        ...item,
+        ProQuantity: item.ProQuantity - 1,
+        ProPrice: (item.ProQuantity - 1) * OurProduct?.ProPrice
+      })
+      dispatch({ type: 'REMOVE_PRODUCT', payload: prod ?? (product?.PRODUCT) })
+      if (item?.ProQuantity == 1) {
+        setModalItem(false)
+        setProduct({
+          PRODUCT: {}
+        })
+      }
     },
     handleIncrement: () => {
-      dispatch({ id: product?.PRODUCT.pId, type: 'INCREMENT' })
       const item = data?.PRODUCT?.find((item) => { return item.pId === product?.PRODUCT.pId })
       const OurProduct = productsFood.find((items) => {
         return items?.pId === product?.PRODUCT?.pId
       })
-      setProd({ ...item, ProQuantity: item.ProQuantity + 1, ProPrice: (item.ProQuantity + 1) * OurProduct?.ProPrice })
+      setProd({
+        ...item,
+        ProQuantity: item.ProQuantity + 1,
+        ProPrice: (item.ProQuantity + 1) * OurProduct?.ProPrice
+      })
+      dispatch({
+        type: 'ADD_TO_CART',
+        payload: product?.PRODUCT
+      })
     },
     handleUpdateAllExtra: () => {
       return handleUpdateAllExtra()
@@ -381,7 +406,7 @@ const GenerateSales = () => {
           <FormFilterSales {...restPropsFormFilter} />
           <ScrollbarProduct style={{ height: 'calc(100vh - 400px)' }}>
             <ContainerGrid>
-              {loading || productsFood?.length <= 0 ? (
+              {false ? (
                 <Skeleton height={400} numberObject={50} />
               ) : (
                 productsFood?.map((producto) => {
@@ -418,23 +443,36 @@ const GenerateSales = () => {
               className='ripple-button__load'
               margin='0px auto'
               onClick={() => {
-                setShowMore((s) => {
-                  return s + 5
-                })
-                fetchMore({
-                  variables: { max: showMore, min: 0 },
-                  updateQuery: (prevResult, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) return prevResult
-                    return {
-                      productFoodsAll: [...fetchMoreResult.productFoodsAll]
+                if (productsFood?.length > 0) {
+                  fetchMore({
+                    variables: { max: showMore, min: 0 },
+                    updateQuery: (previousResult, { fetchMoreResult }) => {
+                      const totalCount = fetchMoreResult.productFoodsAll.length
+                      return totalCount
+                        ? {
+                          // Aquí debes especificar la forma en que se actualizará la lista de productos
+                          productFoodsAll: [
+                            ...previousResult.productFoodsAll,
+                            ...fetchMoreResult.productFoodsAll.filter(
+                              (newItem) =>
+                              {return !previousResult.productFoodsAll.some(
+                                (oldItem) => {return oldItem.pId === newItem.pId}
+                              )}
+                            )
+                          ]
+                        }
+                        : previousResult
+                    },
+                    onError: error => {
+                      // Maneja el error aquí
+                      console.error('Error al cargar más productos:', error)
                     }
-                  }
-                })
+                  })
+                  setShowMore(s => { return s + 100 })
+                }
               }}
               widthButton='100%'
-            >
-            CARGAR MÁS
-            </RippleButton>
+            > {loading ? '...Cargando' : 'CARGAR MÁS'}</RippleButton>
           </ScrollbarProduct>
         </Box>
         <BoxProductSales {...restPropsProductSales} />

@@ -64,7 +64,6 @@ export const ListProducts = ({
             label='Busca tus productos'
             name='search'
             onChange={handleChangeFilter}
-            range={{ min: 0, max: 20 }}
             type='text'
             value={search}
           />

@@ -13,6 +13,7 @@ import {
 } from '../styledStore'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
+import { BGColor } from '@/public/colors'
 
 export const ProductCategories = ({
   data = [],
@@ -36,7 +37,7 @@ export const ProductCategories = ({
                 name={x.pName}
               >
                 <ContentSearch>
-                  <Title size='.9em'>{x.pName} ({x.productFoodsAll?.length || 0})</Title>
+                  <Title color={BGColor} size='.9em' >{x.pName} ({x.productFoodsAll?.length || 0})</Title>
                 </ContentSearch>
               </Sticky>
               <ContainerCarrusel>
@@ -46,11 +47,12 @@ export const ProductCategories = ({
                       food={food}
                       image={
                         <Image
-                          alt={food.ProDescription || 'img'}
+                          // alt={food.ProDescription || 'img'}
+                          alt={'/images/DEFAULTBANNER.png'}
                           blurDataURL='/images/DEFAULTBANNER.png'
                           layout='fill'
                           objectFit='cover'
-                          src={food.ProImage}
+                          src={'/images/DEFAULTBANNER.png' ?? food.ProImage}
                         />
                       }
                       isVisible={true}
