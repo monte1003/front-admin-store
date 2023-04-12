@@ -67,7 +67,7 @@ export const Food = () => {
     min: 0
   })
 
-  const productFree = productsFood.filter((dataProductFree) => {
+  const productFree = productsFood?.filter((dataProductFree) => {
     return dataProductFree.ProDelivery === 1
   })
   const [dataCategoriesProducts] = useCategoriesProduct()

@@ -28,6 +28,11 @@ const SaleDataExtra = sequelize.define('saledataextras', {
     type: STRING,
     allowNull: false
   },
+  pCodeRef: {
+    type: STRING(100),
+    unique: true,
+    allowNull: false
+  },
   exPid: {
     type: STRING,
     allowNull: false

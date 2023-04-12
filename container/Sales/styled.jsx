@@ -16,7 +16,13 @@ export const ContentCalcules = styled.div`
     display: flex;
     border-radius: 4px;
     justify-content: space-between;
-    background-color: ${PColor};
+    h2 {
+        color: #3e3e3e;
+        font-family: PFont-Light;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.25rem;
+    }
 `
 export const ScrollbarProduct = styled.div`
     overflow: hidden auto;

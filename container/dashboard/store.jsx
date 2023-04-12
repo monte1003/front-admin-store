@@ -22,6 +22,8 @@ import { ManageBanner } from './profile/Managebanner'
 import { ButtonsAction } from './Options/index'
 import { Container, Wrapper } from './styled'
 import { StickyBoundaryCategories } from './StickyBoundaryCategories'
+import { IconSearch } from '@/public/icons'
+import { PColor } from '@/public/colors'
 
 
 const DashboardStore = () => {
@@ -40,6 +42,7 @@ const DashboardStore = () => {
   // HOOKS
   const { isMobile } = useMobile()
   const { handleDelete } = useDeleteProductsFood()
+  const [valueProductName, setValueProductName] = useState('')
   const [handleGetOneProduct,
     {
       data: product,
@@ -51,6 +54,7 @@ const DashboardStore = () => {
   const [store] = useStore()
   const [data, { fetchMore, totalCount }] = useCatWithProduct({
     search,
+    productName: valueProductName,
     max: moreCatProduct,
     ...searchFilter
   })
@@ -214,7 +218,15 @@ const DashboardStore = () => {
     <Wrapper>
       <Container>
         <ManageBanner isMobile={isMobile} />
-        <ButtonsAction handle={handleActionClick} />
+        <ButtonsAction handle={handleActionClick} /> 
+        <div className='wrapper__filter__wrapper' style={{ display: 'flex', padding: '30px' }}>
+          <IconSearch color={PColor} size={20} />
+          <input
+            className='wrapper__filter'
+            onChange={(e) => {return setValueProductName(e.target.value)}}
+            placeholder='busca tus productos'
+          />
+        </div>
         <StickyBoundaryCategories
           data={data}
           handleGetOneProduct={handleProduct}

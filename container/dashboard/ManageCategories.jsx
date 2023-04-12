@@ -347,7 +347,9 @@ export const ManageCategories = ({ SHOW_MODAL_UPDATE_PRODUCTS }) => {
         size='large'
         zIndex='990'
       >
-        <RippleButton onClick={() => { return SHOW_MODAL_UPDATE_PRODUCTS.setState(!SHOW_MODAL_UPDATE_PRODUCTS.state) }} padding='5px'> Subir productos</RippleButton >
+        <RippleButton onClick={() => { return SHOW_MODAL_UPDATE_PRODUCTS.setState(!SHOW_MODAL_UPDATE_PRODUCTS.state) }} padding='5px'> 
+          Subir productos
+        </RippleButton >
         <FlexContent>
           <CtnItems>
             {!dataProducto?.length ? <SkeletonP /> : dataProducto?.map((x) => {

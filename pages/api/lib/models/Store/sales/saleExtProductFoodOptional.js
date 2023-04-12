@@ -25,6 +25,11 @@ const ExtProductFoodOptional = sequelize.define('saleextproductfoodoptional', {
     },
     get(x) { return enCode(this.getDataValue(x)) }
   },
+  pCodeRef: {
+    type: STRING(100),
+    unique: true,
+    allowNull: false
+  },
   opExPid: {
     type: INTEGER,
     allowNull: true,

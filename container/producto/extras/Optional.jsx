@@ -5,12 +5,14 @@ import { RippleButton } from '~/components/Ripple'
 import { CardsComponent, GarnishChoicesHeader } from './styled'
 
 export const Optional = ({
-  handleOpenExtra,
-  handleDeleteItemSubOptional,
-  dataOptional,
-  handleLineChange,
   editing,
-  handlersPropsOptional = { }
+  dataOptional = [],
+  handleLineChange = () => { return },
+  handlersPropsOptional = {
+    handleAddOptional: () => { return }
+  },
+  handleDeleteItemSubOptional = () => { return },
+  handleOpenExtra = () => { return }
 }) => {
   const { handleAddOptional } = handlersPropsOptional || {}
 

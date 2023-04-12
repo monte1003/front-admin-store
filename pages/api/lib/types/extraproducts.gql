@@ -5,6 +5,8 @@ type ExtProductFood {
     exState: Int
     extraName: String
     extraPrice: Float
+    quantity: Int
+    newExtraPrice: Int
     state: Int
     pDatCre: DateTime
     pDatMod: DateTime

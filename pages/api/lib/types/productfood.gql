@@ -46,6 +46,8 @@ type ProductFood {
     color: Color
     getStore: Store
     ExtProductFoodsAll: [ExtProductFood]
+    ExtProductFoodOptional: [ExtProductFoodOptional]
+    salesExtProductFoodOptional: [saleExtProductFoodOptional]
     getOneTags: TagsProduct
 }
 # Inputs
@@ -56,7 +58,7 @@ input ICategories {
     cpState: Int
 }
 
-# Inputs    
+# Inputs
 input InputProductFood {
     pId: ID
     sizeId: ID

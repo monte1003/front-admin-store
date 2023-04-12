@@ -13,6 +13,7 @@ export const Ticket = ({ componentRef, dataToPrint }) => {
     client,
     change,
     addressStore,
+    discount,
     storePhone
   } = dataToPrint || {}
   const {
@@ -115,16 +116,16 @@ export const Ticket = ({ componentRef, dataToPrint }) => {
               <td style={{ textAlign: 'right' }}>{total}</td>
             </tr>
             <tr>
-              <td colSpan='4' style={{ textAlign: 'right' }}>Sin Impuesto</td>
+              <td colSpan='4' style={{ textAlign: 'right' }}>IVA</td>
               <td style={{ textAlign: 'right' }}>$ 0</td>
             </tr>
             <tr>
-              <td colSpan='4' style={{ textAlign: 'right' }}>Efectivo</td>
-              <td style={{ textAlign: 'right' }}>{total}</td>
+              <td colSpan='4' style={{ textAlign: 'right' }}>Método de pago</td>
+              <td style={{ textAlign: 'right' }}>{'Efectivo'}</td>
             </tr>
             <tr>
-              <td colSpan='4' style={{ textAlign: 'right' }}>Propina</td>
-              <td style={{ textAlign: 'right' }}>$ 0</td>
+              <td colSpan='4' style={{ textAlign: 'right' }}>Descuento</td>
+              <td style={{ textAlign: 'right' }}>{`${discount?.discount || 0} %`}</td>
             </tr>
             <tr>
               <td colSpan='4' style={{ textAlign: 'right' }}>Cambio</td>

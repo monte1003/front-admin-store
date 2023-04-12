@@ -7,13 +7,15 @@ import CitiesModel from '../../models/information/CitiesModel'
 import colorModel from '../../models/information/color'
 import CountriesModel from '../../models/information/CountriesModel'
 import DepartmentsModel from '../../models/information/DepartmentsModel'
-import ExtraProductModel from '../../models/product/productExtras'
 import productModelFood from '../../models/product/productFood'
 import trademarkModel from '../../models/product/trademark'
 import Store from '../../models/Store/Store'
 import tagsProduct from '../../models/Store/tagsProduct'
 import ThirdPartiesModel from '../../models/thirdParties/ThirdPartiesModel'
 import { deCode, getAttributes } from '../../utils/util'
+import ExtProductFoodOptional from './../../models/Store/sales/saleExtProductFoodOptional'
+import SaleDataExtra from './../../models/Store/sales/saleExtraProduct'
+import ExtProductFoodSubOptional from '../../models/Store/sales/saleExtProductFoodSubOptional'
 
 export const productsOne = async (root, { pId }, context, info) => {
   try {
@@ -225,6 +227,22 @@ export const productsLogis = async (root, args, context, info) => {
 }
 export default {
   TYPES: {
+    // only for sales store
+    saleExtProductFoodOptional: {
+      saleExtProductFoodsSubOptionalAll: async (parent, _args, _context, info) => {
+        try {
+          if (!info?.variableValues?.pCodeRef) return []
+          const attributes = getAttributes(ExtProductFoodSubOptional, info)
+          const data = await ExtProductFoodSubOptional.findAll({
+            attributes,
+            where: { pCodeRef: info?.variableValues?.pCodeRef || '' }
+          })
+          return data
+        } catch {
+          return []
+        }
+      }
+    },
     ProductFood: {
       getOneTags: async (parent, _args, _context, info) => {
         try {
@@ -232,13 +250,39 @@ export default {
           const data = await tagsProduct.findOne({ attributes, where: { pId: deCode(parent.pId) } })
           return data
         } catch (e) {
-          throw ApolloError('Lo sentimos, ha ocurrido un error interno')
+          throw new ApolloError('Lo sentimos, ha ocurrido un error interno')
         }
       },
-      ExtProductFoodsAll: async (parent, _args, _context, info) => {
+      salesExtProductFoodOptional: async (parent, _args, _context, info) => {
         try {
-          const attributes = getAttributes(ExtraProductModel, info)
-          const data = await ExtraProductModel.findAll({
+          if (!info?.variableValues?.pCodeRef) return []
+          const attributes = getAttributes(ExtProductFoodOptional, info)
+          const data = await ExtProductFoodOptional.findAll({
+            attributes,
+            where: { pCodeRef: info?.variableValues?.pCodeRef || '' }
+          })
+          return data
+        } catch {
+          return []
+        }
+      },
+      ExtProductFoodsAll: async (_parent, _args, _context, info) => {
+        try {
+          if (!info?.variableValues?.pCodeRef) return []
+          const attributes = getAttributes(SaleDataExtra, info)
+          const data = await SaleDataExtra.findAll({
+            attributes,
+            where: { pCodeRef: info?.variableValues?.pCodeRef || '' }
+          })
+          return data
+        } catch {
+          return []
+        }
+      },
+      ExtProductFoodOptional: async (parent, _args, _context, info) => {
+        try {
+          const attributes = getAttributes(ExtProductFoodOptional, info)
+          const data = await ExtProductFoodOptional.findAll({
             attributes,
             where: { pId: deCode(parent.pId) }
           })

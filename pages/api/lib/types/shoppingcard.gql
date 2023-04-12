@@ -88,6 +88,8 @@ input IShoppingCard {
     cName: String
     comments: String
     cantProducts: Int
+    ProPrice: Int
+    totalExtra: Int
     cState: Int
     cDatCre: DateTime
     cDatMod: DateTime
@@ -105,7 +107,7 @@ type Query {
 type Mutation {
   registerShoppingCard(input: IShoppingCard, idSubArray: IID_SUB_ITEMS): ShoppingCard
   # sales store
-  registerSalesStore(input: [IShoppingCard], id: ID, idStore: ID, pCodeRef: String, change: String, payMethodPState: Int, pickUp: Int, totalProductsPrice: Float, valueDelivery: Float, idSubArray: IID_SUB_ITEMS): ResponseSalesStore
+  registerSalesStore(input: [IShoppingCard], id: ID, discount: Int, idStore: ID, pCodeRef: String, change: String, payMethodPState: Int, pickUp: Int, totalProductsPrice: Float, valueDelivery: Float, idSubArray: IID_SUB_ITEMS): ResponseSalesStore
 
   deleteOneItem(cState: Int,ShoppingCard: ID): Response
 }

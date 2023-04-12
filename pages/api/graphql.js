@@ -87,6 +87,7 @@ const apolloServer = new ApolloServer({
 
     const excluded = ['/login', '/forgotpassword', '/register', '/teams/invite/[id]', '/teams/manage/[id]']
     if (excluded.indexOf(req.session) > -1) return next()
+    console.log(token)
     if (token) {
       User = await jwt.verify(token, process.env.AUTHO_USER_KEY)
       return { req, setCookies: setCookies || [], setHeaders: setHeaders || [], User: User || {}, restaurant: restaurant || {} }

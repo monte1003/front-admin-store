@@ -18,6 +18,7 @@ import { BGColor } from '@/public/colors'
 export const ProductCategories = ({
   data = [],
   reference = null,
+  setValueProductName = () => { return },
   handleGetOneProduct = () => { return },
   setAlertBox = () => { return }
 }) => {
@@ -38,6 +39,7 @@ export const ProductCategories = ({
               >
                 <ContentSearch>
                   <Title color={BGColor} size='.9em' >{x.pName} ({x.productFoodsAll?.length || 0})</Title>
+                  <input onChange={(e) => {return setValueProductName(e.target.value)}} />
                 </ContentSearch>
               </Sticky>
               <ContainerCarrusel>

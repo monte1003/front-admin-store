@@ -26,6 +26,7 @@ import {
   useFormatDate
 } from 'npm-pkg-hook'
 import { useRouter } from 'next/router'
+import { SubItems } from '../Sales/SubItems'
 
 const DragOrders = ({
   dataReadyOrder,
@@ -68,6 +69,7 @@ const DragOrders = ({
   const {
     getOnePedidoStore,
     data: sale,
+    error: saleError,
     loading: saleLoading
   } = useGetSale()
   useEffect(() => {
@@ -94,7 +96,6 @@ const DragOrders = ({
     const groupByCategory = getAllPedidoStore?.groupByToMap(product => {
       return product.getAllShoppingCard?.pId
     })
-    // console.log(groupByCategory && Object.entries(groupByCategory))
     setGroup(result)
     if (sale && !saleLoading) {
       const groupByQuantity = Object.keys(result)
@@ -226,7 +227,9 @@ const DragOrders = ({
       undefined,
       { shallow: true }
     )
-    setOpenModalDetails(!openModalDetails)
+    if (!saleLoading) {
+      setOpenModalDetails(!openModalDetails)
+    }
   }
   const [dataStore, { loading }] = useStore()
 
@@ -264,25 +267,70 @@ const DragOrders = ({
 
     })
   }
+  const [modalItem, setModalItem] = useState(false)
+  const [dataOption, setDataOption] = useState({
+    dataExtra: [],
+    dataOptional: []
+  })
+  /**
+ * Description
+ * @param {any} _pid
+ * @param {any} ShoppingCardId
+ * @returns {any}
+ * */
+  const handleModalItem = (pid) => {
+    const listShoppingCard = sale.getAllPedidoStore.find((Shopping) => {
+      return Shopping.getAllShoppingCard.productFood.pId === pid
+    })
+    const productModel = listShoppingCard?.getAllShoppingCard?.productFood
+    const newSalesOptional = productModel?.salesExtProductFoodOptional.map((sp) => {
+      return {
+        ...sp,
+        ExtProductFoodsSubOptionalAll: sp?.saleExtProductFoodsSubOptionalAll?.map((subP) => {
+          return {
+            check: true,
+            subP
+          }
+        })
+      }
+    })
+    const objetSubOption = {
+      dataExtra: productModel.ExtProductFoodsAll || [],
+      dataOptional: newSalesOptional || []
+    }
+    if (productModel.ExtProductFoodsAll.length > 0 && newSalesOptional.length > 0) {
+      setDataOption(objetSubOption)
+    } else {
+      setDataOption({
+        dataExtra: [],
+        dataOptional: []
+      })
+    }
+  }
   const propsModal = {
-    openAction,
     dataModal,
-    saleKey,
-    saleGroup,
-    totalProductsPrice: numberFormat(Math.abs(dataModal?.totalProductsPrice)),
     dataStore,
-    pDatCre: useFormatDate({date: dataModal?.pDatCre}),
     loading: loading || saleLoading,
-    handleOpenActions,
+    openAction,
+    pDatCre: useFormatDate({ date: dataModal?.pDatCre }),
+    saleError,
+    saleGroup,
+    saleKey,
+    totalProductsPrice: numberFormat(Math.abs(dataModal?.totalProductsPrice)),
     HandleChangeState,
-    onClose: () => {return handleCloseModal()},
+    handleModalItem,
+    handleOpenActions,
+    setModalItem,
+    onClose: () => { return handleCloseModal() },
     onPress: handleGetOneOrder
   }
 
   useEffect(() => {
     if (!saleId) return
     if (saleId) {
-      setOpenModalDetails(true)
+      if (!saleLoading) {
+        setOpenModalDetails(true)
+      }
       getOnePedidoStore({
         variables: {
           pCodeRef: saleId ?? null
@@ -293,11 +341,43 @@ const DragOrders = ({
       }
     }
   }, [sale, saleId])
+
+  const modalItems = {
+    setModalItem,
+    handleModalItem,
+    loading: false,
+    disabled: false,
+    sumExtraProducts: 0,
+    product: {},
+    modalItem,
+    handleDecrement: () => {
+      return
+    },
+    handleIncrement: () => {
+      return
+    },
+    handleUpdateAllExtra: () => {
+      return
+    },
+    handleIncrementExtra: () => {
+      return
+    },
+    handleDecrementExtra: () => {
+      return
+    },
+    handleAddOptional: () => {
+      return
+    },
+    ...dataOption
+    // dataProduct
+  }
   return (
     <>
-      {(openModalDetails) &&
+      {(openModalDetails && !saleLoading) &&
         <ModalDetailOrder {...propsModal} />
       }
+      <SubItems {...modalItems} />
+
       <Column
         alignItems='stretch'
         backgroundColor={BGColor}

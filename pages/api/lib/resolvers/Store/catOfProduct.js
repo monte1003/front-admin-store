@@ -4,6 +4,7 @@ import productModelFood from '../../models/product/productFood'
 import catProducts from '../../models/Store/cat'
 import { linkHasMany } from '../../utils'
 import { deCode, getAttributes, linkBelongsTo } from '../../utils/util'
+import sequelize from 'sequelize'
 
 export const updatedProducts = async (_, { input }, ctx) => {
   try {
@@ -121,17 +122,79 @@ export const deleteCatFinalOfProducts = async (_, { idPc }) => {
 
   }
 }
+// export const getCatProductsWithProduct = async (root, args, context) => {
+//   const { search, min, max, gender, desc, categories } = args
+//   linkBelongsTo(catProducts, productModelFood, 'pId', 'carProId')
+//   let whereSearch = {}
+//   if (search) {
+//     whereSearch = {
+//       [Op.or]: [
+//         { pName: { [Op.substring]: search.replace(/\s+/g, ' ') } },
+//         { ProPrice: { [Op.substring]: search.replace(/\s+/g, ' ') } },
+//         { ProDescuento: { [Op.substring]: search.replace(/\s+/g, ' ') } },
+//         { ProDelivery: { [Op.substring]: search.replace(/\s+/g, ' ') } }
+//       ]
+//     }
+//   }
+//   if (gender?.length) {
+//     whereSearch = {
+//       ...whereSearch,
+//       ProDelivery: {
+//         [Op.in]: gender.map(x => { return x })
+//       }
+//     }
+//   }
+//   if (desc?.length) {
+//     whereSearch = {
+//       ...whereSearch,
+//       ProDescuento: { [Op.in]: desc.map(x => { return x }) }
+//     }
+//   }
+//   // validad que  venga una categoría para hacer el filtro por categorías
+//   if (categories?.length) {
+//     whereSearch = {
+//       ...whereSearch,
+//       caId: { [Op.in]: categories.map(x => { return deCode(x) }) }
+//     }
+//   }
+//   const { count, rows } = await catProducts.findAndCountAll({
+//     include: [
+//       {
+//         attributes: ['pId', 'carProId'],
+//         model: productModelFood
+//       }
+//     ],
+//     where: {
+//       [Op.or]: [
+//         {
+//           ...whereSearch,
+//           // get restaurant
+//           idStore: deCode(context.restaurant),
+//           // get user
+//           id: deCode(context.User.id),
+//           // Productos state
+//           pState: { [Op.gt]: 0 }
+//         }
+//       ]
+//     }, limit: [min || 0, max || 5], order: [['pDatCre', 'ASC']]
+//   })
+//   return {
+//     totalCount: count,
+//     catProductsWithProduct: rows
+//   }
+// }
+
 export const getCatProductsWithProduct = async (root, args, context) => {
-  const { search, min, max, gender, desc, categories } = args
+  const { search, min, max, gender, desc, categories, productName } = args
   linkBelongsTo(catProducts, productModelFood, 'pId', 'carProId')
   let whereSearch = {}
   if (search) {
     whereSearch = {
       [Op.or]: [
-        { pName: { [Op.substring]: search.replace(/\s+/g, ' ') } },
-        { ProPrice: { [Op.substring]: search.replace(/\s+/g, ' ') } },
-        { ProDescuento: { [Op.substring]: search.replace(/\s+/g, ' ') } },
-        { ProDelivery: { [Op.substring]: search.replace(/\s+/g, ' ') } }
+        { pName: { [Op.substring]: search?.replace(/\s+/g, ' ') } },
+        { ProPrice: { [Op.substring]: search?.replace(/\s+/g, ' ') } },
+        { ProDescuento: { [Op.substring]: search?.replace(/\s+/g, ' ') } },
+        { ProDelivery: { [Op.substring]: search?.replace(/\s+/g, ' ') } }
       ]
     }
   }
@@ -156,15 +219,32 @@ export const getCatProductsWithProduct = async (root, args, context) => {
       caId: { [Op.in]: categories.map(x => { return deCode(x) }) }
     }
   }
+  if (productName) {
+    whereSearch = {
+      ...whereSearch,
+      '$productModelFood.pName$': {
+        [Op.substring]: productName?.replace(/\s+/g, ' ')
+      }
+    }
+  }
+
+
+  productModelFood.belongsTo(catProducts, { foreignKey: 'caId' })
+
   const { count, rows } = await catProducts.findAndCountAll({
     include: [
       {
-        attributes: ['pId', 'carProId'],
-        model: productModelFood
+        attributes: ['pId', 'carProId', 'pName'],
+        model: productModelFood,
+        where: {
+          pName: {
+            [Op.substring]: productName?.replace(/\s+/g, ' ')
+          }
+        }
       }
     ],
     where: {
-      [Op.or]: [
+      [Op.and]: [
         {
           ...whereSearch,
           // get restaurant
@@ -177,11 +257,14 @@ export const getCatProductsWithProduct = async (root, args, context) => {
       ]
     }, limit: [min || 0, max || 5], order: [['pDatCre', 'ASC']]
   })
+  console.log(productName)
+
   return {
     totalCount: count,
     catProductsWithProduct: rows
   }
 }
+
 export const getCatProductsWithProductClient = async (root, args, context, info) => {
   const { min, max, idStore } = args
   linkHasMany(catProducts, productModelFood, 'carProId', 'carProId') // busca por muchos 

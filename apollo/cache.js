@@ -2,6 +2,27 @@ import { InMemoryCache, makeVar } from '@apollo/client'
 import { concatPagination } from '@apollo/client/utilities'
 
 export const isLoggedVar = makeVar({ state: true, expired: false })
+const mergeArraysWithDuplicates = (existing = [], incoming = [], max = Infinity, uniqueKey = null) => {
+  const merged = existing ? existing.slice(0) : []
+  if (Array.isArray(incoming)) {
+    for (let i = 0; i < incoming.length && merged.length < max; ++i) {
+      const item = incoming[i]
+      if (uniqueKey) {
+        const index = merged.findIndex((existingItem) => {return existingItem[uniqueKey] === item[uniqueKey]})
+        if (index >= 0) {
+          merged[index] = item
+        } else {
+          merged.push(item)
+        }
+      } else {
+        merged.push(item)
+      }
+    }
+  }
+  return merged
+}
+
+
 export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
@@ -11,30 +32,34 @@ export const cache = new InMemoryCache({
         },
         allPosts: concatPagination(),
         productFoodsAll: {
-          keyArgs: false,
+          keyArgs: ['categories', 'desc', 'fromDate', 'gender', 'pState', 'search', 'toDate'],
           merge(existing, incoming, { args: { max = Infinity } }) {
-            // Concatenamos los resultados entrantes con los existentes
             const merged = existing ? existing.slice(0) : []
             for (let i = 0; i < incoming.length && merged.length < max; ++i) {
-              merged.push(incoming[i])
+              const item = incoming[i]
+              const index = merged.findIndex((existingItem) => {return existingItem.pId === item.pId})
+              if (index >= 0) {
+                merged[index] = item
+              } else {
+                merged.push(item)
+              }
             }
             return merged
           }
         },
         getCatProductsWithProduct: {
-          keyArgs: false,
+          keyArgs: ['search', 'min', 'max', 'gender', 'desc', 'categories'],
           merge(existing, incoming, { args: { max = Infinity } }) {
-            // Concatenamos los resultados entrantes con los existentes
-            const merged = existing ? existing.catProductsWithProduct.slice(0) : []
-            if (Array.isArray(incoming?.catProductsWithProduct)) {
-              for (let i = 0; i < incoming.catProductsWithProduct.length && merged.length < max; ++i) {
-                merged.push(incoming.catProductsWithProduct[i])
-              }
-            }
-            return {
+            const merged = {
               ...incoming,
-              catProductsWithProduct: merged
+              catProductsWithProduct: mergeArraysWithDuplicates(
+                existing?.catProductsWithProduct,
+                incoming?.catProductsWithProduct,
+                max,
+                'carProId'
+              )
             }
+            return merged
           }
         }
       }

@@ -25,6 +25,7 @@ export const Prints = ({
   total,
   isPrinting,
   promiseResolveRef,
+  discount = {},
   componentRef,
   dataClientes = [],
   values,
@@ -91,6 +92,7 @@ export const Prints = ({
     total,
     change,
     NitStore,
+    discount,
     storeName,
     ...dataStore
   }

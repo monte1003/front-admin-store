@@ -247,6 +247,39 @@ export const Wrapper = styled.div`
     &:last-child {
         border-right: none;
     }
+    .wrapper__filter {
+      display: flex;
+      position: relative;
+      flex: 3 1;
+      align-items: center;
+      transition: all .2s ease-in-out,border 0ms;
+      padding: 20px 16px 0;
+      border-bottom: 0;
+      margin-top: 0;
+      width: 100%;
+      border: none;
+      border-radius: 4px;
+      display: flex;
+      margin-top: 0;
+      height: 62px;
+      padding: 0;
+      outline: none;
+    }
+    .wrapper__filter__wrapper {
+      display: flex;
+      position: relative;
+      flex: 3 1;
+      align-items: center;
+      padding: 20px 16px 0;
+      margin: 20px 0;
+      width: 100%;
+      border: 1px solid #f2f2f2;
+      border-radius: 4px;
+      display: flex;
+      height: 62px;
+      padding: 0;
+      outline: none;
+    }
 `
 
 export const ButtonStore = styled.button`

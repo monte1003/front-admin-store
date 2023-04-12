@@ -9,31 +9,41 @@ import {
   FlipTop
 } from './styled'
 import Button from 'components/common/Atoms/Button'
+import { Text } from 'pkg-components'
 
 const FooterCalcules = ({
-  setPrint,
-  callback,
+  counter = 0,
+  disabled = false,
+  discount = {},
   totalProductPrice,
-  counter,
-  dispatch,
-  disabled
+  callback = () => { return },
+  dispatch = () => { return },
+  setPrint = () => { return }
 }) => {
   return (
     <ContentCalcules>
       <Box display='flex' width='100%'>
+        <Text as='h2' fontSize='1em'>
+          $ {numberFormat(totalProductPrice)}
+        </Text>
+        &nbsp;
+        &nbsp;
         <Button
           background={PColor}
           color={BGColor}
           onClick={() => { return dispatch({ type: 'REMOVE_ALL_PRODUCTS' }) }}
+          padding='20px'
         >
           ELIMINAR
         </Button>
         <FlipTop>
           <Button
             background={PColor}
+
             color={BGColor}
             disabled={disabled}
             onClick={() => { return setPrint({ callback }) }}
+            padding='20px'
             radius='50%'
           >GUARDAR</Button>
         </FlipTop>

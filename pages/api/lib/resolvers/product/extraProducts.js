@@ -262,8 +262,8 @@ export const updateMultipleExtProductFoods = async (_root, args, context) => {
   const { inputLineItems: { setData } } = args
   const { restaurant } = context || {}
   try {
-    for (let i = 0; i < setData.length; i++) {
-      const { pId, exState, extraName, extraPrice } = setData[i]
+    for (const element of setData) {
+      const { pId, exState, extraName, extraPrice } = element
       await updateExtraInProduct(null, { input: { pId, exState, extraName, extraPrice, idStore: restaurant } })
         .catch(() => {return new ApolloError('No ha sido posible procesar su solicitud.', 500)})
     }

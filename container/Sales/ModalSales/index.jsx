@@ -18,6 +18,7 @@ export const ModalSales = ({
   data,
   delivery,
   loading,
+  discount = {},
   setDelivery = () => { return },
   handleChange = () => { return },
   handleSubmit = () => { return },
@@ -49,6 +50,7 @@ export const ModalSales = ({
           code={code}
           data={data?.PRODUCT || []}
           dataClientes={dataClientes}
+          discount={discount}
           handleSubmit={handleSubmit}
           total={`$ ${numberFormat(totalProductPrice)}`}
           values={values}
@@ -67,7 +69,7 @@ export const ModalSales = ({
         padding='25px'
         show={delivery}
         size='small'
-        title='Añade el costo del envio'
+        title='Añade el costo del envío'
       >
         <Input
           autoComplete='off'

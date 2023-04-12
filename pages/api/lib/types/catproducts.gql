@@ -51,7 +51,7 @@ type Query {
     catProducts: [catProducts]
     catProductsOne(carProId: ID, cId: ID, dId: ID, ctId: ID ): catProducts
     catProductsAll(carProId: ID, cId: ID, dId: ID, ctId: ID, search: String, min: Int, max: Int,  gender: [String]  desc: [String], categories: [ID]  ): [catProducts]
-    getCatProductsWithProduct(carProId: ID, cId: ID, dId: ID, ctId: ID, search: String, min: Int, max: Int,  gender: [String]  desc: [String], categories: [ID]  ): customTotalAndCatProductsWithProduct
+    getCatProductsWithProduct(carProId: ID, cId: ID, dId: ID, ctId: ID, productName: String, search: String, min: Int, max: Int,  gender: [String]  desc: [String], categories: [ID]  ): customTotalAndCatProductsWithProduct
     getCatProductsWithProductClient(carProId: ID, cId: ID, dId: ID, ctId: ID, search: String, min: Int, max: Int,  gender: [String]  desc: [String], categories: [ID] idStore: ID  ): [catProductsWithProduct]
     catProductsLogis(carProId: ID, cId: ID, dId: ID, ctId: ID, search: String, min: Int, max: Int  ): [catProducts]
 }

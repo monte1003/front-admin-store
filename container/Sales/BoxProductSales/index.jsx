@@ -9,7 +9,7 @@ import {
 } from '../styled'
 import { Checkbox } from 'components/Checkbox'
 // import { Range } from 'components/InputRange'
-import { CardProductSimple } from 'pkg-components'
+import { CardProductSimple, RippleButton } from 'pkg-components'
 import { IconEdit, IconPay } from 'public/icons'
 import { PColor, APColor } from 'public/colors'
 import { Skeleton } from 'components/Skeleton'
@@ -19,12 +19,13 @@ import { Flex } from 'container/dashboard/styled'
 import { numberFormat } from '../../../utils'
 import { Context } from '~/context/Context'
 import { Draggable } from '~/hooks/useDrag'
+import { Range } from '~/components/InputRange'
 
 export const BoxProductSales = ({
   totalProductPrice,
   data,
   dispatch,
-  // max,
+  max,
   setPrint,
   finalFilter,
   print,
@@ -32,9 +33,11 @@ export const BoxProductSales = ({
   setModalItem,
   modalItem,
   values,
+  discount,
   handleProduct,
   dataClientes,
   callback = () => { return },
+  setOpenModalDiscount = () => { return },
   handleComment = () => { return }
 }) => {
   const { setShowComponentModal } = useContext(Context)
@@ -100,6 +103,15 @@ export const BoxProductSales = ({
                 name='sort'
                 onChange={() => { return dispatch({ type: 'SORT', payload: 'PRICE_LOW_TO_HIGH' }) }}
               />
+            </Flex>
+            <Flex>
+              {/* <RippleButton
+                height='10px'
+                onClick={() => {return setOpenModalDiscount(true)}}
+              >
+                {/* Aplicar descuento */}
+              {/* {discount.discount ? 'descuento aplicado' : 'Aplicar descuento'} */}
+              {/* </RippleButton> */}
             </Flex>
             {/* <Flex>
               <Range
@@ -181,6 +193,7 @@ export const BoxProductSales = ({
           callback={callback}
           counter={Math.abs(data.counter)}
           disabled={false}
+          discount={discount}
           dispatch={dispatch}
           print={print}
           setPrint={setPrint}

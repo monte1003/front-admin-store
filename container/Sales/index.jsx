@@ -41,6 +41,7 @@ import { generatePdfDocumentInvoice } from './PdfStatement'
 import ErrorBoundary from '~/components/Error'
 import { useFormatDate } from './../../../pkg-hook/src/hooks/useFormatDate/index'
 import { useStore } from '~/hooks/useStore'
+import InputHooks from '~/components/InputHooks/InputHooks'
 
 const GenerateSales = () => {
   // STATES
@@ -51,6 +52,7 @@ const GenerateSales = () => {
   } = useContext(Context)
   const router = useRouter()
   const [prod, setProd] = useState(null)
+  const [openModalDiscount, setOpenModalDiscount] = useState(false)
 
   const {
     data,
@@ -78,6 +80,7 @@ const GenerateSales = () => {
     handleRemoveValue,
     print,
     product,
+    discount,
     setProduct,
     productsFood,
     search,
@@ -101,6 +104,7 @@ const GenerateSales = () => {
     handleDecrementExtra,
     loadingExtraProduct,
     disabledModalItems,
+    applyDiscount,
     code
   } = useSales({
     disabled: false,
@@ -221,8 +225,10 @@ const GenerateSales = () => {
     handleComment: handleComment,
     handleProduct: handleProductSelect,
     data,
+    setOpenModalDiscount,
     dispatch,
     dataMinPedido,
+    discount,
     max,
     componentRef,
     inputValue,
@@ -299,6 +305,7 @@ const GenerateSales = () => {
     totalProductPrice,
     values,
     handleChange,
+    discount,
     setDelivery,
     componentRef,
     promiseResolveRef,
@@ -320,10 +327,54 @@ const GenerateSales = () => {
     setOpenCurrentSale(false)
     setPrint(false)
   }
+  const [valueDiscount, setValueDiscount] = useState(null)
+
+  function transformDiscount(discount) {
+    let percentage = parseFloat(discount)
+
+    if (isNaN(percentage)) {
+      return null
+    }
+
+    if (percentage < 1 && discount[0] === '.') {
+      percentage *= 100
+    } else if (percentage > 100) {
+      percentage = 100
+    }
+    return percentage
+  }
+  const handleAddDiscount = () => {
+    applyDiscount(valueDiscount)
+    setOpenModalDiscount(false)
+  }
   if (errorSale) return <ErrorBoundary />
+
   return (
     <Wrapper>
       {loadingRegisterSale || loading || isPrinting && <Loading />}
+      <AwesomeModal
+        btnConfirm={false}
+        footer={false}
+        header={true}
+        onCancel={() => { return setOpenModalDiscount(false)}}
+        onHide={() => { return setOpenModalDiscount(false) }}
+        padding='20px'
+        show={openModalDiscount}
+        size='400px'
+        title='Aplicar descuento al total de la venta'
+        zIndex='9999'
+      >
+        <InputHooks
+          name='number'
+          onChange={(e) => { return setValueDiscount(transformDiscount(e.target.value)) } }
+          required={true}
+          type='number'
+          value={valueDiscount}
+        />
+        <RippleButton onClick={handleAddDiscount} >
+          Aplicar descuento
+        </RippleButton>
+      </AwesomeModal>
       {openCommentModal &&
       <AwesomeModal
         btnConfirm={false}
@@ -351,6 +402,10 @@ const GenerateSales = () => {
           pName={oneProductToComment.pName}
           render={null}
         />
+        <br />
+        <br />
+        <br />
+        <br />
         <textarea
           className='input-textarea'
           name='comment'
