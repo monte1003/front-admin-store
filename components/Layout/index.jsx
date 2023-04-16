@@ -4,7 +4,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { gql, useSubscription } from '@apollo/client'
+import { gql, useApolloClient, useSubscription } from '@apollo/client'
 import { AwesomeModal } from 'pkg-components'
 import { BtnClose } from 'components/AwesomeModal/styled'
 import { usePosition } from 'components/hooks/usePosition'
@@ -24,7 +24,7 @@ import { Context } from '../../context/Context'
 import { AlertBox } from '../AlertBox'
 import { Footer } from './footer'
 import { Header } from './header'
-import { useConnection, useStore } from 'npm-pkg-hook'
+import { useConnection, useStore, useGetSale } from 'npm-pkg-hook'
 import Aside from './Aside'
 import { GET_ALL_PEDIDOS } from 'container/PedidosStore/queries'
 import Head from 'next/head'
@@ -86,20 +86,27 @@ export const MemoLayout = ({
     open: false,
     order: []
   })
-  const [isOpen, setIsOpen] = useState(false)
+  const {
+    getOnePedidoStore,
+    data: sale,
+    error: saleError,
+    loading: saleLoading
+  } = useGetSale()
+  const globalClient = useApolloClient()
+
+
   useSubscription(NEW_NOTIFICATION, {
-    onError: (e) => {
+    onError: () => {
       return sendNotification({ title: 'Error en el pedido', description: 'Error' })
     },
     onData: ({ data, client }) => {
       const ourStore = data?.data?.newStoreOrder?.idStore === dataStore?.idStore
-      console.log(client)
       const subscription = client.link.request({
         query: NEW_NOTIFICATION
       }).subscribe({
         next: (data) => {
           if(ourStore){
-            console.log({data})
+            console.log('')
           } else{
             subscription.unsubscribe()
           }
@@ -115,22 +122,39 @@ export const MemoLayout = ({
         return subscription.unsubscribe()
       }
       if (ourStore) {
-        client.writeQuery({
-          query: GET_ALL_PEDIDOS,
-          data: {
-            // ...messageData?.getMessages,
-            getAllPedidoStoreFinal: [
-              // ...messageData?.getMessages,
-              // newMessage
-            ]
+        const { pCodeRef } = data?.data?.newStoreOrder || {}
+        getOnePedidoStore({
+          variables: {
+            pCodeRef: pCodeRef || ''
           }
         })
-        const oldOrder = [...newOrderModal.order, data?.data?.newStoreOrder]
-        setNewOrderModal({
-          ...newOrderModal,
-          open: true,
-          order: oldOrder
-        })
+        location.push(
+          {
+            query: {
+              ...location.query,
+              saleId: pCodeRef
+            }
+          },
+          undefined,
+          { shallow: true }
+        )
+
+        // client.writeQuery({
+        //   query: GET_ALL_PEDIDOS,
+        //   data: {
+        //     getAllPedidoStoreFinal: [
+        //       ...allPedidosData.getAllPedidoStoreFinal,
+        //       data?.data?.newStoreOrder
+        //     ]
+        //   }
+        // })
+
+        // const oldOrder = [...newOrderMo dal.order, data?.data?.newStoreOrder]
+        // setNewOrderModal({
+        //   ...newOrderModal,
+        //   open: true,
+        //   order: oldOrder
+        // })
         setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
         sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
       }
@@ -179,7 +203,7 @@ export const MemoLayout = ({
           {children}
           <AwesomeModal
             backdrop='static'
-            borderRadius='10px'
+            borderRadius='0'
             btnCancel={true}
             btnConfirm={false}
             customHeight='calc(100vh - 60px)'
@@ -192,6 +216,7 @@ export const MemoLayout = ({
             question={true}
             show={salesOpen}
             size='large'
+            sizeIconClose='35px'
             title='Crea una venta'
             zIndex='9999'
           >

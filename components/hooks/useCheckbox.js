@@ -33,6 +33,7 @@ export const useCheckboxState = (elem, selectedIds = [], disabledIds = [], calBa
       calBack([...newState])
       return newState
     })
+    // eslint-disable-next-line
   }, [])
 
   const setAll = useCallback(

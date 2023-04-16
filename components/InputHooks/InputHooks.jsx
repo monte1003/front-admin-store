@@ -12,7 +12,6 @@ import {
   isEmail,
   isPassword,
   onlyLetters,
-  passwordConfirm,
   rangeLength,
   valNit
 } from '../../utils'

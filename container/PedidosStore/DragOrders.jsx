@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import dynamic from 'next/dynamic'
 import React, {
   useCallback,
   useContext,
@@ -13,11 +12,11 @@ import Text from 'components/common/Atoms/Text'
 import { Context } from 'context/Context'
 import {
   BGColor,
-  PVColor,
+  PColor,
   SEGColor
 } from 'public/colors'
-import { updateCache } from 'utils'
-import { useMutation } from '@apollo/client'
+import { updateCacheMod, updateMultipleCache } from 'utils'
+import { useApolloClient, useMutation } from '@apollo/client'
 import { CHANGE_STATE_STORE_PEDIDO, GET_ALL_PEDIDOS } from './queries'
 import {
   useGetSale,
@@ -27,6 +26,13 @@ import {
 } from 'npm-pkg-hook'
 import { useRouter } from 'next/router'
 import { SubItems } from '../Sales/SubItems'
+import { useDrag2 } from '~/hooks/useDrag'
+import { Button, ModalDetailOrder, Tag } from 'pkg-components'
+import { Loading } from '~/components/Loading'
+import { Bubble, ContainerDrag } from './styled'
+import { GET_ALL_COUNT_SALES } from 'npm-pkg-hook'
+import { QuickFiltersButton } from './QuickFiltersButton'
+import { IconSearch } from '@/public/icons'
 
 const DragOrders = ({
   dataReadyOrder,
@@ -36,32 +42,21 @@ const DragOrders = ({
   data: dataInitial
 }) => {
   // STATES
-  const ModalDetailOrder = dynamic(() =>
-  {return import('pkg-components').then((mod) => {return mod.ModalDetailOrder})}
-  )
-  const { setAlertBox } = useContext(Context)
-  const data = [
-    {
-      title: `Pedidos entrantes`,
-      items: dataInitial || []
-    },
-    {
-      title: `pedidos en progreso`,
-      items: dataProgressOrder || []
-    },
-    {
-      title: `Pedidos listos para entrega`,
-      items: dataReadyOrder || []
-    },
-    {
-      title: `Pedidos concluidos`,
-      items: dataConcludes || []
-    },
-    {
-      title: `Rechazados`,
-      items: dataRechazados || []
-    }
-  ]
+
+  const { sendNotification } = useContext(Context)
+  const orders = {
+    incoming: dataInitial || [],
+    inProgress: dataProgressOrder || [],
+    ready: dataReadyOrder || [],
+    concluded: dataConcludes || [],
+    rejected: dataRechazados || []
+  }
+
+  const data = Object.entries(orders).map(([key, value]) => {return {
+    title: `${key.charAt(0).toUpperCase()}${key.slice(1)} pedidos`,
+    items: value
+  }})
+
   const [list, setList] = useState(data)
   const [saleKey, setSaleKey] = useState([])
   const [saleGroup, setGroup] = useState()
@@ -102,9 +97,9 @@ const DragOrders = ({
       setSaleKey(groupByQuantity)
     }
   }, [])
-  const [changePPStatePPedido] = useMutation(CHANGE_STATE_STORE_PEDIDO, {
+  const [changePPStatePPedido, { loading: LoadingStatusOrder }] = useMutation(CHANGE_STATE_STORE_PEDIDO, {
     onCompleted: (res) => {
-      setAlertBox({ message: res.changePPStatePPedido.message })
+      return sendNotification({ title: 'Exitoso', description: res.changePPStatePPedido.message })
     }
   })
   // EFFECTS
@@ -123,16 +118,17 @@ const DragOrders = ({
   const [elem, setElem] = useState('')
 
   const handleDragStart = (e, groupIndex, itemIndex, item) => {
-    const { pCodeRef } = item || {}
-    setElem(pCodeRef)
-    // eslint-disable-next-line
-    const currentItem = dragItem.current
     const params = {
       groupIndex: groupIndex,
       itemIndex: itemIndex
     }
     dragItem.current = params
     dragNode.current = e.target
+    pushPosition()
+    setDraggingItem(item)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/html', e.target.parentNode)
+    e.target.parentNode.classList.add('dragging')
     dragNode.current.addEventListener('dragend', handleDragEnd)
     setTimeout(() => {
       setDragging(true)
@@ -142,9 +138,9 @@ const DragOrders = ({
     let _a
     setDragging(false);
     (_a = dragNode.current) === null || _a === void 0 ? void 0 : _a.removeEventListener('dragend', handleDragEnd)
+    _a.classList.remove('dragging')
     dragItem.current = initialCoOrdinate
     dragNode.current = undefined
-    pushPosition()
   }
   const handleDragEnter = useCallback(
     (e, groupIndex, itemIndex, item) => {
@@ -156,7 +152,8 @@ const DragOrders = ({
         }
         const currentItem = dragItem.current
         if (e.target !== dragNode.current) {
-          setPosition(groupIndex + 1)
+          e.target.classList.add('dragover')
+          // setPosition(groupIndex + 1)
           setList((oldList) => {
             let newList = JSON.parse(JSON.stringify(oldList))
             newList[params.groupIndex].items.splice(params.itemIndex, 0, newList[currentItem.groupIndex].items.splice(currentItem.itemIndex, 1)[0])
@@ -174,8 +171,6 @@ const DragOrders = ({
     [position, data, dragItem.current]
   )
 
-  // const handleDragEnter = (e, groupIndex, itemIndex, item) => {
-  // }
   const getStyles = (groupIndex, itemIndex) => {
     const currentItem = dragItem.current
     if (currentItem.groupIndex === groupIndex &&
@@ -184,39 +179,21 @@ const DragOrders = ({
     }
     return 'box-items'
   }
-  useEffect(() => {
-    setPosition(position)
-    setElem(elem)
-  }, [position, elem])
 
-  function pushPosition() {
-    changePPStatePPedido({
-      variables: {
-        pPStateP: position,
-        pCodeRef: elem,
-        pDatMod: new Date()
-      }, update: (cache, { data: { getAllPedidoStoreFinal } }) => {return updateCache({
-        cache,
-        query: GET_ALL_PEDIDOS,
-        nameFun: 'getAllPedidoStoreFinal',
-        dataNew: getAllPedidoStoreFinal
-      })}
-    })
-  }
+
   const router = useRouter()
   const { query } = router
   const { saleId } = query || {}
   const [openModalDetails, setOpenModalDetails] = useState(false)
   const [openAction, setOpenAction] = useState(false)
-  const [dataModal, setDataModal] = useState({})
+  const [dataStore] = useStore()
   const handleGetOneOrder = (item) => {
     const { pCodeRef } = item || {}
     getOnePedidoStore({
       variables: {
-        pCodeRef: pCodeRef ?? null
+        pCodeRef: pCodeRef || ''
       }
     })
-    setDataModal(sale)
     router.push(
       {
         query: {
@@ -231,7 +208,6 @@ const DragOrders = ({
       setOpenModalDetails(!openModalDetails)
     }
   }
-  const [dataStore, { loading }] = useStore()
 
   const handleOpenActions = () => {
     setOpenAction(!openAction)
@@ -253,18 +229,34 @@ const DragOrders = ({
     setOpenModalDetails(false)
     onClose()
   }
+  const client = useApolloClient()
+
   const HandleChangeState = (stateNumber, pCodeRef) => {
     changePPStatePPedido({
       variables: {
         pPStateP: stateNumber,
         pCodeRef: pCodeRef
-      }, update: (cache, { data: { getAllPedidoStoreFinal } }) => {return updateCache({
-        cache,
-        query: GET_ALL_PEDIDOS,
-        nameFun: 'getAllPedidoStoreFinal',
-        dataNew: getAllPedidoStoreFinal
-      })}
-
+      },
+      update: async (cache, { data: { getAllPedidoStoreFinal } }) => {
+        const updatedData = {
+          nameFun1: getAllPedidoStoreFinal
+        }
+        if (pCodeRef !== 4) {
+          client.query({
+            query: GET_ALL_COUNT_SALES,
+            fetchPolicy: 'network-only',
+            onCompleted: (data) => {
+              client.writeQuery({ query: GET_ALL_COUNT_SALES, data: { getTodaySales: data.countSales.todaySales } })
+            }
+          })
+        }
+        return updateMultipleCache({
+          cache,
+          queries: [
+            { query: GET_ALL_PEDIDOS, dataNew: updatedData.nameFun1, nameFun: 'getAllPedidoStoreFinal' }
+          ]
+        })
+      }
     })
   }
   const [modalItem, setModalItem] = useState(false)
@@ -282,23 +274,23 @@ const DragOrders = ({
     const listShoppingCard = sale.getAllPedidoStore.find((Shopping) => {
       return Shopping.getAllShoppingCard.productFood.pId === pid
     })
-    const productModel = listShoppingCard?.getAllShoppingCard?.productFood
-    const newSalesOptional = productModel?.salesExtProductFoodOptional.map((sp) => {
+    const productModel = listShoppingCard?.getAllShoppingCard || {}
+    const newSalesOptional = Array.isArray(productModel?.salesExtProductFoodOptional) ? productModel?.salesExtProductFoodOptional.map((sp) => {
       return {
         ...sp,
         ExtProductFoodsSubOptionalAll: sp?.saleExtProductFoodsSubOptionalAll?.map((subP) => {
           return {
             check: true,
-            subP
+            ...subP
           }
         })
       }
-    })
+    }) : []
     const objetSubOption = {
-      dataExtra: productModel.ExtProductFoodsAll || [],
+      dataExtra: Array.isArray(productModel?.ExtProductFoodsAll) ? productModel?.ExtProductFoodsAll : [],
       dataOptional: newSalesOptional || []
     }
-    if (productModel.ExtProductFoodsAll.length > 0 && newSalesOptional.length > 0) {
+    if (Array.isArray(productModel?.ExtProductFoodsAll) && productModel?.ExtProductFoodsAll?.length > 0 && newSalesOptional.length > 0) {
       setDataOption(objetSubOption)
     } else {
       setDataOption({
@@ -307,76 +299,171 @@ const DragOrders = ({
       })
     }
   }
-  const propsModal = {
-    dataModal,
-    dataStore,
-    loading: loading || saleLoading,
-    openAction,
-    pDatCre: useFormatDate({ date: dataModal?.pDatCre }),
-    saleError,
-    saleGroup,
-    saleKey,
-    totalProductsPrice: numberFormat(Math.abs(dataModal?.totalProductsPrice)),
-    HandleChangeState,
-    handleModalItem,
-    handleOpenActions,
-    setModalItem,
-    onClose: () => { return handleCloseModal() },
-    onPress: handleGetOneOrder
-  }
 
   useEffect(() => {
     if (!saleId) return
     if (saleId) {
-      if (!saleLoading) {
-        setOpenModalDetails(true)
-      }
+      setOpenModalDetails(true)
       getOnePedidoStore({
         variables: {
-          pCodeRef: saleId ?? null
+          pCodeRef: saleId || ''
         }
       })
-      if (!saleLoading) {
-        setDataModal(sale)
-      }
     }
   }, [sale, saleId])
-
   const modalItems = {
     setModalItem,
     handleModalItem,
     loading: false,
-    disabled: false,
+    disabled: true,
     sumExtraProducts: 0,
     product: {},
     modalItem,
-    handleDecrement: () => {
-      return
-    },
-    handleIncrement: () => {
-      return
-    },
-    handleUpdateAllExtra: () => {
-      return
-    },
-    handleIncrementExtra: () => {
-      return
-    },
-    handleDecrementExtra: () => {
-      return
-    },
-    handleAddOptional: () => {
-      return
-    },
     ...dataOption
     // dataProduct
   }
+  function pushPosition() {
+    changePPStatePPedido({
+      variables: {
+        pPStateP: position,
+        pCodeRef: elem,
+        pDatMod: new Date()
+      }
+      ,update: (cache, { data: { getAllPedidoStoreFinal } }) => {return updateCacheMod({
+        cache,
+        type: 2,
+        query: GET_ALL_PEDIDOS,
+        nameFun: 'getAllPedidoStoreFinal',
+        dataNew: getAllPedidoStoreFinal
+      })}
+    })
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    e.target.classList.remove('dragover')
+  }
+  const [draggingItem, setDraggingItem] = useState(null)
+  const ref = useRef(null)
+  useDrag2(ref)
+
+  const [pos, setPos] = useState({x: 0, y:  0})
+  const [startPos, setStartPos] = useState({x: 0, y: 0})
+  const [selectedItem, setSelectedItem] = useState(null)
+
+  const handleGetPosition = useCallback((e, grpIdx) => {
+    setPosition(grpIdx)
+  }, [position])
+
+  const handleMouseDown = (e, grpIdx, itemIdx, item) => {
+    setDragging(true)
+    if (item?.pCodeRef) {
+      setElem(item?.pCodeRef)
+      setSelectedItem(item)
+    }
+    setStartPos({ x: e.clientX, y: e.clientY })
+  }
+
+  const handleMouseMove = (e) => {
+    const dx = e.clientX - startPos.x
+    const dy = e.clientY - startPos.y
+    setPos({x: pos.x + dx, y: pos.y + dy})
+    setStartPos({x: e.clientX, y: e.clientY})
+  }
+
+  const handleMouseUp = () => {
+    setDragging(false)
+  }
+  const color = {
+    0:'#63ba3c',
+    1:'#ffd91f',
+    2:'#ffd91f',
+    3:'#ff9a1f',
+    4: '#63ba3c',
+    5: PColor
+  }
+
+  const pDatCre= useFormatDate({ date: sale?.pDatCre })
+  const [filterValue, setFilterValue] = useState('')
+
+  const handleInputChange = (event) => {
+    const inputValue = event.target.value
+    setFilterValue(inputValue)
+
+    const filteredList = data.map(category => {
+      const filteredItems = category.items.filter(item => {return item.pCodeRef.includes(filterValue)})
+      return {
+        ...category,
+        items: filteredItems
+      }
+    })
+
+    // Si no hay coincidencias, actualizar con la lista original
+    const noMatches = filteredList.every(category => {return category.items.length === 0})
+    if (noMatches) {
+      setList(data)
+    } else {
+      setList(filteredList)
+    }
+  }
+
   return (
-    <>
-      {(openModalDetails && !saleLoading) &&
-        <ModalDetailOrder {...propsModal} />
+    <ContainerDrag>
+      <div ref={ref}>
+                    Hola
+      </div>
+      {(saleLoading || LoadingStatusOrder) && <Loading />}
+      {(openModalDetails && sale) &&
+        <ModalDetailOrder
+          HandleChangeState={HandleChangeState}
+          dataModal={sale}
+          dataStore={dataStore}
+          handleModalItem={handleModalItem}
+          handleOpenActions={handleOpenActions}
+          loading={false}
+          onClose={handleCloseModal}
+          onPress={handleGetOneOrder}
+          openAction={openAction}
+          pDatCre={pDatCre}
+          saleError={saleError}
+          saleGroup={saleGroup}
+          saleKey={saleKey}
+          setModalItem={setModalItem}
+          totalProductsPrice={numberFormat(Math.abs(sale?.totalProductsPrice)) || 0}
+        />
       }
       <SubItems {...modalItems} />
+      <div className='quick-filters' style={{ display: 'flex' }}>
+        <div className='search-container'>
+          <input
+            className='search-input'
+            onChange={handleInputChange}
+            placeholder='Buscar ordenes'
+            type='text'
+            value={filterValue}
+          />
+          <IconSearch
+            className='search-icon'
+            color={PColor}
+            size={20}
+          />
+        </div>
+        <QuickFiltersButton
+          onClick={() => {
+            // handleFilter()
+          }}
+        />
+        <Button
+          borderRadius='0'
+          onClick={() => {
+            setFilterValue('')
+            setList(data)
+          }}
+        >
+          Borrar filtro
+        </Button>
+      </div>
 
       <Column
         alignItems='stretch'
@@ -392,7 +479,7 @@ const DragOrders = ({
             return (
               <Column
                 background='#f4f5f7'
-                borderRadius='10px'
+                borderRadius='4px 4px 0 0'
                 key={grp.title}
                 margin='0 15px 0 0 '
                 maxWidth='260px'
@@ -403,6 +490,7 @@ const DragOrders = ({
                     }
                     : undefined
                 }
+                // onMouseMove={(e) => { return handleGetPosition(e, grpIdx + 1)}}
                 transition='1s ease'
                 width='260px'
               >
@@ -422,44 +510,40 @@ const DragOrders = ({
                     textOverflow='ellipsis'
                     textTransform='uppercase'
                   >
-                    {grp.title}
+                    {grp.title} {(grp?.items?.length)}
                   </Text>
                 </Column>
-                {
-                  dragging && <Column
-                    backgroundColor={`${PVColor}10`}
-                    border={`1px solid ${PVColor}`}
-                    borderRadius='5px'
-                    display='grid'
-                    height='40px'
-                    margin='auto'
-                    placeContent='center'
-                    width='95%'
-                  >
-                    <Text
-                      color={SEGColor}
-                      family='PFont-Regular'
-                      fontSize='10px'
-                    >
-                      {grp.title}
-                    </Text>
-                  </Column>
-
-                }
                 {grp.items.length > 0 && grp.items.map((item, itemIdx) => {
+                  const isSelected = selectedItem && selectedItem?.pCodeRef === item?.pCodeRef
+                  const style = {
+                    // position: 'absolute',
+                    // top: pos.y,
+                    // left: pos.x,
+                    // width: '250px',
+                    cursor: dragging ? 'grabbing' : 'grab',
+                    backgroundColor: isSelected ? '#ff000026' : BGColor,
+                    zIndex: isSelected ? 1 : 0
+                  }
                   return (
-                    <Column
+                    <div
                       borderRadius='5px '
-                      className={dragging ? getStyles(grpIdx, itemIdx) : 'box-items'}
-                      display='grid'
+                      className={`box-items ${draggingItem?.pCodeRef === item?.pCodeRef ? 'dragging' : ''}`}
                       draggable={false}
                       key={item?.pCodeRef}
                       margin='auto'
                       onClick={() => { return handleGetOneOrder(item) }}
+                      onContextMenu={(event) => {
+                        event.preventDefault()
+                        return handleGetOneOrder(item)
+                      }}
                       onDragEnter={dragging ? (e) => { return handleDragEnter(e, grpIdx, itemIdx, item) } : undefined}
-                      onDragStart={(e) => { return handleDragStart(e, grpIdx, itemIdx, item) }}
+                      onDragLeave={(e) => {return handleDragLeave(e)}}
+                      // onDragStart={(e) => { return handleDragStart(e, grpIdx, itemIdx, item) }}
+                      onMouseDown={(e) => {return handleMouseDown(e, grpIdx, itemIdx, item)}}
+                      onMouseUp={handleMouseUp}
                       padding='10px'
                       position='relative'
+                      style={isSelected ? style : {}}
                       width='96%'
                     >
                       <Column >
@@ -467,15 +551,24 @@ const DragOrders = ({
                       </Column>
                       <Column>
                         <Text
+                          className='ghx-summary'
                           color={SEGColor}
                           family='PFont-Regular'
                           fontSize='10px'
-                        >{grp.title}</Text>
+                        >
+                          {grp.title}
+                        </Text>
                       </Column>
                       <Column>
                         <Text fontSize='10px' >{item?.pCodeRef}</Text>
                       </Column>
-                    </Column>
+                      <Bubble color={color[item.pSState]}>
+                        <span className='bubble-outer-dot'>
+                          <span className='bubble-inner-dot'></span>
+                        </span>
+                      </Bubble>
+                      <Tag label={item.channel === 0 ? 'Delivery app' : 'Restaurante'} />
+                    </div>
                   )
                 })}
               </Column>
@@ -483,7 +576,7 @@ const DragOrders = ({
           })}
         </Row>
       </Column>
-    </>
+    </ContainerDrag>
   )
 }
 

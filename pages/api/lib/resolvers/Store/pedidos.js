@@ -5,7 +5,6 @@ import ShoppingCard from '../../models/Store/ShoppingCard'
 import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 import Users from '../../models/Users'
 import { deCode, getAttributes } from '../../utils/util'
-import ExtProductFoodOptional from '../../models/Store/sales/saleExtProductFoodOptional'
 
 export const createOnePedidoStore = async (_, { input }) => {
   const {

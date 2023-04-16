@@ -63,6 +63,7 @@ export const SubItems = ({
             <ExtrasProductsItems
               dataExtra={dataExtra || []}
               dataOptional={dataOptional || []}
+              disabled={disabled}
               editing={false}
               handleAddOptional={handleAddOptional}
               handleDecrementExtra={handleDecrementExtra}
@@ -76,14 +77,16 @@ export const SubItems = ({
 
         <DishAction>
           <div style={{ display: 'flex', width: '70%' }}>
-            {loading ? <Skeleton numberObject={1} style={{ padding: 0, margin: 0 }} /> : <QuantityButton
-              handleDecrement={handleDecrement}
-              handleIncrement={handleIncrement}
-              label={numberFormat(ProPrice)}
-              quantity={ProQuantity}
-              showNegativeButton={!ProQuantity || ProQuantity === 0 || ProQuantity === null}
-              validationZero={false}
-            />}
+            {loading ? <Skeleton numberObject={1} style={{ padding: 0, margin: 0 }} /> 
+              : <QuantityButton
+                handleDecrement={handleDecrement}
+                handleIncrement={handleIncrement}
+                label={numberFormat(ProPrice)}
+                quantity={ProQuantity}
+                showNegativeButton={!ProQuantity || ProQuantity === 0 || ProQuantity === null}
+                validationZero={false}
+              />
+            }
             <RippleButton
               bgColor={`${PColor} !important`}
               disabled={disabled}

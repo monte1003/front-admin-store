@@ -4,7 +4,6 @@ import productModelFood from '../../models/product/productFood'
 import catProducts from '../../models/Store/cat'
 import { linkHasMany } from '../../utils'
 import { deCode, getAttributes, linkBelongsTo } from '../../utils/util'
-import sequelize from 'sequelize'
 
 export const updatedProducts = async (_, { input }, ctx) => {
   try {
@@ -257,7 +256,6 @@ export const getCatProductsWithProduct = async (root, args, context) => {
       ]
     }, limit: [min || 0, max || 5], order: [['pDatCre', 'ASC']]
   })
-  console.log(productName)
 
   return {
     totalCount: count,

@@ -17,7 +17,7 @@ export const QuantityButton = ({
   validationZero = false,
   width,
   showPositiveButton = false,
-  handleIncrement,
+  handleIncrement = () => { return },
   ...props
 }) => {
   const validateZero = validationZero && quantity >= 0

@@ -150,50 +150,50 @@ export default function App({ Component, pageProps }) {
 }
 
 
-  // const [isSaved, setIsSaved] = useState(false);
-  // console.log(isSaved)
-  // useEffect(() => {
-  //   function handleKeyDown(event: any): void {
-  //     if (event.ctrlKey && event.key === "s") {
-  //       event.preventDefault();
-  //       setIsSaved(true);
-  //       setTimeout(() => {
-  //         setIsSaved(false)
-  //       }, 2000)
-  //     }
-  //   }
-  //   document.addEventListener("keydown", handleKeyDown);
-  //   return () => {
-  //     document.removeEventListener("keydown", handleKeyDown);
-  //   };
-  // }, [])
+// const [isSaved, setIsSaved] = useState(false);
+// console.log(isSaved)
+// useEffect(() => {
+//   function handleKeyDown(event: any): void {
+//     if (event.ctrlKey && event.key === "s") {
+//       event.preventDefault();
+//       setIsSaved(true);
+//       setTimeout(() => {
+//         setIsSaved(false)
+//       }, 2000)
+//     }
+//   }
+//   document.addEventListener("keydown", handleKeyDown);
+//   return () => {
+//     document.removeEventListener("keydown", handleKeyDown);
+//   };
+// }, [])
 
-  // function MyComponent() {
-  //   const isCtrlSPressed = useMultiKeyPress("Control", "s");
+// function MyComponent() {
+//   const isCtrlSPressed = useMultiKeyPress("Control", "s");
   
-  //   useEffect(() => {
-  //     function handleKeyDown(event) {
-  //       if (isCtrlSPressed) {
-  //         event.preventDefault();
-  //         console.log("Ctrl + S presionado!");
-  //         // Realizar la acción deseada sin enviar el formulario
-  //       }
-  //     }
+//   useEffect(() => {
+//     function handleKeyDown(event) {
+//       if (isCtrlSPressed) {
+//         event.preventDefault();
+//         console.log("Ctrl + S presionado!");
+//         // Realizar la acción deseada sin enviar el formulario
+//       }
+//     }
   
-  //     window.addEventListener("keydown", handleKeyDown);
+//     window.addEventListener("keydown", handleKeyDown);
   
-  //     return () => {
-  //       window.removeEventListener("keydown", handleKeyDown);
-  //     };
-  //   }, [isCtrlSPressed]);
+//     return () => {
+//       window.removeEventListener("keydown", handleKeyDown);
+//     };
+//   }, [isCtrlSPressed]);
   
-  //   return (
-  //     <div>
-  //       <h1>Presiona Ctrl + S para realizar una acción</h1>
-  //       <input type="text" />
-  //     </div>
-  //   );
-  // }
+//   return (
+//     <div>
+//       <h1>Presiona Ctrl + S para realizar una acción</h1>
+//       <input type="text" />
+//     </div>
+//   );
+// }
   
 App.propTypes = {
   Component: PropTypes.any,

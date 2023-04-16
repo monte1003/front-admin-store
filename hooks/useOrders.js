@@ -24,6 +24,7 @@ export const useOrders = ({
     onCompleted: () => {
       setOrders(data)
     },
+    notifyOnNetworkStatusChange: true,
     refetchWritePolicy: refetchWritePolicy,
     pollInterval,
     fetchPolicy,

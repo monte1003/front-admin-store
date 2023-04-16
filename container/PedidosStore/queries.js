@@ -20,6 +20,7 @@ query getAllPedidoStoreFinal($idStore: ID, $search: String, $min: Int, $max: Int
     totalProductsPrice
     pSState
     pDatCre
+    channel
     locationUser
     pDatMod
     getAllPedidoStore{

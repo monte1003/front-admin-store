@@ -509,13 +509,14 @@ export const IconHorario = ({ style = {}, size, color }) => {
   </svg>
 }
 
-export const IconSearch = ({ style = {}, size, color }) => {
+export const IconSearch = ({ style = {}, size, color, props }) => {
   return <svg
     height={size}
     style={style}
     viewBox='0 0 16.39 16.23'
     width={size}
     xmlns='http://www.w3.org/2000/svg'
+    {...props}
   ><circle
       cx='6.91'
       cy='6.91'

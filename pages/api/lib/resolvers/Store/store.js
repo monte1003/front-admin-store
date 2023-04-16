@@ -137,99 +137,111 @@ const registerSalesStore = async (root,
       }
     }
     await Promise.all(input.map(async (element) => {
-      const { pId, cantProducts, comments, dataExtra, dataOptional } = element
+      const {
+        pId,
+        cantProducts,
+        comments,
+        dataExtra,
+        dataOptional,
+        refCodePid
+      } = element
       const resShoppingCard = await ShoppingCard.create({
         pId: deCode(pId),
         id: deCode(id),
         comments: comments ?? '',
         cState: 0,
+        refCodePid: refCodePid || '',
         cantProducts,
         idStore: deCode(context.restaurant)
       })
       if (dataExtra?.length > 0) {
         await SaleDataExtra.bulkCreate(dataExtra.map(extra => {return {
-          shoppingCardId: deCode(resShoppingCard.ShoppingCard),
-          pId: extra.pId,
           exPid: extra.exPid,
           exState: extra.exState,
-          pCodeRef: pCodeRef,
           extraName: extra.extraName,
           extraPrice: extra.extraPrice,
-          state: extra.state,
+          newExtraPrice: extra.newExtraPrice,
+          pCodeRef: pCodeRef,
           pDatCre: new Date(Date.now()),
           pDatMod: new Date(Date.now()),
+          pId: extra.pId,
           quantity: extra.quantity,
-          newExtraPrice: extra.newExtraPrice
+          refCodePid,
+          shoppingCardId: deCode(resShoppingCard.ShoppingCard),
+          state: extra.state
         }}))
       }
-      await Promise.all(dataOptional.map(async (optional) => {
-        const {
-          opExPid,
-          OptionalProName,
-          state,
-          code,
-          numbersOptionalOnly,
-          pDatCre,
-          required,
-          pDatMod,
-          ExtProductFoodsSubOptionalAll
-        } = optional
-        await ExtProductFoodOptional.create({
-          pId: deCode(pId),
-          opExPid: deCode(opExPid),
-          OptionalProName,
-          state,
-          code,
-          pCodeRef: pCodeRef,
-          numbersOptionalOnly,
-          pDatCre,
-          required,
-          pDatMod
-        })
-        if (ExtProductFoodsSubOptionalAll?.length > 0) {
-          await ExtProductFoodSubOptional.bulkCreate(ExtProductFoodsSubOptionalAll.map(subOptional => {return {
+      if (Array.isArray(dataOptional) && dataOptional.length > 0) {
+        await Promise.all(dataOptional.map(async (optional) => {
+          const {
+            opExPid,
+            OptionalProName,
+            state,
+            code,
+            numbersOptionalOnly,
+            pDatCre,
+            required,
+            pDatMod,
+            ExtProductFoodsSubOptionalAll
+          } = optional
+          await ExtProductFoodOptional.create({
             pId: deCode(pId),
             opExPid: deCode(opExPid),
-            idStore: deCode(context.restaurant),
-            opSubExPid: deCode(subOptional.opSubExPid),
-            OptionalSubProName: subOptional.OptionalSubProName,
-            exCodeOptionExtra: subOptional.exCodeOptionExtra,
-            exCode: subOptional.exCode,
+            OptionalProName,
+            state,
+            refCodePid,
+            code,
             pCodeRef: pCodeRef,
-            state: subOptional.state,
-            pDatCre: new Date(Date.now()),
-            pDatMod: new Date(Date.now()),
-            check: subOptional.check
-          }}))
-        }
-      }))
+            numbersOptionalOnly,
+            pDatCre,
+            required,
+            pDatMod
+          })
+          if ((Array.isArray(ExtProductFoodsSubOptionalAll)) && ExtProductFoodsSubOptionalAll?.length > 0) {
+            await ExtProductFoodSubOptional.bulkCreate(ExtProductFoodsSubOptionalAll.map(subOptional => {return {
+              pId: deCode(pId),
+              opExPid: deCode(opExPid),
+              idStore: deCode(context.restaurant),
+              opSubExPid: deCode(subOptional.opSubExPid),
+              OptionalSubProName: subOptional.OptionalSubProName,
+              exCodeOptionExtra: subOptional.exCodeOptionExtra,
+              exCode: subOptional.exCode,
+              pCodeRef: pCodeRef,
+              state: subOptional.state,
+              pDatCre: new Date(Date.now()),
+              pDatMod: new Date(Date.now()),
+              check: subOptional.check
+            }}))
+          }
+        }))
+      }
       await createOnePedidoStore(null, {
         input: {
+          change,
           generateSales: true,
           id: id,
           idStore: context?.restaurant?.replace(/["']/g, ''),
-          ShoppingCard: resShoppingCard.ShoppingCard,
-          change,
-          pickUp,
-          pCodeRef,
           payMethodPState,
-          pPRecoger: null
+          pCodeRef,
+          pickUp,
+          pPRecoger: null,
+          ShoppingCard: resShoppingCard.ShoppingCard
         }
       })
     }))
     await StatusPedidosModel.create({
-      id: deCode(id),
-      locationUser: null,
-      idStore: idStore ? deCode(idStore) : deCode(context.restaurant),
-      pSState: 4,
-      pCodeRef: pCodeRef,
-      discount: discount,
       change: change,
       channel: 1,
-      valueDelivery: valueDelivery,
+      discount: discount,
+      id: deCode(id),
+      idStore: idStore ? deCode(idStore) : deCode(context.restaurant),
+      locationUser: null,
       payMethodPState: payMethodPState,
+      pCodeRef: pCodeRef,
       pickUp,
-      totalProductsPrice
+      pSState: 4,
+      totalProductsPrice,
+      valueDelivery: valueDelivery
     })
     return {
       Response: {
@@ -635,6 +647,39 @@ export default {
       }
     },
     ShoppingCard: {
+      ExtProductFoodsAll: async (parent, _args, _context, info) => {
+        try {
+          if (!info?.variableValues?.pCodeRef || !parent.refCodePid) return []
+          const attributes = getAttributes(SaleDataExtra, info)
+          const data = await SaleDataExtra.findAll({
+            attributes,
+            where: {
+              pCodeRef: info?.variableValues?.pCodeRef || '',
+              refCodePid: parent.refCodePid || '',
+              quantity:  { [Op.gt]: 0 }
+            }
+          })
+          return data
+        } catch {
+          return []
+        }
+      },
+      salesExtProductFoodOptional: async (parent, _args, _context, info) => {
+        try {
+          if (!info?.variableValues?.pCodeRef) return []
+          const attributes = getAttributes(ExtProductFoodOptional, info)
+          const data = await ExtProductFoodOptional.findAll({
+            attributes,
+            where: {
+              pCodeRef: info?.variableValues?.pCodeRef || '',
+              refCodePid: parent.refCodePid || ''
+            }
+          })
+          return data
+        } catch {
+          return []
+        }
+      },
       getStore: async (parent, _args, _context, info) => {
         try {
           const attributes = getAttributes(Store, info)
@@ -660,6 +705,7 @@ export default {
         }
       }
     },
+    
     Store: {
       // eslint-disable-next-line
       getAllRatingStar: async (parent, _args, _context, info) => {

@@ -119,7 +119,7 @@ export default function NewSelect({
   const val = options?.find(x => x[id] === value)
 
   return (
-    <div  style={{  position: 'relative' }}>
+    <div style={{ position: 'relative' }}>
       <LabelInput
         error={error}
         noLabel={noLabel}

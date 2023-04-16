@@ -67,6 +67,10 @@ const ShoppingCard = sequelize.define('shoppingcards', {
     type: STRING(100),
     allowNull: true
   },
+  refCodePid: {
+    type: STRING(50),
+    allowNull: true
+  },
   cantProducts: {
     type: INTEGER,
     allowNull: true

@@ -31,6 +31,7 @@ export const ExtrasProductsItems = ({
   dataOptional,
   editing = true,
   dataExtra,
+  disabled = false,
   setModal,
   modal,
   ...props
@@ -225,6 +226,7 @@ export const ExtrasProductsItems = ({
         </GarnishChoicesHeader>
         <Items
           dataExtra={dataExtra}
+          disabled={disabled}
           editing={editing}
           handleDecrementExtra={handleDecrementExtra}
           handleDeleteAdditional={handleDeleteAdditional}

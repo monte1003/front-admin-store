@@ -14,7 +14,6 @@ import tagsProduct from '../../models/Store/tagsProduct'
 import ThirdPartiesModel from '../../models/thirdParties/ThirdPartiesModel'
 import { deCode, getAttributes } from '../../utils/util'
 import ExtProductFoodOptional from './../../models/Store/sales/saleExtProductFoodOptional'
-import SaleDataExtra from './../../models/Store/sales/saleExtraProduct'
 import ExtProductFoodSubOptional from '../../models/Store/sales/saleExtProductFoodSubOptional'
 
 export const productsOne = async (root, { pId }, context, info) => {
@@ -235,7 +234,11 @@ export default {
           const attributes = getAttributes(ExtProductFoodSubOptional, info)
           const data = await ExtProductFoodSubOptional.findAll({
             attributes,
-            where: { pCodeRef: info?.variableValues?.pCodeRef || '' }
+            where: {
+              exCodeOptionExtra: parent.code,
+              state: { [Op.gt]: 0 },
+              pCodeRef: info?.variableValues?.pCodeRef || ''
+            }
           })
           return data
         } catch {
@@ -251,32 +254,6 @@ export default {
           return data
         } catch (e) {
           throw new ApolloError('Lo sentimos, ha ocurrido un error interno')
-        }
-      },
-      salesExtProductFoodOptional: async (parent, _args, _context, info) => {
-        try {
-          if (!info?.variableValues?.pCodeRef) return []
-          const attributes = getAttributes(ExtProductFoodOptional, info)
-          const data = await ExtProductFoodOptional.findAll({
-            attributes,
-            where: { pCodeRef: info?.variableValues?.pCodeRef || '' }
-          })
-          return data
-        } catch {
-          return []
-        }
-      },
-      ExtProductFoodsAll: async (_parent, _args, _context, info) => {
-        try {
-          if (!info?.variableValues?.pCodeRef) return []
-          const attributes = getAttributes(SaleDataExtra, info)
-          const data = await SaleDataExtra.findAll({
-            attributes,
-            where: { pCodeRef: info?.variableValues?.pCodeRef || '' }
-          })
-          return data
-        } catch {
-          return []
         }
       },
       ExtProductFoodOptional: async (parent, _args, _context, info) => {

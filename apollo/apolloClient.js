@@ -14,18 +14,10 @@ import { typeDefs } from './schema'
 import { cache, isLoggedVar } from './cache'
 import { WebSocketLink } from '@apollo/client/link/ws'
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
-// import { createHttpLink } from 'apollo-link-http'
-// import { createHttpLink } from 'apollo-link-http'
 // https://stackoverflow.com/questions/57229164/how-to-get-the-uri-in-callback-of-onerror-from-apollo-link-error
 // https://stackoverflow.com/questions/53062839/handling-errors-for-apollo-client-when-using-apollolink-split
 let apolloClient
-// import { WebSocketLink } from "@apollo/client/link/ws";
-// eslint-disable-next-line
-import { SubscriptionClient } from 'subscriptions-transport-ws'
-// eslint-disable-next-line
-import { createClient } from 'graphql-ws'
-// eslint-disable-next-line
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+
 
 export const getDeviceId = async () => {
   const fp = await FingerprintJS.load()
@@ -68,29 +60,30 @@ const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
   uri: 'ws://localhost:4000/graphql',
   options: {
     reconnect: true,
-    // lazy: false,
-    // inactivityTimeout: 1000,
-    // timeout: 30000,
+    reconnecting: true,
     wsOptionArguments: {
       headers: {
         authorization: `Bearer ${window.localStorage.getItem('session')}`,
-        restaurant: `MjcyMDg4ODE0ODUxNTE2NDUw`
-
+        restaurant: window.localStorage.getItem('restaurant')
       }
     },
-    connectionParams: {
-      // credentials: 'include',
-      headers: {
-        authorization: `Bearer ${window.localStorage.getItem('session')}`,
-        restaurant: `MjcyMDg4ODE0ODUxNTE2NDUw`
+    connectionParams: () => {
+      const restaurant = window.localStorage.getItem('restaurant')
+      if (restaurant) {
+        return {
+          headers: {
+            restaurant
+          }
+        }
       }
+      return {}
+    },
+    onError: (error) => {
+      console.log('WebSocket connection error', error)
     }
-    // connectionCallback: (error, result) => {
-    //   // eslint-disable-next-line no-console
-    //   console.log(error, result)
-    // }
   }
 }) : null
+
 const NEW_NOTIFICATION = gql`
 subscription {
 newStoreOrder{
@@ -125,14 +118,14 @@ let subscription = typeof window !== 'undefined' && wsLink.request({
   query: NEW_NOTIFICATION
 }).subscribe({
   next: (data) => {
-    const condition = filterData(data)
-    if(condition){
-      isOurStore = true
-    }else{
-      unsubscribed = true
-      isOurStore = false
-      subscription.unsubscribe()
-    }
+    // const condition = filterData(data)
+    // if(condition){
+    //   isOurStore = true
+    // }else{
+    //   unsubscribed = true
+    //   isOurStore = false
+    //   subscription.unsubscribe()
+    // }
   },
   error: (error) => {
     console.log(error)

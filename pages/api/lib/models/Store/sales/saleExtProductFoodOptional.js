@@ -30,6 +30,10 @@ const ExtProductFoodOptional = sequelize.define('saleextproductfoodoptional', {
     unique: true,
     allowNull: false
   },
+  refCodePid: {
+    type: STRING(50),
+    allowNull: true
+  },
   opExPid: {
     type: INTEGER,
     allowNull: true,

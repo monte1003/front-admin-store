@@ -9,6 +9,7 @@ const Items = ({
   editing,
   handleDeleteAdditional,
   dataExtra,
+  disabled = false,
   handleIncrementExtra = () => { return },
   handleDecrementExtra = () => { return }
 }) => {
@@ -38,6 +39,7 @@ const Items = ({
                 {!editing &&
                 <QuantityButton
                   border='none'
+                  disabled={disabled}
                   handleDecrement={() => {return handleDecrementExtra({ Adicionales, index }) }}
                   handleIncrement={() => {return handleIncrementExtra({ Adicionales, index })}}
                   padding='5px'

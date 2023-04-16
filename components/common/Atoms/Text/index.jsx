@@ -2,9 +2,10 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-const Text = ({ text, size, align, lineHeight, padding, margin, color, font, weight, textAlign, ...props }) => {
+const Text = ({ text, size, align, lineHeight, padding, margin, color, font, weight, textAlign, className, ...props }) => {
   return <TextView
     align={align}
+    className={className}
     color={color}
     font={font}
     lineHeight={lineHeight}

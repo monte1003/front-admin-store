@@ -11,6 +11,7 @@ type ShoppingCard {
     discountCardProduct: String
     comments: String
     cantProducts: Int
+    refCodePid: String
     # end
     idUser: ID
     idStore: ID
@@ -21,6 +22,8 @@ type ShoppingCard {
     csDescription: String
     getStore: Store
     productFood: ProductFood
+    salesExtProductFoodOptional: [saleExtProductFoodOptional]
+    ExtProductFoodsAll: [ExtProductFood]
 }
 type ResponseSalesStore {
   ShoppingCard: ShoppingCard
@@ -89,6 +92,7 @@ input IShoppingCard {
     comments: String
     cantProducts: Int
     ProPrice: Int
+    refCodePid: String
     totalExtra: Int
     cState: Int
     cDatCre: DateTime

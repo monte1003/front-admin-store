@@ -54,6 +54,7 @@
     "npm-pkg-hook": "1.0.5",
     "pkg-components": "^1.0.4",
     "react": "18.2.0",
+    "react-beautiful-dnd": "13.1.1",
     "react-chartjs-2": "4.1.0",
     "react-cropper": "2.1.8",
     "react-dom": "18.2.0",

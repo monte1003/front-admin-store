@@ -6,6 +6,19 @@ export const scrollStyle = css`
     .image-cropper {
 
 }
+.dragover {
+  background-color: #f5f5f5;
+  transition: background-color 0.5s ease;
+}
+
+.drop-animation {
+  background-color: #d9edf7;
+  transition: background-color 0.5s ease;
+}
+.no-transparent {
+  background-color: #d9edf7;
+  transition: background-color 0.5s ease;
+}
 
 
 .chart {

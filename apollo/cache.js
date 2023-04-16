@@ -31,6 +31,50 @@ export const cache = new InMemoryCache({
           read: () => {return isLoggedVar()}
         },
         allPosts: concatPagination(),
+        getOnePedidoStore: {
+          keyArgs: ['pCodeRef'],
+          merge(existing, incoming) {
+            if (!incoming) return existing
+            if (!existing) return incoming
+
+            // Creamos una copia de los resultados existentes y entrantes
+            const merged = {
+              ...existing,
+              ...incoming,
+              getAllPedidoStore: [
+                ...(existing.getAllPedidoStore || []),
+                ...(incoming.getAllPedidoStore || [])
+              ]
+            }
+
+            return merged
+          }
+        },
+        getAllPedidoStoreFinal: {
+          keyArgs: ['idStore', 'search', 'statusOrder'],
+          merge(existing, incoming, { args: { max = Infinity } }) {
+            try {
+              // Verificar que el objeto exista y tenga la propiedad getAllPedidoStore
+              const existingResults = existing?.getAllPedidoStore ?? []
+              const incomingResults = incoming?.getAllPedidoStore ?? []
+              // Concatenamos los resultados entrantes con los existentes
+              const merged = [...existingResults]
+              for (let i = 0; i < incomingResults.length && merged.length < max; ++i) {
+                const incomingResult = incomingResults[i]
+                // Verificar que el objeto exista y tenga la propiedad pdpId
+                if (incomingResult?.pdpId && !merged.some(existingResult => {return existingResult.pdpId === incomingResult.pdpId})) {
+                  merged.push(incomingResult)
+                }
+              }
+              return {
+                ...incoming,
+                getAllPedidoStore: merged
+              }
+            } catch (error) {
+              return existing
+            }
+          }
+        },
         productFoodsAll: {
           keyArgs: ['categories', 'desc', 'fromDate', 'gender', 'pState', 'search', 'toDate'],
           merge(existing, incoming, { args: { max = Infinity } }) {

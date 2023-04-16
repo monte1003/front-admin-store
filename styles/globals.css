@@ -277,23 +277,43 @@ code {
   padding: 0.5rem;
 }
 
+.box-items  > .marmita-minitag {
+  font-size: 11px;
+}
 .box-items {
-  display: flex;
+  margin: 5px;
+  padding: 5px;
   justify-content: center;
   align-items: center;
   min-height: 150px;
   background-color: white;
-  cursor: all-scroll;
+  cursor: pointer;
+  width: 96%;
   border-radius: 0.5rem;
-
+  transition: background-color 140ms ease-in-out,border-color 75ms ease-in-out;
+  box-shadow: 0 1px 2px 0 rgba(9, 30, 66, 0.062);
 }
+.ghx-summary {
+  font-family: PFont-Light,Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143px;
+  max-height: 4.28571429em;
+}
+
 .box-items:not(:last-of-type) {
   margin-bottom: 0.5rem;
 }
+
 .box-items * {
   margin: 0;
   font-size: 1.2rem;
- 
+}
+.box-items:hover  {
+  background: #ebecf0;
+}
+.dragging {
+  background-color: #ff000026;
+  opacity: 1 !important;
 }
 
 .group-title {

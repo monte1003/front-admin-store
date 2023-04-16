@@ -458,6 +458,20 @@ export const updateCache = async ({ cache, query, nameFun, dataNew }) => {
   })
 }
 
+export const updateMultipleCache = async ({ cache, queries }) => {
+  const modifiedFields = {}
+  queries.forEach(({ query, nameFun, dataNew }) => {
+    modifiedFields[nameFun] = (dataOld = {}) => {
+      return cache.writeQuery({
+        query,
+        data: { ...dataOld, data: { ...(dataOld?.data || {}), ...(dataNew?.data || {}) } }
+      })
+    }
+  })
+  return cache.modify({ fields: modifiedFields })
+}
+
+
 /**
  * actualizar cache de apollo
  * @param {{ cache: object, query: object, nameFun: string, dataNew: object, type: number, id: string }} params Parámetros para actualizar el cachet de apollo
