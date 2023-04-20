@@ -4,7 +4,7 @@ const sequelize = connect()
 import EmployeesFoldersModel from './EmployeesFoldersModel'
 import { enCode, validationID } from '../../utils/util'
 
-const EmployeesFoldersParentsModel = sequelize.define('employeesFoldersParents', {
+const EmployeesFoldersParentsModel = sequelize.define('employeesfoldersparents', {
   efpId: {
     type: INTEGER,
     primaryKey: true,

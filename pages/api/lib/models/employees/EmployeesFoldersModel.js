@@ -6,7 +6,7 @@ import { enCode, validationID } from '../../utils/util'
 const sequelize = connect()
 import EmployeesModel from './EmployeesModel'
 
-const EmployeesFoldersModel = sequelize.define('employeesFolders', {
+const EmployeesFoldersModel = sequelize.define('employeesfolders', {
   efId: {
     type: INTEGER,
     primaryKey: true,

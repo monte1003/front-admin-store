@@ -4,7 +4,7 @@ import { enCode, validationID } from '../../utils/util'
 import UserMastersModel from './userMasterModel'
 const sequelize = connect()
 
-const UsersModel = sequelize.define('usersNot', {
+const UsersModel = sequelize.define('usersnot', {
   uId: {
     type: INTEGER,
     primaryKey: true,

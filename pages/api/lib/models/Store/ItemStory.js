@@ -5,7 +5,7 @@ import { enCode } from '../../utils/util'
 import StoryModel from './StoryModel'
 
 const conn = connect()
-export default conn.define('storyItemPhotoStore', {
+export default conn.define('storyitemphotostore', {
   iStoId: {
     type: Sequelize.INTEGER,
     primaryKey: true,

@@ -4,7 +4,7 @@ import { enCode, validationID } from '../../utils/util'
 const sequelize = connect()
 import GeneralFoldersModel from './GeneralFoldersModel'
 
-const GeneralFoldersParentsModel = sequelize.define('generalFoldersParents', {
+const GeneralFoldersParentsModel = sequelize.define('generalfoldersparents', {
   gfpId: {
     type: INTEGER,
     primaryKey: true,

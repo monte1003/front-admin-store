@@ -6,7 +6,7 @@ import TypePQR from './TypPQR'
 
 // 
 
-const PQR = sequelize.define('PQR', {
+const PQR = sequelize.define('pqr', {
   hpqrId: {
     type: INTEGER,
     primaryKey: true,

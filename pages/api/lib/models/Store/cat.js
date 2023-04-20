@@ -6,7 +6,7 @@ import Users from '../Users'
 import Store from '../Store/Store'
 sequelize.sync()
 
-const catProducts = sequelize.define('catProducts', {
+const catProducts = sequelize.define('catproducts', {
   carProId: {
     type: INTEGER,
     primaryKey: true,

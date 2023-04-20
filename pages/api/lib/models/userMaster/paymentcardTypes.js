@@ -5,7 +5,7 @@ import { enCode } from '../../utils/util'
 
 sequelize.sync()
 
-const PaymentCardType = sequelize.define('paymentcardType', {
+const PaymentCardType = sequelize.define('paymentcardtype', {
   cardtypeId: {
     type: INTEGER,
     primaryKey: true,

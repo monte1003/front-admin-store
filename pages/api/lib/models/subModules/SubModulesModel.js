@@ -3,6 +3,7 @@ import connect from '../../db'
 const sequelize = connect()
 import ModulesModel from '../modules/ModulesModel'
 import { enCode, validationID } from '../../utils/util'
+
 const SubModulesModel = sequelize.define('submodules', {
   smId: {
     type: INTEGER,

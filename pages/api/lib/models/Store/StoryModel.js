@@ -7,7 +7,7 @@ import { enCode } from '../../utils/util'
 const conn = connect()
 conn.sync()
 
-export default conn.define('storyStore', {
+export default conn.define('storystore', {
   stoId: {
     type: Sequelize.INTEGER,
     primaryKey: true,

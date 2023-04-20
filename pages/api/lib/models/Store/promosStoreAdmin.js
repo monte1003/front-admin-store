@@ -3,7 +3,7 @@ import connect from '../../db'
 import { enCode } from '../../utils/util'
 
 const conn = connect()
-export default conn.define('promoDashboardStoreAdmins', {
+export default conn.define('promodashboardstoreadmins', {
   pSoId: {
     type: Sequelize.INTEGER,
     primaryKey: true,

@@ -6,7 +6,7 @@ import { validationID } from '../../utils/util'
 import FoldersModel from './FoldersModel'
 // 
 
-const FolderParentsModel = sequelize.define('folderParents', {
+const FolderParentsModel = sequelize.define('folderparents', {
   fpId: {
     type: INTEGER,
     primaryKey: true,

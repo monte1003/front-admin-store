@@ -7,7 +7,7 @@ import productModelFood from './productFood'
 
 sequelize.sync()
 
-const productModelFoodAvailable = sequelize.define('productModelFoodAvailable', {
+const productModelFoodAvailable = sequelize.define('productmodelfoodavailable', {
   availableProductId: {
     type: INTEGER,
     primaryKey: true,

@@ -8,7 +8,7 @@ import productModelFood from './../product/productFood'
 const conn = connect()
 conn.sync()
 
-export default conn.define('tagsProduct', {
+export default conn.define('tagsproduct', {
   tPsId: {
     type: Sequelize.INTEGER,
     primaryKey: true,

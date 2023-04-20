@@ -6,7 +6,7 @@ import Users from '../UsersLogin/Users'
 
 // 
 
-const FollowModel = sequelize.define('followModel', {
+const FollowModel = sequelize.define('followmodel', {
   idFollower: {
     type: INTEGER,
     primaryKey: true,

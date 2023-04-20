@@ -5,7 +5,7 @@ import { enCode } from '../../utils/util'
 
 // 
 
-const TypeRoad = sequelize.define('typeRoad', {
+const TypeRoad = sequelize.define('typeroad', {
   rId: {
     type: INTEGER,
     primaryKey: true,
