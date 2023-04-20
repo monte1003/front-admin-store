@@ -302,15 +302,15 @@ const DragOrders = ({
 
   useEffect(() => {
     if (!saleId) return
-    if (saleId) {
-      setOpenModalDetails(true)
-      getOnePedidoStore({
-        variables: {
-          pCodeRef: saleId || ''
-        }
-      })
-    }
-  }, [sale, saleId])
+    setOpenModalDetails(true)
+    getOnePedidoStore({
+      variables: {
+        pCodeRef: saleId || ''
+      }
+    })
+    sale && setSelectedItem(sale)
+  }, [sale])
+  
   const modalItems = {
     setModalItem,
     handleModalItem,
@@ -352,6 +352,7 @@ const DragOrders = ({
   const [startPos, setStartPos] = useState({x: 0, y: 0})
   const [selectedItem, setSelectedItem] = useState(null)
 
+  
   const handleGetPosition = useCallback((e, grpIdx) => {
     setPosition(grpIdx)
   }, [position])
