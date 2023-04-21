@@ -6,7 +6,7 @@ import { Prints } from '../Printsale'
 import { AwesomeModal } from 'pkg-components'
 import { BGColor } from '@/public/colors'
 import { IconSales } from 'public/icons'
-import { Loading } from '~/components/Loading'
+import { Loading } from 'components/Loading'
 
 export const ModalSales = ({
   print,

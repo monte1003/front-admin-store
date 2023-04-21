@@ -1,7 +1,7 @@
 import { EColor, NorthTexasGreen } from '@/public/colors'
 import { IconDelete, IconMiniCheck } from '@/public/icons'
-import { Checkbox } from '~/components/Checkbox'
-import { RippleButton } from '~/components/Ripple'
+import { Checkbox } from 'components/Checkbox'
+import { RippleButton } from 'components/Ripple'
 import { CardsComponent, GarnishChoicesHeader } from './styled'
 
 export const Optional = ({

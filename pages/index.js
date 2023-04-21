@@ -1,6 +1,6 @@
 import { withIronSessionSsr } from 'iron-session/next'
 import dynamic from 'next/dynamic'
-import { cookie } from '~/utils'
+import { cookie } from 'utils'
 import { useLazyScript } from 'npm-pkg-hook'
 
 const HOME = dynamic(

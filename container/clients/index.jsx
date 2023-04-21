@@ -10,10 +10,10 @@ import { useQuery, useMutation } from '@apollo/client'
 import { DELETE_ONE_CLIENTS, GET_ALL_CLIENTS } from './queries'
 import { updateCache } from 'utils'
 import { FormClients } from './Form'
-import { Table } from '~/components/Table'
+import { Table } from 'components/Table'
 import { useState } from 'react'
-import { Section } from '~/components/Table/styled'
-import { Loading } from '~/components/Loading'
+import { Section } from 'components/Table/styled'
+import { Loading } from 'components/Loading'
 
 export const Clients = () => {
   const [deleteClient] = useMutation(DELETE_ONE_CLIENTS)

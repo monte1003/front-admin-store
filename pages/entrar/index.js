@@ -1,4 +1,4 @@
-import ErrorBoundary from '~/components/Error'
+import ErrorBoundary from 'components/Error'
 import { Login } from '../../container/entrar'
 
 export default function LoginView() {

@@ -7,7 +7,7 @@ import styled, { css } from 'styled-components'
 import { IconDelete, IconExcel, IconPDF, IconWord } from '../../public/icons'
 import { BGColor, EColor, PColor } from '../../public/colors'
 import useDropZone from './useDrag'
-import { Context } from '~/context/Context'
+import { Context } from 'context/Context'
 
 export const InputFiles = ({ onChange, reset, Disable, MaximumSizeFiles, ShowMessage, imageOnly }) => {
   const { setAlertBox } = useContext(Context)

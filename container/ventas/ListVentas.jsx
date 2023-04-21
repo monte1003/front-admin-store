@@ -29,7 +29,7 @@ import {
 } from 'npm-pkg-hook'
 import { ContainerQuery } from './styled'
 import { ContentQueryCard } from './ContentQueryCard'
-import { Loading } from '~/components/Loading'
+import { Loading } from 'components/Loading'
 import { ModalDetailOrder } from 'pkg-components'
 import { useMobile, useChartData } from 'npm-pkg-hook'
 import { useRouter } from 'next/router'

@@ -1,13 +1,13 @@
 import React, { useState, useContext } from 'react'
 import { CREATE_CLIENTS, GET_ALL_CLIENTS } from './queries'
 import { useMutation } from '@apollo/client'
-import { updateCache } from '~/utils'
-import InputHooks from '~/components/InputHooks/InputHooks'
-import { RippleButton } from '~/components/Ripple'
-import Column from '~/components/common/Atoms/Column'
-import { Checkbox } from '~/components/Checkbox'
+import { updateCache } from 'utils'
+import InputHooks from 'components/InputHooks/InputHooks'
+import { RippleButton } from 'components/Ripple'
+import Column from 'components/common/Atoms/Column'
+import { Checkbox } from 'components/Checkbox'
 import { useFormTools, formatPhoneNumber } from 'npm-pkg-hook'
-import { Context } from '~/context/Context'
+import { Context } from 'context/Context'
 
 export const FormClients = ({ setLoading, OPEN_MODAL }) => {
   const { sendNotification } = useContext(Context)

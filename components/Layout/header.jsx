@@ -17,7 +17,7 @@ import {
 import { useApolloClient } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useCallback, useContext, useState } from 'react'
-import { Context } from '~/context/Context'
+import { Context } from 'context/Context'
 import useScrollHook, { useScrollColor } from '../hooks/useScroll'
 
 

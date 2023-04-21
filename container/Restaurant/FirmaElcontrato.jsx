@@ -8,8 +8,8 @@
 // import { RippleButton } from '../../components/Ripple'
 // import CanvasDraw from 'react-canvas-draw'
 // import { REGISTER_CONTRACT_STORE } from '../dashboard/queriesStore'
-// import { Context } from '~/context/Context'
-// import { Loading } from '~/components/Loading'
+// import { Context } from 'context/Context'
+// import { Loading } from 'components/Loading'
 // const ContractSignature = () => {
 //   // STATES
 //   const ref = useRef(null)

@@ -12,8 +12,8 @@ import { SalesWeekShortDays } from 'container/dashboard/salesWeekShortDays'
 import { ChatStatistic } from 'container/ventas/ListVentas'
 import React, { useState } from 'react'
 import { Container } from './styled'
-import { InputFiles } from '~/components/InputFilesPrev'
-import InputRange from '~/components/InputRangebuena'
+import { InputFiles } from 'components/InputFilesPrev'
+import InputRange from 'components/InputRangebuena'
 
 export const ReportsC = () => {
   const OPEN_MODAL = useSetState()

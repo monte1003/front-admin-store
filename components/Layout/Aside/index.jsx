@@ -9,7 +9,7 @@ import React, {
   useContext,
   useState
 } from 'react'
-import { Overline } from '~/components/common/Reusable'
+import { Overline } from 'components/common/Reusable'
 import { BGColor, PColor } from '../../../public/colors'
 import {
   IconHome,

@@ -1,4 +1,4 @@
-import { Viewport, VirtualizedList } from '~/container/VirtualizedList'
+import { Viewport, VirtualizedList } from 'container/VirtualizedList'
 // https://codesandbox.io/s/61kjvj0pwz?file=/src/index.tsx:157-262
 const virtualize = () => {
   const items = Array.from(
