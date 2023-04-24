@@ -29,38 +29,40 @@ import {
 } from './styled'
 
 const InputHooks = ({
-  autoComplete,
-  border,
+  autoComplete = 'off',
+  border = '',
   Cc,
-  checked,
+  checked = false,
   autoFocus,
-  dataForm,
-  disabled,
+  dataForm = {},
+  disabled = false,
   display = '',
-  email,
-  error,
+  email = false,
+  error = '',
   fontSize = '14px',
   height,
   labelColor,
   letters,
-  margin,
+  margin = '0',
   maxWidth = '',
   minWidth = '',
   name = '',
   nit = false,
   numeric = false,
-  onChange,
+  onChange = (e) => {
+    return e
+  },
   padding = '',
   paddingInput = '',
   pass,
   passConfirm,
-  placeholder,
+  placeholder = '',
   radius = '',
   range,
   reference,
   required,
   title = '',
-  type,
+  type = 'text',
   TypeTextarea = '',
   value = '',
   width = '100%',
@@ -237,6 +239,9 @@ const InputHooks = ({
     if (passConfirm?.validate) {
       if (validatePhoneNumber(e.target.value, passConfirm?.passValue)) { return errorFunc(e, true, 'Las contraseñas no coinciden.') } errorFunc(e, false, '')
     }
+    if (e) {
+      return errorFunc(e, false, '') 
+    }
   }
   const simpleVerifyEmail = (email) => {
     const emailParts = email.split('@')
@@ -265,6 +270,7 @@ const InputHooks = ({
   const handleFocus = () => {
     // setTimeout(() => setShowSuggestions(true))
   }
+  const asType = numeric ? 'number' : type
   return (
     <BoxInput
       maxWidth={maxWidth}
@@ -282,6 +288,7 @@ const InputHooks = ({
             autoFocus={autoFocus}
             border={border}
             checked={checked}
+            data-required={required}
             disabled={disabled}
             display={display}
             error={errors}
@@ -297,9 +304,9 @@ const InputHooks = ({
             placeholder={placeholder}
             radius={radius}
             ref={email ? refInput : reference}
-            required={required}
+            // required={required}
             size={fontSize}
-            type={isPasswordShown ? 'text' : numeric ? 'number' : type}
+            type={isPasswordShown ? 'text' : asType}
             value={value}
           />
           {(email && !!showSuggestions) && (

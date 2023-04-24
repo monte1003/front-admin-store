@@ -1,11 +1,10 @@
 import React, { useContext } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
-import { useFormTools } from 'components/BaseForm'
+import { useFormTools, useEmployee } from 'npm-pkg-hook'
 import Column from 'components/common/Atoms/Column'
 import Row from 'components/common/Atoms/Row'
-import { AwesomeModal } from '~/components/AwesomeModal'
+import { AwesomeModal } from 'pkg-components'
 import { Context } from '~/context/Context'
-import { useEmployee } from '~/hooks/useEmployee'
 import { useSetState } from '~/hooks/useState'
 import { updateCache } from '~/utils'
 import CreateEmployees from './CreateEmployees'
@@ -145,23 +144,44 @@ const Employees = () => {
           {...propsEmployeesForm}
         />
         <AwesomeModal
+          backdrop='static'
+          borderRadius='0'
+          btnCancel={true}
+          btnConfirm={false}
+          customHeight='calc(100vh - 60px)'
           footer={false}
+          header={true}
+          height='100vh'
+          onCancel={() => { return false }}
           onHide={() => { return OPEN_MODAL_EMPLOYEE.setState(false) }}
+          padding={0}
+          question={true}
           show={OPEN_MODAL_EMPLOYEE.state}
-          title='Crear Empleado'
-          zIndex={'9999'}
+          size='large'
+          sizeIconClose='35px'
+          title='Crea una venta'
+          zIndex='9999'
         >
           <EmployeeProfile {...dataOneEmployee?.employeeStore} />
         </AwesomeModal>
       </Row>
       <AwesomeModal
+        backdrop='static'
+        borderRadius='0'
+        btnCancel={true}
+        btnConfirm={false}
+        customHeight='calc(60vh - 50px)'
         footer={false}
-        header={false}
-        height={'500px'}
-        onHide={() => { return OPEN_MODAL_AUTH.setState(false) }}
+        header={true}
+        height='60vh'
+        onCancel={() => { return false }}
+        onHide={() => { return OPEN_MODAL_AUTH.setState(false)}}
+        padding={0}
+        question={true}
         show={OPEN_MODAL_AUTH.state}
-        size='400px'
-        zIndex={'9999'}
+        size='small'
+        title='Crea una venta'
+        zIndex='9999'
       >
         <AuthPassthrough />
       </AwesomeModal>

@@ -99,7 +99,11 @@ const DragOrders = ({
   }, [])
   const [changePPStatePPedido, { loading: LoadingStatusOrder }] = useMutation(CHANGE_STATE_STORE_PEDIDO, {
     onCompleted: (res) => {
-      return sendNotification({ title: 'Exitoso', description: res.changePPStatePPedido.message })
+      return sendNotification({
+        title: 'Exitoso',
+        description: res.changePPStatePPedido.message,
+        backgroundColor: 'sucess'
+      })
     }
   })
   // EFFECTS

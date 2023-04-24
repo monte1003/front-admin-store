@@ -261,7 +261,6 @@ export const Wrapper = styled.div`
       border-radius: 4px;
       display: flex;
       margin-top: 0;
-      height: 62px;
       padding: 0;
       outline: none;
     }

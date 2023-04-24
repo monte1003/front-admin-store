@@ -32,6 +32,7 @@ import { Food } from '~/container/update/Products/food'
 import GenerateSales from 'container/Sales'
 import { Overline } from '../common/Reusable'
 import { Clients } from '~/container/clients'
+import { BGColor, PColor } from '@/public/colors'
 export const MemoLayout = ({
   children,
   watch,
@@ -97,7 +98,11 @@ export const MemoLayout = ({
 
   useSubscription(NEW_NOTIFICATION, {
     onError: () => {
-      return sendNotification({ title: 'Error en el pedido', description: 'Error' })
+      return sendNotification({
+        title: 'Error en el pedido',
+        description: 'Error',
+        backgroundColor: 'error'
+      })
     },
     onData: ({ data, client }) => {
       const ourStore = data?.data?.newStoreOrder?.idStore === dataStore?.idStore
@@ -138,25 +143,12 @@ export const MemoLayout = ({
           undefined,
           { shallow: true }
         )
-
-        // client.writeQuery({
-        //   query: GET_ALL_PEDIDOS,
-        //   data: {
-        //     getAllPedidoStoreFinal: [
-        //       ...allPedidosData.getAllPedidoStoreFinal,
-        //       data?.data?.newStoreOrder
-        //     ]
-        //   }
-        // })
-
-        // const oldOrder = [...newOrderMo dal.order, data?.data?.newStoreOrder]
-        // setNewOrderModal({
-        //   ...newOrderModal,
-        //   open: true,
-        //   order: oldOrder
-        // })
         setAlertBox({ message: 'Nuevo pedido', duration: 30000 })
-        sendNotification({ title: 'Pedido', description: 'Nuevo pedido' })
+        sendNotification({
+          title: 'Pedido',
+          description: 'Nuevo pedido',
+          backgroundColor: 'success'
+        })
       }
 
     }
@@ -164,6 +156,7 @@ export const MemoLayout = ({
 
   const [connectionStatus, setConnectionStatus] = useState('initial')
   const statusConnection = connectionStatus ? 'Conexión a internet restablecida.' : 'Conexión a internet perdida.'
+
   useConnection({ setConnectionStatus })
   useEffect(() => {
     if (connectionStatus === 'initial') return
@@ -172,7 +165,12 @@ export const MemoLayout = ({
         setConnectionStatus('initial')
       }, 3500)
     }
-    sendNotification({ title: 'Wifi', description: statusConnection })
+    
+    sendNotification({
+      title: 'Wifi',
+      description: statusConnection,
+      backgroundColor: !connectionStatus ? 'warning' : 'success'
+    })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionStatus])
 
@@ -199,7 +197,15 @@ export const MemoLayout = ({
         <Header />
         <Aside />
         <div style={{ gridArea: 'main', overflowY: 'auto' }}>
-          {/* <button onClick={() => {return sendNotification({ title: Math.floor(Math.random() * 101 + 1), description: 'Esta es la descr' })}}>WOW</button> */}
+          <button
+            onClick={() => {
+              return sendNotification({ 
+                title: Math.floor(Math.random() * 101 + 1), 
+                description: 'Esta es la descr',
+                backgroundColor: 'error'
+              })}
+            }
+          >WOW</button>
           {children}
           <AwesomeModal
             backdrop='static'
@@ -224,7 +230,7 @@ export const MemoLayout = ({
           </AwesomeModal>
           <Toast
             autoDelete={true}
-            autoDeleteTime={7000}
+            autoDeleteTime={5000}
             position={'bottom-right'}
             toastList={messagesToast}
           />

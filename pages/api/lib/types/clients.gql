@@ -40,5 +40,6 @@ type Query {
 type Mutation {
     "Registra un cliente"
     createClients(input: IClients): Clients
+    editOneClient(input: IClients): Response
     deleteClient(cliId: ID, clState: Int!): Response
 }

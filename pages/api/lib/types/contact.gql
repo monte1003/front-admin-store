@@ -5,6 +5,7 @@ type Contacts {
     idStore: ID
     cntName: String!
     cntComments: String
+    cntNumberPhone: String
     cntState: Int
     createAt: DateTime
     updateAt: DateTime
@@ -16,6 +17,7 @@ input IContacts {
     id: ID
     idStore: ID
     cntName: String!
+    cntNumberPhone: String
     cntComments: String
     cntState: Int
     createAt: DateTime
@@ -24,7 +26,7 @@ input IContacts {
 
 # Query
 type Query {
-  getAllContacts(idStore: ID): [Contacts]
+  getAllContacts(idStore: ID, cId: ID, dId: ID, ctId: ID, search: String, min: Int, pState: Int,  max: Int): [Contacts]
   getOneContacts(contactId: String, idStore: ID): Contacts
 }
 

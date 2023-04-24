@@ -173,18 +173,6 @@ export const Options = ({
             </ButtonOption>
           </Option>
           <Option Theme={false} >
-            <ButtonOption onClick={() => { return location.push('/messages') }} space>
-              <span>Messages</span>
-              <IconUser color={PColor} size='25px' />
-            </ButtonOption>
-          </Option>
-          <Option Theme={false} >
-            <ButtonOption onClick={() => { return location.push('/contrato') }} space>
-              <span>Contrato</span>
-              <IconUser color={PColor} size='25px' />
-            </ButtonOption>
-          </Option>
-          <Option Theme={false} >
             <ButtonOption onClick={onClickLogout} space>
               <span>Cerrar sesión</span>
               <IconLogout color={PColor} size='20px' />

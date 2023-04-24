@@ -1,18 +1,27 @@
 import React, { useState, useContext } from 'react'
-import { CREATE_CLIENTS, GET_ALL_CLIENTS } from './queries'
-import { useMutation } from '@apollo/client'
+import { GET_ALL_CLIENTS } from './queries'
 import { updateCache } from '~/utils'
-import InputHooks from '~/components/InputHooks/InputHooks'
+import { InputHooks, Checkbox } from 'pkg-components'
 import { RippleButton } from '~/components/Ripple'
 import Column from '~/components/common/Atoms/Column'
-import { Checkbox } from '~/components/Checkbox'
-import { useFormTools, formatPhoneNumber } from 'npm-pkg-hook'
+import { useCreateClient } from 'npm-pkg-hook'
 import { Context } from '~/context/Context'
+import { Loading } from '~/components/Loading'
 
-export const FormClients = ({ setLoading, OPEN_MODAL }) => {
+export const FormClients = ({
+  dataForm,
+  errorForm,
+  OPEN_MODAL,
+  setLoading = () => { return },
+  handleSubmit = () => { return },
+  setDataValue = () => { return },
+  handleChange = () => { return },
+  handleEditOneClient = () => { return }
+}) => {
   const { sendNotification } = useContext(Context)
-  const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm, errorSubmit }] = useFormTools()
-  const [createClients] = useMutation(CREATE_CLIENTS)
+  const [createClients, { loading }] = useCreateClient({
+    sendNotification
+  })
   const [setCheck, setChecker] = useState({
     gender: 1
   })
@@ -22,45 +31,55 @@ export const FormClients = ({ setLoading, OPEN_MODAL }) => {
   }
 
   const handleForm = (e) => {
-    setLoading(true)
-    if (!errorSubmit) {
-      return handleSubmit({
-        event: e,
-        action: () => {
-          if (errorSubmit) return sendNotification({ title: 'Completa los campos requeridos', description: 'Error' })
-          return createClients({
-            variables: {
-              input: {
-                ...dataForm,
-                gender: setCheck.gender
-              }
-            },
-            update: (cache, { data: { getAllClients } }) => {
-              return updateCache({
-                cache,
-                query: GET_ALL_CLIENTS,
-                nameFun: 'getAllClients',
-                dataNew: getAllClients
-              })
+    handleSubmit({
+      event: e,
+      action: () => {
+        setLoading(true)
+        return createClients({
+          variables: {
+            input: {
+              ...dataForm,
+              gender: setCheck.gender
             }
-          }).then(() => {
+          },
+          update: (cache, { data: { getAllClients } }) => {
+            return updateCache({
+              cache,
+              query: GET_ALL_CLIENTS,
+              nameFun: 'getAllClients',
+              dataNew: getAllClients
+            })
+          }
+        }).then((response) => {
+          if (response?.errors && response?.errors[0]?.message) {
+            sendNotification({
+              title: response?.errors[0]?.message,
+              description: 'Alerta',
+              backgroundColor: 'warning'
+            })
+          }
+          if (!response?.errors[0]?.message === 'El numero de identificación ya existe') {
             OPEN_MODAL.setState(!OPEN_MODAL.state)
             setDataValue({})
             setLoading(false)
-          }).catch(() => {
-            OPEN_MODAL.setState(!OPEN_MODAL.state)
-            setDataValue({})
-            setLoading(false)
-            return sendNotification({ title: 'No se pudo crear el cliente, intenta nuevamente', description: 'Error' })
+          }
+        }).catch(() => {
+          OPEN_MODAL.setState(!OPEN_MODAL.state)
+          setDataValue({})
+          setLoading(false)
+          return sendNotification({
+            title: 'No se pudo crear el cliente, intenta nuevamente', 
+            description: 'Error',
+            backgroundColor: 'error'
           })
-        }
-      })
-
-    }
+        })
+      }
+    })
     setLoading(false)
   }
   return (
     <>
+      {loading && <Loading />}
       <Column position='relative'>
         <>
           <Checkbox
@@ -85,10 +104,14 @@ export const FormClients = ({ setLoading, OPEN_MODAL }) => {
         as='form'
         display='flex'
         flexWrap='wrap'
-        onSubmit={handleForm}
+        onSubmit={(e) => {
+          e.preventDefault()
+          return dataForm.update ? handleEditOneClient() : handleForm(e)
+        }}
       >
         <InputHooks
           error={errorForm?.clientName}
+          letters
           name='clientName'
           onChange={handleChange}
           onInvalid={() => { return }}
@@ -99,9 +122,9 @@ export const FormClients = ({ setLoading, OPEN_MODAL }) => {
         />
         <InputHooks
           error={errorForm?.clientLastName}
+          letters
           name='clientLastName'
           onChange={handleChange}
-          required
           title='Apellido'
           value={dataForm?.clientLastName}
           width={'50%'}
@@ -110,7 +133,6 @@ export const FormClients = ({ setLoading, OPEN_MODAL }) => {
           error={errorForm?.ClientAddress}
           name='ClientAddress'
           onChange={handleChange}
-          required
           title='Dirección'
           value={dataForm?.ClientAddress}
           width={'50%'}
@@ -118,9 +140,7 @@ export const FormClients = ({ setLoading, OPEN_MODAL }) => {
         <InputHooks
           error={errorForm?.ccClient}
           name='ccClient'
-          numeric
           onChange={handleChange}
-          required
           title='# Identidad'
           value={dataForm?.ccClient}
           width={'50%'}
@@ -129,14 +149,14 @@ export const FormClients = ({ setLoading, OPEN_MODAL }) => {
         <InputHooks
           error={errorForm?.clientNumber}
           name='clientNumber'
+          numeric
           onChange={handleChange}
-          required
           title='Numero de celular'
           type='tel'
-          value={formatPhoneNumber(dataForm?.clientNumber)}
+          value={dataForm?.clientNumber}
           width={'50%'}
         />
-        <RippleButton type='submit' widthButton='100% ' >Guardar</RippleButton>
+        <RippleButton type='submit' widthButton='100% ' >{dataForm.update ? 'Actualizar' : 'Guardar'}</RippleButton>
       </Column>
     </>
   )

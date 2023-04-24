@@ -131,9 +131,8 @@ export const editExtProductFoods = async (_root, { input }, context) => {
       state, extraName, extraPrice
     }, { where: { exPid: deCode(exPid), idStore: deCode(context.restaurant) } })
     return { success: true, message: 'Editado con éxito' }
-  } 
+  }
   return { success: false, message: 'Ocurrió un error, no pudimos editarlo' }
-    
 }
 export const updateExtraInProduct = async (_root, { input }, _context) => {
   const { pId, idStore } = input || {}

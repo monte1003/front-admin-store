@@ -4,18 +4,6 @@ export const ContainerMain = styled.div`
     padding-top: 25px;
     margin-left: 15px;
 `
-export const TextContent = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: ${ ({ width }) => {return width ? width : '50%'} };
-    margin: ${ ({ margin }) => {return margin ? margin : '0 20px'} };
-
-    @media (max-width: 767.98px) {
-        width: 100%;
-        margin: 0;
-        margin-top: 12px;
-    }
-`
 export const Card = styled.div`
     width: 100%;
     border-radius: 4px;

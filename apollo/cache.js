@@ -2,8 +2,9 @@ import { InMemoryCache, makeVar } from '@apollo/client'
 import { concatPagination } from '@apollo/client/utilities'
 
 export const isLoggedVar = makeVar({ state: true, expired: false })
+
 const mergeArraysWithDuplicates = (existing = [], incoming = [], max = Infinity, uniqueKey = null) => {
-  const merged = existing ? existing.slice(0) : []
+  const merged = Array.isArray(existing) ? existing.slice(0) : []
   if (Array.isArray(incoming)) {
     for (let i = 0; i < incoming.length && merged.length < max; ++i) {
       const item = incoming[i]
@@ -75,6 +76,31 @@ export const cache = new InMemoryCache({
             }
           }
         },
+        getAllSalesStore: {
+          keyArgs: ['idStore', 'search', 'max', 'fromDate', 'toDate'],
+          merge(existing, incoming, { args: { max = Infinity } }) {
+            try {
+              // Verificar que el objeto exista y tenga la propiedad getAllSalesStore
+              const existingResults = existing?.getAllSalesStore ?? []
+              const incomingResults = incoming?.getAllSalesStore ?? []
+              // Concatenamos los resultados entrantes con los existentes
+              const merged = [...existingResults]
+              for (let i = 0; i < incomingResults.length && merged.length < max; ++i) {
+                const incomingResult = incomingResults[i]
+                // Verificar que el objeto exista y tenga la propiedad pCodeRef
+                if (incomingResult?.pCodeRef && !merged.some(existingResult => {return existingResult.pCodeRef === incomingResult.pCodeRef})) {
+                  merged.push(incomingResult)
+                }
+              }
+              return {
+                ...incoming,
+                getAllSalesStore: merged
+              }
+            } catch (error) {
+              return existing
+            }
+          }
+        },
         productFoodsAll: {
           keyArgs: ['categories', 'desc', 'fromDate', 'gender', 'pState', 'search', 'toDate'],
           merge(existing, incoming, { args: { max = Infinity } }) {
@@ -101,6 +127,36 @@ export const cache = new InMemoryCache({
                 incoming?.catProductsWithProduct,
                 max,
                 'carProId'
+              )
+            }
+            return merged
+          }
+        },
+        getAllContacts: {
+          keyArgs: ['search', 'min', 'max', 'idStore', 'pState'],
+          merge(existing, incoming, { args: { max = Infinity } }) {
+            const merged = {
+              ...incoming,
+              getAllContacts: mergeArraysWithDuplicates(
+                existing?.getAllContacts,
+                incoming?.getAllContacts,
+                max,
+                'contactId'
+              )
+            }
+            return merged
+          }
+        },
+        getAllClients: {
+          keyArgs: ['search', 'min', 'max', 'idStore'],
+          merge(existing, incoming, { args: { max = Infinity } }) {
+            const merged = {
+              ...incoming,
+              getAllContacts: mergeArraysWithDuplicates(
+                existing?.getAllClients,
+                incoming?.getAllClients,
+                max,
+                'cliId'
               )
             }
             return merged
