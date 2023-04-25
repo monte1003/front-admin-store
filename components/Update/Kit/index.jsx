@@ -13,7 +13,7 @@ import {
   Text
 } from './styled'
 import { APColor, PVColor, SEGColor } from '../../../public/colors'
-import InputHooks from '../../InputHooks/InputHooks'
+import { InputHooks } from 'pkg-components'
 import { Skeleton } from 'components/Skeleton/SkeletonCard'
 
 export const Kit = ({

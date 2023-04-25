@@ -38,6 +38,10 @@ export default conn.define('contacts', {
     type: Sequelize.STRING,
     allowNull: false
   },
+  cntNumberPhone: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
   cntComments: {
     type: Sequelize.TEXT,
     allowNull: false

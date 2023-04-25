@@ -486,7 +486,6 @@ export const Header = () => {
 
   return (
     <HeaderC scrollNav={scrollNav} style={style} >
-      <div id='holder_element'></div>
       <AwesomeModal
         backdrop='static'
         borderRadius='10px'

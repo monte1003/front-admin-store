@@ -62,7 +62,11 @@ const MemoAside = () => {
         }
       })
       .catch(() => {
-        return sendNotification({ title: 'Se ha producido un error.', description: 'Error' })
+        return sendNotification({
+          title: 'Se ha producido un error.',
+          description: 'Error',
+          backgroundColor: 'error'
+        })
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client, location])
@@ -136,33 +140,17 @@ const MemoAside = () => {
             <ActiveLink activeClassName='active' href='/ventas'>
               <AnchorRouter><IconShopping size='15px' />Ventas</AnchorRouter>
             </ActiveLink>
-            <ActiveLink activeClassName='active' href='/compras'>
-              <AnchorRouter><IconShopping size='15px' />Compras</AnchorRouter>
-            </ActiveLink>
             <ActiveLink activeClassName='active' href='/contactos'>
               <AnchorRouter><IconShopping size='15px' />Contactos</AnchorRouter>
-            </ActiveLink>
-            <ActiveLink activeClassName='active' href='/formas-de-pago'>
-              <AnchorRouter><IconShopping size='15px' />Formas de pago</AnchorRouter>
             </ActiveLink>
             <ActiveLink activeClassName='active' href='/informes'>
               <AnchorRouter><IconShopping size='15px' />Informes</AnchorRouter>
             </ActiveLink>
-            <ActiveLink activeClassName='active' href='/'>
-              <AnchorRouter><IconShopping size='15px' />Recomendaciones</AnchorRouter>
-            </ActiveLink>
-
             <ActiveLink activeClassName='active' href='/clientes'>
               <AnchorRouter>  <IconUser size='20px' />Clientes</AnchorRouter>
             </ActiveLink>
-            <ActiveLink activeClassName='active' href='/billetera'>
-              <AnchorRouter>  <IconWallet size='20px' />Billetera</AnchorRouter>
-            </ActiveLink>
             <ActiveLink activeClassName='active' href='/categorias'>
               <AnchorRouter>  <IconWallet size='20px' />Categorías</AnchorRouter>
-            </ActiveLink>
-            <ActiveLink activeClassName='active' href='/employee'>
-              <AnchorRouter>  <IconWallet size='20px' />Empleados</AnchorRouter>
             </ActiveLink>
             <OptionButton>
               <ButtonOption onClick={onClickLogout} space>

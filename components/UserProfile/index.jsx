@@ -1,83 +1,64 @@
 import PropTypes from 'prop-types'
-import moment from 'moment'
-import { ContentInfo, Text, TextContent } from './style'
-import { ContainerHead, ContainerUpload, InputText, ImgContainer, Form, Container, Card } from './styled'
-import { RippleButton } from '../Ripple'
-const UserProfileSettings = ({ handleSubmit, onChange, dataForm }) => {
+import { ContentInfo } from './style'
+import {
+  Form,
+  Container,
+  Card
+} from './styled'
+import { InputHooks, RippleButton } from 'pkg-components'
+import { useFormatDate } from 'npm-pkg-hook'
+
+const UserProfileSettings = ({
+  dataForm = {},
+  handleSubmit = () => { return },
+  onChange = () => { return }
+}) => {
+  const formatDate = useFormatDate({ date: dataForm?.upDateBir })
   return <div>
     <Container>
-      {/* <RippleButton margin='40px 0' onClick={() => { return setShowModal(!showModal) }}>Registrar Ubicación</RippleButton> */}
       <Card >
         <Form onSubmit={handleSubmit}>
-          <ContainerHead>
-            <ImgContainer>
-            </ImgContainer>
-            <ContainerUpload>
-            </ContainerUpload>
-          </ContainerHead>
-          <ContentInfo>
-            <TextContent margin='10px 20px'>
-              <Text>Número de Teléfono</Text>
-              <InputText
-                name='upPhone'
-                onChange={onChange}
-                value={dataForm?.upPhone || ''}
-              />
-            </TextContent>
-            <TextContent margin='10px 20px'>
-              <Text>email</Text>
-              <InputText
-                name='email'
-                onChange={onChange}
-                value={dataForm?.email || ''}
-              />
-            </TextContent>
-            <TextContent margin='10px 20px'>
-              <Text>lastName</Text>
-              <InputText
-                name='lastName'
-                onChange={onChange}
-                value={dataForm?.lastName || ''}
-              />
-            </TextContent>
-          </ContentInfo>
-          <ContentInfo>
-            <TextContent margin='10px 20px'>
-              <Text>username</Text>
-              <InputText
-                name='username'
-                onChange={onChange}
-                value={dataForm?.username || ''}
-              />
-            </TextContent>
-            <TextContent margin='10px 20px'>
-              <Text>Fecha de Nacimiento</Text>
-              <InputText
-                name='upDateBir'
-                onChange={onChange}
-                type='date'
-                value={moment(dataForm?.upDateBir).format('YYYY-MM-DD')}
-              />
-            </TextContent>
-            <TextContent margin='10px 20px'>
-              <Text>Direccion como la conoces</Text>
-              <InputText
-                name='upAddress'
-                onChange={onChange}
-                type='text'
-                value={dataForm?.upAddress}
-              />
-            </TextContent>
-            <TextContent margin='10px 20px'>
-              <Text>upZipCode</Text>
-              <InputText
-                name='upZipCode'
-                onChange={onChange}
-                type='text'
-                value={dataForm?.upZipCode}
-              />
-            </TextContent>
-          </ContentInfo>
+          <InputHooks
+            name='upPhone'
+            onChange={onChange}
+            title='Número de Teléfono'
+            value={dataForm?.upPhone || ''}
+          />
+          <InputHooks
+            name='email'
+            onChange={onChange}
+            value={dataForm?.email || ''}
+          />
+          <InputHooks
+            name='lastName'
+            onChange={onChange}
+            value={dataForm?.lastName || ''}
+          />
+          <InputHooks
+            name='username'
+            onChange={onChange}
+            value={dataForm?.username || ''}
+          />
+          <InputHooks
+            name='upDateBir'
+            onChange={onChange}
+            type='date'
+            value={formatDate.yearMonthDay}
+          />
+          <InputHooks
+            name='upAddress'
+            onChange={onChange}
+            title='dirección'
+            type='text'
+            value={dataForm?.upAddress}
+          />
+          <InputHooks
+            name='upZipCode'
+            onChange={onChange}
+            title='Zip Code'
+            type='text'
+            value={dataForm?.upZipCode}
+          />
           <ContentInfo>
             <RippleButton type='submit'>Guardar Cambios</RippleButton>
           </ContentInfo>

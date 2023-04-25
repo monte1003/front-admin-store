@@ -3,12 +3,19 @@ import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_DEVICES } from 'container/profile/queries'
 import styled from 'styled-components'
-import moment from 'moment'
+import { useFormatDate } from 'npm-pkg-hook'
+
 import { DarkSilver } from '@/public/colors'
 
 export const Devices = () => {
   const { data: dataDevice } = useQuery(GET_ALL_DEVICES)
   const [deviceId, setDeviceId] = useState(false)
+  const [date, setDate] = useState('')
+  const formatDate = useFormatDate({ date: date })
+  const format = (x) => {
+    setDate(x)
+    return formatDate
+  }
   useEffect(() => {
     setDeviceId(window.localStorage.getItem('deviceid'))
   }, [])
@@ -84,7 +91,7 @@ export const Devices = () => {
             </div>
             <span className='device__localization' tabIndex='0'> {x.short_name}</span>
             <span className='device__localization' tabIndex='0'> {x.locationFormat}</span>
-            <span className='device__localization' tabIndex='0'> {moment(x.DatCre).format('YYYY-MM-DD')} </span>
+            <span className='device__localization' tabIndex='0'> {format(x.DatCre)} </span>
           </div>
         </CardDevice>
       )})}

@@ -138,7 +138,11 @@ export const FoodComponent = ({
    * */
   const handlerValidateFields = () => {
     if (active === 0) {
-      sendNotification({ description: 'Llena todos los campos', title: 'Error' })
+      sendNotification({ 
+        description: 'Llena todos los campos', 
+        title: 'Error',
+        backgroundColor: 'error'
+      })
       return setErrors({
         ...errors,
         ProPrice: true,
@@ -152,7 +156,11 @@ export const FoodComponent = ({
     if (!pId || !food) {
       setShowComponentModal(false)
       handleClick(false)
-      return sendNotification({ description: 'Lo sentimos, no encontramos tu producto.', title: 'Error' })
+      return sendNotification({
+        description: 'Lo sentimos, no encontramos tu producto.',
+        title: 'Error',
+        backgroundColor: 'error'
+      })
     }
     setActive((prev) => {return prev + 1 } )
     setOpenModalDessert(true)
@@ -210,7 +218,11 @@ export const FoodComponent = ({
         if (success) {
           setShowComponentModal(false)
           handleClick(false)
-          sendNotification({ description: 'Se han registrado todos los campos del producto', title: 'Success' })
+          sendNotification({
+            description: 'Se han registrado todos los campos del producto',
+            title: 'Success',
+            backgroundColor: 'success'
+          })
         }
       }) :
       handlerSteps()

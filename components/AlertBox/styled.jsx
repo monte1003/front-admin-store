@@ -33,7 +33,11 @@ export const ContainerToast = styled.div`
     transition: 400ms;
     box-shadow: 0px 0px 6px #00000052;
     color: ${ BGColor };
-    background-color: ${ ({ color }) => {return color === 'success' ? '#50a773' : color === 'error' ? `${ PColor };` : color === 'warning' ? '#ebbc26' : 'rgba(0, 0, 0, 0.9)'} };
+    background-color: ${ ({ color }) => {
+    const statusWarning = color === 'warning' ? '#ebbc26' : 'rgba(0, 0, 0, 0.9)'
+    const statusColor = color === 'error' ? `${PColor};` : statusWarning
+    return color === 'success' ? '#50a773' : statusColor
+  } };
 `
 export const ContentToast = styled.div`
  

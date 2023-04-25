@@ -15,7 +15,6 @@ import {
 import React, { useEffect, useState } from 'react'
 import { numberFormat } from '../../utils'
 import { GET_ONE_SALES } from './queries'
-import moment from 'moment'
 import { BarChat, HorizontalBarChart } from 'components/Chart'
 import { Skeleton } from 'components/Skeleton'
 import { MainCard } from 'components/common/Reusable/ShadowCard'
@@ -155,9 +154,10 @@ export const ListVentas = () => {
     pDatCre: useFormatDate({ date: dataModal?.pDatCre }),
     loading: false,
     edit: false,
-    onClose: () => {return onClose()}
-
+    onClose: () => { return onClose() }
   }
+  const { handleHourPmAM } = useFormatDate()
+
   return (
     <div>
       {loading && <Loading />}
@@ -227,6 +227,10 @@ export const ListVentas = () => {
         renderBody={(dataB, titles) => {
           return dataB?.map((x, i) => {
             const pCodeRef = x.pCodeRef
+            const dateToFormat = new Date(x?.pDatCre ?? null)
+            const shortDayName = x?.pDatCre ? dateToFormat.toLocaleDateString('ES', { weekday: 'short' }) : ''
+            const yearMonthDay = dateToFormat.toLocaleDateString('en-CA')
+            const date = `${yearMonthDay} ${shortDayName} `
             return <Section
               columnWidth={titles}
               key={i}
@@ -243,10 +247,10 @@ export const ListVentas = () => {
                 <span> {pCodeRef}</span>
               </Item>
               <Item>
-                <span> {moment(x.pDatCre).format('DD-MM-YYYY')} - {moment(x.pDatCre).format('HH:mm A')}</span>
+                <span> {date}</span>
               </Item>
               <Item>
-                <span> DELIVERY-APP </span>
+                <span> {x.channel === 1 ? 'RESTAURANTE' : 'DELIVERY-APP' } </span>
               </Item>
               <Item>
                 <span> {x.payMethodPState === 1 ? 'EFECTIVO' : 'TRANSFERENCIA'}</span>
