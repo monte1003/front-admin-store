@@ -20,10 +20,9 @@
       "@/public/*": [
         "public/*"
       ],
-      "~/*": ["./*"],
-      "@/*": ["./*"],
-      "~~/*": ["./*"],
-      "@@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ],
     },
     "allowJs": true,
     "skipLibCheck": true,
@@ -41,7 +40,11 @@
     "**/*.js",
     "**/*.jsx"
   ],
-  "exclude": ["node_modules", ".next", "dist"],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist"
+  ],
   "compileOnSave": true,
   "files": [
     "src/*.js",

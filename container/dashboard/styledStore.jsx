@@ -45,15 +45,17 @@ export const ButtonCard = styled.button`
     display: grid;
     justify-content: center;
     background-color: ${BGColor};
+    
     &:hover  ${ActionName} {
         opacity: 1;
         z-index: 900;
     }
+
     ${props => {
     return props.grid && css`
         top: ${({ top }) => { return top || '80px' }};
-        `}
-}
+      `}
+  }
 `
 
 export const Section = styled.div`
@@ -205,18 +207,21 @@ export const MerchantBannerWrapperInfo = styled.div`
     position: relative;
     justify-content: unset;
     padding-left: 30px;
-    background-color: ${({ Open }) => {return Open ? 'rgb(0 0 0 / 20%)' : 'rgb(0 0 0 / 61%)'} };
+    background-color: ${({ Open }) => { return Open ? 'rgb(0 0 0 / 40%)' : 'rgb(0 0 0 / 61%)' }};
     background-blend-mode: overlay;
+    background-image: ${({ bannerImage }) => { return bannerImage ? (bannerImage) : '' }};
+
     @media only screen and (max-width: 960px) {
       height: 118px;
     }
-    background-image: ${({ bannerImage }) => { return bannerImage ? (bannerImage) : '' }};
+
     .merchant-banner__status-description {
       line-height: 1.15;
       font-size: 16px;
       color: ${SECBGColor};
       box-sizing: border-box;
     }
+
     .merchant-banner__status-title {
     color: ${SECBGColor};
     font-weight: 400;
@@ -226,6 +231,7 @@ export const MerchantBannerWrapperInfo = styled.div`
     margin-bottom: 16px;
     text-align: left;
     }
+
     && > span {
       @media only screen and (min-width: 960px) {
         height: 70px;
@@ -252,6 +258,7 @@ export const MerchantBannerWrapperInfo = styled.div`
 export const InputFile = styled.input`
     display: none;
 `
+
 export const ContentSearch = styled.div`
   max-width: 1366px;
   margin: 5px auto;
@@ -280,6 +287,7 @@ export const ContentSearch = styled.div`
   border-bottom: 2px solid ${SVColor};
   }
   `
+
 export const Title = styled.h1`
   text-rendering: optimizeLegibility;
   font-family: PFont-Light;

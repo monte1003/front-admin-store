@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react'
 import { GET_ALL_CLIENTS } from './queries'
-import { updateCache } from '~/utils'
+import { updateCache } from 'utils'
 import { InputHooks, Checkbox } from 'pkg-components'
-import { RippleButton } from '~/components/Ripple'
-import Column from '~/components/common/Atoms/Column'
+import { RippleButton } from 'components/Ripple'
+import Column from 'components/common/Atoms/Column'
 import { useCreateClient } from 'npm-pkg-hook'
-import { Context } from '~/context/Context'
-import { Loading } from '~/components/Loading'
+import { Context } from 'context/Context'
+import { Loading } from 'components/Loading'
 
 export const FormClients = ({
   dataForm,

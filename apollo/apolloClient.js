@@ -1,10 +1,7 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-console */
 import { useMemo } from 'react'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { onError } from '@apollo/client/link/error'
 import { ApolloClient, ApolloLink, gql, split } from '@apollo/client'
-// import { withFilter } from 'graphql-subscriptions'
 import { createUploadLink } from 'apollo-upload-client'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 import merge from 'deepmerge'
@@ -26,20 +23,16 @@ export const getDeviceId = async () => {
   return visitorId
 }
 
-// eslint-disable-next-line
 const errorHandler = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
     graphQLErrors?.length && graphQLErrors.forEach(err => {
       const { code } = err.extensions
       if (code === 'UNAUTHENTICATED' || code === 'FORBIDDEN') console.log('')
-      // else if (code === 403) {
-      //   console.log('')
-      // }
     })
   }
 })
 
-const authLink = async () => {
+const authLink = () => {
   if (typeof window !== 'undefined') {
     const token = window.localStorage.getItem('session')
     const restaurant = window.localStorage.getItem('restaurant')

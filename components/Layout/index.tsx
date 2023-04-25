@@ -5,33 +5,31 @@ import React, {
   useEffect,
   useState
 } from 'react'
-import {
-  gql,
-  useApolloClient,
-  useSubscription
-} from '@apollo/client'
-import styled, { css } from 'styled-components'
+import { gql, useSubscription } from '@apollo/client'
 import { AwesomeModal, Toast } from 'pkg-components'
-import {
-  useConnection,
-  useStore,
-  useGetSale
-} from 'npm-pkg-hook'
-
+import { useConnection, useStore } from 'npm-pkg-hook'
 import { Context } from 'context/Context'
-import { usePosition } from 'components/hooks/usePosition'
-import { ScheduleTimings } from 'container/dashboard/ScheduleTimings'
-import { BtnClose } from 'components/AwesomeModal/styled'
-import { LateralModal } from 'container/dashboard/styled'
 import { IconCancel } from 'public/icons'
-
+import { usePosition } from 'components/hooks/usePosition'
+import { BtnClose } from 'components/AwesomeModal/styled'
+import { Overline } from 'components/common/Reusable'
+import { ScheduleTimings } from 'container/dashboard/ScheduleTimings'
+import { LateralModal } from 'container/dashboard/styled'
+import { Clients } from 'container/clients'
+import { Food } from 'container/update/Products/food'
+import GenerateSales from 'container/Sales'
 import { AlertBox } from '../AlertBox'
 import { Footer } from './footer'
 import { Header } from './header'
 import Aside from './Aside'
-import { Overline } from '../common/Reusable'
-import { Clients } from '~/container/clients'
-import { BGColor, PColor } from '@/public/colors'
+import { Main } from './styled'
+
+interface IMemoLayoutProps {
+  children: React.ReactNode;
+  settings: unknown;
+  watch: boolean;
+}
+
 export const MemoLayout = ({
   children,
   watch,
@@ -177,9 +175,10 @@ export const MemoLayout = ({
   return (
     <>
       <Head>
+        <title>FoodApp</title>
       </Head>
       <AlertBox err={error} />
-      <Main aside={!['/'].find(x => { return x === location.pathname })} >
+      <Main aside={'/' !== location.pathname} >
         <Header />
         <Aside />
         <div style={{ gridArea: 'main', overflowY: 'auto' }}>
@@ -192,7 +191,9 @@ export const MemoLayout = ({
               })
             }
             }
-          >WOW</button>
+          >
+            WOW
+          </button>
           {children}
           <AwesomeModal
             backdrop='static'
@@ -247,32 +248,3 @@ export const MemoLayout = ({
   )
 }
 export const Layout = React.memo(MemoLayout)
-
-const Main = styled.main`
-    display: grid;
-    width: 100%;
-    overflow: hidden;
-    height: 100vh;
-    grid-template-rows: 75px 2fr;
-    grid-template-columns: 180px 1fr;
-    grid-template-areas:
-    'aside head head head'
-    'aside main main right'
-    'aside main main right';
-    text-align: center;
-    grid-gap: 0.25rem;
-    /* grid-gap: 10px; */
-    @media (max-width: 960px) {
-        grid-template-columns: min-content 1fr;
-    }
-    @media (min-width: 960px) {
-        ${props => {
-    return !props.aside &&
-      css`
-                /* grid-template-columns: 1fr; */
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-            `}};
-    }
-`
