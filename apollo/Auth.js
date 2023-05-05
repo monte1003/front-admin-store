@@ -6,8 +6,8 @@ import {
 } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect } from 'react'
-import { getSession } from '~/hooks/useSession'
-import { getUserFromToken } from '~/utils'
+import { getSession } from 'hooks/useSession'
+import { getUserFromToken } from 'utils'
 import { isLoggedVar } from './cache'
 import { UPDATE_TOKEN } from './queries'
 

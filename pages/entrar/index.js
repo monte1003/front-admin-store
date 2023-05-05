@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import ErrorBoundary from '~/components/Error'
+import ErrorBoundary from 'components/Error'
 import { useEffect } from 'react'
 import { Login } from '../../container/entrar'
 

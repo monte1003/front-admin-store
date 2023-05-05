@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Section } from '~/components/Table/styled'
-import { Table } from '~/components/Table'
-import Button from '~/components/common/Atoms/Button'
-import { RippleButton } from '~/components/Ripple'
+import { Section } from 'components/Table/styled'
+import { Table } from 'components/Table'
+import Button from 'components/common/Atoms/Button'
+import { RippleButton } from 'components/Ripple'
 import { PColor } from '@/public/colors'
 
 const ListEmployees = ({

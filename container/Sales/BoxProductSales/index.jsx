@@ -17,9 +17,9 @@ import FooterCalcules from '../FooterCalcules'
 import NewSelect from 'components/NewSelectHooks/NewSelect'
 import { Flex } from 'container/dashboard/styled'
 import { numberFormat } from '../../../utils'
-import { Context } from '~/context/Context'
-import { Draggable } from '~/hooks/useDrag'
-import { Range } from '~/components/InputRange'
+import { Context } from 'context/Context'
+import { Draggable } from 'hooks/useDrag'
+import { Range } from 'components/InputRange'
 
 export const BoxProductSales = ({
   totalProductPrice,

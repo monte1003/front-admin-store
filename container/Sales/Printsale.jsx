@@ -12,8 +12,8 @@ import {
   Item,
   Ticket
 } from './styled'
-import { Loading } from '~/components/Loading'
-import { RippleButton } from '~/components/Ripple'
+import { Loading } from 'components/Loading'
+import { RippleButton } from 'components/Ripple'
 import { IconSales } from './../../public/icons/index'
 import { BGColor } from '@/public/colors'
 import { Ticket as TemplateTicket } from '../Sales/Ticket'

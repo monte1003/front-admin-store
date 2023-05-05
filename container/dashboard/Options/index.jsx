@@ -1,6 +1,6 @@
 import { Button } from 'pkg-components'
 import { useContext } from 'react'
-import { Context } from '~/context/Context'
+import { Context } from 'context/Context'
 import { WrapperOptions } from '../styledStore'
 
 export const ButtonsAction = ({ handle = () => { return } }) => {

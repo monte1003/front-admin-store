@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
-import Column from '~/components/common/Atoms/Column'
-import Text from '~/components/common/Atoms/Text'
-import { RippleButton } from '~/components/Ripple'
-import { Context } from '~/context/Context'
-import { useDynamicAuth } from '~/hooks/useDynamicAuth'
+import Column from 'components/common/Atoms/Column'
+import Text from 'components/common/Atoms/Text'
+import { RippleButton } from 'components/Ripple'
+import { Context } from 'context/Context'
+import { useDynamicAuth } from 'hooks/useDynamicAuth'
 import Option from './Option'
 import {
   ContainerAuth,
@@ -11,9 +11,9 @@ import {
   TableKeyboard
 } from './styles'
 import PropTypes from 'prop-types'
-import { Loading } from '~/components/Loading'
+import { Loading } from 'components/Loading'
 import { PColor } from '@/public/colors'
-import NotFount from '~/container/404'
+import NotFount from 'container/404'
 
 // eslint-disable-next-line
 const AuthPassthrough = ({ idStore, user }) => {

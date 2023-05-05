@@ -1,8 +1,8 @@
 import React from 'react'
-import Column from '~/components/common/Atoms/Column'
-import Row from '~/components/common/Atoms/Row'
-import Text from '~/components/common/Atoms/Text'
-import { RippleButton } from '~/components/Ripple'
+import Column from 'components/common/Atoms/Column'
+import Row from 'components/common/Atoms/Row'
+import Text from 'components/common/Atoms/Text'
+import { RippleButton } from 'components/Ripple'
 
 export const EmployeeProfile = ({
   idStore,

@@ -1,9 +1,9 @@
 import React from 'react'
 import { PColor } from '@/public/colors'
-import { AwesomeModal } from '~/components/AwesomeModal'
-import { QuantityButton } from '~/components/QuantityButton'
+import { AwesomeModal } from 'components/AwesomeModal'
+import { QuantityButton } from 'components/QuantityButton'
 import { RippleButton } from 'pkg-components'
-import { ExtrasProductsItems } from '~/container/producto/extras/ExtrasProductsItems'
+import { ExtrasProductsItems } from 'container/producto/extras/ExtrasProductsItems'
 import {
   Container,
   Content,

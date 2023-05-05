@@ -8,10 +8,10 @@ import {
 } from './styled'
 import { GET_ALL_CLIENTS } from './queries'
 import { FormClients } from './Form'
-import { Table } from '~/components/Table'
+import { Table } from 'components/Table'
 import { useContext, useState } from 'react'
-import { Section } from '~/components/Table/styled'
-import { Loading } from '~/components/Loading'
+import { Section } from 'components/Table/styled'
+import { Loading } from 'components/Loading'
 import {
   useDeleteClients,
   updateCacheMod,

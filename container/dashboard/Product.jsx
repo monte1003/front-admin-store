@@ -13,7 +13,7 @@ import {
   GraniteGray
 } from 'public/colors'
 import { AwesomeModal } from 'pkg-components'
-import Column from '~/components/common/Atoms/Column'
+import Column from 'components/common/Atoms/Column'
 import {
   CardProductsModal,
   ContentImage,

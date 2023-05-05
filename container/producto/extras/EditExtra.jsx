@@ -1,9 +1,9 @@
 import { EColor } from '@/public/colors'
 import { IconDelete } from '@/public/icons'
 import moment from 'moment'
-import { AwesomeModal } from '~/components/AwesomeModal'
-import InputHooks from '~/components/InputHooks/InputHooks'
-import { RippleButton } from '~/components/Ripple'
+import { AwesomeModal } from 'components/AwesomeModal'
+import InputHooks from 'components/InputHooks/InputHooks'
+import { RippleButton } from 'components/Ripple'
 import { ContentModal, GarnishChoicesHeader } from './styled'
 
 export const EditExtra = ({

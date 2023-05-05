@@ -5,11 +5,11 @@ import {
   InputHookProducts,
   QuantityButton
 } from 'pkg-components'
-import { AwesomeModal } from '~/components/AwesomeModal'
-import { Checkbox } from '~/components/Checkbox'
-import Row from '~/components/common/Atoms/Row'
-import { RippleButton } from '~/components/Ripple'
-import { numberFormat } from '~/utils'
+import { AwesomeModal } from 'components/AwesomeModal'
+import { Checkbox } from 'components/Checkbox'
+import Row from 'components/common/Atoms/Row'
+import { RippleButton } from 'components/Ripple'
+import { numberFormat } from 'utils'
 import {
   Action,
   ContentLinesItems,

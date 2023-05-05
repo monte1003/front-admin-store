@@ -22,9 +22,9 @@ import {
 } from 'pkg-components'
 import { IconSales } from 'public/icons'
 import { useContext } from 'react'
-import { AwesomeModal } from '~/components/AwesomeModal'
+import { AwesomeModal } from 'components/AwesomeModal'
 import { Loading } from '../../components/Loading'
-import { Context } from '~/context/Context'
+import { Context } from 'context/Context'
 import { BoxProductSales } from './BoxProductSales'
 import { FormFilterSales } from './formFilterSales'
 import { ModalSales } from './ModalSales'
@@ -38,10 +38,10 @@ import {
 import { SubItems } from './SubItems'
 import { SuccessSaleModal } from './Success'
 import { generatePdfDocumentInvoice } from './PdfStatement'
-import ErrorBoundary from '~/components/Error'
+import ErrorBoundary from 'components/Error'
 import { useFormatDate } from './../../../pkg-hook/src/hooks/useFormatDate/index'
-import { useStore } from '~/hooks/useStore'
-import InputHooks from '~/components/InputHooks/InputHooks'
+import { useStore } from 'hooks/useStore'
+import InputHooks from 'components/InputHooks/InputHooks'
 
 const GenerateSales = () => {
   // STATES
