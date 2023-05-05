@@ -17,7 +17,7 @@ import { numberFormat } from '../../utils'
 import { useStore } from 'npm-pkg-hook'
 import Link from 'next/link'
 import { CardsComponent } from '../pruebas/styled'
-import { RippleButton } from '~/components/Ripple'
+import { RippleButton } from 'components/Ripple'
 
 export const GetOneSales = ({ setOpen, open, data }) => {
   const { getAllPedidoStore } = data

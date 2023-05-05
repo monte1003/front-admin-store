@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Warper } from '../styled'
 import InputHooks from 'components/InputHooks/InputHooks'
-import { RippleButton } from '~/components/Ripple'
+import { RippleButton } from 'components/Ripple'
 
 export const FormFilterSales = ({
   onChangeInput,

@@ -1,8 +1,8 @@
 import { EColor } from '@/public/colors'
 import { IconDelete } from '@/public/icons'
 import { QuantityButton } from 'pkg-components'
-import { RippleButton } from '~/components/Ripple'
-import { numberFormat } from '~/utils'
+import { RippleButton } from 'components/Ripple'
+import { numberFormat } from 'utils'
 import { CardsComponent } from './styled'
 
 const Items = ({

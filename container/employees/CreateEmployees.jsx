@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Row from 'components/common/Atoms/Row'
 import { RippleButton } from 'components/Ripple'
-import InputHooks from '~/components/InputHooks/InputHooks'
+import InputHooks from 'components/InputHooks/InputHooks'
 
 const CreateEmployees = ({
   dataForm,

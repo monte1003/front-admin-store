@@ -1,43 +1,40 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable consistent-return */
-/* eslint-disable no-console */
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { gql, useApolloClient, useSubscription } from '@apollo/client'
-import { AwesomeModal } from 'pkg-components'
-import { BtnClose } from 'components/AwesomeModal/styled'
-import { usePosition } from 'components/hooks/usePosition'
-import { ScheduleTimings } from 'container/dashboard/ScheduleTimings'
-import { LateralModal } from 'container/dashboard/styled'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Toast } from 'pkg-components'
-import PropTypes from 'prop-types'
-import { IconCancel } from 'public/icons'
 import React, {
   useContext,
   useEffect,
   useState
 } from 'react'
-import styled, { css } from 'styled-components'
-import { Context } from '../../context/Context'
+import { gql, useSubscription } from '@apollo/client'
+import { AwesomeModal, Toast } from 'pkg-components'
+import { useConnection, useStore } from 'npm-pkg-hook'
+import { Context } from 'context/Context'
+import { IconCancel } from 'public/icons'
+import { usePosition } from 'components/hooks/usePosition'
+import { BtnClose } from 'components/AwesomeModal/styled'
+import { Overline } from 'components/common/Reusable'
+import { ScheduleTimings } from 'container/dashboard/ScheduleTimings'
+import { LateralModal } from 'container/dashboard/styled'
+import { Clients } from 'container/clients'
+import { Food } from 'container/update/Products/food'
+import GenerateSales from 'container/Sales'
 import { AlertBox } from '../AlertBox'
 import { Footer } from './footer'
 import { Header } from './header'
-import { useConnection, useStore, useGetSale } from 'npm-pkg-hook'
 import Aside from './Aside'
-import { GET_ALL_PEDIDOS } from 'container/PedidosStore/queries'
-import Head from 'next/head'
-import { Food } from '~/container/update/Products/food'
-import GenerateSales from 'container/Sales'
-import { Overline } from '../common/Reusable'
-import { Clients } from '~/container/clients'
-import { BGColor, PColor } from '@/public/colors'
+import { Main } from './styled'
+
+interface IMemoLayoutProps {
+  children: React.ReactNode;
+  settings: unknown;
+  watch: boolean;
+}
+
 export const MemoLayout = ({
   children,
   watch,
   settings
-}) => {
+}: IMemoLayoutProps) => {
   const location = useRouter()
 
   const {
@@ -50,16 +47,15 @@ export const MemoLayout = ({
     setShowComponentModal,
     setSalesOpen
   } = useContext(Context)
-  const { latitude, longitude } = usePosition(watch, settings)
   const dataLocation = usePosition(watch, settings)
   useEffect(() => {
-    setAlertBox({ message: '', color: 'success' })
+    const { latitude, longitude } = dataLocation
     if (latitude) {
       window.localStorage.setItem('latitude', latitude)
       window.localStorage.setItem('longitude', longitude)
       window.localStorage.setItem('location', JSON.stringify(dataLocation))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setAlertBox({ message: '', color: 'success' })
   }, [])
   const NEW_NOTIFICATION = gql`
   subscription {
@@ -83,18 +79,6 @@ export const MemoLayout = ({
 }
   `
   const [dataStore] = useStore()
-  const [newOrderModal, setNewOrderModal] = useState({
-    open: false,
-    order: []
-  })
-  const {
-    getOnePedidoStore,
-    data: sale,
-    error: saleError,
-    loading: saleLoading
-  } = useGetSale()
-  const globalClient = useApolloClient()
-
 
   useSubscription(NEW_NOTIFICATION, {
     onError: () => {
@@ -110,9 +94,9 @@ export const MemoLayout = ({
         query: NEW_NOTIFICATION
       }).subscribe({
         next: (data) => {
-          if(ourStore){
+          if (ourStore) {
             console.log('')
-          } else{
+          } else {
             subscription.unsubscribe()
           }
         },
@@ -160,22 +144,22 @@ export const MemoLayout = ({
   useConnection({ setConnectionStatus })
   useEffect(() => {
     if (connectionStatus === 'initial') return
-    if (connectionStatus === true) {
+    if (connectionStatus) {
       setTimeout(() => {
         setConnectionStatus('initial')
       }, 3500)
     }
-    
+
     sendNotification({
       title: 'Wifi',
       description: statusConnection,
       backgroundColor: !connectionStatus ? 'warning' : 'success'
     })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionStatus])
 
   const component = {
-    1:  <ScheduleTimings />,
+    1: <ScheduleTimings />,
     2: <Clients />,
     3: <Food />
   }
@@ -191,21 +175,25 @@ export const MemoLayout = ({
   return (
     <>
       <Head>
+        <title>FoodApp</title>
       </Head>
       <AlertBox err={error} />
-      <Main aside={!['/'].find(x => { return x === location.pathname })} >
+      <Main aside={'/' !== location.pathname} >
         <Header />
         <Aside />
         <div style={{ gridArea: 'main', overflowY: 'auto' }}>
           <button
             onClick={() => {
-              return sendNotification({ 
-                title: Math.floor(Math.random() * 101 + 1), 
+              return sendNotification({
+                title: Math.floor(Math.random() * 101 + 1),
                 description: 'Esta es la descr',
                 backgroundColor: 'error'
-              })}
+              })
             }
-          >WOW</button>
+            }
+          >
+            WOW
+          </button>
           {children}
           <AwesomeModal
             backdrop='static'
@@ -260,37 +248,3 @@ export const MemoLayout = ({
   )
 }
 export const Layout = React.memo(MemoLayout)
-MemoLayout.propTypes = {
-  children: PropTypes.any,
-  settings: PropTypes.any,
-  watch: PropTypes.any
-}
-// https://www.conferecartoes.com.br/blog/portal-do-ifood
-const Main = styled.main`
-    display: grid;
-    width: 100%;
-    overflow: hidden;
-    height: 100vh;
-    grid-template-rows: 75px 2fr;
-    grid-template-columns: 180px 1fr;
-    grid-template-areas:
-    'aside head head head'
-    'aside main main right'
-    'aside main main right';
-    text-align: center;
-    grid-gap: 0.25rem;
-    /* grid-gap: 10px; */
-    @media (max-width: 960px) {
-        grid-template-columns: min-content 1fr;
-    }
-    @media (min-width: 960px) {
-        ${props => {
-    return !props.aside &&
-      css`
-                /* grid-template-columns: 1fr; */
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-            `}};
-    }
-`

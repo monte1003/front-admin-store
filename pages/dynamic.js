@@ -1,6 +1,6 @@
 import { withIronSessionSsr } from 'iron-session/next'
-import AuthPassthrough from '~/container/services/auth'
-import { cookie, defaultReturnObject } from '~/utils'
+import AuthPassthrough from 'container/services/auth'
+import { cookie, defaultReturnObject } from 'utils'
 
 export default function AuthPassthroughPage({ user, idStore }) {
 

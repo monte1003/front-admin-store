@@ -7,8 +7,8 @@ import {
   Tag
 } from 'pkg-components'
 import { useState } from 'react'
-import InputHooks from '~/components/InputHooks/InputHooks'
-import { QuantityButton } from '~/components/QuantityButton'
+import InputHooks from 'components/InputHooks/InputHooks'
+import { QuantityButton } from 'components/QuantityButton'
 import { RippleButton } from '../../../components/Ripple'
 import {
   BGColor,

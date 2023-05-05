@@ -19,8 +19,8 @@ import {
   GET_ALL_CATEGORIES_WITH_PRODUCT,
   GET_ULTIMATE_CATEGORY_PRODUCTS
 } from '../dashboard/queries'
-import { Loading } from '~/components/Loading'
-import { useSetState } from '~/hooks/useState'
+import { Loading } from 'components/Loading'
+import { useSetState } from 'hooks/useState'
 import { REGISTER_CAT_OF_PRODUCTS } from '../dashboard/queriesStore'
 
 export const Categories = () => {

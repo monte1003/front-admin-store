@@ -1,7 +1,7 @@
 import { PColor } from '@/public/colors'
 import { useContext } from 'react'
 import styled from 'styled-components'
-import { Context } from '~/context/Context'
+import { Context } from 'context/Context'
 
 export const Hamburguer = () => {
   const {

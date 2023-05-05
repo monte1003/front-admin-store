@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
-import { GET_EMPLOYEES } from '~/container/employees/queries'
+import { GET_EMPLOYEES } from 'container/employees/queries'
 
 export const useEmployee = () => {
   const [clientes, setClients] = useState(data)

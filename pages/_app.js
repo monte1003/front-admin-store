@@ -1,11 +1,9 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import Head from 'next/head'
+import Script from 'next/script'
+import { useRouter } from 'next/router'
 import { ApolloProvider } from '@apollo/client'
 import ErrorBoundary from 'components/Error'
 import Noscript from 'components/Noscript'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import Script from 'next/script'
 import PropTypes from 'prop-types'
 import {
   useCallback,

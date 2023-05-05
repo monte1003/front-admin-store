@@ -1,15 +1,16 @@
-import { useApolloClient } from '@apollo/client'
-import { Context } from 'context/Context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useMobile, useStore } from 'npm-pkg-hook'
-import PropTypes from 'prop-types'
 import React, {
   useCallback,
   useContext,
   useState
 } from 'react'
-import { Overline } from '~/components/common/Reusable'
+import { useApolloClient } from '@apollo/client'
+import PropTypes from 'prop-types'
+import { useMobile, useStore } from 'npm-pkg-hook'
+import { Button } from 'pkg-components'
+import { Context } from 'context/Context'
+import { Overline } from 'components/common/Reusable'
 import { BGColor, PColor } from '../../../public/colors'
 import {
   IconHome,
@@ -22,7 +23,6 @@ import {
 } from '../../../public/icons'
 import ActiveLink from '../../common/Link'
 import { ButtonOption } from '../styled'
-import { Button } from 'pkg-components'
 import {
   AnchorRouter,
   ButtonGlobalCreate,
@@ -68,7 +68,7 @@ const MemoAside = () => {
           backgroundColor: 'error'
         })
       })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client, location])
   const [dataStore, { loading }] = useStore()
   const {
@@ -84,12 +84,12 @@ const MemoAside = () => {
   return (
     <>
       {isMobile &&
-      <Overline
-        bgColor='rgba(0,0,0,.4)'
-        onClick={() => {return setCollapsed(!collapsed)}}
-        show={collapsed}
-        zIndex='999'
-      />}
+        <Overline
+          bgColor='rgba(0,0,0,.4)'
+          onClick={() => { return setCollapsed(!collapsed) }}
+          show={collapsed}
+          zIndex='999'
+        />}
       <ContainerAside collapsed={isMobile ? collapsed : false}>
         <Card>
           <Info>
@@ -110,13 +110,13 @@ const MemoAside = () => {
               </a>
             </Link>)}
             {pathname &&
-                <h1 className='title_store'>{storeName}</h1>
+              <h1 className='title_store'>{storeName}</h1>
             }
             {uState == 1 &&
-            <div className='program_state'>
-              <IconLogo color={PColor} size='20px' />
-              <h3 className='sub_title_store'>En pausa programada</h3>
-            </div>
+              <div className='program_state'>
+                <IconLogo color={PColor} size='20px' />
+                <h3 className='sub_title_store'>En pausa programada</h3>
+              </div>
             }
           </Info>
           <Router>
@@ -157,30 +157,6 @@ const MemoAside = () => {
                 <IconLogout color={PColor} size='20px' />
               </ButtonOption>
             </OptionButton>
-            {/* {data?.map((m, i) => {
-              return (
-                <Options
-                  active={menu === i}
-                  handleClick={() => { return handleClick(i) }}
-                  index={i}
-                  key={m.mId}
-                  label={m.mName}
-                  path={m.mPath}
-                // icon={<FontAwesomeIcon icon={iconModules[x.mIcon]} color={active === i ? '#a6b0cf' : '#a6b0cf'} size='lg' />}
-                >
-                  {!!m.subModules && m.subModules.map(sm => {
-                    return <ActiveLink
-                      href={`/${m.mPath}/${sm.smPath}`}
-                      key={sm.smId}
-                      onClick={e => { return e.stopPropagation() }}
-                    >
-                      <AnchorRouter><IconShopping size='15px' />{sm.smName}</AnchorRouter>
-                    </ActiveLink>
-                  })}
-                </Options>
-
-              )
-            })} */}
           </Router>
         </Card>
       </ContainerAside>

@@ -6,7 +6,7 @@ import {
   IconCarrot,
   IconFigure
 } from 'pkg-components'
-import { RippleButton } from '~/components/Ripple'
+import { RippleButton } from 'components/Ripple'
 import { ContainerSuccessInvoice,Tooltip } from './styles'
 import { IconDownload, IconSales } from '@/public/icons'
 import { BGColor } from '@/public/colors'

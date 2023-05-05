@@ -1,5 +1,10 @@
 import styled, { css } from 'styled-components'
-import { BGColor, PColor } from '../../public/colors'
+import {
+  BGColor,
+  DarkSilver,
+  PColor,
+  SECBGColor
+} from '../../public/colors'
 
 export const FooterComponent = styled.footer`
     position: fixed;
@@ -65,7 +70,7 @@ position: relative;
 `
 export const Time = styled.time`
     font-family: PFont-Regular;
-    color: ${ PColor };
+    color: ${PColor};
     text-align: center;
     @media only screen and (min-width: 960px){
     }
@@ -83,7 +88,7 @@ export const UseSize = styled.div`
     bottom: -45px;
     width: 60px;
     max-width: 60px;
-    background-color: ${ ({ theme }) => {return theme.InvColor} };
+    background-color: ${({ theme }) => { return theme.InvColor }};
     border-radius: 50%;
     height: 60px;
     align-items: center;
@@ -103,7 +108,8 @@ export const ButtonOption = styled.button`
     cursor: pointer;
     /* z-index: 999; */
     background-color:  transparent;
-    ${ props => {return props.space &&css`
+    ${props => {
+    return props.space && css`
         display: flex;
         justify-content: space-between;
         width: 100%;
@@ -111,9 +117,9 @@ export const ButtonOption = styled.button`
         & > span {
             font-family: PFont-Light;
             font-size: 14px;
-            color: ${ ({ theme }) => {return `${ theme.PColor }`} };
+            color: ${({ theme }) => { return `${theme.PColor}` }};
         }
-    `} }
+    `}}
     @media only screen and (min-width: 960px){
     }
 `
@@ -122,19 +128,20 @@ export const FloatingBox = styled.div`
     grid-gap: 0 10px;
     display: grid;
     transition: all 200ms ease-in-out;
-    background-color: ${ BGColor };
+    background-color: ${BGColor};
     padding: 10px;
     z-index: 99999;
-  ${ ({ show }) => {return show
-    ? css`
+  ${({ show }) => {
+    return show
+      ? css`
                   visibility: visible;
                   transform: translateY(0);
                   `
-    : css`
+      : css`
                 
                 visibility: hidden;
                   transform: translateY(-50px);
-              `} }
+              `}}
     @media only screen and (min-width: 960px){
     }
 `
@@ -159,8 +166,94 @@ export const Overline = styled.div`
     height: 100vh;
     width: 100%;
     background-color: transparent;
-    ${ props => {return props.show ? css`display: block` : css`display: none;`} };
+    ${props => { return props.show ? css`display: block` : css`display: none;` }};
     @media only screen and (min-width: 960px){
     }
-  
 `
+
+export const Main = styled.main`
+    display: grid;
+    width: 100%;
+    overflow: hidden;
+    height: 100vh;
+    grid-template-rows: 75px 2fr;
+    grid-template-columns: 180px 1fr;
+    grid-template-areas:
+    'aside head head head'
+    'aside main main right'
+    'aside main main right';
+    text-align: center;
+    grid-gap: 0.25rem;
+
+    @media (max-width: 960px) {
+        grid-template-columns: min-content 1fr;
+    }
+
+    @media (min-width: 960px) {
+        ${props => {
+    return !props.aside && css`
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+        `}};
+    }
+`
+
+
+export const CtnItemOps = styled.div`
+  display: flex;
+  width: fit-content;
+  place-content: center;
+  place-items: center;
+`
+export const HeaderWrapperButton = styled.div`
+    display: flex;
+    flex-direction: row;
+    grid-column-gap: 12px;
+    column-gap: 12px;
+    align-items: center;
+    width: max-content;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 8px 12px;
+    border-radius: 200px;
+    transition: background-color .3s ease-in-out;
+    border: 0;
+    cursor: pointer;
+    background-color: ${SECBGColor};
+    margin-left: 30px;
+    &:hover {
+      background-color: ${SECBGColor};
+    }
+    .info-sales {
+    margin: 0 0 0 6px;
+    color: ${DarkSilver};
+    transition: background-color .3s ease-in-out;
+    white-space: nowrap;
+    text-align: left;
+    }
+    span {
+    font-size: .75rem;
+    line-height: 1rem;
+    display: block;
+    }
+`
+export const HeaderC = styled.header`
+    display: flex;
+    height: auto;
+    grid-area: head;
+    background-color: ${({ scrollNav }) => { return (scrollNav ? 'none' : 'transparent') }};
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 0 1.2em;
+    display: flex;
+    height: 80px;
+    z-index: 990;
+    justify-content: space-between;
+    box-shadow: inset 0 -1px 0 #dcdcdc;
+    @media (max-width: 992px) {
+      padding: 0 0.2em;
+    }
+    `

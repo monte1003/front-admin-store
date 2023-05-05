@@ -1,6 +1,12 @@
 import link from 'next/link'
 import styled, { css } from 'styled-components'
-import { BColor, BGColor, PColor, PLVColor, SFVColor } from '../../../public/colors'
+import {
+    BColor,
+    BGColor,
+    PColor,
+    PLVColor,
+    SFVColor
+} from 'public/colors'
 
 export const Router = styled.div`
     background-color: ${`${SFVColor}69`};
@@ -40,13 +46,14 @@ export const ContainerAside = styled.div`
         height: 100%;
         width: 80%;
         position: absolute;
-        ${ ({ collapsed }) => {return collapsed
-    ? css`
+        ${({ collapsed }) => {
+        return collapsed
+            ? css`
             transform: translate(0px, 0px);
             `
-    : css`
+            : css`
             transform: translate(-800px, 0px);
-              `} }
+              `}}
     }
 `
 export const LeftNav = styled.div`
@@ -78,13 +85,14 @@ export const LeftNav = styled.div`
         right: 0;
         margin: auto;
     }
-    ${({ show }) => {return show
-    ? css`
+    ${({ show }) => {
+        return show
+            ? css`
             visibility: visible;
             opacity: 1;
             transform: translateY(0);
                 `
-    : css`
+            : css`
                 
             margin: 0;
             visibility: hidden;
@@ -287,9 +295,6 @@ cursor: pointer;
     }
     `
 
-// export const Anchor = styled.a`
-//     font-size: 12px;
-// `
 export const Card = styled.div`
     display: flex;
     flex-direction: column;

@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { useState } from 'react'
-import { GET_ONE_STORE } from '~/container/Restaurant/queries'
+import { GET_ONE_STORE } from 'container/Restaurant/queries'
 
 export const useStore = () => {
   const [store, setStore] = useState([])

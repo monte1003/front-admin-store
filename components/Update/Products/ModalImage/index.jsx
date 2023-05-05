@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Cropper } from 'react-cropper'
-import { AwesomeModal } from '~/components/AwesomeModal'
+import { AwesomeModal } from 'components/AwesomeModal'
 
 export const ModalImage = ({
   handleOpenEditImage,

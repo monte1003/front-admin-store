@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { withIronSessionSsr } from 'iron-session/next'
 import { cookie } from 'utils'
-import { Loading } from '~/components/Loading'
+import { Loading } from 'components/Loading'
 
 export default function RestaurantView() {
 

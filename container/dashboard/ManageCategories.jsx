@@ -14,7 +14,7 @@ import {
   useState
 } from 'react'
 import styled from 'styled-components'
-import { Loading } from '~/components/Loading'
+import { Loading } from 'components/Loading'
 import { AwesomeModal } from '../../components/AwesomeModal'
 import { useFormTools } from '../../components/BaseForm'
 import { useSetState } from '../../components/hooks/useState'
