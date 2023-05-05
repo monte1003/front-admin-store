@@ -2,7 +2,7 @@ import {
   useLazyQuery, useMutation,
   useQuery
 } from '@apollo/client'
-import { CardProducts } from 'components/CartProduct'
+import { MemoCardProductSimple } from 'pkg-components'
 import { Table } from 'components/Table'
 import { Section } from 'components/Table/styled'
 import { Context } from 'context/Context'
@@ -354,7 +354,7 @@ export const ManageCategories = ({ SHOW_MODAL_UPDATE_PRODUCTS }) => {
           <CtnItems>
             {!dataProducto?.length ? <SkeletonP /> : dataProducto?.map((x) => {
               return (
-                <CardProducts
+                <MemoCardProductSimple
                   ProDescription={x.ProDescription}
                   ProDescuento={x.ProDescuento}
                   ProImage={x.ProImage}
@@ -373,7 +373,7 @@ export const ManageCategories = ({ SHOW_MODAL_UPDATE_PRODUCTS }) => {
           <CtnItems>
             {data?.PRODUCT?.map((x, idx) => {
               return (
-                <CardProducts
+                <MemoCardProductSimple
                   ProDescription={x.ProDescription}
                   ProDescuento={x.ProDescuento}
                   ProImage={x.ProImage}

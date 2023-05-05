@@ -1,4 +1,10 @@
-import { BGColor, PColor, APColor, SECBGColor, DarkSilver, SFVColor } from 'public/colors'
+import {
+    BGColor,
+    APColor,
+    SECBGColor,
+    DarkSilver,
+    SFVColor
+} from 'public/colors'
 import styled, { css } from 'styled-components'
 
 export const Input = styled.input`
@@ -12,7 +18,6 @@ export const ContentCalcules = styled.div`
     right: 0;
     width: max-content;
     bottom: -1px;
-    padding: 15.8px;
     display: flex;
     border-radius: 4px;
     justify-content: space-between;
@@ -26,18 +31,17 @@ export const ContentCalcules = styled.div`
 `
 export const ScrollbarProduct = styled.div`
     overflow: hidden auto;
-
+    background-color:  ${BGColor};
     border-left: 1px solid #e9ecef;
-    z-index: 9999999;
+    z-index: 9999;
     margin: ${({ margin }) => { return margin || '0' }};
     .ripple-button__load {
-        position: fixed;
-        height: auto;
-        height: 50px;
-        left: -1px;
-        bottom: -1PX;
-        width: 300px;
         border-radius: 5px;
+        bottom: -1PX;
+        height: 45px;
+        left: -1px;
+        position: fixed;
+        width: 300px;
     }
     h2 {
         text-rendering: optimizeLegibility;
@@ -59,8 +63,15 @@ export const FlipTop = styled.div`
 
 `
 export const Warper = styled.div`
-    flex-wrap: wrap;
+    background-color:  ${BGColor};
+    border-bottom: 1px solid #e9ecef;
     display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+
     .ripple-button  {
         padding: 13px !important;
         margin-top: 15px !important;
@@ -109,7 +120,7 @@ export const Wrapper = styled.div`
 }
 `
 export const ContainerGrid = styled.div`
-    display: grid;    
+    display: grid;
     margin: 0;
     padding-bottom: 20px;
     margin: auto;
@@ -124,6 +135,7 @@ export const ContainerGrid = styled.div`
     grid-template-columns: repeat(auto-fill,minmax(172px,1fr));
     grid-gap: 100px 20px;
     grid-auto-rows: max-content;
+    box-shadow: 0 1px 2px 0 rgba(9, 30, 66, 0.062);
     }
 
 `

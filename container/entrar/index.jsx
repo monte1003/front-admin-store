@@ -27,9 +27,11 @@ import { Context } from 'context/Context'
 import Portal from 'components/portal'
 import { Facebook, IconGoogleFullColor } from '@/public/icons'
 import { LoadEllipsis } from './../../components/LoadingButton/index'
+import { useSetSession } from 'npm-pkg-hook'
 
 export const Login = () => {
   const router = useRouter()
+  const [handleSession] = useSetSession()
   const { setAlertBox } = useContext(Context)
   const [location, setLocation] = useState({})
   const [loading, setLoading] = useState(false)
@@ -50,18 +52,67 @@ export const Login = () => {
     return locationFormat ?? locationFormat[0].formatted_address
   }
 
-  const responseGoogle = async (response) => {
-    // e.preventDefault()
+  const handleLogin = async (response) => {
+    const cookie = [
+      {
+        name: 'RESTAURANT',
+        value: 'Lol'
+      }
+    ]
     await fetchData()
     const device = await getDeviceId()
-    window.localStorage.setItem('sessionGoogle', JSON.stringify(response.profileObj))
+    window.localStorage.setItem('sessionGoogle', JSON.stringify(response?.profileObj))
     const { name, googleId, email, imageUrl } = response?.profileObj || {}
     const body = {
       name: name,
       username: name,
       lastName: name,
-      email: email,
-      password: googleId,
+      email: 'juvi69elpapu@gmail.com',
+      password: '109872394149172618249',
+      locationFormat: locationFormat[0]?.formatted_address,
+      useragent: window.navigator.userAgent,
+      deviceid: device,
+      imageUrl: imageUrl
+    }
+    setLoading(true)
+    await fetchJson(`${process.env.URL_BASE}api/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(res => {
+      setAlertBox({ message: `${res.message}`, color: 'success' })
+      const { storeUserId, token } = res
+      const { idStore, id } = storeUserId || {}
+      if (storeUserId) {
+        localStorage.setItem('restaurant', idStore)
+        localStorage.setItem('usuario', id)
+        localStorage.setItem('usuario', token)
+        localStorage.setItem('session', token)
+        router.push('/restaurante/getDataVerify')
+      } else {
+        router.push('/restaurante/getDataVerify')
+      }
+    }).catch(() => {
+      setAlertBox({ message: 'Lo sentimos ha ocurrido un error', color: 'error' })
+    }).finally(() => {
+      setLoading(false)
+    })
+    handleSession({ cookie })
+  }
+  const responseGoogle = async (response) => {
+    // e.preventDefault()
+    await fetchData()
+    const device = await getDeviceId()
+    window.localStorage.setItem('sessionGoogle', JSON.stringify(response?.profileObj))
+    const { name, googleId, email, imageUrl } = response?.profileObj || {}
+    const body = {
+      name: name,
+      username: name,
+      lastName: name,
+      // email: email,
+      // password: googleId,
+      email: 'juvi69elpapu@gmail.com',
+      password: '109872394149172618249',
       locationFormat: locationFormat[0]?.formatted_address,
       useragent: window.navigator.userAgent,
       deviceid: device,
@@ -163,7 +214,11 @@ export const Login = () => {
             color='2'
             colorFont={DarkSilver}
             height='40px'
-            onClick={responseGoogleFalse}
+            // onClick={responseGoogleFalse}
+            onClick={(e) => {
+              e.preventDefault()
+              return handleLogin()
+            }}
             size='14px'
           >
             <IconGoogleFullColor size='30px' />  {loading ? <LoadEllipsis /> : 'Continue with Google false'}

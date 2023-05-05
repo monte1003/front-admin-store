@@ -28,21 +28,25 @@ module.exports = async (phase) => {
     NAMEDB: (() => {
       // if (isDev) return 'app'
       if (isDev) return 'app'
-      if (isProd) return 'bsm58gjtynob5wvyvpo3'
+      if (isProd) return 'app'
+      // if (isProd) return 'bsm58gjtynob5wvyvpo3'
     })(),
     USERDB: (() => {
       // if (isDev) return 'root'
       if (isDev) return 'root'
-      if (isProd) return 'um6z9noxxvjg5b1v'
+      if (isProd) return 'root'
+      // if (isProd) return 'um6z9noxxvjg5b1v'
     })(),
     PASSDB: (() => {
       // if (isDev) return ''
       if (isDev) return ''
-      if (isProd) return 'qcV3ROSpVDim28bmmutN'
+      // if (isProd) return 'qcV3ROSpVDim28bmmutN'
+      if (isProd) return ''
     })(),
     HOST_DB: (() => {
       if (isDev) return 'localhost'
-      if (isProd) return 'bsm58gjtynob5wvyvpo3-mysql.services.clever-cloud.com'
+      // if (isProd) return 'bsm58gjtynob5wvyvpo3-mysql.services.clever-cloud.com'
+      if (isProd) return 'localhost'
     })(),
     MYSQL_PORT: (() => {
       if (isDev) return 3306

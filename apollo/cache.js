@@ -4,7 +4,7 @@ import { concatPagination } from '@apollo/client/utilities'
 export const isLoggedVar = makeVar({ state: true, expired: false })
 
 const mergeArraysWithDuplicates = (existing = [], incoming = [], max = Infinity, uniqueKey = null) => {
-  const merged = Array.isArray(existing) ? existing.slice(0) : []
+  const merged = Array.isArray(existing) ? existing?.slice(0) : []
   if (Array.isArray(incoming)) {
     for (let i = 0; i < incoming.length && merged.length < max; ++i) {
       const item = incoming[i]
@@ -104,7 +104,7 @@ export const cache = new InMemoryCache({
         productFoodsAll: {
           keyArgs: ['categories', 'desc', 'fromDate', 'gender', 'pState', 'search', 'toDate'],
           merge(existing, incoming, { args: { max = Infinity } }) {
-            const merged = existing ? existing.slice(0) : []
+            const merged = Array.isArray(existing) ? existing?.slice(0) : []
             for (let i = 0; i < incoming.length && merged.length < max; ++i) {
               const item = incoming[i]
               const index = merged.findIndex((existingItem) => {return existingItem.pId === item.pId})

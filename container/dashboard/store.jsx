@@ -14,7 +14,7 @@ import {
   useRef,
   useState
 } from 'react'
-import { AwesomeModal } from '../../components/AwesomeModal'
+import { AwesomeModal } from 'pkg-components'
 import { Food } from '../update/Products/food'
 import { ManageCategories } from './ManageCategories'
 import { Product } from './Product'
@@ -29,7 +29,11 @@ import { PColor } from '@/public/colors'
 const DashboardStore = () => {
   // STATES
   const [showDessert, setShowDessert] = useState(false)
-  const { setAlertBox, handleClick, show } = useContext(Context)
+  const {
+    setAlertBox,
+    handleClick,
+    show
+  } = useContext(Context)
 
   const [searchFilter] = useState({
     gender: [],

@@ -250,7 +250,6 @@ const registerSalesStore = async (root,
       }
     }
   } catch (e) {
-    console.log(e)
     return {
       Response: {
         success: false,

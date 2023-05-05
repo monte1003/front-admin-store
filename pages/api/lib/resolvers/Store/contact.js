@@ -62,7 +62,6 @@ export const getOneContacts = async (_, { contactId }, ctx, info) => {
     })
     return data
   } catch (e) {
-    console.log("🚀 ~ file: contact.js:48 ~ getOneContacts ~ e:", e)
     const error = new Error('Lo sentimos, ha ocurrido un error interno')
     return error
   }

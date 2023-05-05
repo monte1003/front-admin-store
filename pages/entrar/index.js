@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Head from 'next/head'
 import ErrorBoundary from '~/components/Error'
 import { useEffect } from 'react'
@@ -40,6 +41,7 @@ export default function LoginView() {
         })
       })
     }
+    // eslint-disable-next-line
   }, [window])
   return (
     <>

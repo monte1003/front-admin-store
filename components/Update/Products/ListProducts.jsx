@@ -1,7 +1,6 @@
-import { CardProducts } from 'components/CartProduct'
 import { RippleButton } from 'components/Ripple'
 import { Skeleton } from 'components/Skeleton'
-import { Button } from 'pkg-components'
+import { Button, MemoCardProductSimple } from 'pkg-components'
 import PropTypes from 'prop-types'
 import { InputHook } from './Input'
 import {
@@ -72,7 +71,7 @@ export const ListProducts = ({
           <ContainerCardProduct>
             {!isData ? <Skeleton height='400' numberObject={8} /> : data?.map(producto => {
               return (
-                <CardProducts
+                <MemoCardProductSimple
                   {...producto}
                   del={true}
                   edit={true}

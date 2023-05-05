@@ -1,5 +1,4 @@
-import { CardProducts } from 'components/CartProduct'
-import { Button, Tag, Text } from 'pkg-components'
+import { Button, Tag, Text, MemoCardProductSimple } from 'pkg-components'
 import { useContext, useState } from 'react'
 import { OptionalExtraProducts } from '~/container/producto/extras'
 import { Context } from '~/context/Context'
@@ -39,7 +38,6 @@ export const FoodComponent = ({
   handleCheckFreeShipping,
   handleRegister,
   handleDelete,
-  tags,
   image,
   loading,
   setErrors,
@@ -68,7 +66,11 @@ export const FoodComponent = ({
   } = useContext(Context)
 
   const OPEN_MODAL_ORGANICE = useSetState(0)
-  const { dataTags, handleAddTag } = tagsProps
+  const {
+    dataTags,
+    handleAddTag,
+    tags
+  } = tagsProps
   const router = useRouter()
   const cancelAll = () => {
     setShowComponentModal(false)
@@ -138,8 +140,8 @@ export const FoodComponent = ({
    * */
   const handlerValidateFields = () => {
     if (active === 0) {
-      sendNotification({ 
-        description: 'Llena todos los campos', 
+      sendNotification({
+        description: 'Llena todos los campos',
         title: 'Error',
         backgroundColor: 'error'
       })
@@ -268,7 +270,7 @@ export const FoodComponent = ({
               <FormProduct {...propsForm} />
             </Card>
             <Card state={'50%'}>
-              <CardProducts
+              <MemoCardProductSimple
                 {...values}
                 alt={alt}
                 fileInputRef={fileInputRef}
@@ -397,9 +399,8 @@ export const FoodComponent = ({
         </Button>
       </ActionStep>
     </Container>
-
-    {/* <Dessert />
-    <ListProducts {...propsListProducts} /> */}
+    {/* <ListProducts {...propsListProducts} />  */}
+    {/* <Dessert />*/}
   </>
   )
 }

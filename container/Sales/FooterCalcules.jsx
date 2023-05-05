@@ -14,7 +14,6 @@ import { Text } from 'pkg-components'
 const FooterCalcules = ({
   counter = 0,
   disabled = false,
-  discount = {},
   totalProductPrice,
   callback = () => { return },
   dispatch = () => { return },
@@ -22,6 +21,7 @@ const FooterCalcules = ({
 }) => {
   return (
     <ContentCalcules>
+      {/* {counter} */}
       <Box display='flex' width='100%'>
         <Text as='h2' fontSize='1em'>
           $ {numberFormat(totalProductPrice)}
@@ -32,7 +32,7 @@ const FooterCalcules = ({
           background={PColor}
           color={BGColor}
           onClick={() => { return dispatch({ type: 'REMOVE_ALL_PRODUCTS' }) }}
-          padding='20px'
+          padding='13.5px'
         >
           ELIMINAR
         </Button>
@@ -43,7 +43,7 @@ const FooterCalcules = ({
             color={BGColor}
             disabled={disabled}
             onClick={() => { return setPrint({ callback }) }}
-            padding='20px'
+            padding='13.5px'
             radius='50%'
           >GUARDAR</Button>
         </FlipTop>

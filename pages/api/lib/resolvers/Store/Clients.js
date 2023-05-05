@@ -20,7 +20,6 @@ export const createClients = async (_root, { input }, context) => {
     const error = new ApolloError('El numero de identificación ya existe')
     return error
   } catch (e) {
-    console.log(e)
     return new ApolloError('Ocurrió un error')
   }
   // try {
@@ -107,10 +106,8 @@ export const getAllClients = async (_root, {
         ]
       }, limit: [min || 0, max || 100], order: [['createAt', 'DESC']]
     })
-    console.log("🚀 ~ file: Clients.js:116 ~ data:", data)
     return data
   } catch (e) {
-    console.log("🚀 ~ file: Clients.js:112 ~ e:", e)
     throw new ApolloError('No ha sido posible procesar su solicitud.', 500, e)
 
   }

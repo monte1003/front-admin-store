@@ -16,6 +16,7 @@ import {
   useReactToPrint
 } from 'npm-pkg-hook'
 import {
+  Button,
   CardProductSimple,
   numberFormat,
   ResisesColumns
@@ -260,6 +261,7 @@ const GenerateSales = () => {
   } = client || {}
   const { yearMonthDay, longDayName } = useFormatDate({})
   const [date, setDate] = useState(new Date())
+  const [fetchMoreLoader, setFetchMoreLoader] = useState(false)
   // useEffect(() => {
   //   const timer = setInterval(() => {return setDate(new Date())}, 1000)
   //   return () => {return clearInterval(timer)}
@@ -452,7 +454,7 @@ const GenerateSales = () => {
       <ModalSales {...restPropsSalesModal} />
       <ResisesColumns
         backgroundColor='transparent'
-        initialDividerPosition={{ __0: 80, __1: 20 }}
+        initialDividerPosition={{ __0: 60, __1: 40 }}
         lastMinWidth={'auto'}
         padding='0'
       >
@@ -494,10 +496,12 @@ const GenerateSales = () => {
                 })
               )}
             </ContainerGrid>
-            <RippleButton
+            <Button
               className='ripple-button__load'
+              loading={fetchMoreLoader}
               margin='0px auto'
               onClick={() => {
+                setFetchMoreLoader(true)
                 if (productsFood?.length > 0) {
                   fetchMore({
                     variables: { max: showMore, min: 0 },
@@ -519,15 +523,17 @@ const GenerateSales = () => {
                         : previousResult
                     },
                     onError: error => {
+                      setFetchMoreLoader(false)
                       // Maneja el error aquí
                       console.error('Error al cargar más productos:', error)
                     }
                   })
                   setShowMore(s => { return s + 100 })
+                  setFetchMoreLoader(false)
                 }
               }}
               widthButton='100%'
-            > {loading ? '...Cargando' : 'CARGAR MÁS'}</RippleButton>
+            > {(fetchMoreLoader || loading) ? '...Cargando' : 'CARGAR MÁS'}</Button>
           </ScrollbarProduct>
         </Box>
         <BoxProductSales {...restPropsProductSales} />

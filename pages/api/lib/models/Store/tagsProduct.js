@@ -50,8 +50,7 @@ export default conn.define('tagsproduct', {
   },
   nameTag: {
     type: Sequelize.STRING,
-    allowNull: false,
-    defaultValue: 1
+    allowNull: false
   },
   createAt: {
     type: 'TIMESTAMP',

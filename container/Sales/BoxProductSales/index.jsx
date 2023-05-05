@@ -9,7 +9,7 @@ import {
 } from '../styled'
 import { Checkbox } from 'components/Checkbox'
 // import { Range } from 'components/InputRange'
-import { CardProductSimple, RippleButton } from 'pkg-components'
+import { CardProductSimple } from 'pkg-components'
 import { IconEdit, IconPay } from 'public/icons'
 import { PColor, APColor } from 'public/colors'
 import { Skeleton } from 'components/Skeleton'
@@ -55,7 +55,7 @@ export const BoxProductSales = ({
 
   return (
     <Box>
-      <ScrollbarProduct margin='0' style={{ height: 'calc(100vh - 100px)', padding: '10px' }}>
+      <ScrollbarProduct margin='0' style={{ height: 'calc(100vh - 100px)', padding: '0px' }}>
         <Warper>
           <NewSelect
             action={true}
@@ -94,14 +94,24 @@ export const BoxProductSales = ({
                 disabled={false}
                 id={'PRICE_HIGH_TO_LOW'}
                 name='sort'
-                onChange={() => { return dispatch({ type: 'SORT', payload: 'PRICE_HIGH_TO_LOW' }) }}
+                onChange={() => {
+                  if (data.sortBy === 'PRICE_HIGH_TO_LOW') {
+                    return dispatch({ type: 'SORT', payload: null })
+                  }
+                  return dispatch({ type: 'SORT', payload: 'PRICE_HIGH_TO_LOW' }) }
+                }
               />
               <Checkbox
                 checked={data.sortBy && data.sortBy === 'PRICE_LOW_TO_HIGH'}
                 disabled={false}
                 id={'PRICE_LOW_TO_HIGH'}
                 name='sort'
-                onChange={() => { return dispatch({ type: 'SORT', payload: 'PRICE_LOW_TO_HIGH' }) }}
+                onChange={() => {
+                  if (data.sortBy === 'PRICE_LOW_TO_HIGH') {
+                    return dispatch({ type: 'SORT', payload: null })
+                  }
+                  return dispatch({ type: 'SORT', payload: 'PRICE_LOW_TO_HIGH' }) }
+                }
               />
             </Flex>
             <Flex>
