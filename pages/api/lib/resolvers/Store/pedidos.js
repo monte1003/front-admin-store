@@ -5,6 +5,7 @@ import ShoppingCard from '../../models/Store/ShoppingCard'
 import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 import Users from '../../models/Users'
 import { deCode, getAttributes } from '../../utils/util'
+import StoreProductModelFoodCopy from '../../models/product/storeproductFoodCopy'
 
 export const createOnePedidoStore = async (_, { input }) => {
   const {
@@ -197,9 +198,9 @@ export default {
       productFoodsOne: async (parent, _args, _context, info) => {
         try {
           const attributes = getAttributes(productModelFood, info)
-          const data = await productModelFood.findOne({
+          const data = await StoreProductModelFoodCopy.findOne({
             attributes,
-            where: { pId: deCode(parent.pId) }
+            where: { originalPId: deCode(parent.pId) }
           })
           return data
         } catch {

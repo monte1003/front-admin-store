@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { withIronSessionSsr } from 'iron-session/next'
 import { cookie, defaultReturnObject } from 'utils'
 import Dashboard from '../../container/dashboard'
@@ -6,6 +7,11 @@ import Dashboard from '../../container/dashboard'
 export default function DASHBOARD({ user, idStore }) {
   const allProps = { user, idStore }
   return <Dashboard {...allProps} />
+}
+
+DASHBOARD.propTypes = {
+  idStore: PropTypes.any,
+  user: PropTypes.any
 }
 
 // eslint-disable-next-line

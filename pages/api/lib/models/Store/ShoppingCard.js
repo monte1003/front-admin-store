@@ -11,6 +11,7 @@ const sequelize = connect()
 import { enCode } from '../../utils/util'
 import productModelFood from '../product/productFood'
 import Store from './Store'
+import StoreProductModelFoodCopy from '../product/storeproductFoodCopy'
 
 sequelize.sync()
 
@@ -34,19 +35,12 @@ const ShoppingCard = sequelize.define('shoppingcards', {
   pId: {
     type: INTEGER,
     allowNull: false,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-    references: {
-      model: productModelFood,
-      key: 'pId'
-    },
     get(x) { return enCode(this.getDataValue(x)) }
   },
   // id store
   idStore: {
     type: INTEGER,
     allowNull: false,
-    onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
     references: {
       model: Store,

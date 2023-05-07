@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import Button from 'components/common/Atoms/Button'
 import Column from 'components/common/Atoms/Column'
 import Row from 'components/common/Atoms/Row'
@@ -21,6 +22,7 @@ import {
   IconUser
 } from '../../public/icons'
 import Link from '../common/Link'
+import { IconChart } from 'pkg-components'
 import {
   ButtonOption,
   FloatingBoxTwo,
@@ -28,9 +30,9 @@ import {
 } from './styled'
 
 export const Options = ({
-  onClickLogout,
   loading,
-  error
+  error,
+  onClickLogout = () => { return }
 }) => {
   const [show, setShow] = useState(false)
   const location = useRouter()
@@ -101,6 +103,11 @@ export const Options = ({
       <ButtonOption onClick={() => { return handleClick(2) }}>
         <IconShopping color={PColor} size='25px' />
       </ButtonOption>
+      <ButtonOption>
+        <Enlace href='/expenses'>
+          <IconChart color={PColor} size='29px' />
+        </Enlace>
+      </ButtonOption>
       <ContainerOption>
         <FloatingBoxTwo show={show === 2}>
           <Row alignItems={'center'}>
@@ -146,10 +153,10 @@ export const Options = ({
                 {!isConsentGranted && 'Activar'}
               </Button>
               {/* <button disabled={!pushNotificationSupported || !isConsentGranted || userSubscription} onClick={onClickSusbribeToPushNotification}>
-              {userSubscription ? "Push subscription created" : "Create Notification subscription"}
+              {userSubscription ? 'Push subscription created' : 'Create Notification subscription'}
             </button>
               <button disabled={!userSubscription || pushServerSubscriptionId} onClick={onClickSendSubscriptionToPushServer}>
-              {pushServerSubscriptionId ? "Subscrption sent to the server" : "Send subscription to push server"}
+              {pushServerSubscriptionId ? 'Subscrption sent to the server' : 'Send subscription to push server'}
             </button>
               {pushServerSubscriptionId && (
               <div>
@@ -160,7 +167,7 @@ export const Options = ({
               {/* <section>
               <h4>Your notification subscription details</h4>
               <pre>
-                <code>{JSON.stringify(userSubscription, null, " ")}</code>
+                <code>{JSON.stringify(userSubscription, null, ' ')}</code>
               </pre>
             </section> */}
             </Column>
@@ -182,6 +189,16 @@ export const Options = ({
       </ContainerOption>
     </ContainerOption>
   )
+}
+
+Options.propTypes = {
+  error: PropTypes.shape({
+    code: PropTypes.any,
+    message: PropTypes.any,
+    name: PropTypes.any
+  }),
+  loading: PropTypes.any,
+  onClickLogout: PropTypes.func
 }
 const ContainerOption = styled.div`
     position: relative;

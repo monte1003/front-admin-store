@@ -19,6 +19,7 @@ import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 import SaleDataExtra from './../../models/Store/sales/saleExtraProduct'
 import ExtProductFoodOptional from '../../models/Store/sales/saleExtProductFoodOptional'
 import ExtProductFoodSubOptional from '../../models/Store/sales/saleExtProductFoodSubOptional'
+import StoreProductModelFoodCopy from '../../models/product/storeproductFoodCopy'
 
 // eslint-disable-next-line
 export const newRegisterStore = async (_, { input }, ctx) => {
@@ -96,7 +97,7 @@ export const deleteOneItem = async (root, args, context, _info) => {
   }
 }
 // eslint-disable-next-line
-const registerSalesStore = async (root,
+export const registerSalesStore = async (root,
   {
     input,
     totalProductsPrice,
@@ -111,30 +112,25 @@ const registerSalesStore = async (root,
   },
   context) => {
   try {
-
-    if (!context.restaurant || !context.User) {
+    const statusPedido = await StatusPedidosModel.findOne({
+      where: { pCodeRef }
+    });
+    if (statusPedido) {
       return {
         Response: {
           success: false,
-          message: 'Error, session ha caducado'
+          message: 'Error, esto es raro pero... La orden ya existe'
         }
       }
+    }
+    if (!context.restaurant || !context.User) {
+      throw new Error('La sesión ha caducado');
     }
     if (!id) {
-      return {
-        Response: {
-          success: false,
-          message: 'Elije un cliente, No se pudo realizar la venta'
-        }
-      }
+      throw new Error('Elija un cliente, no se pudo realizar la venta');
     }
-    if (!input || input?.length === 0) {
-      return {
-        Response: {
-          success: false,
-          message: 'No se ha podido realizar la venta, no hay productos en el carrito'
-        }
-      }
+    if (!input || Boolean(!input?.length)) {
+      throw new Error('No se ha podido realizar la venta, no hay productos en el carrito');
     }
     await Promise.all(input.map(async (element) => {
       const {
@@ -145,6 +141,54 @@ const registerSalesStore = async (root,
         dataOptional,
         refCodePid
       } = element
+      const decodePid = deCode(pId)
+      if (!refCodePid) throw new Error('No pudimos guardar tu venta, intenta de nuevo')
+      const productoOriginal = await productModelFood.findByPk(decodePid)
+      if (!productoOriginal) {
+        throw new Error('No se encontró ningún producto proporcionado, parece que fue eliminado')
+      }
+      // Crea una copia del producto original
+      const copiaProducto = await StoreProductModelFoodCopy.create({
+      // Copia los atributos necesarios de la tabla ProductModelFood a la tabla CopiedProductModel
+        caId: null,
+        carProId: deCode(productoOriginal.carProId),
+        cId: null,
+        colorId: null,
+        ctId: null,
+        dId: null,
+        fId: null,
+        free: productoOriginal.free,
+        id: deCode(context.User.id),
+        idStore: deCode(productoOriginal.idStore),
+        originalPId: deCode(productoOriginal.pId),
+        pCode: productoOriginal.pCode,
+        pDatCre: new Date(Date.now()),
+        pDatMod: new Date(Date.now()),
+        pName: productoOriginal.pName,
+        ProAssurance: productoOriginal.ProAssurance,
+        ProDelivery: productoOriginal.ProDelivery,
+        ProDescription: productoOriginal.ProDescription,
+        ProDescuento: productoOriginal.ProDescuento,
+        ProHeight: productoOriginal.ProHeight,
+        ProImage: productoOriginal.ProImage,
+        ProLength: productoOriginal.ProLength,
+        ProOutstanding: productoOriginal.ProOutstanding,
+        ProPrice: productoOriginal.ProPrice,
+        ProProtegido: productoOriginal.ProProtegido,
+        ProQuantity: productoOriginal.ProQuantity,
+        ProStar: productoOriginal.ProStar,
+        ProUniDisponibles: productoOriginal.ProUniDisponibles,
+        ProVoltaje: productoOriginal.ProVoltaje,
+        ProWeight: productoOriginal.ProWeight,
+        ProWidth: productoOriginal.ProWidth,
+        pState: productoOriginal.pState,
+        sizeId: null,
+        sTateLogistic: productoOriginal.sTateLogistic,
+        valueDelivery: productoOriginal.valueDelivery
+      })
+
+      // Guarda la copia del producto en la tabla CopiedProductModel
+      await copiaProducto.save()
       const resShoppingCard = await ShoppingCard.create({
         pId: deCode(pId),
         id: deCode(id),
@@ -211,7 +255,10 @@ const registerSalesStore = async (root,
               pDatCre: new Date(Date.now()),
               pDatMod: new Date(Date.now()),
               check: subOptional.check
-            }}))
+            }})).then(response => {
+              console.log(response);
+            })
+
           }
         }))
       }
@@ -253,7 +300,7 @@ const registerSalesStore = async (root,
     return {
       Response: {
         success: false,
-        message: 'Lo sentimos, ha ocurrido un error interno'
+        message: e.message || 'Lo sentimos, ha ocurrido un error interno'
       }
     }
   }
@@ -693,10 +740,10 @@ export default {
       },
       productFood: async (parent, _args, _context, info) => {
         try {
-          const attributes = getAttributes(productModelFood, info)
-          const data = await productModelFood.findOne({
+          const attributes = getAttributes(StoreProductModelFoodCopy, info)
+          const data = await StoreProductModelFoodCopy.findOne({
             attributes,
-            where: { pId: deCode(parent.pId) }
+            where: { originalPId: deCode(parent.pId) }
           })
           return data
         } catch {

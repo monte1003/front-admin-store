@@ -73,16 +73,17 @@ export const getUserFromToken = async token => {
   let error = false
   if (!token) return { error: false, message: '' }
   const tokenState = getTokenState(token)
+  console.log(tokenState)
   const { needRefresh, valid } = tokenState || {}
   try {
-    if (needRefresh === true) return { error: true, user: user, userProfile: userProfile }
+    if (needRefresh === true) return { error: true, user: user, userProfile: userProfile, message: 'session expired' }
     if (!valid) return { error: true, message: 'El token no es valido' }
   } catch {
     user = ''
     userProfile = ''
     error = false
   }
-  return { user, userProfile, error }
+  return { user, userProfile, error, message: '' }
 }
 
 

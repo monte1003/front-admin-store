@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import PropTypes from "prop-types"
 import React, {
   useCallback,
   useContext,
@@ -22,6 +23,7 @@ import {
   useGetSale,
   useStore,
   numberFormat,
+  GET_ALL_COUNT_SALES,
   useFormatDate
 } from 'npm-pkg-hook'
 import { useRouter } from 'next/router'
@@ -30,7 +32,6 @@ import { useDrag2 } from 'hooks/useDrag'
 import { Button, ModalDetailOrder, Tag } from 'pkg-components'
 import { Loading } from 'components/Loading'
 import { Bubble, ContainerDrag } from './styled'
-import { GET_ALL_COUNT_SALES } from 'npm-pkg-hook'
 import { QuickFiltersButton } from './QuickFiltersButton'
 import { IconSearch } from '@/public/icons'
 
@@ -268,6 +269,7 @@ const DragOrders = ({
     dataExtra: [],
     dataOptional: []
   })
+  console.log(dataOption)
   /**
  * Description
  * @param {any} _pid
@@ -291,10 +293,10 @@ const DragOrders = ({
       }
     }) : []
     const objetSubOption = {
-      dataExtra: Array.isArray(productModel?.ExtProductFoodsAll) ? productModel?.ExtProductFoodsAll : [],
+      dataExtra: productModel?.ExtProductFoodsAll || [],
       dataOptional: newSalesOptional || []
     }
-    if (Array.isArray(productModel?.ExtProductFoodsAll) && productModel?.ExtProductFoodsAll?.length > 0 && newSalesOptional.length > 0) {
+    if (Array.isArray(productModel?.ExtProductFoodsAll) || productModel?.ExtProductFoodsAll?.length || newSalesOptional.length) {
       setDataOption(objetSubOption)
     } else {
       setDataOption({
@@ -314,7 +316,7 @@ const DragOrders = ({
     })
     sale && setSelectedItem(sale)
   }, [sale])
-  
+
   const modalItems = {
     setModalItem,
     handleModalItem,
@@ -323,8 +325,8 @@ const DragOrders = ({
     sumExtraProducts: 0,
     product: {},
     modalItem,
-    ...dataOption
-    // dataProduct
+    dataExtra: dataOption.dataExtra,
+    dataOptional: dataOption.dataOptional
   }
   function pushPosition() {
     changePPStatePPedido({
@@ -332,8 +334,7 @@ const DragOrders = ({
         pPStateP: position,
         pCodeRef: elem,
         pDatMod: new Date()
-      }
-      ,update: (cache, { data: { getAllPedidoStoreFinal } }) => {return updateCacheMod({
+      },update: (cache, { data: { getAllPedidoStoreFinal } }) => {return updateCacheMod({
         cache,
         type: 2,
         query: GET_ALL_PEDIDOS,
@@ -583,6 +584,14 @@ const DragOrders = ({
       </Column>
     </ContainerDrag>
   )
+}
+
+DragOrders.propTypes = {
+  data: PropTypes.array,
+  dataConcludes: PropTypes.array,
+  dataProgressOrder: PropTypes.array,
+  dataReadyOrder: PropTypes.array,
+  dataRechazados: PropTypes.array
 }
 
 export default DragOrders

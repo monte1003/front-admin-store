@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Button, Tag, Text, MemoCardProductSimple } from 'pkg-components'
 import { useContext, useState } from 'react'
 import { OptionalExtraProducts } from 'container/producto/extras'
@@ -13,7 +14,7 @@ import {
   ContainerAnimation
 } from './styled'
 import { ActionStep } from './styles'
-import { useGetOneProductsFood, useSaveAvailableProduct } from 'npm-pkg-hook'
+import { useGetOneProductsFood, useSaveAvailableProduct, useStore } from 'npm-pkg-hook'
 import { useRouter } from 'next/router'
 import { ExtrasProductsItems } from 'container/producto/extras/ExtrasProductsItems'
 import { Loading } from 'components/Loading'
@@ -21,7 +22,6 @@ import { BGColor, PColor, SECColor } from '@/public/colors'
 import { Checkbox } from 'components/Checkbox'
 import styled, { css } from 'styled-components'
 import { onPulses } from 'components/animations'
-import { useStore } from 'hooks/useStore'
 import { AwesomeModal } from 'pkg-components'
 import Portal from 'components/portal'
 

@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useContext } from 'react'
 import { useMutation } from '@apollo/client'
-import InputHooks from 'components/InputHooks/InputHooks'
-import { AwesomeModal } from 'components/AwesomeModal'
-import { RippleButton } from 'components/Ripple'
+import { RippleButton, AwesomeModal, InputHooks } from 'pkg-components'
 import { PColor, WColor } from 'public/colors'
 import { Item } from 'components/Update/Products/styled'
 import { Table } from 'components/Table'
@@ -151,9 +149,9 @@ export const Categories = () => {
         borderRadius='10px'
         btnCancel={true}
         btnConfirm={false}
+        customHeight='min-content'
         footer={false}
         header={true}
-        height='min-content'
         onCancel={() => { return false }}
         onHide={() => { SHOW_CATEGORIES.setState(!SHOW_CATEGORIES.state) }}
         padding='25px'
@@ -176,7 +174,6 @@ export const Categories = () => {
             error={errorForm?.catDescription}
             name='catDescription'
             onChange={handleChange}
-            required
             title='Description'
             value={dataForm?.catDescription}
             width='100%'

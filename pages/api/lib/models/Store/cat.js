@@ -2,8 +2,9 @@ import { INTEGER, STRING, TEXT, TINYINT, literal } from 'sequelize'
 import connect from '../../db'
 const sequelize = connect()
 import { enCode } from '../../utils/util'
-import Users from '../Users'
-import Store from '../Store/Store'
+import Users from '../Users' // Asegúrate de exportar Users correctamente en su módulo correspondiente
+import Store from '../Store/Store' // Asegúrate de exportar Store correctamente en su módulo correspondiente
+let productModelFood = null // Agrega esta línea
 sequelize.sync()
 
 const catProducts = sequelize.define('catproducts', {
@@ -64,3 +65,11 @@ const catProducts = sequelize.define('catproducts', {
 })
 
 export default catProducts
+
+import('../product/productFood').then(module => {
+  productModelFood = module.default
+  catProducts.hasMany(productModelFood, {
+    foreignKey: 'carProId',
+    onDelete: 'CASCADE' // Configuración para borrar en cascada
+  })
+})

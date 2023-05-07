@@ -1,4 +1,3 @@
-import { useStore } from 'components/hooks/useStore'
 import { Context } from 'context/Context'
 import { useRouter } from 'next/router'
 import {
@@ -6,7 +5,8 @@ import {
   useCatWithProduct,
   useGetOneProductsFood,
   useIntersectionObserver,
-  useDeleteProductsFood
+  useDeleteProductsFood,
+  useStore
 } from 'npm-pkg-hook'
 import {
   useContext,

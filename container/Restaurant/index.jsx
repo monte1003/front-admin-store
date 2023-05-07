@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import {
   useLazyQuery,
   useMutation,
@@ -95,7 +96,6 @@ export const Restaurant = ({ userToken }) => {
               typeRegiments: dataForm.storePhone,
               typeContribute: dataForm.storePhone,
               addressStore: dataForm.storePhone
-              // createAt: dataForm.storePhone
             }
           }
         }).then(() => {
@@ -454,6 +454,10 @@ export const Restaurant = ({ userToken }) => {
       </div>
     </Content>
   )
+}
+
+Restaurant.propTypes = {
+  userToken: PropTypes.object
 }
 
 export const AnimationRight = keyframes`

@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { useApolloClient } from '@apollo/client'
 import PropTypes from 'prop-types'
-import { useMobile, useStore } from 'npm-pkg-hook'
+import { useMobile, useStore, useLogout } from 'npm-pkg-hook'
 import { Button } from 'pkg-components'
 import { Context } from 'context/Context'
 import { Overline } from 'components/common/Reusable'
@@ -51,25 +51,8 @@ const MemoAside = () => {
   } = useContext(Context)
 
   const [show, setShow] = useState(false)
-  const onClickLogout = useCallback(async () => {
-    await window
-      .fetch(`${process.env.URL_BASE}api/auth/logout/`, {})
-      .then(res => {
-        if (res) {
-          client?.clearStore()
-          // window.localStorage.clear()
-          location.replace('/')
-        }
-      })
-      .catch(() => {
-        return sendNotification({
-          title: 'Se ha producido un error.',
-          description: 'Error',
-          backgroundColor: 'error'
-        })
-      })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [client, location])
+  const [onClickLogout, { loading: load, error: err }] = useLogout({ })
+
   const [dataStore, { loading }] = useStore()
   const {
     storeName,

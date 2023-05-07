@@ -130,7 +130,7 @@ export const generateCode = async () => {
 export const generateToken = async dataUser => {
   // eslint-disable-next-line no-undef
   // parseInt(process.env.JWT_EXPIRY)
-  const AccessToken = await jwt.sign(dataUser, process.env.AUTHO_USER_KEY, { expiresIn: process.env.JWT_EXPIRY })
+  const AccessToken = await jwt.sign(dataUser, process.env.AUTHO_USER_KEY, { expiresIn: '1d' })
   return AccessToken
 }
 export const createToken = (data) => {

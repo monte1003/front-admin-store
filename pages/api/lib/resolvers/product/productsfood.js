@@ -38,7 +38,11 @@ export const productsOne = async (root, { pId }, context, info) => {
 }
 // GET ONE PRODUCTS FOOD
 export const productFoodsOne = async (root, { pId }, context, info) => {
+
   try {
+    if (!pId) {
+      return new Error('Lo sentimos, ha ocurrido un error interno o el producto no esta  registrado, Vuelve a intentarlo mas tarde.')
+    }
     const attributes = getAttributes(productModelFood, info)
     const data = await productModelFood.findOne({
       attributes,
@@ -56,8 +60,7 @@ export const productFoodsOne = async (root, { pId }, context, info) => {
     })
     return data
   } catch (e) {
-    const error = new Error('Lo sentimos, ha ocurrido un error interno o el producto no esta  registrado, Vuelve a intentarlo mas tarde.')
-    return error
+    return new Error('Lo sentimos, ha ocurrido un error interno o el producto no esta  registrado, Vuelve a intentarlo mas tarde.')
   }
 }
 export const getMinPrice = async (root, { idStore }, context) => {

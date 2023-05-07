@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useContext, useState } from 'react'
 import { RippleButton } from 'components/Ripple'
 import { Table } from 'components/Table'
@@ -27,7 +28,7 @@ import Image from 'next/image'
 import { CHANGE_STATE_STORE_PEDIDO, GET_ALL_PEDIDOS } from './queries'
 import { Context } from 'context/Context'
 import { IconLocationMap } from 'public/icons'
-import { useStore } from '../../components/hooks/useStore'
+import { useStore } from 'npm-pkg-hook'
 import { CLIENT_URL_BASE } from 'apollo/urls'
 
 export const ListPedidos = ({
@@ -49,39 +50,43 @@ export const ListPedidos = ({
       <Table
         data={data}
         labelBtn='Product'
-        renderBody={(dataB, titles) => {return dataB?.map((x, i) => {return <Section
-          columnWidth={titles}
-          key={i}
-          odd
-          padding='10px 0'
-        >
-          <Item>
-            <span> Restaurante</span>
-          </Item>
-          <Item>
-            <span># {x.pCodeRef}</span>
-          </Item>
-          <Item>
-            <span> {moment(x.pDatCre).format('DD/MM/YYYY')} - {moment(x.pDatCre).format('h:mma')} </span>
-          </Item>
-          <Item>
-            <span> DELIVERY-APP </span>
-          </Item>
-          <Item>
-            <span> {x.payMethodPState === 1 ? 'EFECTIVO' : 'TRANSFERENCIA'}</span>
-          </Item>
-          <Item>
-            <span> $ {numberFormat(x.totalProductsPrice)} </span>
-          </Item>
-          <Item>
-            {x.pSState === 1 ? 'Aceptado' : x.pSState === 2 ? 'Pedido en proceso' : x.pSState === 3 ? 'listo para entrega' : x.pSState === 4 ? 'Pedido pagado (Concluido)' : 'Rechazado'}
-          </Item>
-          <Item>
-            <Button onClick={() => {return handleOpenModal(x)}}>
+        renderBody={(dataB, titles) => {return dataB?.map((x, i) => {
+          const newLocal_2 = x.pSState === 4 ? 'Pedido pagado (Concluido)' : 'Rechazado'
+          const newLocal_1 = x.pSState === 3 ? 'listo para entrega' : newLocal_2
+          const newLocal = x.pSState === 2 ? 'Pedido en proceso' : newLocal_1
+          return <Section
+            columnWidth={titles}
+            key={i}
+            odd
+            padding='10px 0'
+          >
+            <Item>
+              <span> Restaurante</span>
+            </Item>
+            <Item>
+              <span># {x.pCodeRef}</span>
+            </Item>
+            <Item>
+              <span> {moment(x.pDatCre).format('DD/MM/YYYY')} - {moment(x.pDatCre).format('h:mma')} </span>
+            </Item>
+            <Item>
+              <span> DELIVERY-APP </span>
+            </Item>
+            <Item>
+              <span> {x.payMethodPState === 1 ? 'EFECTIVO' : 'TRANSFERENCIA'}</span>
+            </Item>
+            <Item>
+              <span> $ {numberFormat(x.totalProductsPrice)} </span>
+            </Item>
+            <Item>
+              {x.pSState === 1 ? 'Aceptado' : newLocal}
+            </Item>
+            <Item>
+              <Button onClick={() => {return handleOpenModal(x)}}>
                             Ver detalles
-            </Button>
-          </Item>
-        </Section>})}}
+              </Button>
+            </Item>
+          </Section>})}}
         titles={[
           { name: 'Cancelado por', key: '', justify: 'flex-center', width: '1fr' },
           { name: 'Pedido', key: 'bDescription', justify: 'flex-center', width: '1fr' },
@@ -120,6 +125,13 @@ export const ListPedidos = ({
       />
     </div>
   )
+}
+
+ListPedidos.propTypes = {
+  data: PropTypes.any,
+  fetchMore: PropTypes.func,
+  more: PropTypes.number,
+  setMore: PropTypes.func
 }
 
 export const CheckStatus = ({ setModal, modal, dataModal }) => {
@@ -306,6 +318,12 @@ export const CheckStatus = ({ setModal, modal, dataModal }) => {
       </AwesomeModal>
     </div >
   )
+}
+
+CheckStatus.propTypes = {
+  dataModal: PropTypes.object,
+  modal: PropTypes.any,
+  setModal: PropTypes.func
 }
 export const Tooltip = styled.div`
     border-radius: 2px;

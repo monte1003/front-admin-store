@@ -23,13 +23,22 @@ export const getDeviceId = async () => {
   return visitorId
 }
 
-const errorHandler = onError(({ graphQLErrors }) => {
+export const errorHandler = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
     graphQLErrors?.length && graphQLErrors.forEach(err => {
       const { code } = err.extensions
       if (code === 'UNAUTHENTICATED' || code === 'FORBIDDEN') console.log('')
     })
   }
+})
+
+
+export const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.map(({ message, location, path }) => { return console.log(`[GraphQL error]: Message: ${message}, Location: ${location}, Path: ${path}`) }
+    )
+
+  if (networkError) console.log(`[Network error]: ${networkError}`)
 })
 
 const authLink = () => {
@@ -158,15 +167,6 @@ if(!unsubscribed) {
 // console.log(lol)
 // eslint-disable-next-line
 function createApolloClient() {
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors)
-      graphQLErrors.map(({ message, location, path }) => { return console.log(`[GraphQL error]: Message: ${message}, Location: ${location}, Path: ${path}`) }
-      )
-
-    if (networkError) console.log(`[Network error]: ${networkError}`)
-  })
-
-  const ssrMode = typeof window === 'undefined' // Disables forceFetch on the server (so queries are only run once)
   const getLink = async (operation) => {
     // await splitLink({ query: operation.query })
     const headers = await authLink()
@@ -214,18 +214,24 @@ function createApolloClient() {
       errorPolicy: 'all'
     }
   }
-  const link = ssrMode ? ApolloLink.split(() => { return true }, operation => { return getLink(operation) }
-  ) : !ssrMode
-    ? split((operation) => {
-      const definition = getMainDefinition(operation.query)
-      return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
-    }, wsLink,
-    ApolloLink.split(() => { return true }, operation => { return getLink(operation) },
-      errorLink
-    ))
-    : ApolloLink.split(() => { return true }, operation => { return getLink(operation) },
-      errorLink
+  const ssrMode = typeof window === 'undefined' // Disables forceFetch on the server (so queries are only run once)
+
+  let link
+
+  if (ssrMode) {
+    link = ApolloLink.split(() => {return true}, getLink)
+  } else {
+    const subscriptionLink = split(
+      (operation) => {
+        const definition = getMainDefinition(operation.query)
+        return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
+      },
+      wsLink,
+      ApolloLink.split(() => {return true}, getLink)
     )
+    link = ApolloLink.split(() => {return true}, subscriptionLink)
+  }
+
   return new ApolloClient({
     connectToDevTools: true,
     ssrMode,

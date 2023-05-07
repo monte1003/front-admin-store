@@ -106,21 +106,41 @@ export const deleteCatOfProducts = async (_, { idPc, pState }) => {
 
   }
 }
-export const deleteCatFinalOfProducts = async (_, { idPc }) => {
+export const deleteCatFinalOfProducts = async (_, { idPc, withProduct }) => {
   try {
-    await catProducts.destroy({ where: { carProId: deCode(idPc) } })
-    return {
-      success: true,
-      message: 'Borrado'
-    }
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Error'
+    const decodedId = deCode(idPc)
+
+    // Buscar la categoría a borrar
+    const category = await catProducts.findOne({ where: { carProId: decodedId } })
+
+    if (!category) {
+      return {
+        success: false,
+        message: 'La categoría no existe'
+      }
     }
 
+    // Borrar la categoría y los productos asociados en cascada
+    // await category.destroy({ cascade: true });
+    if (withProduct) {
+      await category.destroy({ cascade: true, where: { carProId: decodedId } })
+    } else {
+      await category.destroy({ where: { carProId: decodedId } })
+    }
+
+    return {
+      success: true,
+      message: 'Borrado exitoso'
+    }
+  } catch (error) {
+    console.log("🚀 ~ file: catOfProduct.js:136 ~ deleteCatFinalOfProducts ~ error:", error)
+    return {
+      success: false,
+      message: 'Error al borrar la categoría'
+    }
   }
 }
+
 // export const getCatProductsWithProduct = async (root, args, context) => {
 //   const { search, min, max, gender, desc, categories } = args
 //   linkBelongsTo(catProducts, productModelFood, 'pId', 'carProId')

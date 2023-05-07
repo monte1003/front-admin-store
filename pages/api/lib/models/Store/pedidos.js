@@ -21,8 +21,6 @@ const pedidosModel = sequelize.define('storepedidos', {
   ShoppingCard: {
     type: INTEGER,
     allowNull: true,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
     references: {
       model: ShoppingCard,
       key: 'ShoppingCard'

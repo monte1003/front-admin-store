@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-undef */
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
-import { ApolloServer } from 'apollo-server-micro'
+import { ApolloServer, AuthenticationError, UserInputError } from 'apollo-server-micro'
 import { getIronSession } from 'iron-session'
 import jwt from 'jsonwebtoken'
 import Cors from 'micro-cors'
@@ -12,7 +12,7 @@ import { getUserFromToken } from './auth'
 import { requestDidStartPlugin } from './lib/hooks/apollo-plugin'
 import httpHeadersPlugin from './lib/hooks/apollo-plugin-http-header'
 import { parseCookies } from './lib/utils'
-
+import { GraphQLError } from 'graphql'
 const corsMultipleAllowOrigin = (options = {}) => {
   const { origin: optionsOrigin } = options || {}
   const multiple = Array.isArray(optionsOrigin)
@@ -39,6 +39,16 @@ let serverCleanup = null
 
 const apolloServer = new ApolloServer({
   resolvers,
+  formatError: (error) => {
+    if (error.originalError instanceof UserInputError) {
+      return new Error('Entrada de usuario inválida')
+    }
+
+    if (error.originalError instanceof AuthenticationError) {
+      return new Error('No autenticado')
+    }
+    return error
+  },
   typeDefs,
   introspection: true,
   cache: 'bounded',
@@ -55,44 +65,49 @@ const apolloServer = new ApolloServer({
     },
     requestDidStartPlugin],
   context: (async ({ req, res, next, connection }) => {
-    const session = await getIronSession(req, res, {
-      password: process.env.SESSION_KEY,
-      cookieName: process.env.SESSION_NAME,
-      cookieOptions: {
-        maxAge: 60 * 60 * 8, // 8 hours,
-        secure: process.env.NODE_ENV === 'production'
+    try {
+      const session = await getIronSession(req, res, {
+        password: process.env.SESSION_KEY,
+        cookieName: process.env.SESSION_NAME,
+        cookieOptions: {
+          maxAge: 60 * 60 * 8, // 8 hours,
+          secure: process.env.NODE_ENV === 'production'
+        }
+      })
+      const { user } = session || {}
+      const { token } = user || {}
+      parseCookies(req)
+      res.setHeader('x-token-access', `${token}`)
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH')
+      let tokenClient
+      let User = {}
+      if (connection) {
+        // check connection for metadata
+        return connection.context
       }
-    })
-    const { user } = session || {}
-    const { token } = user || {}
-    parseCookies(req)
-    res.setHeader('x-token-access', `${token}`)
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH')
-    let tokenClient
-    let User = {}
-    if (connection) {
-      // check connection for metadata
-      return connection.context
+      //  Initialize Array empty
+      const setCookies = []
+      const setHeaders = []
+      tokenClient = req.headers.authorization?.split(' ')[1]
+      const restaurant = req.headers.restaurant || {}
+      // eslint-disable-next-line
+      const { error, message } = await getUserFromToken(tokenClient)
+      const excluded = ['/login', '/forgotpassword', '/register']
+      if (excluded.indexOf(req.session) > -1) return next()
+      if (token) {
+        User = await jwt.verify(token, process.env.AUTHO_USER_KEY)
+        return { req, setCookies: setCookies || [], setHeaders: setHeaders || [], User: User || {}, restaurant: restaurant || {} }
+      } else if (tokenClient) {
+        User = await jwt.verify(tokenClient, process.env.AUTHO_USER_KEY)
+        return { req, setCookies: setCookies || [], setHeaders: setHeaders || [], User: User || {}, restaurant: restaurant || {} }
+      }
+      return { req, setCookies: [], setHeaders: [], User: User || {}, restaurant: restaurant || {} }
+    } catch (error) {
+      if (error.message === 'jwt expired') throw new GraphQLError(error.message, {
+        extensions: { code: 'FORBIDDEN', message:  { message: 'Token expired' } }
+      })
     }
-    //  Initialize Array empty
-    const setCookies = []
-    const setHeaders = []
-    tokenClient = req.headers.authorization?.split(' ')[1]
-    const restaurant = req.headers.restaurant || {}
-    // eslint-disable-next-line
-    const { error } = await getUserFromToken(token)
-
-    const excluded = ['/login', '/forgotpassword', '/register', '/teams/invite/[id]', '/teams/manage/[id]']
-    if (excluded.indexOf(req.session) > -1) return next()
-    if (token) {
-      User = await jwt.verify(token, process.env.AUTHO_USER_KEY)
-      return { req, setCookies: setCookies || [], setHeaders: setHeaders || [], User: User || {}, restaurant: restaurant || {} }
-    } else if (tokenClient) {
-      User = await jwt.verify(tokenClient, process.env.AUTHO_USER_KEY)
-      return { req, setCookies: setCookies || [], setHeaders: setHeaders || [], User: User || {}, restaurant: restaurant || {} }
-    }
-    return { req, setCookies: [], setHeaders: [], User: User || {}, restaurant: restaurant || {} }
   }),
   subscriptions: {
     path: '/api/graphqlSubscriptions',

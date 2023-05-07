@@ -41,7 +41,7 @@ import { SuccessSaleModal } from './Success'
 import { generatePdfDocumentInvoice } from './PdfStatement'
 import ErrorBoundary from 'components/Error'
 import { useFormatDate } from './../../../pkg-hook/src/hooks/useFormatDate/index'
-import { useStore } from 'hooks/useStore'
+import { useStore } from 'npm-pkg-hook'
 import InputHooks from 'components/InputHooks/InputHooks'
 
 const GenerateSales = () => {
