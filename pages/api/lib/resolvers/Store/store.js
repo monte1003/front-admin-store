@@ -19,7 +19,7 @@ import StatusOrderModel from '../../models/Store/statusPedidoFinal'
 import SaleDataExtra from './../../models/Store/sales/saleExtraProduct'
 import ExtProductFoodOptional from '../../models/Store/sales/saleExtProductFoodOptional'
 import ExtProductFoodSubOptional from '../../models/Store/sales/saleExtProductFoodSubOptional'
-import StoreProductModelFoodCopy from '../../models/product/storeproductFoodCopy'
+import StoreProductModelFoodCopy from '../../models/product/storeProductFoodCopy'
 
 // eslint-disable-next-line
 export const newRegisterStore = async (_, { input }, ctx) => {
