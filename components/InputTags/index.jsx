@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useRef } from 'react'
 import styled, { css } from 'styled-components'
 import { SEGColor, SFVColor } from '../../public/colors'
@@ -46,6 +47,17 @@ export const InputTags = ({ width, disabled, setTags, tags, ...props }) => {
       </InputTag>
     </Box>
   )
+}
+
+InputTags.propTypes = {
+  disabled: PropTypes.any,
+  setTags: PropTypes.func,
+  selectedTags: PropTypes.func,
+  tags: PropTypes.shape({
+    filter: PropTypes.func,
+    map: PropTypes.func
+  }),
+  width: PropTypes.any
 }
 const Tags = styled.div`
   border: .5px solid ${`${SEGColor}69`};

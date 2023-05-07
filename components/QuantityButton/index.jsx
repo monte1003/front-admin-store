@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import {
   ButtonDecrement,
@@ -76,4 +77,17 @@ export const QuantityButton = ({
       </ContainerQuantity>
     </div>
   )
+}
+
+QuantityButton.propTypes = {
+  border: PropTypes.any,
+  handleDecrement: PropTypes.func,
+  handleIncrement: PropTypes.func,
+  label: PropTypes.string,
+  padding: PropTypes.any,
+  quantity: PropTypes.number,
+  showNegativeButton: PropTypes.bool,
+  showPositiveButton: PropTypes.bool,
+  validationZero: PropTypes.bool,
+  width: PropTypes.any
 }

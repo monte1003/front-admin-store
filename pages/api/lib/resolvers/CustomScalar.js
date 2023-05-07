@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { GraphQLScalarType } from 'graphql'
 
 const dateTimeScalar = new GraphQLScalarType({

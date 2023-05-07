@@ -1,9 +1,22 @@
 import PropTypes from 'prop-types'
-import { useCallback, useEffect, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useState
+} from 'react'
 import { IconCancel } from '../../public/icons'
 import { RippleButton } from '../Ripple'
 import { BUTTONS_TEXT, MODAL_SIZES } from './constanst'
-import { BtnClose, Container, Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, Wrapper } from './styled'
+import {
+  BtnClose,
+  Container,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+  Wrapper
+} from './styled'
 export const AwesomeModal = ({
   title,
   size = MODAL_SIZES.medium,
@@ -187,11 +200,13 @@ AwesomeModal.propTypes = {
   onHide: PropTypes.func,
   openLateral: PropTypes.any,
   padding: PropTypes.any,
-  show: PropTypes.any,
+  question: PropTypes.any,
+  show: PropTypes.bool,
   size: PropTypes.any,
+  sizeIconClose: PropTypes.string,
   submit: PropTypes.bool,
   timeOut: PropTypes.number,
-  title: PropTypes.any,
+  title: PropTypes.string,
   useScroll: PropTypes.bool,
   zIndex: PropTypes.any
 }

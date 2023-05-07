@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable no-console */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cookie = require('cookie')

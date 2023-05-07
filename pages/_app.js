@@ -6,7 +6,6 @@ import ErrorBoundary from 'components/Error'
 import Noscript from 'components/Noscript'
 import PropTypes from 'prop-types'
 import {
-  useCallback,
   useEffect,
   useRef,
   useState
@@ -54,22 +53,7 @@ export default function App({ Component, pageProps }) {
     }
   }, [router])
   const timerId = useRef()
-  // eslint-disabled-next-line
-  const onClickLogout = useCallback(async () => {
-    await window
-      .fetch(`${process.env.URL_BASE}api/auth/logout/`, {})
-      .then(res => {
-        if (res) {
-          localStorage.removeItem('session')
-          localStorage.removeItem('usuario')
-          localStorage.removeItem('restaurant')
-          router.replace('/entrar')
-        }
-      })
-      .catch(() => {
-        return
-      })
-  }, [router])
+  // eslint-disable-next-line
   const handleMouseMove = () => {
     clearInterval(timerId.current)
     timerId.current = setInterval(() => {

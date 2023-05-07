@@ -113,6 +113,7 @@ InputHook.propTypes = {
   letters: PropTypes.any,
   name: PropTypes.any,
   numeric: PropTypes.any,
+  disabled: PropTypes.bool,
   onChange: PropTypes.func,
   pass: PropTypes.any,
   passConfirm: PropTypes.shape({

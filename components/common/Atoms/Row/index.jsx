@@ -11,6 +11,7 @@ const Row = ({ children, as='div', ...props }) => {
 }
 
 Row.propTypes = {
+  as: PropTypes.string,
   children: PropTypes.node
 }
 

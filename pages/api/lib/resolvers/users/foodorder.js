@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import StatusPedidosModel from '../../models/Store/statusPedidoFinal'
 import { deCode, getAttributes } from '../../utils/util'
 

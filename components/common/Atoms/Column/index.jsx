@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
@@ -9,7 +10,9 @@ const Column = ({ children, ...props }) => {
   )
 }
 
-Column.propTypes = {}
+Column.propTypes = {
+  children: PropTypes.any
+}
 
 
 export default Column

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { withIronSessionSsr } from 'iron-session/next'
 import dynamic from 'next/dynamic'
 import { cookie } from 'utils'
@@ -13,6 +14,11 @@ export default function HomeView({ isMobile, user }) {
   return user ? (
     <div>Logged</div>
   ) :<HOME isMobile={isMobile} />
+}
+
+HomeView.propTypes = {
+  isMobile: PropTypes.any,
+  user: PropTypes.any
 }
 
 

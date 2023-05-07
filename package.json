@@ -11,6 +11,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "echo \"message: Hola\"",
     "lint:fix": "npm run lint -- --fix",
     "build:css": "node scripts/update-export-atoms.js",
     "build:globals": "node scripts/build-tokens.js",

@@ -9,9 +9,7 @@ import {
 import connect from '../../db'
 const sequelize = connect()
 import { enCode } from '../../utils/util'
-import productModelFood from '../product/productFood'
 import Store from './Store'
-import StoreProductModelFoodCopy from '../product/storeproductFoodCopy'
 
 sequelize.sync()
 

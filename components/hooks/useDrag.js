@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 export function useDrag2(ref) {
@@ -56,7 +57,15 @@ export const useDrag = (x, y) => {
   return { move, moveTo, handelDown, handelUp, handleMove }
 }
 
-export const Draggable = ({ children, moveY = false, moveX = false, minX, minY, maxX, maxY }) => {
+export const Draggable = ({
+  children,
+  moveY = false,
+  moveX = false,
+  minX,
+  minY,
+  maxX,
+  maxY
+}) => {
   const elemRef = useRef(null)
   const dragProps = useRef()
   useEffect(() => {
@@ -135,4 +144,13 @@ export const Draggable = ({ children, moveY = false, moveX = false, minX, minY, 
       {children}
     </div >
   )
+}
+Draggable.propTypes = {
+  children: PropTypes.any,
+  maxX: PropTypes.any,
+  maxY: PropTypes.any,
+  minX: PropTypes.number,
+  minY: PropTypes.number,
+  moveX: PropTypes.bool,
+  moveY: PropTypes.bool
 }

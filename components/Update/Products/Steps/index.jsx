@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { Text } from 'pkg-components'
 import { Steps, Tabs } from '../styles'
@@ -47,4 +48,8 @@ export const HeaderSteps = ({ active }) => {
       </Tabs>
     </Steps>
   )
+}
+
+HeaderSteps.propTypes = {
+  active: PropTypes.number
 }

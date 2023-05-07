@@ -26,6 +26,13 @@ const SkeletonComponent = ({
   )
 }
 
+SkeletonComponent.propTypes = {
+  height: PropTypes.any,
+  margin: PropTypes.any,
+  numberObject: PropTypes.number,
+  width: PropTypes.string
+}
+
 export const Skeleton = React.memo(SkeletonComponent)
 
 Skeleton.propTypes = {

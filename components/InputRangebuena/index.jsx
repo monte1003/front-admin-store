@@ -14,7 +14,6 @@ const MARGIN = (THUMB_LENGTH - TRACK_HEIGHT) / 2
 // Used http://danielstern.ca/range.css to start styling then altered from there
 const Input = styled.input`
   /* THUMB */
-  -webkit-appearance: none;
   width: 100%;
   background: transparent;
   margin: ${MARGIN}px 0;
@@ -225,10 +224,17 @@ InputRange.defaultProps = {
 }
 
 InputRange.propTypes = {
-  value: PropTypes.number.isRequired,
-  min: PropTypes.number.isRequired,
+  description: PropTypes.any,
+  fraction: PropTypes.any,
+  id: PropTypes.any,
+  label: PropTypes.any,
+  margins: PropTypes.array,
   max: PropTypes.number.isRequired,
-  step: PropTypes.number.isRequired
+  min: PropTypes.number.isRequired,
+  onChange: PropTypes.func,
+  step: PropTypes.number.isRequired,
+  style: PropTypes.object,
+  value: PropTypes.number.isRequired
 }
 
 export default InputRange

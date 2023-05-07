@@ -54,5 +54,7 @@ Range.propTypes = {
   label: PropTypes.string,
   max: PropTypes.number,
   min: PropTypes.number,
-  value: PropTypes.number
+  onChange: PropTypes.func,
+  value: PropTypes.number,
+  width: PropTypes.any
 }

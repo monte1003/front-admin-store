@@ -133,7 +133,6 @@ export const deleteCatFinalOfProducts = async (_, { idPc, withProduct }) => {
       message: 'Borrado exitoso'
     }
   } catch (error) {
-    console.log("🚀 ~ file: catOfProduct.js:136 ~ deleteCatFinalOfProducts ~ error:", error)
     return {
       success: false,
       message: 'Error al borrar la categoría'

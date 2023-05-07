@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable consistent-return */
 import { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
@@ -12,9 +13,8 @@ const Portal = ({ children, selector= 'portal' }) => {
       return null
     }
     return ReactDOM.createPortal(children, dom || 'portal')
-  } 
+  }
 }
 
-Portal.propTypes = {}
 
 export default Portal

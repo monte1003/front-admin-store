@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-export const FlipCard = ({ frontChild, backChild, flipped, setFlipped, onClick }) => {
+export const FlipCard = ({
+  frontChild,
+  backChild,
+  flipped,
+  setFlipped,
+  onClick
+}) => {
   return (
     <CardContainer onClick={() => { return onClick() }}>
       <div className={`flip-card ${flipped ? 'flipped' : ''}`}>
@@ -43,6 +49,7 @@ FlipCard.propTypes = {
   backChild: PropTypes.any,
   flipped: PropTypes.any,
   frontChild: PropTypes.any,
+  onClick: PropTypes.func,
   setFlipped: PropTypes.func
 }
 

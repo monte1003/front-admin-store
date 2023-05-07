@@ -1,14 +1,15 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
 import { Placeholder } from 'pkg-components'
 import { PColor } from '@/public/colors'
 import Image from 'next/image'
 
-export const ImageItem = ({ 
-  onClick,
-  showImge,
-  src,
-  alt
+export const ImageItem = ({
+  showImge = true,
+  src = '',
+  alt = '',
+  onClick = () => { return }
 }) => {
   return (
     <Container>
@@ -32,6 +33,13 @@ export const ImageItem = ({
       }
     </Container>
   )
+}
+
+ImageItem.propTypes = {
+  alt: PropTypes.any,
+  onClick: PropTypes.any,
+  showImge: PropTypes.any,
+  src: PropTypes.any
 }
 
 const Container = styled.div`

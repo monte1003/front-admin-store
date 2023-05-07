@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { withIronSessionSsr } from 'iron-session/next'
 import AuthPassthrough from 'container/services/auth'
 import { cookie, defaultReturnObject } from 'utils'
@@ -7,6 +8,11 @@ export default function AuthPassthroughPage({ user, idStore }) {
   return (
     <AuthPassthrough idStore={idStore} user={user} />
   )
+}
+
+AuthPassthroughPage.propTypes = {
+  idStore: PropTypes.any,
+  user: PropTypes.any
 }
 
 AuthPassthroughPage.getLayout = function getLayout(page) {

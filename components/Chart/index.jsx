@@ -111,6 +111,11 @@ export const HorizontalBarChart = ({ data, options }) => {return (
   </>
 )}
 
+HorizontalBarChart.propTypes = {
+  data: PropTypes.any,
+  options: PropTypes.any
+}
+
 export const Circle = ({ data, options }) => {return (
   <>
     <div className='header'>
@@ -120,6 +125,11 @@ export const Circle = ({ data, options }) => {return (
     </div>
   </>
 )}
+
+Circle.propTypes = {
+  data: PropTypes.any,
+  options: PropTypes.any
+}
 export const DoughnutChar = ({ data, options }) => {return (
   <>
     <div className='header'>
@@ -129,6 +139,11 @@ export const DoughnutChar = ({ data, options }) => {return (
     </div>
   </>
 )}
+
+DoughnutChar.propTypes = {
+  data: PropTypes.any,
+  options: PropTypes.any
+}
 export const BarChat = ({ data, options }) => {return (
   <>
     <div className='header'>
@@ -140,5 +155,6 @@ export const BarChat = ({ data, options }) => {return (
 )}
 
 BarChat.propTypes = {
-  data: PropTypes.any
+  data: PropTypes.any,
+  options: PropTypes.any
 }

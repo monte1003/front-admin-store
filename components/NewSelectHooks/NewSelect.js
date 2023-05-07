@@ -447,22 +447,33 @@ export const InputText = styled.input`
     font-size: 12px;
 `
 NewSelect.propTypes = {
-  options: PropTypes.array,
+  accessor: PropTypes.string,
+  action: PropTypes.any,
+  beforeLabel: PropTypes.any,
+  border: PropTypes.string,
   disabled: PropTypes.bool,
-  id: (PropTypes.string || PropTypes.number).isRequired,
-  idD: (PropTypes.string || PropTypes.number),
-  name: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.number || PropTypes.string,
-  width: PropTypes.string,
-  search: PropTypes.bool,
-  title: PropTypes.string,
-  padding: PropTypes.string,
+  error: PropTypes.bool,
+  fullName: PropTypes.bool,
+  handleClickAction: PropTypes.func,
+  heightBody: PropTypes.any,
+  icon: PropTypes.any,
+  id: PropTypes.any.isRequired,
+  idD: PropTypes.any,
   margin: PropTypes.string,
   minWidth: PropTypes.string,
-  error: PropTypes.bool,
+  name: PropTypes.string.isRequired,
+  noLabel: PropTypes.any,
+  onChange: PropTypes.func.isRequired,
+  optionName: PropTypes.shape({
+    forEach: PropTypes.func
+  }),
+  options: PropTypes.array,
+  padding: PropTypes.string,
   required: PropTypes.bool,
-  accessor: PropTypes.string,
-  border: PropTypes.string,
-  fullName: PropTypes.bool
+  search: PropTypes.bool,
+  sideLabel: PropTypes.any,
+  title: PropTypes.string,
+  topTitle: PropTypes.any,
+  value: PropTypes.string,
+  width: PropTypes.string
 }

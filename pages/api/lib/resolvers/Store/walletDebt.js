@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable consistent-return */
 import Walletdebt from '../../models/Store/walletdebt'
 import walletdebtproducts from '../../models/Store/walletdebtproducts'

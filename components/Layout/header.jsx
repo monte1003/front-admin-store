@@ -2,10 +2,12 @@ import {
   useContext,
   useState
 } from 'react'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { useApolloClient } from '@apollo/client'
-import { useMobile, useTotalSales, useLogout } from 'npm-pkg-hook'
+import {
+  useMobile,
+  useTotalSales,
+  useLogout
+} from 'npm-pkg-hook'
 import { AwesomeModal } from 'components/AwesomeModal'
 import Column from 'components/common/Atoms/Column'
 import Text from 'components/common/Atoms/Text'
@@ -24,19 +26,17 @@ import {
 
 export const Header = () => {
   const [count, { loading: loadingCount }] = useTotalSales()
-  
+
   const style = useScrollHook()
   const {
     setSalesOpen,
     salesOpen,
     setAlertBox
   } = useContext(Context)
-  const [onClickLogout, { loading: load, error: err }] = useLogout({ setAlertBox })
-  const { client } = useApolloClient()
+  const [onClickLogout] = useLogout({ setAlertBox })
   const { scrollNav } = useScrollColor()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
-  const location = useRouter()
+  const [loading] = useState(false)
+  const [error] = useState(false)
   const { isMobile } = useMobile()
 
   return (

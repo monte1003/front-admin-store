@@ -1,8 +1,9 @@
+/* eslint-disable import/no-anonymous-default-export */
 import Users from '../../models/Users'
 import { deCode } from '../../utils/util'
 import Store from '../../models/Store/Store'
 import { generateToken } from '../../utils'
-import { getUserFromToken } from 'pages/api/auth'   
+import { getUserFromToken } from 'pages/api/auth'
 /**
  * New user token.
  * @param {Object} _ Not used

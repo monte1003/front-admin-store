@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { ApolloError } from 'apollo-server-micro'
 import UserLocation from '../../models/product/userLocations'
 import { deCode, getAttributes } from '../../utils/util'
@@ -48,7 +49,7 @@ export const getUserLocations = async (_root, _args, context, info) => {
     })
     return data
   } catch (e) {
-    throw ApolloError('Lo sentimos, ha ocurrido un error interno')
+    throw new ApolloError('Lo sentimos, ha ocurrido un error interno')
   }
 }
 

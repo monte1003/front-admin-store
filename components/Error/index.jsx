@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 
 class ErrorBoundary extends React.Component {
@@ -23,8 +24,6 @@ class ErrorBoundary extends React.Component {
   componentDidMount() {
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line
-      console.log(this.state.message)
-      console.log(this.state)
     }
   }
   render() {
@@ -34,5 +33,10 @@ class ErrorBoundary extends React.Component {
     }
     return this.props.children
   }
+}
+
+ErrorBoundary.propTypes = {
+  children: PropTypes.any,
+  customMessage: PropTypes.string
 }
 export default ErrorBoundary

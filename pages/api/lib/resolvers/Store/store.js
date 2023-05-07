@@ -114,7 +114,7 @@ export const registerSalesStore = async (root,
   try {
     const statusPedido = await StatusPedidosModel.findOne({
       where: { pCodeRef }
-    });
+    })
     if (statusPedido) {
       return {
         Response: {
@@ -124,13 +124,13 @@ export const registerSalesStore = async (root,
       }
     }
     if (!context.restaurant || !context.User) {
-      throw new Error('La sesión ha caducado');
+      throw new Error('La sesión ha caducado')
     }
     if (!id) {
-      throw new Error('Elija un cliente, no se pudo realizar la venta');
+      throw new Error('Elija un cliente, no se pudo realizar la venta')
     }
     if (!input || Boolean(!input?.length)) {
-      throw new Error('No se ha podido realizar la venta, no hay productos en el carrito');
+      throw new Error('No se ha podido realizar la venta, no hay productos en el carrito')
     }
     await Promise.all(input.map(async (element) => {
       const {
@@ -255,9 +255,7 @@ export const registerSalesStore = async (root,
               pDatCre: new Date(Date.now()),
               pDatMod: new Date(Date.now()),
               check: subOptional.check
-            }})).then(response => {
-              console.log(response);
-            })
+            }}))
 
           }
         }))

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable consistent-return */
 import { ApolloError } from 'apollo-server-micro'
 import CategoryProductsModel from '../../models/Categories/CategoryProducts'

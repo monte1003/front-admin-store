@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { Op } from 'sequelize'
 import Store from '../../models/Store/Store'
 import Users from '../../models/Users'

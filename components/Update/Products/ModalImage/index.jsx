@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 // import { Cropper } from 'react-cropper'
 import { AwesomeModal } from 'components/AwesomeModal'
@@ -154,4 +155,10 @@ export const ModalImage = ({
     </ContainerEditImage> */}
     </AwesomeModal>
   )
+}
+
+ModalImage.propTypes = {
+  handleOpenEditImage: PropTypes.func,
+  onChange: PropTypes.func,
+  openEditImage: PropTypes.any
 }

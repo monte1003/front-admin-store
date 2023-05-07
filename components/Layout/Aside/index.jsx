@@ -1,11 +1,9 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, {
-  useCallback,
   useContext,
   useState
 } from 'react'
-import { useApolloClient } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { useMobile, useStore, useLogout } from 'npm-pkg-hook'
 import { Button } from 'pkg-components'
@@ -38,20 +36,18 @@ import {
 
 const MemoAside = () => {
   const { isMobile } = useMobile()
-  const { client } = useApolloClient()
   const location = useRouter()
   const pathname = location.pathname === '/dashboard/[...name]'
   const {
     setShowComponentModal,
     countPedido,
     handleClick,
-    sendNotification,
     setCollapsed,
     collapsed
   } = useContext(Context)
 
   const [show, setShow] = useState(false)
-  const [onClickLogout, { loading: load, error: err }] = useLogout({ })
+  const [onClickLogout] = useLogout({ })
 
   const [dataStore, { loading }] = useStore()
   const {

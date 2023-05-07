@@ -2,7 +2,19 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-const Text = ({ text, size, align, lineHeight, padding, margin, color, font, weight, textAlign, className, ...props }) => {
+const Text = ({
+  text,
+  size,
+  align,
+  lineHeight,
+  padding,
+  margin,
+  color,
+  font,
+  weight,
+  textAlign,
+  className,
+  ...props }) => {
   return <TextView
     align={align}
     className={className}
@@ -24,6 +36,7 @@ const Text = ({ text, size, align, lineHeight, padding, margin, color, font, wei
 
 Text.propTypes = {
   align: PropTypes.any,
+  className: PropTypes.any,
   color: PropTypes.any,
   font: PropTypes.any,
   lineHeight: PropTypes.any,
@@ -31,6 +44,8 @@ Text.propTypes = {
   padding: PropTypes.any,
   size: PropTypes.any,
   text: PropTypes.any,
+  textAlign: PropTypes.any,
+  children: PropTypes.any,
   weight: PropTypes.any
 }
 export default Text

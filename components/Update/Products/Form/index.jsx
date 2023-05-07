@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { Checkbox } from 'components/Checkbox'
 import InputHooks from 'components/InputHooks/InputHooks'
 import NewSelect from 'components/NewSelectHooks/NewSelect'
@@ -90,6 +91,29 @@ const FormProduct = ({
   )
 }
 
-FormProduct.propTypes = {}
+FormProduct.propTypes = {
+  check: PropTypes.shape({
+    desc: PropTypes.any
+  }),
+  dataCategoriesProducts: PropTypes.array,
+  errors: PropTypes.shape({
+    ProDescuento: PropTypes.any,
+    ProPrice: PropTypes.any,
+    ValueDelivery: PropTypes.any,
+    carProId: PropTypes.any,
+    names: PropTypes.any
+  }),
+  handleChange: PropTypes.any,
+  handleCheckFreeShipping: PropTypes.any,
+  names: PropTypes.any,
+  setName: PropTypes.func,
+  values: PropTypes.shape({
+    ProDescription: PropTypes.any,
+    ProDescuento: PropTypes.any,
+    ProPrice: PropTypes.any,
+    ValueDelivery: PropTypes.any,
+    carProId: PropTypes.any
+  })
+}
 
 export default FormProduct
