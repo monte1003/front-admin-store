@@ -219,8 +219,8 @@ export const ExtrasProductsItems = ({
       <form onSubmit={() => { return editing && onSubmitUpdate() }} >
         <GarnishChoicesHeader onClick={() => { return editing && setModal(!modal) }}>
           <div>
-            <p className='garnish-choices__title'>Adicionales</p>
-            <p className='garnish-choices__title-desc'>Escoge las opciones.</p>
+            <p className='garnish-choices__title'>Complementos</p>
+            <p className='garnish-choices__title-desc'>Ingresa tus opciones.</p>
           </div>
           <IconMiniCheck color={NorthTexasGreen} size='15px' />
         </GarnishChoicesHeader>

@@ -1,10 +1,29 @@
 /* eslint-disable react/prop-types */
-import { Button, Tag, Text, MemoCardProductSimple } from 'pkg-components'
+import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
-import { OptionalExtraProducts } from 'container/producto/extras'
+import styled, { css } from 'styled-components'
+import {
+  Button,
+  Tag,
+  Text,
+  MemoCardProductSimple,
+  AwesomeModal
+} from 'pkg-components'
+import {
+  useGetOneProductsFood,
+  useSaveAvailableProduct,
+  useStore
+} from 'npm-pkg-hook'
 import { Context } from 'context/Context'
-import { useSetState } from '../../hooks/useState'
-import { Skeleton } from '../../Skeleton/SkeletonCard'
+import { OptionalExtraProducts } from 'container/producto/extras'
+import { ExtrasProductsItems } from 'container/producto/extras/ExtrasProductsItems'
+import { BGColor, PColor, SECColor } from '@/public/colors'
+import { Loading } from 'components/Loading'
+import { Checkbox } from 'components/Checkbox'
+import { onPulses } from 'components/animations'
+import { Skeleton } from 'components/Skeleton'
+import Portal from 'components/portal'
+import { useSetState } from 'hooks/useState'
 import FormProduct from './Form'
 import { HeaderSteps } from './Steps'
 import {
@@ -14,16 +33,7 @@ import {
   ContainerAnimation
 } from './styled'
 import { ActionStep } from './styles'
-import { useGetOneProductsFood, useSaveAvailableProduct, useStore } from 'npm-pkg-hook'
-import { useRouter } from 'next/router'
-import { ExtrasProductsItems } from 'container/producto/extras/ExtrasProductsItems'
-import { Loading } from 'components/Loading'
-import { BGColor, PColor, SECColor } from '@/public/colors'
-import { Checkbox } from 'components/Checkbox'
-import styled, { css } from 'styled-components'
-import { onPulses } from 'components/animations'
-import { AwesomeModal } from 'pkg-components'
-import Portal from 'components/portal'
+
 
 export const FoodComponent = ({
   alt,
@@ -57,6 +67,7 @@ export const FoodComponent = ({
   state: grid,
   pId,
   values,
+  handleCheck,
   ...props
 }) => {
   const {
@@ -101,7 +112,7 @@ export const FoodComponent = ({
     errors,
     ...props
   }
-  // eslint-disable-next-line
+
   const propsListProducts = {
     onClickClear,
     data,
@@ -234,14 +245,14 @@ export const FoodComponent = ({
       <Portal selector='portal'>
         <AwesomeModal
           backdrop='static'
-          btnCancel={true}
-          btnConfirm={true}
-          footer={true}
+          btnCancel
+          btnConfirm
+          footer
           header={false}
           height='20vh'
           onCancel={() => { return false }}
-          onConfirm={() => { return cancelAll() }}
-          onHide={() => { return handleOpenCloseAlert() }}
+          onConfirm={cancelAll}
+          onHide={handleOpenCloseAlert}
           padding='20px'
           question={false}
           show={openAlertClose}
@@ -266,23 +277,17 @@ export const FoodComponent = ({
         <ContainerAnimation active={active === 0}>
           {active === 0 &&
           <>
-            <Card state={'50%'}>
+            <Card state={'30%'}>
               <FormProduct {...propsForm} />
             </Card>
-            <Card state={'50%'}>
-              <MemoCardProductSimple
-                {...values}
-                alt={alt}
-                fileInputRef={fileInputRef}
-                height={'500px'}
-                onFileInputChange={onFileInputChange}
-                onTargetClick={onTargetClick}
-                pName={names}
-                src={src}
-                tag={tags}
-              />
-            </Card>
-            <Card>
+            <Card state='20%'>
+              <Text
+                fontSize='16px'
+                fontWeight='bold'
+                margin='10px 0'
+              >
+                Tags:
+              </Text>
               {dataTags.map((tag) => {
                 return(
                   <Button
@@ -297,6 +302,26 @@ export const FoodComponent = ({
                   </Button>
                 )
               })}
+            </Card>
+            <Card state={'20%'} >
+              <Text
+                fontSize='16px'
+                fontWeight='bold'
+                margin='10px 0'
+              >
+                Vista previa
+              </Text>
+              <MemoCardProductSimple
+                {...values}
+                alt={alt}
+                fileInputRef={fileInputRef}
+                height={'500px'}
+                onFileInputChange={onFileInputChange}
+                onTargetClick={onTargetClick}
+                pName={names}
+                src={src}
+                tag={tags}
+              />
             </Card>
           </>
           }
@@ -340,21 +365,23 @@ export const FoodComponent = ({
                 </Text>
                 <Checkbox
                   checked={check.availability}
-                  disabled={check.noAvailability}
                   id='checkboxAvailability'
                   label='Siempre disponible'
                   name='availability'
-                  onChange={(e) =>{ return handleCheckFreeShipping(e, true) }}
-                  value={check.availability}
+                  onChange={(e) => {
+                    handleCheck(e)
+                    if(check.noAvailability)document.getElementById('checkbox-checkboxNoAvailability').click()
+                  }}
                 />
                 <Checkbox
                   checked={check.noAvailability}
-                  disabled={check.availability}
                   id='checkboxNoAvailability'
                   label='Disponible en horarios específicos'
                   name='noAvailability'
-                  onChange={(e) =>{ return handleCheckFreeShipping(e, true) }}
-                  value={check.noAvailability}
+                  onChange={(e) => {
+                    handleCheck(e)
+                    if(check.availability) document.getElementById('checkbox-checkboxAvailability').click()
+                  }}
                 />
                 {check.noAvailability &&
                 <>

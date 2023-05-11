@@ -45,7 +45,7 @@ export const CreateExtra = ({
         show={modal}
         size='900px'
         sizeIconClose='30px'
-        title='Añade adicionales'
+        title='Añade Complementos'
         zIndex='9999'
       >
         <ContentModal>
@@ -109,17 +109,15 @@ export const CreateExtra = ({
               fontFamily='PFont-Light'
               fontWeight='300'
               margin='0px'
-              onClick={() => { return CleanLines() }}
+              onClick={CleanLines}
               padding='7px 10px'
               primary
               size='large'
               type='button'
               width='100px'
-            >
-              <IconDelete color={EColor} size='25px' />
-            </Button>
+            />
             <QuantityButton
-              handleIncrement={() => { return handleAdd() }}
+              handleIncrement={handleAdd}
               quantity={LineItems?.Lines?.length}
               showNegativeButton
               style={{ margin: '0 20px 0 0', width: '60%' }}

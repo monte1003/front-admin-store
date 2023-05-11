@@ -1,33 +1,27 @@
-import PropTypes from 'prop-types'
-import { BGColor, PColor } from 'public/colors'
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
+import { BGColor, PColor } from 'public/colors'
+
 export const Loading = () => {
   return (
     <Container>
-      {/* <LsRipple>
-        <div></div>
-        <div></div>
-      </LsRipple> */}
       <span className='loader'></span>
     </Container>
   )
 }
-export function LoadingClosed({ error }) {
+
+export function LoadingClosed({ error }: { error: boolean }) {
   return (
     <Container>
       <Modal>
         <h3>{error ? 'A ocurrido un error' : 'Cerrando session'}</h3>
         <h2>{error ? ':(' : 'Tienes que regresar'}</h2>
-        {/* <LoadingBabel color={PColor} size={'1090px'} speed={1} /> */}
       </Modal>
     </Container>
   )
 }
 
-LoadingClosed.propTypes = {
-  error: PropTypes.bool
-}
+
 const Modal = styled.div`
   display: grid;
   border: 1px solid #ccc;
@@ -97,6 +91,7 @@ export const SpinnerColor = () => {
     </Container>
   )
 }
+
 export const SpinnerColorJust = () => {
   return (
     <Container>
