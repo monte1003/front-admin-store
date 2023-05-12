@@ -25,10 +25,10 @@ COPY --from=build /app/nginx/default.conf /etc/nginx/sites-available/default
 COPY --from=build /build/package*.json ./
 COPY --from=build /build/.next ./.next
 COPY --from=build /build/public ./public
-COPY --from=build /build/.npmrc .npmrc
+# COPY --from=build /build/.npmrc .npmrc
 RUN npm install -g npm
 RUN npm install next
-RUN rm -f .npmrc
+# RUN rm -f .npmrc
 
 EXPOSE 3000
 CMD npm run start

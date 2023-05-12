@@ -1,83 +1,73 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable consistent-return */
 import PropTypes from 'prop-types'
-import React,
-{
+import React, {
   useContext,
   useEffect,
   useRef,
   useState
 } from 'react'
+import { OptionalExtraProducts } from 'container/producto/extras'
 import styled, { css } from 'styled-components'
-import { InputHooks } from 'pkg-components'
-import { useFormTools } from 'npm-pkg-hook'
-import { EDIT_PRODUCT, GET_ONE_PRODUCTS_FOOD } from '../queries'
 import {
-  GET_EXTRAS_PRODUCT_FOOD_OPTIONAL,
-  UPDATE_IMAGE_PRODUCT_FOOD,
-  UPDATE_PRODUCT_FOOD
-} from 'container/update/Products/queries'
-import { GET_ALL_CATEGORIES_WITH_PRODUCT, GET_ALL_EXTRA_PRODUCT } from 'container/dashboard/queries'
-import { useLazyQuery, useMutation } from '@apollo/client'
+  MemoCardProductSimple,
+  Text,
+  Button,
+  AwesomeModal
+} from 'pkg-components'
 import {
-  numberFormat,
-  updateCache,
-  validationImg
-} from 'utils'
-import { RippleButton } from 'components/Ripple'
+  useFormTools,
+  useGetOneProductsFood,
+  useEditProduct
+} from 'npm-pkg-hook'
+import { GET_ONE_PRODUCTS_FOOD } from '../queries'
+import { UPDATE_PRODUCT_FOOD } from 'container/update/Products/queries'
+import { GET_ALL_CATEGORIES_WITH_PRODUCT } from 'container/dashboard/queries'
+import { useMutation } from '@apollo/client'
+import { updateCache } from 'utils'
 import {
-  APColor,
   BColor,
-  BGColor,
-  DarkSilver,
-  PColor
+  BGColor
 } from 'public/colors'
-import { IconDelete, IconPay } from 'public/icons'
-import Link from 'next/link'
-import { CLIENT_URL_BASE } from 'apollo/urls'
-import { DisRestaurant } from 'container/PedidosStore/ListPedidos'
 import { GET_ALL_PRODUCT_STORE } from 'container/dashboard/queriesStore'
 import { Context } from 'context/Context'
 import { useRouter } from 'next/router'
 import { ExtrasProductsItems } from '../extras/ExtrasProductsItems'
+import { Form } from './Form'
+import { Loading } from 'components/Loading'
 
 export const ProductEdit = ({ id }) => {
   // STATES
   const [handleChange, handleSubmit, setDataValue, { dataForm, errorForm }] = useFormTools()
   const initialState = { alt: '/images/DEFAULTBANNER.png', src: '/images/DEFAULTBANNER.png' }
   const [modal, openModal] = useState(false)
+  const [showDessert, setShowDessert] = useState(false)
   const { setAlertBox } = useContext(Context)
   const [{ alt, src }, setPreviewImg] = useState(initialState)
   const router = useRouter()
-  const [image, setImage] = useState({})
   // QUERIES
-  const [productFoodsOne, { data: dataProduct, loading, error }] = useLazyQuery(GET_ONE_PRODUCTS_FOOD)
-  const [ExtProductFoodsOptionalAll, { error: errorOptional, data: dataOptional }] = useLazyQuery(GET_EXTRAS_PRODUCT_FOOD_OPTIONAL)
+  const [handleGetOneProduct,
+    {
+      loading,
+      error,
+      data: dataProduct,
+      dataExtra,
+      dataOptional
+    }
+  ] = useGetOneProductsFood()
   const [updateProductFoods] = useMutation(UPDATE_PRODUCT_FOOD)
-  const [ExtProductFoodsAll, { data: dataExtra }] = useLazyQuery(GET_ALL_EXTRA_PRODUCT)
-  const [editProductFoods] = useMutation(EDIT_PRODUCT)
-  const [setImageProducts] = useMutation(UPDATE_IMAGE_PRODUCT_FOOD, {
-    context: { clientName: 'admin-server' }
-  })
-  // EFFECTS
-  const { getStore, pCode, ProPrice, ProDescuento, ValueDelivery, ProDescription, ProImage, ProDelivery, pState } = dataProduct?.productFoodsOne || {}
+  const [editProductFoods] = useEditProduct()
+  const { getStore, pState } = dataProduct || {}
   useEffect(() => {
-    if (id) {
-      productFoodsOne({ variables: { pId: id } })
-      ExtProductFoodsOptionalAll({ variables: { pId: id } })
-      ExtProductFoodsAll({ variables: { pId: id } })
+    handleGetOneProduct({ pId: id })
+    if (dataProduct) {
       setDataValue({
-        ...dataProduct?.productFoodsOne || {}
+        ...dataProduct || {}
       })
     }
-    setDataValue({
-      ...dataProduct?.productFoodsOne || {}
-    })
-  }, [id, dataProduct, dataOptional, loading, error, errorOptional, setDataValue, productFoodsOne, ExtProductFoodsOptionalAll, ExtProductFoodsAll])
+    // eslint-disable-next-line
+  }, [id, loading, error])
   // HANDLESS
   const onFileInputChange = event => {
     const { files } = event.target
-    setImage(files[0])
     setPreviewImg(
       files.length
         ? {
@@ -87,6 +77,9 @@ export const ProductEdit = ({ id }) => {
         : initialState
     )
 
+  }
+  const onHideDessert = () => {
+    setShowDessert(false)
   }
   const handleForm = (e) => {
     e.preventDefault()
@@ -133,6 +126,7 @@ export const ProductEdit = ({ id }) => {
   const fileInputRef = useRef(null)
   const onTargetClick = e => {
     e.preventDefault()
+
     fileInputRef.current.click()
   }
   const handleDelete = () => {
@@ -165,121 +159,78 @@ export const ProductEdit = ({ id }) => {
   }
   return (
     <Container>
+      {loading && <Loading />}
       <>
-        <Card>
-          <div className='dish-card__info'>
-            <h3 className='dish-card__description'>{''}</h3>
-            <span className='description'>{ProDescription}</span>
-            <span className='description'>$ {numberFormat(ValueDelivery)} <IconPay color={PColor} size={20} /></span>
-            <RippleButton
-              margin='5px auto'
-              onClick={() => { return handleDelete() }}
-              padding='0'
-              widthButton='100%'
-            > <IconDelete color={BGColor} size={20} /></RippleButton>
-            <div className='flex-wrap'>
-              <span className='price'>$ {numberFormat(ProPrice)}</span>
-              <span className='price discount'>$ {numberFormat(ProDescuento)}</span>
-            </div>
-          </div>
-          <div className='dish-card__container-image'>
-            <img
-              alt=''
-              className='marmita-image--responsive'
-              src={ProImage}
+        <Form
+          alt={alt}
+          dataForm={dataForm}
+          errorForm={errorForm}
+          fileInputRef={fileInputRef}
+          getStore={getStore || {}}
+          handleChange={handleChange}
+          handleForm={handleForm}
+          onFileInputChange={onFileInputChange}
+          onTargetClick={onTargetClick}
+          src={src}
+        />
+        <>
+          <div>
+            <Text
+              fontSize='16px'
+              fontWeight='bold'
+              margin='10px 0'
+            >
+              Vista previa
+            </Text>
+            <MemoCardProductSimple
+              del={true}
+              edit={false}
+              handleDelete={() => { return handleDelete() }}
+              {...dataForm}
             />
           </div>
-        </Card>
-        <ExtrasProductsItems
-          dataExtra={dataExtra?.ExtProductFoodsAll || []}
-          dataOptional={dataOptional?.ExtProductFoodsOptionalAll || []}
-          modal={modal}
-          setModal={() => { return openModal(!modal) }}
-        />
+          <div>
+            <Button
+              backgroundColor='transparent'
+              color={BColor}
+              fontFamily='PFont-Light'
+              fontWeight='300'
+              label='Añadir Adicionales'
+              onClick={() => { return openModal(!modal) }}
+              ripple
+            />
+            <Button
+              fontFamily='PFont-Light'
+              fontWeight='300'
+              label='Añadir Sobremesa'
+              onClick={() => { return setShowDessert(!showDessert) }}
+            />
+            <ExtrasProductsItems
+              dataExtra={dataExtra || []}
+              dataOptional={dataOptional || []}
+              modal={modal}
+              pId={id}
+              setModal={() => { return openModal(!modal) }}
+            />
+            <AwesomeModal
+              customHeight='calc(100vh - 100px)'
+              footer={false}
+              header={true}
+              onHide={() => { return onHideDessert()}}
+              show={showDessert}
+              size='100vw'
+              zIndex='999999999'
+            >
+              <OptionalExtraProducts
+                dataOptional={dataOptional || []}
+                pId={id}
+              />
+            </AwesomeModal>
+          </div>
+
+        </>
       </>
-      <form onSubmit={(e) => { return handleForm(e) }}>
-        <InputHooks
-          error={errorForm?.pName}
-          name='pName'
-          onChange={handleChange}
-          required
-          title='Nombre del Producto'
-          value={dataForm?.pName}
-          width={'100%'}
-        />
-        <InputHooks
-          error={errorForm?.ProPrice}
-          name='ProPrice'
-          numeric
-          onChange={handleChange}
-          title='Precio'
-          value={dataForm?.ProPrice}
-          width='100%'
-        />
-        <InputHooks
-          error={errorForm?.ProDescuento}
-          name='ProDescuento'
-          numeric
-          onChange={handleChange}
-          title='Descuento'
-          value={dataForm?.ProDescuento}
-          width='100%'
-        />
-        <InputHooks
-          error={errorForm?.ValueDelivery}
-          name='ValueDelivery'
-          numeric
-          onChange={handleChange}
-          title='Costo de envio'
-          value={dataForm?.ValueDelivery}
-          width='100%'
-        />
-        <InputHooks
-          TypeTextarea={true}
-          error={errorForm?.ProDescription}
-          name='ProDescription'
-          onChange={handleChange}
-          title='Description'
-          value={dataForm?.ProDescription}
-          width='100%'
-        />
-        <div>
-          {ProDelivery === 1 ? <span>Gratis</span> : <span>{numberFormat(ValueDelivery)}</span>}
-        </div>
-        <div>
-          {pState === 1 ? <span>Activo</span> : <span>No activo</span>}
-        </div>
-        {getStore &&
-          <DisRestaurant>
-            <Link href={`${CLIENT_URL_BASE}delivery/${getStore.city.cName?.toLocaleLowerCase()}-${getStore.department.dName?.toLocaleLowerCase()}/${getStore.storeName}/${getStore.idStore}`}>
-              <a target='_blank'>
-                <span color={PColor} margin={'0 0 0 10px'} >{getStore.storeName}</span>
-              </a>
-            </Link>
-          </DisRestaurant>
-        }
-        <ContentImage >
-          <img
-            alt={alt}
-            onClick={(e) => { return onTargetClick(e) }}
-            src={src}
-          />
-          <Inputdeker
-            accept='.jpg, .png'
-            id='iFile'
-            onChange={(event) => { return onFileInputChange(event) }}
-            ref={fileInputRef}
-            type='file'
-          />
-        </ContentImage>
-        <RippleButton
-          margin='20px auto'
-          type='submit'
-          widthButton='100%'
-        >
-          Guardar y salir
-        </RippleButton>
-      </form>
+
     </Container>
   )
 }
@@ -288,17 +239,6 @@ ProductEdit.propTypes = {
   id: PropTypes.string
 }
 
-export const ContentImage = styled.div`
-    display: flex;
-    width: 100%;
-    && > img {
-        height: 300px; 
-        min-height: 300px; 
-        object-fit: cover;
-        max-height: 300px; 
-        width: 100%; 
-    }
-`
 export const InputFile = styled.input`
     /* display: none;    */
 `
@@ -344,146 +284,7 @@ export const ButtonCard = styled.button`
         `}
 }
 `
-const Card = styled.div`
-    position: relative;
-    display: grid;
-    width: 100%;
-    text-decoration: none;
-    transition: .2s;
-    overflow: hidden;
-    border: 1px solid #f2f2f2;
-    box-shadow: 0 1px 4px rgba(0,0,0,.05);
-    border-radius: 4px;
-    padding: 0;
-    /* max-width: 222px; */
-    grid-template:
-     "image" 157px 
-     "info-price"  1fr
-     "info"  1fr;
-    grid-gap: 28px;
-    height: 400px;
-    align-items: flex-end;
-    top: 0;
-    &:hover  ${ButtonCard} {
-        right: 15px;
-    }
-    &#space {
-        padding: 30px;
-        justify-content: space-between;
-    }
-    @media only screen and (min-width: 960px) {
-        cursor: pointer;
-    }
-    .dish-card__info {
-        line-height: 1.15;
-        text-rendering: optimizeLegibility;
-        font-family: SulSans,Helvetica,sans-serif;
-        font-size: 16px;
-        list-style: none;
-        cursor: pointer;
-        margin: 0;
-        display: grid;
-        grid-area: info;
-        grid-template-rows: 1fr;
-        padding: 10px 20px;
-        height: min-content;
-        /* padding: 0 20px; */
-    }
-    .dish-card__container-image {
-        line-height: 1.15;
-        text-rendering: optimizeLegibility;
-        font-family: SulSans,Helvetica,sans-serif;
-        font-size: 16px;
-        list-style: none;
-        cursor: pointer;
-        height: 157px;
-        grid-area: image;
-    width: 100%;
-    overflow: hidden;
-    height: 100%;
-    border-radius: 4px 4px 0 0;
-        box-sizing: border-box;
-        position: relative;
-    }
-    .marmita-image--responsive {
-        line-height: 1.15;
-        text-rendering: optimizeLegibility;
-        font-size: 16px;
-        list-style: none;
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        box-sizing: border-box;
-        border-style: none;
-        pointer-events: none;
-        align-self: flex-start;
-        object-fit: cover;
-        grid-area: image;
-        width: 100%;
-        border-radius: 4px 4px 0 0;
-        height: 157px;
-    }
-    .dish-card__description {
-    text-rendering: optimizeLegibility;
-    font-family: SulSans,Helvetica,sans-serif;
-    list-style: none;
-    cursor: pointer;
-    box-sizing: border-box;
-    color: #3e3e3e;
-    font-weight: 400;
-    margin-top: 0;
-    line-height: 1.5rem;
-    margin-bottom: 9px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 1.165rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    width: 85%;
-    }
-    .description {
-    text-rendering: optimizeLegibility;
-    font-family: SulSans,Helvetica,sans-serif;
-    list-style: none;
-    cursor: pointer;
-    box-sizing: border-box;
-    font-weight: lighter;
-    color: ${DarkSilver};
-    word-break: break-word;
-    font-size: .875rem;
-    line-height: 1.25rem;
-    margin-bottom: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    }
-    .price {
-    list-style: none;
-    cursor: pointer;
-    box-sizing: border-box;
-    font-size: 1rem;
-    line-height: 1.25rem;
-    font-weight: 400;
-    color: ${APColor};
-    }
-    .discount {
-    color: #3e3e3e;
-    text-decoration-line: line-through;
-    }
-    .flex-wrap {
-        display: flex;
-        justify-content: space-between;
-    }
-    .info-price {
-        display: flex;
-        padding: 0 20px;
-    }
-`
+
 const Container = styled.div`
     padding: 30px;
     display: grid;
@@ -491,11 +292,3 @@ const Container = styled.div`
     width: 90%;
     grid-gap: 19px 12px;  
 `
-const Inputdeker = styled.input`
-    padding: 30px;
-    border: 1px solid;
-    display: none;
-`
-// const InputHooks = styled.input`
-// margin: 5px;
-// `
