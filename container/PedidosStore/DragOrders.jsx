@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import PropTypes from "prop-types"
+import PropTypes from 'prop-types'
 import React, {
   useCallback,
   useContext,
@@ -16,7 +16,7 @@ import {
   PColor,
   SEGColor
 } from 'public/colors'
-import { updateCacheMod, updateMultipleCache } from 'utils'
+import { updateMultipleCache } from 'utils'
 import { useApolloClient, useMutation } from '@apollo/client'
 import { CHANGE_STATE_STORE_PEDIDO, GET_ALL_PEDIDOS } from './queries'
 import {
@@ -29,21 +29,18 @@ import {
 import { useRouter } from 'next/router'
 import { SubItems } from '../Sales/SubItems'
 import { useDrag2 } from 'hooks/useDrag'
-import { Button, ModalDetailOrder, Tag } from 'pkg-components'
+import { ModalDetailOrder, Tag } from 'pkg-components'
 import { Loading } from 'components/Loading'
 import { Bubble, ContainerDrag } from './styled'
-import { QuickFiltersButton } from './QuickFiltersButton'
-import { IconSearch } from '@/public/icons'
 
 const DragOrders = ({
-  dataReadyOrder,
-  dataRechazados,
-  dataConcludes,
-  dataProgressOrder,
-  data: dataInitial
+  dataReadyOrder = [],
+  dataRechazados = [],
+  dataConcludes = [],
+  dataProgressOrder = [],
+  data: dataInitial = []
 }) => {
   // STATES
-
   const { sendNotification } = useContext(Context)
   const orders = {
     incoming: dataInitial || [],
@@ -60,7 +57,12 @@ const DragOrders = ({
 
   const [list, setList] = useState(data)
   const [saleKey, setSaleKey] = useState([])
+  const [pCodeRef, setPCodeRef] = useState(null)
   const [saleGroup, setGroup] = useState()
+  const [elem, setElem] = useState('')
+  const client = useApolloClient()
+  const [stateNumber, setStateNumber] = useState(null)
+
   // QUERIES
   const {
     getOnePedidoStore,
@@ -98,13 +100,104 @@ const DragOrders = ({
       setSaleKey(groupByQuantity)
     }
   }, [])
+
+  const isValidCodeRef = (codeRef) => {
+    return typeof codeRef === 'string' && codeRef.trim() !== ''
+  }
+
+  const isValidState = (state) => {
+    const validStates = [1, 2, 3, 4, 5]
+    return validStates.includes(state)
+  }
+
+  const updateExistingOrders = (existingOrders, pCodeRef, pSState) => {
+    if (typeof existingOrders !== 'object' || existingOrders === null) {
+      // existingOrders no es un objeto válido
+      return existingOrders
+    }
+    if (typeof pCodeRef !== 'string' || typeof pSState !== 'number') {
+      // Los tipos de datos de pCodeRef y pSState no son los esperados
+      return existingOrders
+    }
+    if (!isValidCodeRef(pCodeRef) || !isValidState(pSState)) {
+      // Valores de entrada no válidos, devuelve existingOrders sin cambios
+      return existingOrders
+    }
+
+    const updatedExistingOrders = Object.assign({}, existingOrders)
+    const statusKeys = {
+      1: 'ACEPTA',
+      2: 'PROCESSING',
+      3: 'READY',
+      4: 'CONCLUDES',
+      5: 'RECHAZADOS'
+    }
+    const targetArray = statusKeys[pSState]
+
+    if (!targetArray || !(targetArray in existingOrders)) {
+      // El valor de pSState no está mapeado a ninguna propiedad existente en existingOrders
+      return existingOrders
+    }
+    Object.keys(updatedExistingOrders).forEach((key) => {
+      if (Array.isArray(updatedExistingOrders[key])) {
+        const oneSale = updatedExistingOrders[key].find((order) => {return order.pCodeRef === pCodeRef})
+        updatedExistingOrders[key] = updatedExistingOrders[key].filter((order) => {return order.pCodeRef !== pCodeRef})
+
+        if (oneSale !== undefined && oneSale !== null) {
+          const updatedOneSale = { ...oneSale, pSState }
+          if (!Array.isArray(updatedExistingOrders[targetArray])) {
+            updatedExistingOrders[targetArray] = []
+          }
+          updatedExistingOrders[targetArray] = [updatedOneSale, ...updatedExistingOrders[targetArray]]
+        }
+      }
+    })
+    return updatedExistingOrders
+  }
+
+
   const [changePPStatePPedido, { loading: LoadingStatusOrder }] = useMutation(CHANGE_STATE_STORE_PEDIDO, {
-    onCompleted: (res) => {
+    onError: (res) => {
       return sendNotification({
         title: 'Exitoso',
         description: res.changePPStatePPedido.message,
-        backgroundColor: 'sucess'
+        backgroundColor: 'error'
       })
+    },
+    onCompleted: (res) => {
+      if (!res || !res.changePPStatePPedido) {
+        // No se recibió una respuesta válida o no hay datos en changePPStatePPedido
+        return
+      }
+      const { success, message } = res.changePPStatePPedido
+
+      if (success) {
+        const codeRef = elem || pCodeRef
+        const pSState = stateNumber
+
+        if (!codeRef || !pSState) {
+          // Verificar que codeRef y pSState tengan valores válidos
+          return
+        }
+        client.cache.modify({
+          fields: {
+            getAllOrdersFromStore(existingOrders = []) {
+              try {
+                return updateExistingOrders(existingOrders, codeRef, pSState)
+              } catch (e) {
+                return existingOrders
+              }
+            }
+          }
+        })
+        sendNotification({
+          title: 'Exitoso',
+          description: message,
+          backgroundColor: 'success'
+        })
+        setPCodeRef(null)
+        setElem(null)
+      }
     }
   })
   // EFFECTS
@@ -120,7 +213,6 @@ const DragOrders = ({
   const dragNode = useRef()
   // HANDLESS
   const [position, setPosition] = useState(undefined)
-  const [elem, setElem] = useState('')
 
   const handleDragStart = (e, groupIndex, itemIndex, item) => {
     const params = {
@@ -234,13 +326,14 @@ const DragOrders = ({
     setOpenModalDetails(false)
     onClose()
   }
-  const client = useApolloClient()
-
   const HandleChangeState = (stateNumber, pCodeRef) => {
+    setPCodeRef(pCodeRef)
+    setStateNumber(stateNumber)
     changePPStatePPedido({
       variables: {
         pPStateP: stateNumber,
-        pCodeRef: pCodeRef
+        pCodeRef: pCodeRef,
+        pDatMod: new Date()
       },
       update: async (cache, { data: { getAllPedidoStoreFinal } }) => {
         const updatedData = {
@@ -269,7 +362,6 @@ const DragOrders = ({
     dataExtra: [],
     dataOptional: []
   })
-  console.log(dataOption)
   /**
  * Description
  * @param {any} _pid
@@ -329,18 +421,13 @@ const DragOrders = ({
     dataOptional: dataOption.dataOptional
   }
   function pushPosition() {
+    setPCodeRef(elem)
     changePPStatePPedido({
       variables: {
         pPStateP: position,
         pCodeRef: elem,
         pDatMod: new Date()
-      },update: (cache, { data: { getAllPedidoStoreFinal } }) => {return updateCacheMod({
-        cache,
-        type: 2,
-        query: GET_ALL_PEDIDOS,
-        nameFun: 'getAllPedidoStoreFinal',
-        dataNew: getAllPedidoStoreFinal
-      })}
+      }
     })
   }
 
@@ -440,36 +527,7 @@ const DragOrders = ({
         />
       }
       <SubItems {...modalItems} />
-      <div className='quick-filters' style={{ display: 'flex' }}>
-        <div className='search-container'>
-          <input
-            className='search-input'
-            onChange={handleInputChange}
-            placeholder='Buscar ordenes'
-            type='text'
-            value={filterValue}
-          />
-          <IconSearch
-            className='search-icon'
-            color={PColor}
-            size={20}
-          />
-        </div>
-        <QuickFiltersButton
-          onClick={() => {
-            // handleFilter()
-          }}
-        />
-        <Button
-          borderRadius='0'
-          onClick={() => {
-            setFilterValue('')
-            setList(data)
-          }}
-        >
-          Borrar filtro
-        </Button>
-      </div>
+      
 
       <Column
         alignItems='stretch'
@@ -568,7 +626,7 @@ const DragOrders = ({
                       <Column>
                         <Text fontSize='10px' >{item?.pCodeRef}</Text>
                       </Column>
-                      <Bubble color={color[item.pSState]}>
+                      <Bubble color={color[item?.pSState]}>
                         <span className='bubble-outer-dot'>
                           <span className='bubble-inner-dot'></span>
                         </span>

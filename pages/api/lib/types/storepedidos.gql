@@ -103,11 +103,20 @@ type TypeInputSalesChannel {
     delivery: Int,
     TOTAL: Int,
 }
+
+type StorePedidosFromPSState {
+  ACEPTA: [StorePedidos]
+  PROCESSING: [StorePedidos]
+  READY: [StorePedidos]
+  CONCLUDES: [StorePedidos]
+  RECHAZADOS: [StorePedidos]
+}
 type Query {
 """Response for find one Store"""
   getOnePedidoStore(pCodeRef: String, StoreName: String, idStore: ID): StorePedidos
   getAllPedidoStore(StoreName: String, idStore: ID): [StorePedidos]
   getAllPedidoStoreFinal(idStore: ID, cId: ID dId: ID ctId: ID search: String min: Int fromDate: DateTime toDate: DateTime max: Int, statusOrder: Int): [StorePedidos]
+  getAllOrdersFromStore(idStore: ID, cId: ID dId: ID ctId: ID search: String min: Int fromDate: DateTime toDate: DateTime max: Int, statusOrder: Int): StorePedidosFromPSState
   getAllSalesStore(idStore: ID, pId: ID cId: ID dId: ID ctId: ID search: String min: Int fromDate: DateTime toDate: DateTime max: Int): [StorePedidos]
   getAllSalesStoreTotal(idStore: ID, pId: ID cId: ID dId: ID ctId: ID search: String min: Int fromDate: DateTime toDate: DateTime max: Int, channel: Int): TypeInputSalesChannel
   getAllSalesStoreStatistic(idStore: ID, pId: ID cId: ID dId: ID ctId: ID search: String min: Int fromDate: DateTime toDate: DateTime max: Int): [StorePedidos]

@@ -5,6 +5,42 @@ export const Container = styled.div`
     width: 100%;
     /* max-width: 1366px; */
     margin: 0 auto;
+    .search-icon {
+  margin-left: 8px;
+  fill: #555;
+}
+    .form-container-orders {
+      display: flex;
+    }
+      .quick-filters {
+        align-items: center;
+        display: flex;
+        height: 110px;
+        justify-content: start;
+        margin-bottom: 20px;
+        max-width: 100%;
+        overflow-x: auto;
+        padding:0 0 20px 34px;
+        width: 100%;
+  }
+  .search-container {
+    display: flex;
+    width: min-content;
+    align-items: center;
+    border: 1px solid #DBDBDB;
+    padding: 3px;
+}
+
+.search-input {
+  flex: 1;
+  height: 40px;
+  border-radius: 4px;
+  border: none;
+  padding: 8px 12px;
+  font-size: 16px;
+}
+
+
 `
 export const CardPedido = styled.div`
     box-shadow: 1px 1px 11px 0px #cccccc29;
@@ -78,32 +114,7 @@ const pulse = keyframes`
 
 
 export const ContainerDrag = styled.div`
-  .quick-filters {
-    display: flex;
-    margin-bottom: 20px;
-    padding:0 0 20px 34px;
-  }
-  .search-container {
-    display: flex;
-    width: min-content;
-    align-items: center;
-    border: 1px solid #DBDBDB;
-    padding: 3px;
-}
 
-.search-input {
-  flex: 1;
-  height: 40px;
-  border-radius: 4px;
-  border: none;
-  padding: 8px 12px;
-  font-size: 16px;
-}
-
-.search-icon {
-  margin-left: 8px;
-  fill: #555;
-}
 `
 export const Bubble = styled.div`
   display: block;

@@ -55,6 +55,7 @@ export const FormFilterSales = ({
 FormFilterSales.propTypes = {
   handleChangeFilter: PropTypes.any,
   onChangeInput: PropTypes.any,
+  handleCleanFilter: PropTypes.any,
   search: PropTypes.any,
   valuesDates: PropTypes.shape({
     fromDate: PropTypes.any,

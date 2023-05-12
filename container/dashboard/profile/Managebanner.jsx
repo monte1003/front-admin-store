@@ -1,11 +1,8 @@
 
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Skeleton } from 'components/Skeleton/index'
 import Image from 'next/image'
 import {
-  useBanner, 
+  useBanner,
   useImageStore,
   useSchedule,
   useSchedules,
@@ -19,11 +16,13 @@ import {
   IconPromo
 } from 'public/icons'
 import React, {
-  memo, 
+  memo,
+  useContext,
   useEffect,
   useRef,
   useState
 } from 'react'
+import { Context } from './../../../context/Context'
 import {
   ActionName,
   ButtonCard,
@@ -34,6 +33,7 @@ import {
 
 const Banner = ({ isMobile }) => {
   // STATES
+  const { sendNotification } = useContext(Context)
   const [day, setDay] = useState()
   const [Open, setOpen] = useState('')
   const [openNow, setOpenNow] = useState(false)
@@ -50,7 +50,7 @@ const Banner = ({ isMobile }) => {
     onTargetClickLogo,
     src,
     srcLogo
-  } = useImageStore(data?.idStore)
+  } = useImageStore({ idStore: data?.idStore, sendNotification })
   const [banner, { loading: loadBanner }] = useBanner()
   const [dataSchedule, { loading }] = useSchedule({ day: day })
   const [dataScheduleTow] = useSchedule({ day: day >= 6 ? 0 : day })

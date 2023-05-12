@@ -1,103 +1,107 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { LocationName } from 'components/hooks/useLocationName'
+import { InputHooks, Button, PColor, ErrorBoundary } from 'pkg-components'
 import { Container } from './styled'
-import { useOrders } from 'hooks/useOrders'
+import { useFormTools,useFormatDate, useStore, useOrdersFromStore } from 'npm-pkg-hook'
 import DragOrders from './DragOrders'
+import { QuickFiltersButton } from './QuickFiltersButton'
+import { IconSearch } from '../../public/icons'
+import { Loading } from './../../components/Loading/index'
 
 const PedidosStore = () => {
-  // STATES
-  const ACEPTA_STATUS_ORDER = 0
-  const PROCESSING_STATUS_ORDER = 2
-  const READY_STATUS_ORDER = 3
-  const CONCLUDES_STATUS_ORDER = 4
-  const RECHAZADOS_STATUS_ORDER = 5
+  const useFormAndStore = () => {
+    const [handleChange, _handleSubmit, setDataValue, { dataForm, errorForm }] = useFormTools()
+    const [dataStore] = useStore()
+    const { createdAt } = dataStore || {}
+    const { yearMonthDay } = useFormatDate({ date: createdAt })
 
-  const [data] = useOrders({
-    statusOrder: ACEPTA_STATUS_ORDER
-  })
+    return { handleChange, dataForm, errorForm, yearMonthDay, setDataValue }
+  }
 
-  const [dataProgressOrder] = useOrders({
-    statusOrder: PROCESSING_STATUS_ORDER
-  })
-  const [dataReadyOrder] = useOrders({
-    statusOrder: READY_STATUS_ORDER
-  })
-  const [dataConcludes] = useOrders({
-    statusOrder: CONCLUDES_STATUS_ORDER
-  })
-  const [dataRechazados] = useOrders({
-    statusOrder: RECHAZADOS_STATUS_ORDER
-  })
+  const useOrderData = ({ fromDate, toDate, search }) => {
+    const [data, { loading, error }] = useOrdersFromStore({ fromDate, toDate, search })
 
+    return [data, { loading, error }]
+  }
+  const { dataForm, yearMonthDay, handleChange, setDataValue } = useFormAndStore()
+  const [valuesDates, setValuesDates] = useState({ fromDate: yearMonthDay, toDate: '' })
+  const { fromDate, toDate } = valuesDates
+
+  const [data, { loading, error }] = useOrderData({ fromDate: fromDate, toDate: toDate, search: dataForm.search })
+
+  const onChangeInput = (e) => {
+    setValuesDates({ ...valuesDates, [e.target.name]: e.target.value })
+  }
+  if (error) return <ErrorBoundary />
   return (
     <div>
+      {loading && <Loading />}
       <Container>
         <LocationName />
-        <DragOrders
-          data={data}
-          dataConcludes={dataConcludes}
-          dataProgressOrder={dataProgressOrder}
-          dataReadyOrder={dataReadyOrder}
-          dataRechazados={dataRechazados}
-        />
-        {/* <Column>
-        <Row as='form' flexWrap={'wrap'} $draggable={'blue'} draggable={true}>
+        <div className='quick-filters' style={{ display: 'flex' }}>
+          <div className='search-container'>
+            <input
+              className='search-input'
+              name='search'
+              onChange={handleChange}
+              placeholder='Buscar ordenes'
+              type='text'
+              value={dataForm.search}
+            />
+            <IconSearch
+              className='search-icon'
+              color={PColor}
+              size={20}
+            />
+          </div>
+          <QuickFiltersButton
+            onClick={() => {
+            // handleFilter()
+            }}
+          />
           <InputHooks
-            error={errorForm?.Desde}
-            name='Desde'
-            onChange={handleChange}
-            required
+            name='fromDate'
+            onChange={onChangeInput}
             title='Desde'
             type='date'
-            value={dataForm?.Desde}
+            value={valuesDates?.fromDate}
             width={'20%'}
           />
           <InputHooks
-            error={errorForm?.ProDescuento}
-            name='ProDescuento'
-            onChange={handleChange}
-            required
+            name='toDate'
+            onChange={onChangeInput}
             title='Hasta'
             type='date'
-            value={dataForm?.ProDescuento}
+            value={valuesDates?.toDate}
             width='20%'
           />
-          <InputHooks
-            error={errorForm?.ProPrice}
-            name='ProPrice'
-            onChange={handleChange}
-            required
-            title='Numero'
-            value={dataForm?.ProPrice}
-            width='30%'
-          />
-          <InputHooks
-            error={errorForm?.ProPrice}
-            name='ProPrice'
-            numeric
-            onChange={handleChange}
-            required
-            title='Nombre'
-            value={dataForm?.ProPrice}
-            width='30%'
-          />
-          <NewSelect
-            id='colorId'
-            name='colorId'
-            onChange={handleChange}
-            optionName='colorName'
-            options={[1, 2]}
-            title='STATUS'
-            value={dataForm?.Color}
-            width='33.33%'
-          />
-          <Column>
-          <Button type='submit'>Mas opciones</Button>
-          <RippleButton margin='30px' padding='10px'>Consultar</RippleButton>
-          <RippleButton margin='30px' padding='10px'>Consultar y exportar</RippleButton>
-          </Column>
-        </Row>
-      </Column> */}
+          <Button
+            borderRadius='0'
+            onClick={() => {
+              setDataValue({
+                ...dataForm,
+                search: ''
+              })
+              setValuesDates({
+                fromDate: null,
+                toDate: null,
+                search: ''
+              })
+            }}
+            padding='15px'
+          >
+          Borrar filtro
+          </Button>
+        </div>
+        <div className='form-container-orders'>
+        </div>
+        <DragOrders
+          data={data.ACEPTA}
+          dataConcludes={data.CONCLUDES}
+          dataProgressOrder={data.PROCESSING}
+          dataReadyOrder={data.READY}
+          dataRechazados={data.RECHAZADOS}
+        />
       </Container>
     </div>
   )

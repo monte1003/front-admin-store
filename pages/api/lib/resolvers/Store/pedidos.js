@@ -110,7 +110,6 @@ export const getAllPedidoStore = async (_, args, ctx, info) => {
   const { idStore } = args
   try {
     const attributes = getAttributes(pedidosModel, info)
-    // console.log(attributes)
     const data = await pedidosModel.findAll({
       attributes,
       where: {
@@ -130,7 +129,7 @@ export const getAllPedidoStore = async (_, args, ctx, info) => {
 }
 // store
 export const getAllPedidoStoreFinal = async (_, args, ctx, info) => {
-  const { idStore, statusOrder } = args || {}
+  const { idStore, statusOrder, fromDate, toDate } = args || {}
   const START = new Date()
   START.setHours(0, 0, 0, 0)
   const NOW = new Date()
@@ -142,22 +141,183 @@ export const getAllPedidoStoreFinal = async (_, args, ctx, info) => {
         [Op.or]: [
           {
             // ID STORE
-            pSState: statusOrder,
-            idStore: idStore ? deCode(idStore) : deCode(ctx.restaurant),
-            pDatCre: {
+            ...((fromDate && toDate) ? { pDatCre: { [Op.between]: [fromDate, `${toDate} 23:59:59`] } } : {pDatCre: {
               [Op.between]: [START.toISOString(), NOW.toISOString()]
-            }
+            }}),
+            pSState: statusOrder,
+            idStore: idStore ? deCode(idStore) : deCode(ctx.restaurant)
           }
         ]
       },
       order: [['pDatMod', 'DESC']]
-
     })
     return data
   } catch (error) {
     return error
   }
 }
+const cache = {}
+
+const getPedidosByState = async ({ model, attributes, fromDate, toDate, idStore, ctx, pSState, search, min, max}) => {
+  const cacheKey = `${model}_${JSON.stringify(attributes)}_${fromDate}_${toDate}_${idStore}_${ctx}_${pSState}_${search}_${min}_${max}`
+  const START = new Date()
+  START.setHours(0, 0, 0, 0)
+  const NOW = new Date()
+  // Verificar si el resultado está en caché
+  if (cache[cacheKey]) return cache[cacheKey]
+
+  const where = {
+    [Op.and]: [
+      {
+        idStore: idStore ? deCode(idStore) : deCode(ctx.restaurant),
+        pSState: pSState,
+        ...((fromDate && toDate) ? { pDatCre: { [Op.between]: [fromDate, `${toDate} 23:59:59`] } } : {pDatCre: {
+          [Op.between]: [START.toISOString(), NOW.toISOString()]
+        }})
+      }
+    ]
+  }
+
+
+  if (search) {
+    where[Op.and].push({
+      [Op.or]: [
+        { pCodeRef: { [Op.like]: `%${search}%` } }
+      ]
+    })
+  }
+
+  const orders = await model.findAll({
+    attributes,
+    where,
+    order: [['pDatMod', 'DESC']]
+  })
+
+  // Almacenar el resultado en caché
+  cache[cacheKey] = orders
+
+  return orders
+}
+
+// Objeto para almacenar la caché
+
+
+const ordersByState = {
+  ACEPTA: [],
+  PROCESSING: [],
+  READY: [],
+  CONCLUDES: [],
+  RECHAZADOS: []
+}
+
+const getStatusKey = (pSState) => {
+  const statusKeys = {
+    1: 'ACEPTA',
+    2: 'PROCESSING',
+    3: 'READY',
+    4: 'CONCLUDES',
+    5: 'RECHAZADOS'
+  }
+  return statusKeys[pSState] || ''
+}
+
+const getOrdersByState = async ({
+  idStore,
+  search = '',
+  min,
+  fromDate,
+  toDate,
+  max,
+  ctx
+}) => {
+  try {
+    const ordersByState = {
+      ACEPTA: [],
+      PROCESSING: [],
+      READY: [],
+      CONCLUDES: [],
+      RECHAZADOS: []
+    }
+
+    const attributes = [
+      'stPId',
+      'id',
+      'idStore',
+      'pSState',
+      'valueDelivery',
+      'locationUser',
+      'discount',
+      'tip',
+      'change',
+      'pCodeRef',
+      'totalProductsPrice',
+      'payMethodPState',
+      'pickUp',
+      'channel',
+      'pPDate',
+      'pDatCre',
+      'pDatMod',
+      'createdAt',
+      'updatedAt'
+    ]
+
+    const addOrdersByState = async (pSState) => {
+      const orders = await getPedidosByState({
+        search,
+        model: StatusOrderModel,
+        attributes,
+        max,
+        fromDate,
+        toDate,
+        min,
+        idStore,
+        ctx,
+        pSState
+      })
+      ordersByState[getStatusKey(pSState)] = orders || []
+    }
+
+    for (let pSState = 1; pSState <= 5; pSState++) {
+      await addOrdersByState(pSState)
+    }
+
+    return ordersByState
+  } catch (error) {
+    return ordersByState
+  }
+}
+
+export const getAllOrdersFromStore = async (_, args, ctx, info) => {
+  const { idStore, statusOrder, fromDate, toDate, search, min, cId, dId, ctId, max } = args || {}
+  const attributes = [ 
+    'stPId',
+    'id',
+    'idStore',
+    'pSState',
+    'valueDelivery',
+    'locationUser',
+    'discount',
+    'tip',
+    'change',
+    'pCodeRef',
+    'totalProductsPrice',
+    'payMethodPState',
+    'pickUp',
+    'channel',
+    'pPDate',
+    'pDatCre',
+    'pDatMod',
+    'createdAt',
+    'updatedAt']
+
+  const ordersByState = await getOrdersByState({idStore, cId, dId, ctId, search, min, fromDate, toDate, max, statusOrder, ctx, info, attributes})
+  try {
+    return ordersByState
+  } catch (error) {
+    return ordersByState
+  }
+}
+
 export const getAllPedidoUserFinal = async (_, args, ctx, info) => {
   const { id } = args || {}
   try {
@@ -173,7 +333,7 @@ export const getAllPedidoUserFinal = async (_, args, ctx, info) => {
     })
     return data
   } catch (error) {
-    return error
+    return ordersByState
   }
 }
 const getOnePedidoStore = async (_, { pCodeRef }, ctx, info) => {
@@ -248,6 +408,7 @@ export default {
   QUERIES: {
     getAllPedidoStore,
     getAllPedidoStoreFinal,
+    getAllOrdersFromStore,
     getOnePedidoStore,
     // User
     getAllPedidoUserFinal

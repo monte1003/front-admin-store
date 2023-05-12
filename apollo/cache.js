@@ -42,7 +42,7 @@ export const cache = new InMemoryCache({
             const merged = {
               ...existing,
               ...incoming,
-              getAllPedidoStore: [
+              getOnePedidoStore: [
                 ...(existing.getAllPedidoStore || []),
                 ...(incoming.getAllPedidoStore || [])
               ]
@@ -62,14 +62,14 @@ export const cache = new InMemoryCache({
               const merged = [...existingResults]
               for (let i = 0; i < incomingResults.length && merged.length < max; ++i) {
                 const incomingResult = incomingResults[i]
-                // Verificar que el objeto exista y tenga la propiedad pdpId
-                if (incomingResult?.pdpId && !merged.some(existingResult => {return existingResult.pdpId === incomingResult.pdpId})) {
+                // Verificar que el objeto exista y tenga la propiedad pCodeRef
+                if (incomingResult?.pCodeRef && !merged.some(existingResult => {return existingResult.pCodeRef === incomingResult.pCodeRef})) {
                   merged.push(incomingResult)
                 }
               }
               return {
                 ...incoming,
-                getAllPedidoStore: merged
+                getAllPedidoStoreFinal: merged
               }
             } catch (error) {
               return existing
@@ -147,6 +147,21 @@ export const cache = new InMemoryCache({
             return merged
           }
         },
+        getAllOrdersFromStore: concatPagination(['search', 'min', 'max', 'idStore', 'toDate', 'fromDate'], {
+          merge(existing, incoming, { args: { max = Infinity } }) {
+            const merged = { ...incoming }
+            if (Array.isArray(existing?.getAllOrdersFromStore) && Array.isArray(incoming?.getAllOrdersFromStore)) {
+              const mergedOrders = mergeArraysWithDuplicates(
+                existing.getAllOrdersFromStore,
+                incoming.getAllOrdersFromStore,
+                max,
+                'pCodeRef'
+              )
+              merged.getAllOrdersFromStore = mergedOrders;
+            }
+            return merged;
+          }
+        }),
         getAllClients: {
           keyArgs: ['search', 'min', 'max', 'idStore'],
           merge(existing, incoming, { args: { max = Infinity } }) {

@@ -104,7 +104,7 @@ export const Options = ({
         <IconShopping color={PColor} size='25px' />
       </ButtonOption>
       <ButtonOption>
-        <Enlace href='/expenses'>
+        <Enlace href='/informes'>
           <IconChart color={PColor} size='29px' />
         </Enlace>
       </ButtonOption>

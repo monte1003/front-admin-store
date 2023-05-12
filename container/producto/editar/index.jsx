@@ -9,8 +9,8 @@ import React,
   useState
 } from 'react'
 import styled, { css } from 'styled-components'
-import InputHooks from '../../../components/InputHooks/InputHooks'
-import { useFormTools } from '../../../components/BaseForm'
+import { InputHooks } from 'pkg-components'
+import { useFormTools } from 'npm-pkg-hook'
 import { EDIT_PRODUCT, GET_ONE_PRODUCTS_FOOD } from '../queries'
 import {
   GET_EXTRAS_PRODUCT_FOOD_OPTIONAL,
@@ -90,65 +90,45 @@ export const ProductEdit = ({ id }) => {
   }
   const handleForm = (e) => {
     e.preventDefault()
-    const isImage = validationImg(image)
-    if (isImage) {
-      return handleSubmit({
-        event: e,
-        action: () => {
-          setImageProducts({
-            variables: {
-              input: {
-                file: image,
-                pCode: pCode,
-                pId: id
-              }
+    return handleSubmit({
+      event: e,
+      action: () => {
+        const { pName, ProPrice, ProDescuento, ValueDelivery, ProUniDisponibles, ProDescription, ProProtegido, ProAssurance, ProWidth, ProHeight, ProLength, ProWeight, ProQuantity, ProOutstanding, ProDelivery, ProVoltaje, pState, sTateLogistic } = dataForm || {}
+        return editProductFoods({
+          variables: {
+            input: {
+              pId: id,
+              pName,
+              ProPrice: parseFloat(ProPrice),
+              ProDescuento: parseFloat(ProDescuento),
+              ValueDelivery: parseFloat(ValueDelivery),
+              ProUniDisponibles,
+              ProDescription,
+              ProProtegido,
+              ProAssurance,
+              ProWidth,
+              ProHeight,
+              ProLength,
+              ProWeight,
+              ProQuantity,
+              ProOutstanding,
+              ProDelivery,
+              ProVoltaje,
+              pState,
+              sTateLogistic
             }
-          }).then((x) => {
-            const { data } = x
-            const { setImageProducts } = data
-            setAlertBox({ message: `${setImageProducts?.message || ''}`, color: 'success', duration: 7000 })
-          }).catch(() => {
-            setAlertBox({ message: 'Lo sentimos ha ocurrido un error al cargar la imagen', color: 'error', duration: 7000 })
-          })
-          const { pName, ProPrice, ProDescuento, ValueDelivery, ProUniDisponibles, ProDescription, ProProtegido, ProAssurance, ProWidth, ProHeight, ProLength, ProWeight, ProQuantity, ProOutstanding, ProDelivery, ProVoltaje, pState, sTateLogistic } = dataForm || {}
-          return editProductFoods({
-            variables: {
-              input: {
-                pId: id,
-                pName,
-                ProPrice: parseFloat(ProPrice),
-                ProDescuento: parseFloat(ProDescuento),
-                ValueDelivery: parseFloat(ValueDelivery),
-                ProUniDisponibles,
-                ProDescription,
-                ProProtegido,
-                ProAssurance,
-                ProWidth,
-                ProHeight,
-                ProLength,
-                ProWeight,
-                ProQuantity,
-                ProOutstanding,
-                ProDelivery,
-                ProVoltaje,
-                pState,
-                sTateLogistic
-              }
-            }, update: (cache, { data: { productFoodsOne } }) => {
-              return updateCache({
-                cache,
-                query: GET_ONE_PRODUCTS_FOOD,
-                nameFun: 'productFoodsOne',
-                dataNew: productFoodsOne
-              })
-            }
-  
-          })
-        }
-      })
-    } 
-    setAlertBox({ message: `Es necesario una imagen para el product ${dataForm?.pName || null}` })
-    
+          }, update: (cache, { data: { productFoodsOne } }) => {
+            return updateCache({
+              cache,
+              query: GET_ONE_PRODUCTS_FOOD,
+              nameFun: 'productFoodsOne',
+              dataNew: productFoodsOne
+            })
+          }
+        })
+      }
+    })
+
   }
   const fileInputRef = useRef(null)
   const onTargetClick = e => {
@@ -232,7 +212,6 @@ export const ProductEdit = ({ id }) => {
           name='ProPrice'
           numeric
           onChange={handleChange}
-          required
           title='Precio'
           value={dataForm?.ProPrice}
           width='100%'
@@ -242,7 +221,6 @@ export const ProductEdit = ({ id }) => {
           name='ProDescuento'
           numeric
           onChange={handleChange}
-          required
           title='Descuento'
           value={dataForm?.ProDescuento}
           width='100%'
@@ -252,7 +230,6 @@ export const ProductEdit = ({ id }) => {
           name='ValueDelivery'
           numeric
           onChange={handleChange}
-          required
           title='Costo de envio'
           value={dataForm?.ValueDelivery}
           width='100%'
@@ -262,7 +239,6 @@ export const ProductEdit = ({ id }) => {
           error={errorForm?.ProDescription}
           name='ProDescription'
           onChange={handleChange}
-          required
           title='Description'
           value={dataForm?.ProDescription}
           width='100%'

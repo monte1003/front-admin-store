@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { PColor } from '@/public/colors'
 import styled from 'styled-components'
 
@@ -5,15 +6,14 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
   background-color: #FFFFFF;
   border: 1px solid #DBDBDB;
-  border-radius: 4px;
   font-size: 14px;
   line-height: 20px;
   color: #262626;
+  margin: 0 15px;
   cursor: pointer;
-
+  height: 50px;
   &:focus {
     outline: none;
     box-shadow: 0 0 0 2px ${PColor};
@@ -50,4 +50,8 @@ export function QuickFiltersButton({ onClick = () => { return } }) {
       </span>
     </Button>
   )
+}
+
+QuickFiltersButton.propTypes = {
+  onClick: PropTypes.func
 }

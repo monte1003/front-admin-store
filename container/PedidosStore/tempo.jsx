@@ -5,7 +5,7 @@ import { LocationName } from 'components/hooks/useLocationName'
 import { Container } from './styled'
 import { ListPedidos } from './ListPedidos'
 import Tabs from 'components/Tabs'
-import { useOrders } from 'hooks/useOrders'
+import { useOrders } from 'npm-pkg-hook'
 import { useFormTools } from 'components/BaseForm'
 
 const PedidosStoreOld = () => {

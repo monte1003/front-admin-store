@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import { useMobile, useStore, useLogout } from 'npm-pkg-hook'
-import { Button } from 'pkg-components'
+import { Button, IconChart } from 'pkg-components'
 import { Context } from 'context/Context'
 import { Overline } from 'components/common/Reusable'
 import { BGColor, PColor } from '../../../public/colors'
@@ -123,7 +123,7 @@ const MemoAside = () => {
               <AnchorRouter><IconShopping size='15px' />Contactos</AnchorRouter>
             </ActiveLink>
             <ActiveLink activeClassName='active' href='/informes'>
-              <AnchorRouter><IconShopping size='15px' />Informes</AnchorRouter>
+              <AnchorRouter><IconChart size='20px' />Informes</AnchorRouter>
             </ActiveLink>
             <ActiveLink activeClassName='active' href='/clientes'>
               <AnchorRouter>  <IconUser size='20px' />Clientes</AnchorRouter>

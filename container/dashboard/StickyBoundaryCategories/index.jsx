@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { Skeleton } from 'components/Skeleton'
 import {
@@ -39,7 +40,7 @@ export const ProductCategories = ({
               >
                 <ContentSearch>
                   <Title color={BGColor} size='.9em' >{x.pName} ({x.productFoodsAll?.length || 0})</Title>
-                  <input onChange={(e) => {return setValueProductName(e.target.value)}} />
+                  {/* <input onChange={(e) => {return setValueProductName(e.target.value)}} /> */}
                 </ContentSearch>
               </Sticky>
               <ContainerCarrusel>
@@ -76,4 +77,12 @@ export const ProductCategories = ({
       })}
     </StickyViewport>
   )}
+
+ProductCategories.propTypes = {
+  data: PropTypes.array,
+  handleGetOneProduct: PropTypes.func,
+  reference: PropTypes.any,
+  setAlertBox: PropTypes.func,
+  setValueProductName: PropTypes.func
+}
 export const StickyBoundaryCategories = React.memo(ProductCategories)
