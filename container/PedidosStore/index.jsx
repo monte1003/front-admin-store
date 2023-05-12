@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { LocationName } from 'components/hooks/useLocationName'
-import { InputHooks, Button, PColor, ErrorBoundary } from 'pkg-components'
+import { InputHooks, Button, ErrorBoundary } from 'pkg-components'
 import { Container } from './styled'
 import { useFormTools,useFormatDate, useStore, useOrdersFromStore } from 'npm-pkg-hook'
 import DragOrders from './DragOrders'
 import { QuickFiltersButton } from './QuickFiltersButton'
 import { IconSearch } from '../../public/icons'
 import { Loading } from './../../components/Loading/index'
+import { PColor } from '@/public/colors'
 
 const PedidosStore = () => {
   const useFormAndStore = () => {
