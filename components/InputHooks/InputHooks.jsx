@@ -63,7 +63,7 @@ const InputHooks = ({
   required,
   title = '',
   type = 'text',
-  TypeTextarea = '',
+  TypeTextarea = false,
   value = '',
   width = '100%',
   onFocus = () => { return },
@@ -422,59 +422,5 @@ InputHooks.propTypes = {
   value: PropTypes.string,
   width: PropTypes.string
 }
-
-/**
- * import React, { useCallback, useEffect, useState } from "react";
-
-interface CheckboxProps {
-  name: string;
-  checkAll: boolean;
-  defaultChecked?: boolean;
-  onCheck: (name: string) => void;
-}
-
-export const Checkbox = ({
-  name,
-  checkAll,
-  defaultChecked,
-  onCheck
-}: CheckboxProps) => {
-  const [checked, setChecked] = useState(defaultChecked);
-  const handleCheck = useCallback(
-    (name: string) => {
-      setChecked(!checked);
-      onCheck(name);
-    },
-    [checked, onCheck]
-  );
-
-  useEffect(() => {
-    if (checkAll) {
-      setChecked(true);
-    }
-
-    if (!checkAll && defaultChecked) {
-      setChecked(true);
-    }
-
-    if (!defaultChecked && checkAll) {
-      setChecked(true);
-    }
-
-    if (!defaultChecked && !checkAll) {
-      setChecked(false);
-    }
-  }, [checkAll, defaultChecked]);
-
-  return (
-    <input
-      type="checkbox"
-      name={name}
-      checked={checked}
-      onChange={() => handleCheck(name)}
-    />
-  );
-};
- */
 
 export default InputHooks

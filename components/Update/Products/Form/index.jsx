@@ -17,19 +17,19 @@ const FormProduct = ({
   errors
 }) => {
   return (
-    <div>
-      <FormProducts className='form-horizontal'>
-        <InputHook
-          error={errors.names}
-          label='Nombre del producto'
-          name='name'
-          onChange={e => { return setName(e.target.value) }}
-          placeholder='Nombre del producto'
-          range={{ min: 0, max: 180 }}
-          required={true}
-          type='text'
-          value={names}
-        />
+    <FormProducts className='form-horizontal'>
+      <InputHook
+        error={errors.names}
+        label='Nombre del producto'
+        name='name'
+        onChange={e => { return setName(e.target.value) }}
+        placeholder='Nombre del producto'
+        range={{ min: 0, max: 180 }}
+        required
+        type='text'
+        value={names}
+      />
+      <CardInput>
         <InputHook
           error={errors.ProPrice}
           label='Precio de producto'
@@ -37,8 +37,18 @@ const FormProduct = ({
           onChange={handleChange}
           range={{ min: 0, max: 180 }}
           required
-          value={numberFormat(values.ProPrice)}
+          value={numberFormat(values?.ProPrice)}
         />
+        <InputHook
+          error={errors.ProDescuento}
+          label='Descuento'
+          name='ProDescuento'
+          onChange={handleChange}
+          range={{ min: 0, max: 180 }}
+          value={numberFormat(values?.ProDescuento)}
+        />
+      </CardInput>
+      <CardInput>
         <InputHook
           disabled={check.desc}
           error={errors.ValueDelivery}
@@ -47,34 +57,7 @@ const FormProduct = ({
           onChange={handleChange}
           range={{ min: 0, max: 180 }}
           required
-          value={numberFormat(values.ValueDelivery)}
-        />
-        <InputHook
-          error={errors.ProDescuento}
-          label='Descuento'
-          name='ProDescuento'
-          onChange={handleChange}
-          range={{ min: 0, max: 180 }}
-          value={numberFormat(values.ProDescuento)}
-        />
-        <NewSelect
-          error={errors.carProId}
-          id='carProId'
-          name='carProId'
-          onChange={handleChange}
-          optionName='pName'
-          options={dataCategoriesProducts || []}
-          title='Categoría'
-          value={values?.carProId}
-        />
-        <InputHooks
-          TypeTextarea={true}
-          height='200px'
-          name='ProDescription'
-          onChange={handleChange}
-          range={{ min: 0, max: 180 }}
-          title='Description'
-          value={values.ProDescription}
+          value={numberFormat(values?.ValueDelivery)}
         />
         <CardInput onChange={handleCheckFreeShipping}>
           <Checkbox
@@ -86,8 +69,27 @@ const FormProduct = ({
             value={check?.desc}
           />
         </CardInput>
-      </FormProducts>
-    </div>
+      </CardInput>
+      <NewSelect
+        error={errors.carProId}
+        id='carProId'
+        name='carProId'
+        onChange={handleChange}
+        optionName='pName'
+        options={dataCategoriesProducts || []}
+        title='Categoría'
+        value={values?.carProId}
+      />
+      <InputHooks
+        TypeTextarea
+        height='200px'
+        name='ProDescription'
+        onChange={handleChange}
+        range={{ min: 0, max: 180 }}
+        title='Description'
+        value={values?.ProDescription}
+      />
+    </FormProducts>
   )
 }
 

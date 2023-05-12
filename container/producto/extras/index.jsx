@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Checkbox } from 'components/Checkbox'
 import Column from 'components/common/Atoms/Column'
 import { useDessert } from 'npm-pkg-hook'
@@ -6,7 +7,6 @@ import {
   ResisesColumns,
   Tag
 } from 'pkg-components'
-import { useState } from 'react'
 import InputHooks from 'components/InputHooks/InputHooks'
 import { QuantityButton } from 'components/QuantityButton'
 import { RippleButton } from '../../../components/Ripple'
@@ -18,7 +18,8 @@ import {
 } from '../../../public/colors'
 import { IconDelete, IconMiniCheck } from '../../../public/icons'
 import {
-  BodyDnd, ContentCheckbox,
+  BodyDnd,
+  ContentCheckbox,
   GarnishChoicesHeader
 } from './styled'
 
@@ -61,9 +62,8 @@ export const OptionalExtraProducts = ({ pId }) => {
                 height='min-content'
                 key={index}
                 role='list'
-                width='95%'
               >
-                <GarnishChoicesHeader>
+                <GarnishChoicesHeader style={{padding:5, marginBottom: 20}}>
                   <div>
                     <p className='garnish-choices__title'>{list?.title}</p>
                     <p className='garnish-choices__title-desc'>Escoge hasta {messageLimit}.</p>
@@ -102,19 +102,21 @@ export const OptionalExtraProducts = ({ pId }) => {
                   title='Añade un item'
                   value={list?.value}
                 />
-                <RippleButton
-                  disabled={incompleteList}
-                  margin='16px 0 auto'
-                  onClick={() => { return handleAdd({ listId: listID }) }}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleAdd({ listId: listID })
-                    }
-                  }}
-                  widthButton='100%'
-                >
-                  Adicionar sobremesa
-                </RippleButton>
+                {!incompleteList && (
+                  <RippleButton
+                    disabled={incompleteList}
+                    margin='16px 0 auto'
+                    onClick={() => { return handleAdd({ listId: listID }) }}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        handleAdd({ listId: listID })
+                      }
+                    }}
+                    widthButton='100%'
+                  >
+                  Adicionar
+                  </RippleButton>
+                )}
               </Column>
             )
           })}
