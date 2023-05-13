@@ -203,7 +203,7 @@ export const deleteCatFinalOfProducts = async (_, { idPc, withProduct }) => {
 // }
 
 export const getCatProductsWithProduct = async (root, args, context) => {
-  const { search, min, max, gender, desc, categories, productName } = args
+  const { search, min, max, gender, desc, categories } = args
   linkBelongsTo(catProducts, productModelFood, 'pId', 'carProId')
   let whereSearch = {}
   if (search) {
@@ -237,30 +237,7 @@ export const getCatProductsWithProduct = async (root, args, context) => {
       caId: { [Op.in]: categories.map(x => { return deCode(x) }) }
     }
   }
-  if (productName) {
-    whereSearch = {
-      ...whereSearch,
-      '$productModelFood.pName$': {
-        [Op.substring]: productName?.replace(/\s+/g, ' ')
-      }
-    }
-  }
-
-
-  productModelFood.belongsTo(catProducts, { foreignKey: 'caId' })
-
   const { count, rows } = await catProducts.findAndCountAll({
-    include: [
-      {
-        attributes: ['pId', 'carProId', 'pName'],
-        model: productModelFood,
-        where: {
-          pName: {
-            [Op.substring]: productName?.replace(/\s+/g, ' ')
-          }
-        }
-      }
-    ],
     where: {
       [Op.and]: [
         {

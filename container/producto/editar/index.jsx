@@ -16,6 +16,7 @@ import {
 import {
   useFormTools,
   useGetOneProductsFood,
+  useDeleteProductsFood,
   useEditProduct
 } from 'npm-pkg-hook'
 import { GET_ONE_PRODUCTS_FOOD } from '../queries'
@@ -33,6 +34,7 @@ import { useRouter } from 'next/router'
 import { ExtrasProductsItems } from '../extras/ExtrasProductsItems'
 import { Form } from './Form'
 import { Loading } from 'components/Loading'
+import { GoBack } from './../../Restaurant/styled';
 
 export const ProductEdit = ({ id }) => {
   // STATES
@@ -40,7 +42,7 @@ export const ProductEdit = ({ id }) => {
   const initialState = { alt: '/images/DEFAULTBANNER.png', src: '/images/DEFAULTBANNER.png' }
   const [modal, openModal] = useState(false)
   const [showDessert, setShowDessert] = useState(false)
-  const { setAlertBox } = useContext(Context)
+  const { setAlertBox, sendNotification } = useContext(Context)
   const [{ alt, src }, setPreviewImg] = useState(initialState)
   const router = useRouter()
   // QUERIES
@@ -53,7 +55,7 @@ export const ProductEdit = ({ id }) => {
       dataOptional
     }
   ] = useGetOneProductsFood()
-  const [updateProductFoods] = useMutation(UPDATE_PRODUCT_FOOD)
+  const { handleDelete } = useDeleteProductsFood({ sendNotification })
   const [editProductFoods] = useEditProduct()
   const { getStore, pState } = dataProduct || {}
   useEffect(() => {
@@ -86,7 +88,26 @@ export const ProductEdit = ({ id }) => {
     return handleSubmit({
       event: e,
       action: () => {
-        const { pName, ProPrice, ProDescuento, ValueDelivery, ProUniDisponibles, ProDescription, ProProtegido, ProAssurance, ProWidth, ProHeight, ProLength, ProWeight, ProQuantity, ProOutstanding, ProDelivery, ProVoltaje, pState, sTateLogistic } = dataForm || {}
+        const {
+          pName,
+          ProPrice,
+          ProDescuento,
+          ValueDelivery,
+          ProUniDisponibles,
+          ProDescription,
+          ProProtegido,
+          ProAssurance,
+          ProWidth,
+          ProHeight,
+          ProLength,
+          ProWeight,
+          ProQuantity,
+          ProOutstanding,
+          ProDelivery,
+          ProVoltaje,
+          pState,
+          sTateLogistic
+        } = dataForm || {}
         return editProductFoods({
           variables: {
             input: {
@@ -129,33 +150,12 @@ export const ProductEdit = ({ id }) => {
 
     fileInputRef.current.click()
   }
-  const handleDelete = () => {
-    updateProductFoods({
-      variables: {
-        input: {
-          pId: id,
-          pState
-        }
-      }, update(cache) {
-        cache.modify({
-          fields: {
-            productFoodsAll(dataOld = []) {
-              return cache.writeQuery({ query: GET_ALL_PRODUCT_STORE, data: dataOld })
-            }
-          }
-        })
-        cache.modify({
-          fields: {
-            getCatProductsWithProduct(dataOld = []) {
-              return cache.writeQuery({ query: GET_ALL_CATEGORIES_WITH_PRODUCT, data: dataOld })
-            }
-          }
-        })
-        setAlertBox({ message: 'El producto ha sido eliminado', color: 'error', duration: 7000 })
-      }
-    }).then(() => {
-      router.back()
-    }).catch(err => { return setAlertBox({ message: `${err}`, duration: 7000 }) })
+  const handleClickDelete = async () => {
+    await handleDelete({
+      pId: id,
+      pState
+    })
+    router.back()
   }
   return (
     <Container>
@@ -185,7 +185,7 @@ export const ProductEdit = ({ id }) => {
             <MemoCardProductSimple
               del={true}
               edit={false}
-              handleDelete={() => { return handleDelete() }}
+              handleDelete={() => { return handleClickDelete() }}
               {...dataForm}
             />
           </div>
@@ -198,12 +198,14 @@ export const ProductEdit = ({ id }) => {
               label='Añadir Adicionales'
               onClick={() => { return openModal(!modal) }}
               ripple
+              width='50%'
             />
             <Button
               fontFamily='PFont-Light'
               fontWeight='300'
               label='Añadir Sobremesa'
               onClick={() => { return setShowDessert(!showDessert) }}
+              width='50%'
             />
             <ExtrasProductsItems
               dataExtra={dataExtra || []}

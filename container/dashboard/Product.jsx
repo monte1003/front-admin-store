@@ -5,14 +5,13 @@ import { ExtrasProductsItems } from 'container/producto/extras/ExtrasProductsIte
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Button } from 'pkg-components'
+import { Button, AwesomeModal } from 'pkg-components'
 import PropTypes from 'prop-types'
 import {
   APColor,
   BColor,
   GraniteGray
 } from 'public/colors'
-import { AwesomeModal } from 'pkg-components'
 import Column from 'components/common/Atoms/Column'
 import {
   CardProductsModal,
@@ -38,7 +37,7 @@ export const Product = ({
   showDessert,
   onHideDessert,
   setShowDessert,
-  handleDelete,
+  handleDelete = () => { return },
   pId,
   ...props
 }) => {
@@ -166,13 +165,17 @@ Product.propTypes = {
   dataOptional: PropTypes.shape({
     ExtProductFoodsOptionalAll: PropTypes.array
   }),
+  handleDelete: PropTypes.func,
   modal: PropTypes.any,
   nameStore: PropTypes.shape({
     replace: PropTypes.func
   }),
+  onHideDessert: PropTypes.func,
   pId: PropTypes.any,
   pName: PropTypes.any,
   setModal: PropTypes.func,
+  setShowDessert: PropTypes.func,
+  showDessert: PropTypes.any,
   store: PropTypes.shape({
     city: PropTypes.shape({
       cName: PropTypes.shape({

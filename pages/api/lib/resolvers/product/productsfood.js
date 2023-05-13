@@ -140,7 +140,7 @@ export const productFoodsAll = async (root, args, context, info) => {
     })
     return data
   } catch (e) {
-    
+
     const error = new Error(e || 'Lo sentimos, ha ocurrido un error interno')
     return error
   }
@@ -164,7 +164,7 @@ export const editProductFoods = async (_root, { input }, context) => {
 
 }
 export const updateProductFoods = async (_root, { input }, context) => {
-  const { sizeId, colorId, cId, dId, ctId, pId, pState, carProId } = input
+  const { sizeId, colorId, cId, dId, ctId, pId, pState, carProId } = input || {}
   try {
     if (!pId) {
       const data = await productModelFood.create({
@@ -174,7 +174,6 @@ export const updateProductFoods = async (_root, { input }, context) => {
         idStore: deCode(context.restaurant),
         carProId: deCode(carProId),
         id: deCode(context.User.id),
-        // sTateLogistic: 1,
         sizeId: sizeId ? deCode(sizeId) : null,
         colorId: colorId ? deCode(colorId) : null,
         cId: cId ? deCode(cId) : null,
@@ -184,12 +183,18 @@ export const updateProductFoods = async (_root, { input }, context) => {
       return data
     }
 
-    await productModelFood.update({ pState: pState === 1 ? 0 : 1 }, { where: { pId: deCode(pId) } })
+    const existingProduct = await productModelFood.findOne({ where: { pId: deCode(pId) } })
+    if (!existingProduct) {
+      throw new ApolloError('El producto no existe.', 404)
+    }
 
+    await productModelFood.update({ pState: pState === 1 ? 0 : 1 }, { where: { pId: deCode(pId) } })
+    return existingProduct
   } catch (e) {
     throw new ApolloError('No ha sido posible procesar su solicitud.', 500, e)
   }
 }
+
 export const productsLogis = async (root, args, context, info) => {
   try {
     const { search, min, max, pId } = args
