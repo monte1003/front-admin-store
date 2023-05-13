@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
-const { Base64 } = require('js-base64')
-
+const { v4: uuidv4 } = require('uuid')
 // eslint-disable-next-line consistent-return
 const codeRed = async model => {
   /** variables necesarias */
@@ -19,14 +18,15 @@ const codeRed = async model => {
   if (dataUP) { await codeRed() }
   else { return result }
 }
-
 const enCode = value => {
   const v = ((((value * 998161) * 793927) * 562841) * 288413) / 472793
-  return Base64.encode(`${v}`)
+  const randomId = uuidv4()
+  return `${randomId}${v}`
 }
 
 const deCode = value => {
-  const v = Base64.decode(value)
+  const encodedValue = value.slice(36) // Extraemos el valor codificado sin el identificador aleatorio
+  const v = parseFloat(encodedValue)
   return Math.round(((((v * 472793) / 288413) / 562841) / 793927) / 998161)
 }
 

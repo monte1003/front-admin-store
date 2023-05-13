@@ -31,6 +31,7 @@ const DashboardStore = () => {
   const {
     setAlertBox,
     handleClick,
+    sendNotification,
     show
   } = useContext(Context)
 
@@ -248,6 +249,7 @@ const DashboardStore = () => {
           data={data}
           handleGetOneProduct={handleProduct}
           reference={ref}
+          sendNotification={sendNotification}
           setAlertBox={setAlertBox}
         />
       </Container>

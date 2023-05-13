@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Checkbox } from 'components/Checkbox'
 import Column from 'components/common/Atoms/Column'
@@ -177,4 +178,8 @@ export const OptionalExtraProducts = ({ pId }) => {
     </BodyDnd>
   )
 
+}
+
+OptionalExtraProducts.propTypes = {
+  pId: PropTypes.string
 }

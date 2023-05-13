@@ -223,18 +223,12 @@ export const getCatProductsWithProduct = async (_, args, context) => {
   }
   // validad que  venga una categoría para hacer el filtro por categorías
   if (categories?.length) {
-    whereSearch['caId'] = { [Op.in]: categories.map(x => { return deCode(x) }) }
+    whereSearch = {
+      ...whereSearch,
+      caId: { [Op.in]: categories.map(x => { return deCode(x) }) }
+    }
   }
-
-  productModelFood.belongsTo(catProducts, { foreignKey: 'caId' })
-
-  const { count, rows } = await productModelFood.findAndCountAll({
-    include: [
-      {
-        model: catProducts,
-        attributes: ['carProId', 'pName']
-      }
-    ],
+  const { count, rows } = await catProducts.findAndCountAll({
     where: {
       [Op.and]: [
         {

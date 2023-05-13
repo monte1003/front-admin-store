@@ -1,7 +1,12 @@
-import { INTEGER, STRING, TINYINT, literal } from 'sequelize'
+import {
+  INTEGER,
+  STRING,
+  TINYINT,
+  literal
+} from 'sequelize'
 import connect from '../../db'
 const sequelize = connect()
-import { enCode, validationID } from '../../utils/util'
+import { enCode } from '../../utils/util'
 import Store from '../Store/Store'
 import productModelFood from './productFood'
 
@@ -10,9 +15,7 @@ const productsOptionalExtra = sequelize.define('productsoptionalextra', {
     type: INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    get(x) { return enCode(this.getDataValue(x)) },
-    set(x) { this.setDataValue('opExPid', validationID(x, false)) }
-
+    get(x) { return enCode(this.getDataValue(x)) }
   },
   pId: {
     type: INTEGER,
