@@ -3,7 +3,7 @@ import { Op } from 'sequelize'
 import productModelFood from '../../models/product/productFood'
 import catProducts from '../../models/Store/cat'
 import { linkHasMany } from '../../utils'
-import { deCode, getAttributes, linkBelongsTo } from '../../utils/util'
+import { deCode, getAttributes } from '../../utils/util'
 
 export const updatedProducts = async (_, { input }, ctx) => {
   try {
@@ -202,63 +202,37 @@ export const deleteCatFinalOfProducts = async (_, { idPc, withProduct }) => {
 //   }
 // }
 
-export const getCatProductsWithProduct = async (root, args, context) => {
-  const { search, min, max, gender, desc, categories, productName } = args
-  linkBelongsTo(catProducts, productModelFood, 'pId', 'carProId')
-  let whereSearch = {}
-  if (search) {
-    whereSearch = {
-      [Op.or]: [
-        { pName: { [Op.substring]: search?.replace(/\s+/g, ' ') } },
-        { ProPrice: { [Op.substring]: search?.replace(/\s+/g, ' ') } },
-        { ProDescuento: { [Op.substring]: search?.replace(/\s+/g, ' ') } },
-        { ProDelivery: { [Op.substring]: search?.replace(/\s+/g, ' ') } }
-      ]
-    }
+export const getCatProductsWithProduct = async (_, args, context) => {
+  const { search, min = 0, max = 5, gender, desc, categories } = args
+  const generalOption = { [Op.like]: `%${search}%` }
+  
+  let whereSearch = {
+    [Op.or]: [
+      { pName: generalOption },
+      { ProPrice: generalOption },
+      { ProDescuento: generalOption },
+      { ProDelivery: generalOption }
+    ]
   }
+  
   if (gender?.length) {
-    whereSearch = {
-      ...whereSearch,
-      ProDelivery: {
-        [Op.in]: gender.map(x => { return x })
-      }
-    }
+    whereSearch['ProDelivery'] = { [Op.in]: gender.map(x => { return x }) }
   }
   if (desc?.length) {
-    whereSearch = {
-      ...whereSearch,
-      ProDescuento: { [Op.in]: desc.map(x => { return x }) }
-    }
+    whereSearch['ProDescuento'] = { [Op.in]: desc.map(x => { return x }) }
   }
   // validad que  venga una categoría para hacer el filtro por categorías
   if (categories?.length) {
-    whereSearch = {
-      ...whereSearch,
-      caId: { [Op.in]: categories.map(x => { return deCode(x) }) }
-    }
+    whereSearch['caId'] = { [Op.in]: categories.map(x => { return deCode(x) }) }
   }
-  if (productName) {
-    whereSearch = {
-      ...whereSearch,
-      '$productModelFood.pName$': {
-        [Op.substring]: productName?.replace(/\s+/g, ' ')
-      }
-    }
-  }
-
 
   productModelFood.belongsTo(catProducts, { foreignKey: 'caId' })
 
-  const { count, rows } = await catProducts.findAndCountAll({
+  const { count, rows } = await productModelFood.findAndCountAll({
     include: [
       {
-        attributes: ['pId', 'carProId', 'pName'],
-        model: productModelFood,
-        where: {
-          pName: {
-            [Op.substring]: productName?.replace(/\s+/g, ' ')
-          }
-        }
+        model: catProducts,
+        attributes: ['carProId', 'pName']
       }
     ],
     where: {
@@ -273,7 +247,10 @@ export const getCatProductsWithProduct = async (root, args, context) => {
           pState: { [Op.gt]: 0 }
         }
       ]
-    }, limit: [min || 0, max || 5], order: [['pDatCre', 'ASC']]
+    },
+    offset: min,
+    limit:  max,
+    order: [['pDatCre', 'ASC']]
   })
 
   return {

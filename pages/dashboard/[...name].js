@@ -1,17 +1,10 @@
 import DashboardStore from 'container/dashboard/store'
 import { withIronSessionSsr } from 'iron-session/next'
-import Head from 'next/head'
 import { cookie, defaultReturnObject } from 'utils'
 
 export default function dashboard () {
   return (
-    <>
-      <Head>
-        <title></title>
-      </Head>
-      <DashboardStore />
-      {/* {auth ? <ErrorBoundary message='error' /> : <DashboardStore />} */}
-    </>
+    <DashboardStore />
   )
 }
 

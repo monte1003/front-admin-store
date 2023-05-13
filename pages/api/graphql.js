@@ -35,7 +35,7 @@ const corsMultipleAllowOrigin = (options = {}) => {
     }
   }
 }
-const cors = corsMultipleAllowOrigin({ origin: ['http://localhost:3001', 'http://localhost:3000', 'http://localhost:4000', 'http://localhost:3003'] })
+const cors = corsMultipleAllowOrigin({ origin: ['*'] })
 let serverCleanup = null
 
 const apolloServer = new ApolloServer({

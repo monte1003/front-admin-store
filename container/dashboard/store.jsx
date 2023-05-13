@@ -22,8 +22,7 @@ import { ManageBanner } from './profile/Managebanner'
 import { ButtonsAction } from './Options/index'
 import { Container, Wrapper } from './styled'
 import { StickyBoundaryCategories } from './StickyBoundaryCategories'
-import { IconSearch } from '@/public/icons'
-import { PColor } from '@/public/colors'
+import SearchBar from 'components/SearchBar'
 
 
 const DashboardStore = () => {
@@ -40,13 +39,12 @@ const DashboardStore = () => {
     desc: [],
     speciality: []
   })
-  const [search] = useState('')
   const [moreCatProduct, setMoreCaProduct] = useState(2)
   const [modal, setModal] = useState(false)
   // HOOKS
   const { isMobile } = useMobile()
   const { handleDelete } = useDeleteProductsFood()
-  const [valueProductName, setValueProductName] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   const [handleGetOneProduct,
     {
       data: product,
@@ -57,8 +55,7 @@ const DashboardStore = () => {
   const router = useRouter()
   const [store] = useStore()
   const [data, { fetchMore, totalCount }] = useCatWithProduct({
-    search,
-    productName: valueProductName,
+    search: searchQuery,
     max: moreCatProduct,
     ...searchFilter
   })
@@ -218,19 +215,35 @@ const DashboardStore = () => {
       }
     }
   })
+
+  const handleChange = (e) => {
+    setSearchQuery(e.target.value)
+  }
+
+  const handleSubmit = () => {
+    console.log('submit')
+  }
+
   return (<>
     <Wrapper>
       <Container>
         <ManageBanner isMobile={isMobile} />
         <ButtonsAction handle={handleActionClick} /> 
-        <div className='wrapper__filter__wrapper' style={{ display: 'flex', padding: '30px' }}>
+        <div style={{marginTop: 20}}/>
+        <SearchBar
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          placeholder='Buscar productos'
+        />
+        <div style={{marginTop: 20}}/>
+        {/* <div className='wrapper__filter__wrapper' style={{ display: 'flex', padding: '30px' }}>
           <IconSearch color={PColor} size={20} />
           <input
             className='wrapper__filter'
             onChange={(e) => {return setValueProductName(e.target.value)}}
             placeholder='busca tus productos'
           />
-        </div>
+        </div> */}
         <StickyBoundaryCategories
           data={data}
           handleGetOneProduct={handleProduct}
