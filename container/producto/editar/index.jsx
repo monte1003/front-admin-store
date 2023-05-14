@@ -20,21 +20,16 @@ import {
   useEditProduct
 } from 'npm-pkg-hook'
 import { GET_ONE_PRODUCTS_FOOD } from '../queries'
-import { UPDATE_PRODUCT_FOOD } from 'container/update/Products/queries'
-import { GET_ALL_CATEGORIES_WITH_PRODUCT } from 'container/dashboard/queries'
-import { useMutation } from '@apollo/client'
 import { updateCache } from 'utils'
 import {
   BColor,
   BGColor
 } from 'public/colors'
-import { GET_ALL_PRODUCT_STORE } from 'container/dashboard/queriesStore'
 import { Context } from 'context/Context'
 import { useRouter } from 'next/router'
 import { ExtrasProductsItems } from '../extras/ExtrasProductsItems'
 import { Form } from './Form'
 import { Loading } from 'components/Loading'
-import { GoBack } from './../../Restaurant/styled';
 
 export const ProductEdit = ({ id }) => {
   // STATES
@@ -42,7 +37,7 @@ export const ProductEdit = ({ id }) => {
   const initialState = { alt: '/images/DEFAULTBANNER.png', src: '/images/DEFAULTBANNER.png' }
   const [modal, openModal] = useState(false)
   const [showDessert, setShowDessert] = useState(false)
-  const { setAlertBox, sendNotification } = useContext(Context)
+  const { sendNotification } = useContext(Context)
   const [{ alt, src }, setPreviewImg] = useState(initialState)
   const router = useRouter()
   // QUERIES
@@ -139,6 +134,22 @@ export const ProductEdit = ({ id }) => {
               dataNew: productFoodsOne
             })
           }
+        }).then((response) => {
+          if (response?.data?.editProductFoods?.success) {
+            const { message, success } = response?.data?.editProductFoods || {}
+            sendNotification({
+              title: 'Exitoso',
+              description: message,
+              backgroundColor: success ? 'success' : 'warning'
+            })
+          }
+        }).catch((response) => {
+          const { message, success } = response?.data?.editProductFoods || {}
+          sendNotification({
+            title: 'Exitoso',
+            description: message,
+            backgroundColor: success ? 'success' : 'error'
+          })
         })
       }
     })
@@ -210,6 +221,7 @@ export const ProductEdit = ({ id }) => {
             <ExtrasProductsItems
               dataExtra={dataExtra || []}
               dataOptional={dataOptional || []}
+              editing={true}
               modal={modal}
               pId={id}
               setModal={() => { return openModal(!modal) }}
@@ -241,9 +253,6 @@ ProductEdit.propTypes = {
   id: PropTypes.string
 }
 
-export const InputFile = styled.input`
-    /* display: none;    */
-`
 export const ActionName = styled.span`
     position: absolute;
     height: 20px;

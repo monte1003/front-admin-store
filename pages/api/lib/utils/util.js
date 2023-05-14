@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
-const { v4: uuidv4 } = require('uuid')
+// const { v4: uuidv4 } = require('uuid')
+
 // eslint-disable-next-line consistent-return
 const codeRed = async model => {
   /** variables necesarias */
@@ -18,17 +19,17 @@ const codeRed = async model => {
   if (dataUP) { await codeRed() }
   else { return result }
 }
+const { Base64 } = require('js-base64')
 const enCode = value => {
   const v = ((((value * 998161) * 793927) * 562841) * 288413) / 472793
-  const randomId = uuidv4()
-  return `${randomId}${v}`
+  return Base64.encode(`${v}`)
 }
 
 const deCode = value => {
-  const encodedValue = value.slice(36) // Extraemos el valor codificado sin el identificador aleatorio
-  const v = parseFloat(encodedValue)
+  const v = Base64.decode(value)
   return Math.round(((((v * 472793) / 288413) / 562841) / 793927) / 998161)
 }
+
 
 const linkBelongsTo = (modelOne, modelTwo, target, foreign) => {
   return modelOne.belongsTo(modelTwo, {

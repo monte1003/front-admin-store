@@ -1,34 +1,31 @@
-FROM node:lts-alpine as base
+# Base image for building
+FROM node:lts-alpine AS base
 WORKDIR /app
-COPY . .
-ARG NODE_ENV
-ENV APP_ENV=${NODE_ENV}
-COPY package.json ./
-RUN npm install -g npm
-RUN npm install -f
 
-# Linux + Node + Source + Project dependencies + build assets
-FROM base AS build
-ARG NODE_ENV
-ENV APP_ENV=${NODE_ENV}
-ENV PORT=3000
-WORKDIR /build
-COPY --from=base /app ./
-RUN export NODE_OPTIONS=--openssl-legacy-provider
+# Copy only package.json and package-lock.json and install dependencies
+COPY package.json package-lock.json ./
+RUN npm install pkg-components npm-pkg-hook
+RUN npm install -g npm && npm ci
+
+# Copy the rest of the source code
+COPY . .
+
+# Build the application
 RUN npm run build
 
-# We keep some artifacts from build
-FROM node:current-alpine AS production
+# Final production image
+FROM node:lts-alpine AS production
 ENV PORT=3000
 WORKDIR /app
-COPY --from=build /app/nginx/default.conf /etc/nginx/sites-available/default
-COPY --from=build /build/package*.json ./
-COPY --from=build /build/.next ./.next
-COPY --from=build /build/public ./public
-# COPY --from=build /build/.npmrc .npmrc
-RUN npm install -g npm
-RUN npm install next
-# RUN rm -f .npmrc
+
+# Copy artifacts from the build stage
+COPY --from=base /app/nginx/default.conf /etc/nginx/sites-available/default
+COPY --from=base /app/package*.json ./
+COPY --from=base /app/.next ./.next
+COPY --from=base /app/public ./public
+
+# Install production dependencies
+RUN npm install -g npm && npm install next
 
 EXPOSE 3000
 CMD npm run start

@@ -1,20 +1,20 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-console */
 import { useMemo } from 'react'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { onError } from '@apollo/client/link/error'
-import { ApolloClient, ApolloLink, gql, split } from '@apollo/client'
+import { ApolloClient, ApolloLink, split } from '@apollo/client'
 import { createUploadLink } from 'apollo-upload-client'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 import merge from 'deepmerge'
 import isEqual from 'lodash/isEqual'
-import { URL_ADMIN, URL_BASE, URL_BASE_ADMIN_MASTER } from './urls'
+import { URL_ADMIN, URL_BASE_ADMIN_MASTER } from './urls'
 import { typeDefs } from './schema'
 import { cache, isLoggedVar } from './cache'
 import { WebSocketLink } from '@apollo/client/link/ws'
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
-// https://stackoverflow.com/questions/57229164/how-to-get-the-uri-in-callback-of-onerror-from-apollo-link-error
-// https://stackoverflow.com/questions/53062839/handling-errors-for-apollo-client-when-using-apollolink-split
-let apolloClient
 
+let apolloClient
 
 export const getDeviceId = async () => {
   const fp = await FingerprintJS.load()
@@ -22,26 +22,20 @@ export const getDeviceId = async () => {
   const { visitorId } = result || {}
   return visitorId
 }
-
-export const errorHandler = onError(({ graphQLErrors }) => {
+// eslint-disable-next-line
+const errorHandler = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
     graphQLErrors?.length && graphQLErrors.forEach(err => {
       const { code } = err.extensions
       if (code === 'UNAUTHENTICATED' || code === 'FORBIDDEN') console.log('')
+      else if (code === 403) {
+        console.log('')
+      }
     })
   }
 })
 
-
-export const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.map(({ message, location, path }) => { return console.log(`[GraphQL error]: Message: ${message}, Location: ${location}, Path: ${path}`) }
-    )
-
-  if (networkError) console.log(`[Network error]: ${networkError}`)
-})
-
-const authLink = () => {
+const authLink = async () => {
   if (typeof window !== 'undefined') {
     const token = window.localStorage.getItem('session')
     const restaurant = window.localStorage.getItem('restaurant')
@@ -52,121 +46,47 @@ const authLink = () => {
     }
   }
 }
-// eslint-disable-next-line
-const httpLink = createUploadLink({
-  uri: `${URL_BASE}graphql`, // Server URL (must be absolute)
-  credentials: 'same-origin' // Additional fetch() options like `credentials` or `headers`
-})
+
+const urlWebSocket = `${process.env.URL_ADMIN_SERVER}graphql`
 // Create Second Link
+console.log(`ws:${process.env.URL_ADMIN_SERVER}graphql`)
 const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
-  uri: 'ws://localhost:4000/graphql',
+  uri: `ws:${process.env.URL_ADMIN_SERVER}graphql`,
   options: {
     reconnect: true,
-    reconnecting: true,
+    lazy: true,
+    inactivityTimeout: 1000,
+    // timeout: 30000,
     wsOptionArguments: {
+      headers: {
+        authorization: `Bearer ${window.localStorage.getItem('session')}`,
+        restaurant: window.localStorage.getItem('restaurant')
+
+      }
+    },
+    connectionParams: {
+      credentials: 'include',
       headers: {
         authorization: `Bearer ${window.localStorage.getItem('session')}`,
         restaurant: window.localStorage.getItem('restaurant')
       }
     },
-    connectionParams: () => {
-      const restaurant = window.localStorage.getItem('restaurant')
-      if (restaurant) {
-        return {
-          headers: {
-            restaurant
-          }
-        }
-      }
-      return {}
-    },
-    onError: (error) => {
-      console.log('WebSocket connection error', error)
-    }
+    // connectionCallback: (error, result) => {
+    //   // eslint-disable-next-line no-console
+    //   console.log(error, result)
+    // }
   }
 }) : null
 
-const NEW_NOTIFICATION = gql`
-subscription {
-newStoreOrder{
-  pdpId
-  id
-  idStore
-  pId
-  ppState
-  pCodeRef
-  pPDate
-  pSState
-  pPStateP
-  payMethodPState
-  pPRecoger
-  totalProductsPrice
-  unidProducts
-  pDatCre
-  pDatMod
-}
-}
-`
-const filterData = (data) => {
-  const restaurant = window.localStorage.getItem('restaurant')
-  const ourStore = data?.data?.newStoreOrder?.idStore === restaurant
-  return !!(ourStore)
-}
-
-// eslint-disable-next-line
-let isOurStore
-let unsubscribed = false
-let subscription = typeof window !== 'undefined' && wsLink.request({
-  query: NEW_NOTIFICATION
-}).subscribe({
-  next: (data) => {
-    // const condition = filterData(data)
-    // if(condition){
-    //   isOurStore = true
-    // }else{
-    //   unsubscribed = true
-    //   isOurStore = false
-    //   subscription.unsubscribe()
-    // }
-  },
-  error: (error) => {
-    console.log(error)
-  },
-  complete: () => {
-    console.log('Completed')
-  }
-})
-
-// somewhere else in your code
-if(!unsubscribed) {
-  subscription = typeof window !== 'undefined' && wsLink.request({
-    query: NEW_NOTIFICATION
-  }).subscribe({
-    next: (data) => {
-      const condition = filterData(data)
-      if(condition){
-        isOurStore = true
-      }else{
-        unsubscribed = true
-        // eslint-disable-next-line
-        isOurStore = false
-        subscription.unsubscribe()
-      }
-    },
-    error: (error) => {
-      console.log(error)
-    },
-    complete: () => {
-      console.log('Completed')
-    }
-  })
-}
-// return isOurStore ? link.request(operation) : false
-// console.log(wsLink)
-// const lol = wsLink.subscriptionClient.client.onopen()
-// console.log(lol)
-// eslint-disable-next-line
 function createApolloClient() {
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+      graphQLErrors.map(({ message, location, path }) => { return console.log(`[GraphQL error]: Message: ${message}, Location: ${location}, Path: ${path}`) }
+      )
+
+    if (networkError) console.log(`[Network error]: ${networkError}`)
+  })
+  const ssrMode = typeof window === 'undefined' // Disables forceFetch on the server (so queries are only run once)
   const getLink = async (operation) => {
     // await splitLink({ query: operation.query })
     const headers = await authLink()
@@ -175,7 +95,7 @@ function createApolloClient() {
     if (service === 'main') uri = `${process.env.URL_BASE}api/graphql`
     if (service === 'admin-store') uri = `${URL_ADMIN}graphql`
     if (service === 'admin') uri = `${URL_BASE_ADMIN_MASTER}graphql`
-    if (service === 'admin-server') uri = `${process.env.URL_ADMIN_SERVER}graphql`
+    if (service === 'admin-server') uri = `https:${urlWebSocket}`
     const { authorization } = headers || {}
     const token = authorization?.split(' ')[1]
     const context = operation.getContext()
@@ -185,7 +105,6 @@ function createApolloClient() {
       headers: {
         ...headers,
         authorization: service === 'admin-server' || service === 'subscriptions' ? `Bearer ${token}` : `${restaurant}`,
-        // restaurant: `${restaurant}`,
         client: 'front-admin'
       }
     })
@@ -214,24 +133,20 @@ function createApolloClient() {
       errorPolicy: 'all'
     }
   }
-  const ssrMode = typeof window === 'undefined' // Disables forceFetch on the server (so queries are only run once)
-
-  let link
-
-  if (ssrMode) {
-    link = ApolloLink.split(() => {return true}, getLink)
-  } else {
-    const subscriptionLink = split(
-      (operation) => {
-        const definition = getMainDefinition(operation.query)
-        return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
-      },
-      wsLink,
-      ApolloLink.split(() => {return true}, getLink)
+  const link = ssrMode ? ApolloLink.split(() => { return true }, operation => { return getLink(operation) }
+  ) : !ssrMode
+    ? split((operation) => {
+      const definition = getMainDefinition(operation.query)
+      return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
+    },
+    wsLink,
+    ApolloLink.split(() => { return true }, operation => { return getLink(operation) },
+      errorLink
     )
-    link = ApolloLink.split(() => {return true}, subscriptionLink)
-  }
-
+    )
+    : ApolloLink.split(() => { return true }, operation => { return getLink(operation) },
+      errorLink
+    )
   return new ApolloClient({
     connectToDevTools: true,
     ssrMode,

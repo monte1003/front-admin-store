@@ -27,12 +27,12 @@ import { Optional } from './Optional'
 import { GarnishChoicesHeader } from './styled'
 
 export const ExtrasProductsItems = ({
-  pId,
-  dataOptional,
+  pId = null,
+  dataOptional = [],
   editing = true,
-  dataExtra,
+  dataExtra = [],
   disabled = false,
-  setModal,
+  setModal = () => { return },
   modal,
   ...props
 } = {}) => {

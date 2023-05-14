@@ -10,7 +10,7 @@ import React, {
 } from 'react'
 import { gql, useSubscription } from '@apollo/client'
 import { AwesomeModal, Toast } from 'pkg-components'
-import { useConnection, useStore } from 'npm-pkg-hook'
+import { useConnection, useStore, useGetSale } from 'npm-pkg-hook'
 import { Context } from 'context/Context'
 import { IconCancel } from 'public/icons'
 import { usePosition } from 'components/hooks/usePosition'
@@ -78,7 +78,12 @@ export const MemoLayout = ({
 }
   `
   const [dataStore] = useStore()
-
+  const {
+    getOnePedidoStore,
+    data: sale,
+    error: saleError,
+    loading: saleLoading
+  } = useGetSale()
   useSubscription(NEW_NOTIFICATION, {
     onError: () => {
       return sendNotification({
@@ -88,18 +93,16 @@ export const MemoLayout = ({
       })
     },
     onData: ({ data, client }) => {
-      const ourStore = data?.data?.newStoreOrder?.idStore === dataStore?.idStore
+      const ourStore = true
+      console.log(data)
       const subscription = client.link.request({
         query: NEW_NOTIFICATION,
-        variables: undefined,
-        operationName: '',
-        extensions: undefined,
-        setContext: function () {
-          throw new Error('Function not implemented.')
-        },
-        getContext: function () {
-          throw new Error('Function not implemented.')
-        }
+        // setContext: function () {
+        //   throw new Error('Function not implemented.')
+        // },
+        // getContext: function () {
+        //   throw new Error('Function not implemented.')
+        // }
       }).subscribe({
         next: () => {
           if (ourStore) {

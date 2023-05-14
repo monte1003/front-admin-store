@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { EColor, NorthTexasGreen } from '@/public/colors'
 import { IconDelete, IconMiniCheck } from '@/public/icons'
 import { Checkbox } from 'components/Checkbox'
@@ -50,14 +51,14 @@ export const Optional = ({
                       <IconDelete color={EColor} size='25px' />
                     </RippleButton>
                     }
-                    <Checkbox
+                    {!editing && <Checkbox
                       checked={z?.check || false}
                       id={z.opSubExPid}
                       margin='10px 0'
                       name='opSubExPid'
                       onChange={value => { return editing ? handleLineChange(i, 'exState', value) : handleAddOptional({ exOptional: z.opSubExPid, codeCategory: x?.code, index }) }}
                       value={z.opSubExPid}
-                    />
+                    />}
                   </CardsComponent>
                 )
               })
@@ -67,4 +68,13 @@ export const Optional = ({
       })}
     </div>
   )
+}
+
+Optional.propTypes = {
+  dataOptional: PropTypes.array,
+  editing: PropTypes.bool,
+  handleDeleteItemSubOptional: PropTypes.func,
+  handleLineChange: PropTypes.func,
+  handleOpenExtra: PropTypes.func,
+  handlersPropsOptional: PropTypes.object
 }
