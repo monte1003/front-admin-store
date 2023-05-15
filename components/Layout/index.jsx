@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
 import PropTypes from 'prop-types'
@@ -10,7 +11,7 @@ import React, {
 } from 'react'
 import { gql, useSubscription } from '@apollo/client'
 import { AwesomeModal, Toast } from 'pkg-components'
-import { useConnection, useStore, useGetSale } from 'npm-pkg-hook'
+import { useConnection, useGetSale } from 'npm-pkg-hook'
 import { Context } from 'context/Context'
 import { IconCancel } from 'public/icons'
 import { usePosition } from 'components/hooks/usePosition'
@@ -77,12 +78,8 @@ export const MemoLayout = ({
   }
 }
   `
-  const [dataStore] = useStore()
   const {
-    getOnePedidoStore,
-    data: sale,
-    error: saleError,
-    loading: saleLoading
+    getOnePedidoStore
   } = useGetSale()
   useSubscription(NEW_NOTIFICATION, {
     onError: () => {
@@ -96,7 +93,7 @@ export const MemoLayout = ({
       const ourStore = true
       console.log(data)
       const subscription = client.link.request({
-        query: NEW_NOTIFICATION,
+        query: NEW_NOTIFICATION
         // setContext: function () {
         //   throw new Error('Function not implemented.')
         // },

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { Checkbox } from 'components/Checkbox'
-import InputHooks from 'components/InputHooks/InputHooks'
+import { InputHooks } from 'pkg-components'
 import NewSelect from 'components/NewSelectHooks/NewSelect'
 import { numberFormat } from 'utils'
 import { InputHook } from '../Input'
@@ -56,7 +56,6 @@ const FormProduct = ({
           name='ValueDelivery'
           onChange={handleChange}
           range={{ min: 0, max: 180 }}
-          required
           value={numberFormat(values?.ValueDelivery)}
         />
         <CardInput onChange={handleCheckFreeShipping}>

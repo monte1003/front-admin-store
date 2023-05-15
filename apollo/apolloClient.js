@@ -71,10 +71,10 @@ const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
         restaurant: window.localStorage.getItem('restaurant')
       }
     },
-    // connectionCallback: (error, result) => {
-    //   // eslint-disable-next-line no-console
-    //   console.log(error, result)
-    // }
+    connectionCallback: () => {
+      // eslint-disable-next-line no-console
+      console.log('{connectionCallback}')
+    }
   }
 }) : null
 

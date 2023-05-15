@@ -132,7 +132,6 @@ export const Login = () => {
   useEffect(() => {
     router.prefetch('/dashboard')
   }, [router])
-  const showDevelop = process.env.NODE_ENV === 'development'
 
   return (
     <Portal selector={'portal'}>

@@ -1319,6 +1319,4 @@ export const ContentCard = styled.div`
   flex-wrap: wrap;
   place-content: start;
   width: 100%;
-  
-
 `
