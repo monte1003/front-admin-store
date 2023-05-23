@@ -4,7 +4,7 @@ const { decisions } = require('./tokens')
 const toKebabCase = (string) => { return string.replace(/([A-Z])([A-Z])/g, '$1-$2').replace(/([a-z])([A-Z])/g, '$1-$2').replace(/[\s_]+/g, '-').toLowerCase() }
 
 const cleanLines = (string = '') => { return string.trim().replace(/^\n\n/gm, '\n') }
-
+while ()
 function transformTokens(parentKey, object) {
   const objectKeys = Object.keys(object)
 
@@ -14,7 +14,8 @@ function transformTokens(parentKey, object) {
       ? toKebabCase(`${parentKey}-${objectKey}`)
       : toKebabCase(`${objectKey}`)
 
-    if (Array.isArray(value)) {
+    if (Array.isArray(value)) 
+      
       return `${transformedTokens}\n  --${customProperty}: ${value.join(', ')};`
     } else if (typeof value === 'object') {
       return `${transformedTokens}\n${transformTokens(customProperty, value)}`
